@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Button } from '../../projects/kit/src/lib/ui/component/button';
+import { OpButton } from '../../projects/kit/src/lib/ui/component/button';
 
 @Component({
   selector: 'app-example',
-  imports: [Button],
+  imports: [OpButton],
   template: `
     <div class="example-container">
       <h1>Kit Library Example</h1>
@@ -12,67 +12,67 @@ import { Button } from '../../projects/kit/src/lib/ui/component/button';
         <h2>Button Variants</h2>
 
         <div class="button-group">
-          <button
+          <op-button
             variant="primary"
             size="md"
             (click)="onButtonClick('Primary')">
             Primary Button
-          </button>
+          </op-button>
 
-          <button
+          <op-button
             variant="secondary"
             size="md"
             (click)="onButtonClick('Secondary')">
             Secondary Button
-          </button>
+          </op-button>
 
-          <button
+          <op-button
             variant="outline"
             size="md"
             (click)="onButtonClick('Outline')">
             Outline Button
-          </button>
+          </op-button>
 
-          <button
+          <op-button
             variant="destructive"
             size="md"
             (click)="onButtonClick('Destructive')">
             Destructive Button
-          </button>
+          </op-button>
         </div>
 
         <h2>Button Sizes</h2>
         <div class="button-group">
-          <button
+          <op-button
             variant="primary"
             size="sm"
             (click)="onButtonClick('Small')">
             Small
-          </button>
+          </op-button>
 
-          <button
+          <op-button
             variant="primary"
             size="md"
             (click)="onButtonClick('Medium')">
             Medium
-          </button>
+          </op-button>
 
-          <button
+          <op-button
             variant="primary"
             size="lg"
             (click)="onButtonClick('Large')">
             Large
-          </button>
+          </op-button>
         </div>
 
         <h2>Disabled State</h2>
         <div class="button-group">
-          <button
+          <op-button
             variant="primary"
             size="md"
             [disabled]="true">
             Disabled Button
-          </button>
+          </op-button>
         </div>
       </div>
 
@@ -82,39 +82,39 @@ import { Button } from '../../projects/kit/src/lib/ui/component/button';
         <h3>1. Base Theme (dari styles.css)</h3>
         <div class="button-group">
           <p class="description">Button menggunakan CSS variables yang didefinisikan di global styles.css</p>
-          <button variant="primary" size="md">Primary (Base)</button>
-          <button variant="secondary" size="md">Secondary (Base)</button>
+          <op-button variant="primary" size="md">Primary (Base)</op-button>
+          <op-button variant="secondary" size="md">Secondary (Base)</op-button>
         </div>
 
         <h3>2. Theme Classes dengan CSS Variables Override</h3>
         <div class="button-group theme-brand">
           <p class="description">Button dengan custom theme class "theme-brand" yang override CSS variables</p>
-          <button variant="primary" size="md">Brand Theme</button>
-          <button variant="secondary" size="md">Brand Theme</button>
+          <op-button variant="primary" size="md">Brand Theme</op-button>
+          <op-button variant="secondary" size="md">Brand Theme</op-button>
         </div>
 
         <h3>3. Inline CSS Variables</h3>
         <div class="button-group">
           <p class="description">Button dengan CSS variables inline</p>
-          <button
+          <op-button
             variant="primary"
             size="md"
             style="--btn-primary-bg: #8b5cf6; --btn-primary-text: white; --btn-primary-border: #8b5cf6;">
             Purple Inline
-          </button>
+          </op-button>
         </div>
 
         <h3>4. Dynamic Theme Switching</h3>
         <div class="button-group" [class.dark-theme]="isDarkTheme">
           <p class="description">Click "Toggle Dark Theme" untuk melihat perubahan</p>
-          <button variant="primary" size="md">Primary (Theme Aware)</button>
-          <button variant="destructive" size="md">Destructive (Theme Aware)</button>
-          <button
+          <op-button variant="primary" size="md">Primary (Theme Aware)</op-button>
+          <op-button variant="destructive" size="md">Destructive (Theme Aware)</op-button>
+          <op-button
             variant="secondary"
             size="md"
             (click)="toggleDarkTheme()">
             Toggle Dark Theme
-          </button>
+          </op-button>
         </div>
       </div>
 

@@ -12,7 +12,7 @@
 
     <!-- Theme Controls -->
     <section class="mb-8">
-      <kit-theme-selector></kit-theme-selector>
+      <op-theme-selector></op-theme-selector>
       <app-theme-debug></app-theme-debug>
     </section>
 
@@ -24,21 +24,21 @@
       <div class="space-y-4">
         <h3 class="text-lg font-medium">Kit Button Components</h3>
         <div class="flex gap-4 flex-wrap">
-          <button [variant]="'primary'" [size]="'sm'">Primary Small</button>
-          <button [variant]="'primary'" [size]="'md'">Primary Medium</button>
-          <button [variant]="'primary'" [size]="'lg'">Primary Large</button>
+          <op-button [variant]="'primary'" [size]="'sm'">Primary Small</op-button>
+          <op-button [variant]="'primary'" [size]="'md'">Primary Medium</op-button>
+          <op-button [variant]="'primary'" [size]="'lg'">Primary Large</op-button>
         </div>
 
         <div class="flex gap-4 flex-wrap">
-          <button [variant]="'secondary'">Secondary</button>
-          <button [variant]="'destructive'">Destructive</button>
-          <button [variant]="'outline'">Outline</button>
-          <button [variant]="'ghost'">Ghost</button>
+          <op-button [variant]="'secondary'">Secondary</op-button>
+          <op-button [variant]="'destructive'">Destructive</op-button>
+          <op-button [variant]="'outline'">Outline</op-button>
+          <op-button [variant]="'ghost'">Ghost</op-button>
         </div>
 
         <div class="flex gap-4 flex-wrap">
-          <button [variant]="'primary'" [disabled]="true">Disabled Primary</button>
-          <button [variant]="'secondary'" [disabled]="true">Disabled Secondary</button>
+          <op-button [variant]="'primary'" [disabled]="true">Disabled Primary</op-button>
+          <op-button [variant]="'secondary'" [disabled]="true">Disabled Secondary</op-button>
         </div>
       </div>
 

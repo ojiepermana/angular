@@ -4,13 +4,15 @@ export type ButtonVariant = 'primary' | 'secondary' | 'destructive' | 'outline' 
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 @Component({
-  selector: 'button',
+  selector: 'op-button',
   imports: [],
   host: {
     '[class]': 'buttonClasses()',
-    '[type]': 'type()',
-    '[disabled]': 'disabled()',
-    '(click)': 'handleClick($event)'
+    '[attr.type]': 'type()',
+    '[attr.disabled]': 'disabled() || null',
+    '(click)': 'handleClick($event)',
+    'role': 'button',
+    '[attr.aria-disabled]': 'disabled()'
   },
   template: `
     <ng-content />
@@ -124,7 +126,7 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
     }
   `
 })
-export class Button {
+export class OpButton {
   variant = input<ButtonVariant>('primary');
   size = input<ButtonSize>('md');
   type = input<'button' | 'submit' | 'reset'>('button');

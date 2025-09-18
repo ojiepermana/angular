@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ThemeService, type ThemeVariant } from '../service/theme.service';
 
 @Component({
-  selector: 'kit-theme-selector',
+  selector: 'op-theme-selector',
   imports: [],
   template: `
     <div class="theme-selector">
@@ -87,7 +87,7 @@ import { ThemeService, type ThemeVariant } from '../service/theme.service';
     }
   `
 })
-export class ThemeSelector {
+export class OpThemeSelector {
   readonly themeService = inject(ThemeService);
 
   onVariantChange(event: Event): void {
