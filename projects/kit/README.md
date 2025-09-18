@@ -21,6 +21,44 @@ projects/kit/src/lib/
 npm install @ojiepermana/angular
 ```
 
+### Peer Dependencies
+
+Library ini mendukung Angular Material dan TailwindCSS sebagai peer dependencies:
+
+#### Angular Material (Required)
+
+```bash
+# Install Angular Material (jika belum ada)
+ng add @angular/material
+
+# Atau install manual
+npm install @angular/material @angular/cdk
+```
+
+#### TailwindCSS (Required)
+
+```bash
+# Install TailwindCSS
+npm install -D tailwindcss @tailwindcss/postcss postcss autoprefixer
+
+# Generate config
+npx tailwindcss init -p
+```
+
+"postcss": "^8.5.6",
+    "tailwindcss": "^4.1.13",
+
+**Required versions:**
+
+- `@angular/core`: ^20.3.0
+- `@angular/common`: ^20.3.0
+- `@angular/material`: ^20.3.0
+- `@angular/cdk`: ^20.3.0
+- `tailwindcss`: ^4.1.13
+- `postcss`: ^8.5.6
+- `@tailwindcss/postcss`: ^4.1.13
+- `autoprefixer`: ^10.4.0
+
 ## 🎯 Component Naming Convention
 
 Semua komponen menggunakan prefix `op-` (OjiePermanA):
@@ -73,6 +111,39 @@ export class ExampleComponent {
     console.log('Button clicked!');
   }
 }
+```
+
+### Angular Material Integration
+
+Library ini dirancang untuk bekerja dengan Angular Material. Anda dapat mengombinasikan komponen op- dengan Material components:
+
+```typescript
+import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { OpButton, OpThemeSelector } from '@ojiepermana/angular';
+
+@Component({
+  selector: 'app-material-example',
+  imports: [MatButtonModule, MatCardModule, OpButton, OpThemeSelector],
+  template: `
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Theme Demo</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <op-theme-selector></op-theme-selector>
+        
+        <div style="margin-top: 16px;">
+          <op-button variant="primary">Op Button</op-button>
+          <button mat-raised-button color="primary">Material Button</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  `
+})
+export class MaterialExampleComponent {}
 ```
 
 ## 🎨 Available Components
@@ -146,6 +217,7 @@ npm publish dist/kit
 
 ## 📝 Version History
 
+- **1.2.0**: Added Angular Material as peer dependency, integration examples
 - **1.1.0**: Restructured to flat architecture, updated exports
 - **1.0.0**: Initial release with ui/ structure
 

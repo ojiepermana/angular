@@ -1,12 +1,17 @@
 {
   "name": "@ojiepermana/angular",
-  "version": "1.1.0",
-  "description": "Angular UI Library with op- prefix components and comprehensive theme system",
+  "version": "1.2.0",
+  "description": "Angular UI Library with op- prefix components, comprehensive theme system, Angular Material and TailwindCSS integration",
   "keywords": [
     "angular",
     "ui",
     "components",
     "theme",
+    "material",
+    "material-design",
+    "tailwindcss",
+    "postcss",
+    "css",
     "ojiepermana"
   ],
   "author": "Ojie Permana <me@ojiepermana.com>",
@@ -24,7 +29,13 @@
   },
   "peerDependencies": {
     "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/core": "^20.3.0",
+    "@angular/material": "^20.3.0",
+    "@angular/cdk": "^20.3.0",
+    "tailwindcss": "^4.1.13",
+    "@tailwindcss/postcss": "^4.1.13",
+    "postcss": "^8.5.6",
+    "autoprefixer": "^10.4.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
