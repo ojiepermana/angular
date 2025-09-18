@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "permana"
+  },
+  "targets": {
+    "permana": {
+      "hosting": {
+        "angular-kit": [
+          "angular-kit"
+        ]
+      }
+    }
   }
 }

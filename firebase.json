@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "angular-kit",
     "public": "dist/angular/browser",
     "ignore": [
       "firebase.json",
