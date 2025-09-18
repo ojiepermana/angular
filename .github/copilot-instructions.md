@@ -45,3 +45,25 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Design services around a single responsibility
 - Use the `providedIn: 'root'` option for singleton services
 - Use the `inject()` function instead of constructor injection
+
+
+
+## Project Context: @ojiepermana/angular Library
+Angular UI library with **FLAT ARCHITECTURE** using `op-` prefix naming convention.
+
+## CRITICAL Library Structure
+```
+projects/kit/src/lib/
+├── components/          # All UI components (op-button, op-card, etc.)
+├── services/           # All services (theme, data, etc.)
+├── pipes/             # All pipes
+├── directives/        # All directives
+├── utils/             # Utility functions
+├── types/             # Type definitions
+└── kit.ts             # Main library component
+```
+
+## Component Naming (MANDATORY)
+- **Selector**: `op-` prefix (e.g., `op-button`, `op-card`)
+- **Class**: `Op` prefix PascalCase (e.g., `OpButton`, `OpCard`)
+- **File**: kebab-case (e.g., `button.ts`, `theme-selector.ts`)
