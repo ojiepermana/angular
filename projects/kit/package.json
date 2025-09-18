@@ -40,50 +40,5 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "exports": {
-    ".": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/ojiepermana-angular.mjs"
-    },
-    "./components": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/ojiepermana-angular.mjs"
-    },
-    "./components/button": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/ojiepermana-angular.mjs"
-    },
-    "./components/theme-selector": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/ojiepermana-angular.mjs"
-    },
-    "./services": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/ojiepermana-angular.mjs"
-    },
-    "./services/theme": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/ojiepermana-angular.mjs"
-    },
-    "./pipes": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/ojiepermana-angular.mjs"
-    },
-    "./directives": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/ojiepermana-angular.mjs"
-    },
-    "./utils": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/ojiepermana-angular.mjs"
-    },
-    "./types": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/ojiepermana-angular.mjs"
-    },
-    "./package.json": {
-      "default": "./package.json"
-    }
-  },
   "sideEffects": false
 }
