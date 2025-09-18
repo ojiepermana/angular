@@ -4,5 +4,9 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./example.component').then(m => m.ExampleComponent)
+  },
+  {
+    path: 'material-icons',
+    loadComponent: () => import('./components/material-icons-demo.component').then(m => m.MaterialIconsDemoComponent)
   }
 ];

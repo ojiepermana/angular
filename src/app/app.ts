@@ -1,11 +1,11 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
 import { OpThemeSelector, OpButton } from '@ojiepermana/angular';
 import { ThemeDebugComponent } from './components/theme-debug.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, OpThemeSelector, OpButton, ThemeDebugComponent],
+  imports: [RouterOutlet, RouterLink, OpThemeSelector, OpButton, ThemeDebugComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

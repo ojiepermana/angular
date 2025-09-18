@@ -6,9 +6,21 @@
         {{ title() }}
       </h1>
       <p class="text-muted-foreground">
-        shadcn/ui Theme System with Multiple Color Variants
+        shadcn/ui Theme System with Multiple Color Variants & Material Icons
       </p>
     </header>
+
+    <!-- Navigation -->
+    <nav class="mb-8">
+      <div class="flex gap-4 justify-center">
+        <op-button variant="outline" size="sm">
+          <a routerLink="/" class="no-underline">Theme Demo</a>
+        </op-button>
+        <op-button variant="outline" size="sm">
+          <a routerLink="/material-icons" class="no-underline">Material Icons</a>
+        </op-button>
+      </div>
+    </nav>
 
     <!-- Theme Controls -->
     <section class="mb-8">
@@ -16,59 +28,12 @@
       <app-theme-debug></app-theme-debug>
     </section>
 
-    <!-- Buttons Demo -->
-    <section class="space-y-6">
-      <h2 class="text-2xl font-semibold">Button Variants</h2>
-
-      <!-- Kit Buttons Demo -->
-      <div class="space-y-4">
-        <h3 class="text-lg font-medium">Kit Button Components</h3>
-        <div class="flex gap-4 flex-wrap">
-          <op-button [variant]="'primary'" [size]="'sm'">Primary Small</op-button>
-          <op-button [variant]="'primary'" [size]="'md'">Primary Medium</op-button>
-          <op-button [variant]="'primary'" [size]="'lg'">Primary Large</op-button>
-        </div>
-
-        <div class="flex gap-4 flex-wrap">
-          <op-button [variant]="'secondary'">Secondary</op-button>
-          <op-button [variant]="'destructive'">Destructive</op-button>
-          <op-button [variant]="'outline'">Outline</op-button>
-          <op-button [variant]="'ghost'">Ghost</op-button>
-        </div>
-
-        <div class="flex gap-4 flex-wrap">
-          <op-button [variant]="'primary'" [disabled]="true">Disabled Primary</op-button>
-          <op-button [variant]="'secondary'" [disabled]="true">Disabled Secondary</op-button>
-        </div>
-      </div>
-
-      <!-- Theme Preview Cards -->
-      <div class="space-y-4">
-        <h3 class="text-lg font-medium">Theme Preview</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div class="p-4 rounded-lg border" style="background: hsl(var(--card)); color: hsl(var(--card-foreground));">
-            <h4 class="font-semibold mb-2">Card Background</h4>
-            <p class="text-sm" style="color: hsl(var(--muted-foreground));">Uses hsl(var(--card)) and hsl(var(--card-foreground))</p>
-          </div>
-
-          <div class="p-4 rounded-lg border" style="background: hsl(var(--secondary)); color: hsl(var(--secondary-foreground));">
-            <h4 class="font-semibold mb-2">Secondary Background</h4>
-            <p class="text-sm">Uses hsl(var(--secondary)) and hsl(var(--secondary-foreground))</p>
-          </div>
-
-          <div class="p-4 rounded-lg border" style="background: hsl(var(--accent)); color: hsl(var(--accent-foreground));">
-            <h4 class="font-semibold mb-2">Accent Background</h4>
-            <p class="text-sm">Uses hsl(var(--accent)) and hsl(var(--accent-foreground))</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Router Content -->
+    <router-outlet></router-outlet>
 
     <!-- Footer -->
     <footer class="text-center mt-12 text-muted-foreground">
-      <p>Test all theme combinations: light/dark mode with 7 color variants</p>
+      <p>Test all theme combinations: light/dark mode with 7 color variants + Material Icons</p>
     </footer>
   </div>
 </div>
-
-<router-outlet></router-outlet>
