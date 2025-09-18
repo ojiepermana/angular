@@ -1,6 +1,6 @@
 # @ojiepermana/kit
 
-Angular UI Library dengan struktur pemanggilan bertingkat.
+Angular UI Library dengan struktur pemanggilan bertingkat dan prefix konvensi `op-`.
 
 ## Instalasi
 
@@ -10,22 +10,28 @@ npm install @ojiepermana/kit
 
 ## Penggunaan
 
-Library ini mendukung pemanggilan dengan struktur bertingkat untuk memudahkan organisasi komponen.
+Library ini menggunakan prefix `op-` untuk semua komponen guna menghindari konflik penamaan dan memberikan namespace yang jelas.
+
+### Naming Convention
+
+Semua komponen menggunakan prefix `op-` (OjiePermanA):
+- `<op-button>` untuk Button component
+- `<op-theme-selector>` untuk Theme Selector component
 
 ### Import Secara Spesifik
 
 ```typescript
 // Import button component secara spesifik
-import { Button } from '@ojiepermana/kit/ui/component/button';
+import { OpButton } from '@ojiepermana/kit/ui/component/button';
 
 // Import semua UI components
-import { Button } from '@ojiepermana/kit/ui/component';
+import { OpButton, OpThemeSelector } from '@ojiepermana/kit/ui/component';
 
 // Import semua UI modules (components, services, directives, pipes)
-import { Button } from '@ojiepermana/kit/ui';
+import { OpButton, OpThemeSelector } from '@ojiepermana/kit/ui';
 
 // Import semua dari library
-import { Button } from '@ojiepermana/kit';
+import { OpButton, OpThemeSelector } from '@ojiepermana/kit';
 ```
 
 ### Struktur Library
@@ -50,22 +56,22 @@ import { Button } from '@ojiepermana/kit';
 
 ## Contoh Penggunaan
 
-### Button Component
+### OpButton Component
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@ojiepermana/kit/ui/component/button';
+import { OpButton } from '@ojiepermana/kit/ui/component/button';
 
 @Component({
   selector: 'app-example',
-  imports: [Button],
+  imports: [OpButton],
   template: `
-    <kit-button 
+    <op-button 
       variant="primary" 
       size="md"
       (click)="handleClick()">
       Click me
-    </kit-button>
+    </op-button>
   `
 })
 export class ExampleComponent {
@@ -75,14 +81,14 @@ export class ExampleComponent {
 }
 ```
 
-### Button Properties
+### OpButton Properties
 
-- `variant`: 'primary' | 'secondary' | 'danger' | 'success' (default: 'primary')
+- `variant`: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' (default: 'primary')
 - `size`: 'sm' | 'md' | 'lg' (default: 'md')
 - `type`: 'button' | 'submit' | 'reset' (default: 'button')
 - `disabled`: boolean (default: false)
 
-### Button Events
+### OpButton Events
 
 - `click`: Event emitted when button is clicked
 
