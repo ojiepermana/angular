@@ -43,6 +43,20 @@ export class ThemeService {
     this.setMode(newMode);
   }
 
+  resetToSystem(): void {
+    // Reset to default theme and light mode
+    this.setVariant('default');
+    this.setMode('light');
+  }
+
+  getAvailableModes(): ThemeMode[] {
+    return ['light', 'dark'];
+  }
+
+  getAvailableVariants(): ThemeVariant[] {
+    return ['default', 'red', 'rose', 'orange', 'green', 'blue', 'yellow', 'violet', 'zinc', 'slate', 'stone'];
+  }
+
   private applyTheme(variant: ThemeVariant, mode: ThemeMode): void {
     console.log('Applying theme:', { variant, mode });
 
@@ -85,7 +99,7 @@ export class ThemeService {
   }
 
   private isValidVariant(variant: string): variant is ThemeVariant {
-    return ['default', 'red', 'rose', 'orange', 'green', 'blue', 'yellow', 'violet'].includes(variant);
+    return ['default', 'red', 'rose', 'orange', 'green', 'blue', 'yellow', 'violet', 'zinc', 'slate', 'stone'].includes(variant);
   }
 
   private isValidMode(mode: string): mode is ThemeMode {
