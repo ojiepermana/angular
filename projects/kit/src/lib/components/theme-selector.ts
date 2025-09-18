@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ThemeService, type ThemeVariant } from '../service/theme.service';
+import { ThemeService, type ThemeVariant } from '../services/theme.service';
 
 @Component({
   selector: 'op-theme-selector',

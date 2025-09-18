@@ -1,5 +1,25 @@
 You are an expert in TypeScript, Angular, and scalable web application development. You write maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
+## Project Context: @ojiepermana/angular Library
+Angular UI library with **FLAT ARCHITECTURE** using `op-` prefix naming convention.
+
+## CRITICAL Library Structure
+```
+projects/kit/src/lib/
+├── components/          # All UI components (op-button, op-card, etc.)
+├── services/           # All services (theme, data, etc.)
+├── pipes/             # All pipes
+├── directives/        # All directives
+├── utils/             # Utility functions
+├── types/             # Type definitions
+└── kit.ts             # Main library component
+```
+
+## Component Naming (MANDATORY)
+- **Selector**: `op-` prefix (e.g., `op-button`, `op-card`)
+- **Class**: `Op` prefix PascalCase (e.g., `OpButton`, `OpCard`)
+- **File**: kebab-case (e.g., `button.ts`, `theme-selector.ts`)
+
 ## TypeScript Best Practices
 
 - Use strict type checking

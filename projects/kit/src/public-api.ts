@@ -5,11 +5,20 @@
 // Existing exports
 export * from './lib/kit';
 
-// UI Components, Services, Directives, and Pipes
-export * from './lib/ui';
+// Components
+export * from './lib/components';
 
-// Utilities
+// Services
+export * from './lib/services';
+
+// Pipes (commented until actual pipes are added)
+// export * from './lib/pipes';
+
+// Directives (commented until actual directives are added)
+// export * from './lib/directives';
+
+// Utilities (commented until actual utilities are added)
 // export * from './lib/utils';
 
-// Types
+// Types (commented until actual types are added)
 // export * from './lib/types';

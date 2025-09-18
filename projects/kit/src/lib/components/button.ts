@@ -140,7 +140,9 @@ export class OpButton {
     const sizeClass = `btn-${this.size()}`;
 
     return [baseClass, variantClass, sizeClass].join(' ');
-  });  handleClick(event: Event) {
+  });
+
+  handleClick(event: Event) {
     if (!this.disabled()) {
       this.click.emit(event);
     }

@@ -1,6 +1,6 @@
 import { Component, inject, computed } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
-import { ThemeService } from '../../../projects/kit/src/lib/service/theme.service';
+import { ThemeService } from '../../../projects/kit/src/lib/services/theme.service';
 
 @Component({
   selector: 'app-theme-switcher',

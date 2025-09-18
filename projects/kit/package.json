@@ -1,12 +1,78 @@
 {
-  "name": "@ojiepermana/kit",
-  "version": "0.0.1",
+  "name": "@ojiepermana/angular",
+  "version": "1.1.0",
+  "description": "Angular UI Library with op- prefix components and comprehensive theme system",
+  "keywords": [
+    "angular",
+    "ui",
+    "components",
+    "theme",
+    "ojiepermana"
+  ],
+  "author": "Ojie Permana <me@ojiepermana.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ojiepermana/angular.git"
+  },
+  "homepage": "https://github.com/ojiepermana/angular#readme",
+  "bugs": {
+    "url": "https://github.com/ojiepermana/angular/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ojiepermana-angular.mjs"
+    },
+    "./components": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ojiepermana-angular.mjs"
+    },
+    "./components/button": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ojiepermana-angular.mjs"
+    },
+    "./components/theme-selector": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ojiepermana-angular.mjs"
+    },
+    "./services": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ojiepermana-angular.mjs"
+    },
+    "./services/theme": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ojiepermana-angular.mjs"
+    },
+    "./pipes": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ojiepermana-angular.mjs"
+    },
+    "./directives": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ojiepermana-angular.mjs"
+    },
+    "./utils": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ojiepermana-angular.mjs"
+    },
+    "./types": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ojiepermana-angular.mjs"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
   },
   "sideEffects": false
 }

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ThemeService } from '@ojiepermana/kit';
+import { ThemeService } from '@ojiepermana/angular';
 
 @Component({
   selector: 'app-theme-debug',

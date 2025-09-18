@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OpButton } from '../../projects/kit/src/lib/ui/component/button';
+import { OpButton } from '../../projects/kit/src/lib/components/button';
 
 @Component({
   selector: 'app-example',

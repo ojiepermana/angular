@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { OpThemeSelector, OpButton } from '@ojiepermana/kit';
+import { OpThemeSelector, OpButton } from '@ojiepermana/angular';
 import { ThemeDebugComponent } from './components/theme-debug.component';
 
 @Component({

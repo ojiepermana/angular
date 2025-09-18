@@ -1,0 +1,44 @@
+# Codeium Development Rules for @ojiepermana/angular
+
+## Library Context
+Angular UI library with FLAT ARCHITECTURE and `op-` prefix components.
+
+## Structure (REQUIRED)
+```
+projects/kit/src/lib/
+├── components/     # op-button, op-card, etc.
+├── services/      # theme.service.ts, etc.
+├── pipes/         # all pipes
+├── directives/    # all directives
+├── utils/         # utilities
+├── types/         # type definitions
+└── kit.ts
+```
+
+## Naming Rules
+- Selector: `op-` prefix (op-button)
+- Class: `Op` prefix (OpButton)
+- File: kebab-case (button.ts)
+
+## Angular Standards
+- Standalone components (default)
+- Signals for state
+- input()/output() functions
+- computed() for derived state
+- @if/@for/@switch control flow
+- inject() function
+- Host bindings in host object
+
+## Workflow
+1. Create in flat folder
+2. Export in index.ts
+3. Update public-api.ts
+4. Update package.json exports
+5. Build: ng build kit
+
+## Forbidden
+- /ui/component/ structure
+- Nested folders in components/
+- Services outside /services/
+- NgModules
+- Missing op- prefix

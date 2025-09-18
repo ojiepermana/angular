@@ -1,0 +1,31 @@
+# AI Development Rules for @ojiepermana/angular
+
+## Project
+Angular UI library with FLAT ARCHITECTURE using op- prefix.
+
+## Structure
+```
+lib/
+├── components/  # op-button, op-card
+├── services/    # theme.service.ts
+├── pipes/       # all pipes
+├── directives/  # all directives
+├── utils/       # utilities
+└── types/       # types
+```
+
+## Rules
+- Selector: op- prefix
+- Class: Op prefix (OpButton)
+- File: kebab-case
+- Standalone components
+- Signals + input()/output()
+- Flat structure only
+- Export via index.ts
+- Update public-api.ts
+
+## Forbidden
+- /ui/component/ structure
+- Nested folders
+- NgModules
+- Missing op- prefix

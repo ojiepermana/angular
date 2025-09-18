@@ -1,161 +1,154 @@
-# @ojiepermana/kit
+# @ojiepermana/angular
 
-Angular UI Library dengan struktur pemanggilan bertingkat dan prefix konvensi `op-`.
+Angular UI Library dengan **FLAT ARCHITECTURE** dan `op-` prefix naming convention.
 
-## Instalasi
+## 🏗️ Library Structure
+
+```
+projects/kit/src/lib/
+├── components/          # All UI components (op-button, op-card, etc.)
+├── services/           # All services (theme, data, etc.)
+├── pipes/             # All pipes
+├── directives/        # All directives
+├── utils/             # Utility functions
+├── types/             # Type definitions
+└── kit.ts             # Main library component
+```
+
+## 📦 Installation
 
 ```bash
-npm install @ojiepermana/kit
+npm install @ojiepermana/angular
 ```
 
-## Penggunaan
-
-Library ini menggunakan prefix `op-` untuk semua komponen guna menghindari konflik penamaan dan memberikan namespace yang jelas.
-
-### Naming Convention
+## 🎯 Component Naming Convention
 
 Semua komponen menggunakan prefix `op-` (OjiePermanA):
-- `<op-button>` untuk Button component
-- `<op-theme-selector>` untuk Theme Selector component
+- **Selector**: `op-` prefix (e.g., `op-button`, `op-card`)
+- **Class**: `Op` prefix dengan PascalCase (e.g., `OpButton`, `OpCard`) 
+- **File**: kebab-case (e.g., `button.ts`, `theme-selector.ts`)
 
-### Import Secara Spesifik
+## 📖 Usage Examples
+
+### Import Patterns
 
 ```typescript
-// Import button component secara spesifik
-import { OpButton } from '@ojiepermana/kit/ui/component/button';
+// Main import (recommended)
+import { OpButton, OpThemeSelector, ThemeService } from '@ojiepermana/angular';
 
-// Import semua UI components
-import { OpButton, OpThemeSelector } from '@ojiepermana/kit/ui/component';
+// Specific category imports
+import { OpButton, OpThemeSelector } from '@ojiepermana/angular/components';
+import { ThemeService } from '@ojiepermana/angular/services';
 
-// Import semua UI modules (components, services, directives, pipes)
-import { OpButton, OpThemeSelector } from '@ojiepermana/kit/ui';
-
-// Import semua dari library
-import { OpButton, OpThemeSelector } from '@ojiepermana/kit';
+// Individual component imports
+import { OpButton } from '@ojiepermana/angular/components/button';
+import { ThemeService } from '@ojiepermana/angular/services/theme';
 ```
 
-### Struktur Library
-
-```
-@ojiepermana/kit/
-├── ui/
-│   ├── component/
-│   │   ├── button         # Button component
-│   │   └── ...           # Component lainnya
-│   ├── service/
-│   │   └── ...           # Services
-│   ├── directive/
-│   │   └── ...           # Directives
-│   └── pipe/
-│       └── ...           # Pipes
-├── utils/
-│   └── ...               # Utility functions
-└── types/
-    └── ...               # Type definitions
-```
-
-## Contoh Penggunaan
-
-### OpButton Component
+### Component Usage
 
 ```typescript
 import { Component } from '@angular/core';
-import { OpButton } from '@ojiepermana/kit/ui/component/button';
+import { OpButton, OpThemeSelector } from '@ojiepermana/angular';
 
 @Component({
   selector: 'app-example',
-  imports: [OpButton],
+  imports: [OpButton, OpThemeSelector],
   template: `
-    <op-button 
-      variant="primary" 
-      size="md"
-      (click)="handleClick()">
-      Click me
-    </op-button>
+    <div>
+      <op-theme-selector></op-theme-selector>
+      
+      <op-button variant="primary" size="md" (click)="onButtonClick()">
+        Primary Button
+      </op-button>
+      
+      <op-button variant="destructive" size="lg">
+        Destructive Button
+      </op-button>
+    </div>
   `
 })
 export class ExampleComponent {
-  handleClick() {
+  onButtonClick() {
     console.log('Button clicked!');
   }
 }
 ```
 
-### OpButton Properties
+## 🎨 Available Components
 
-- `variant`: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' (default: 'primary')
-- `size`: 'sm' | 'md' | 'lg' (default: 'md')
-- `type`: 'button' | 'submit' | 'reset' (default: 'button')
-- `disabled`: boolean (default: false)
+### OpButton
+Button component dengan berbagai variants dan sizes.
 
-### OpButton Events
+**Variants**: `primary`, `secondary`, `destructive`, `outline`, `ghost`  
+**Sizes**: `sm`, `md`, `lg`
 
-- `click`: Event emitted when button is clicked
+```html
+<op-button variant="primary" size="md" (click)="handleClick()">
+  Click me
+</op-button>
+```
 
-## Development
+### OpThemeSelector
+Component untuk switching theme variants dan mode (light/dark).
 
-Untuk menambahkan komponen baru:
+```html
+<op-theme-selector></op-theme-selector>
+```
 
-1. Buat file component di folder yang sesuai dalam `src/lib/`
-2. Export component di file `index.ts` folder tersebut
-3. Pastikan path sudah di-export di `public-api.ts`
-4. Buat secondary entry point jika diperlukan
+## 🛠️ Services
 
-## Build
+### ThemeService
+Service untuk managing theme state dengan signals.
+
+```typescript
+import { ThemeService } from '@ojiepermana/angular';
+
+@Component({...})
+export class MyComponent {
+  private themeService = inject(ThemeService);
+
+  changeTheme() {
+    this.themeService.setVariant('blue');
+    this.themeService.toggleMode();
+  }
+
+  // Access current state
+  currentTheme = this.themeService.variant; // signal
+  currentMode = this.themeService.mode; // signal
+}
+```
+
+## 🎯 Development Guidelines
+
+### Angular Best Practices
+- Standalone components (default)
+- Signals for state management
+- `input()` and `output()` functions
+- `computed()` for derived state
+- Native control flow (`@if`, `@for`, `@switch`)
+- `inject()` function for dependency injection
+
+### Export Rules
+- Each folder has `index.ts` dengan barrel exports
+- Semua exports melalui `public-api.ts`
+- Support subpath imports dalam package.json
+
+## 🔧 Build Library
 
 ```bash
+# Build library
 ng build kit
-```
-```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
+# Publish to npm
+npm publish dist/kit
 ```
 
-## Building
+## 📝 Version History
 
-To build the library, run:
+- **1.1.0**: Restructured to flat architecture, updated exports
+- **1.0.0**: Initial release with ui/ structure
 
-```bash
-ng build kit
-```
+## 📄 License
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
-
-### Publishing the Library
-
-Once the project is built, you can publish your library by following these steps:
-
-1. Navigate to the `dist` directory:
-   ```bash
-   cd dist/kit
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT
