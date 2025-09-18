@@ -3,10 +3,10 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./example.component').then(m => m.ExampleComponent)
+    loadComponent: () => import('./example').then(m => m.ExampleComponent)
   },
   {
     path: 'material-icons',
-    loadComponent: () => import('./components/material-icons-demo.component').then(m => m.MaterialIconsDemoComponent)
+    loadComponent: () => import('./components/material-icons-demo').then(m => m.MaterialIconsDemoComponent)
   }
 ];
