@@ -68,5 +68,15 @@ projects/kit/src/lib/
 ## Component Naming (MANDATORY)
 
 - **Selector**: `op-` prefix (e.g., `op-button`, `op-card`)
-- **Class**: `Op` prefix PascalCase (e.g., `OpButton`, `OpCard`)
+- **Class**: Simple PascalCase without prefix (e.g., `Button`, `Card`)
 - **File**: kebab-case (e.g., `button.ts`, `theme-selector.ts`)
+
+### Import/Export Pattern
+```typescript
+// Export from component file
+export class Button { }  // NOT OpButton
+export class Card { }    // NOT OpCard
+
+// Import in consuming code
+import { Button, Card } from '@ojiepermana/angular';
+```

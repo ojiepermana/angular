@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { OpButton } from '../../projects/kit/src/lib/components/button';
+import { Button } from '../../projects/kit/src/lib/components/button';
 
 @Component({
   selector: 'app-example',
-  imports: [OpButton],
+  imports: [Button],
   template: `
     <section>
       <h2>Button Variants & Theme Demo</h2>

@@ -3,10 +3,10 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./example').then(m => m.ExampleComponent)
+    loadChildren: () => import('./pages/website/routes').then(m => m.routes)
   },
   {
-    path: 'material-icons',
-    loadComponent: () => import('./components/material-icons-demo').then(m => m.MaterialIconsDemoComponent)
+    path: 'demo',
+    loadChildren: () => import('./pages/demo/routes').then(m => m.routes)
   }
 ];
