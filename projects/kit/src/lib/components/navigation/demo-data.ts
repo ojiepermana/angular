@@ -10,14 +10,14 @@ export const demoNavigationData: NavigationItem[] = [
         id: 'analytics',
         title: 'Analytics',
         type: 'basic',
-        icon: '📊',
+        icon: 'analytics',
         link: '/dashboard/analytics'
       },
       {
         id: 'ecommerce',
         title: 'eCommerce',
         type: 'basic',
-        icon: '🛒',
+        icon: 'shopping_cart',
         link: '/dashboard/ecommerce'
       }
     ]
@@ -35,27 +35,27 @@ export const demoNavigationData: NavigationItem[] = [
         id: 'ecommerce-app',
         title: 'eCommerce',
         type: 'collapsable',
-        icon: '🏪',
+        icon: 'store',
         children: [
           {
             id: 'products',
             title: 'Products',
             type: 'basic',
-            icon: '📦',
+            icon: 'inventory',
             link: '/apps/ecommerce/products'
           },
           {
             id: 'orders',
             title: 'Orders',
             type: 'basic',
-            icon: '📋',
+            icon: 'receipt_long',
             link: '/apps/ecommerce/orders'
           },
           {
             id: 'customers',
             title: 'Customers',
             type: 'basic',
-            icon: '👥',
+            icon: 'people',
             link: '/apps/ecommerce/customers'
           }
         ]
@@ -64,28 +64,28 @@ export const demoNavigationData: NavigationItem[] = [
         id: 'academy',
         title: 'Academy',
         type: 'basic',
-        icon: '🎓',
+        icon: 'school',
         link: '/apps/academy'
       },
       {
         id: 'calendar',
         title: 'Calendar',
         type: 'basic',
-        icon: '📅',
+        icon: 'calendar_today',
         link: '/apps/calendar'
       },
       {
         id: 'chat',
         title: 'Chat',
         type: 'basic',
-        icon: '💬',
+        icon: 'chat',
         link: '/apps/chat'
       },
       {
         id: 'mailbox',
         title: 'Mailbox',
         type: 'basic',
-        icon: '📧',
+        icon: 'mail',
         link: '/apps/mailbox'
       }
     ]
@@ -103,34 +103,34 @@ export const demoNavigationData: NavigationItem[] = [
         id: 'authentication',
         title: 'Authentication',
         type: 'collapsable',
-        icon: '��',
+        icon: 'security',
         children: [
           {
             id: 'sign-in',
             title: 'Sign in',
             type: 'basic',
-            icon: '🔑',
+            icon: 'login',
             link: '/pages/authentication/sign-in'
           },
           {
             id: 'sign-up',
             title: 'Sign up',
             type: 'basic',
-            icon: '📝',
+            icon: 'person_add',
             link: '/pages/authentication/sign-up'
           },
           {
             id: 'sign-out',
             title: 'Sign out',
             type: 'basic',
-            icon: '🚪',
+            icon: 'logout',
             link: '/pages/authentication/sign-out'
           },
           {
             id: 'forgot-password',
             title: 'Forgot password',
             type: 'basic',
-            icon: '🔑',
+            icon: 'lock_reset',
             link: '/pages/authentication/forgot-password'
           }
         ]
@@ -139,27 +139,27 @@ export const demoNavigationData: NavigationItem[] = [
         id: 'coming-soon',
         title: 'Coming Soon',
         type: 'basic',
-        icon: '🚧',
+        icon: 'construction',
         link: '/pages/coming-soon'
       },
       {
         id: 'error',
         title: 'Error',
         type: 'collapsable',
-        icon: '❌',
+        icon: 'error',
         children: [
           {
             id: '404',
             title: '404',
             type: 'basic',
-            icon: '🔍',
+            icon: 'search_off',
             link: '/pages/error/404'
           },
           {
             id: '500',
             title: '500',
             type: 'basic',
-            icon: '💥',
+            icon: 'warning',
             link: '/pages/error/500'
           }
         ]
@@ -179,13 +179,13 @@ export const demoNavigationData: NavigationItem[] = [
         id: 'material-components',
         title: 'Material Components',
         type: 'collapsable',
-        icon: '🎨',
+        icon: 'widgets',
         children: [
           {
             id: 'buttons',
             title: 'Buttons',
             type: 'basic',
-            icon: '🔘',
+            icon: 'radio_button_checked',
             link: '/ui/material/buttons'
           },
           {
@@ -199,7 +199,7 @@ export const demoNavigationData: NavigationItem[] = [
             id: 'forms',
             title: 'Forms',
             type: 'basic',
-            icon: '📝',
+            icon: 'edit',
             link: '/ui/material/forms'
           }
         ]

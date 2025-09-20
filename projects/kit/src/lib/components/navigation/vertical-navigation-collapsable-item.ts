@@ -1,4 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { NavigationItem } from './types';
 import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
 
@@ -14,7 +15,7 @@ import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
         (click)="toggleExpanded()"
       >
         @if (item().icon) {
-          <span class="mr-3 text-lg">{{ item().icon }}</span>
+          <mat-icon class="mr-3 text-lg">{{ item().icon }}</mat-icon>
         }
         <span class="flex-1">{{ item().title }}</span>
         <span class="text-base font-bold transition-transform duration-200 w-4 h-4 flex items-center justify-center">
@@ -50,7 +51,7 @@ import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
       transform: rotate(180deg);
     }
   `],
-  imports: [VerticalNavigationBasicItem]
+  imports: [VerticalNavigationBasicItem, MatIconModule]
 })
 export class VerticalNavigationCollapsableItem {
   item = input.required<NavigationItem>();
