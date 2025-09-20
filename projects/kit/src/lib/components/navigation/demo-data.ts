@@ -192,7 +192,7 @@ export const demoNavigationData: NavigationItem[] = [
             id: 'cards',
             title: 'Cards',
             type: 'basic',
-            icon: '🃏',
+            icon: 'credit_card',
             link: '/ui/material/cards'
           },
           {
@@ -208,20 +208,20 @@ export const demoNavigationData: NavigationItem[] = [
         id: 'icons',
         title: 'Icons',
         type: 'collapsable',
-        icon: '⭐',
+        icon: 'star',
         children: [
           {
             id: 'heroicons',
             title: 'Heroicons',
             type: 'basic',
-            icon: '🦸',
+            icon: 'superhero_mode',
             link: '/ui/icons/heroicons'
           },
           {
             id: 'material-icons',
             title: 'Material Icons',
             type: 'basic',
-            icon: '🎭',
+            icon: 'theater_comedy',
             link: '/ui/icons/material'
           }
         ]
@@ -241,21 +241,21 @@ export const demoNavigationData: NavigationItem[] = [
         id: 'guides',
         title: 'Guides',
         type: 'basic',
-        icon: '📖',
+        icon: 'menu_book',
         link: '/docs/guides'
       },
       {
         id: 'getting-started',
         title: 'Getting started',
         type: 'basic',
-        icon: '🚀',
+        icon: 'rocket_launch',
         link: '/docs/getting-started'
       },
       {
         id: 'changelog',
         title: 'Changelog',
         type: 'basic',
-        icon: '📋',
+        icon: 'history',
         link: '/docs/changelog'
       }
     ]
