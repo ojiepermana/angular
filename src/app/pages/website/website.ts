@@ -10,9 +10,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'website-info',
   imports: [],
   template: `
-    <div class="w-full max-w-none">
+    <div class="space-y-16">
       <!-- Hero Section -->
-      <section class="text-center py-16 bg-gradient-to-br from-[rgb(var(--muted))] to-blue-100 rounded-2xl mb-16 border border-[rgb(var(--border))]">
+      <section class="text-center py-16 bg-gradient-to-br from-[rgb(var(--muted))] to-blue-100 rounded-2xl border border-[rgb(var(--border))]">
         <h1 class="text-5xl font-bold mb-4 bg-gradient-to-br from-[rgb(var(--primary))] to-purple-600 bg-clip-text text-transparent">@ojiepermana/angular</h1>
         <p class="text-2xl text-[rgb(var(--muted-foreground))] mb-6 font-medium">Modern Angular UI Library with NavigationService Architecture</p>
         <p class="text-lg text-[rgb(var(--foreground))] max-w-3xl mx-auto mb-8 leading-relaxed">
@@ -26,9 +26,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       </section>
 
       <!-- Latest Updates Section -->
-      <section class="mb-16">
+      <section>
         <h2 class="text-center mb-8 text-4xl text-[rgb(var(--foreground))]">🚀 Latest Implementation</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div class="p-8 bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl shadow-md border border-green-200 dark:border-green-800">
             <h3 class="mb-4 text-green-800 dark:text-green-200 text-xl font-semibold">🏗️ NavigationService Architecture</h3>
             <p class="m-0 text-green-700 dark:text-green-300 leading-relaxed">
@@ -61,7 +61,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       </section>
 
       <!-- Features Section -->
-      <section class="mb-16">
+      <section>
         <h2 class="text-center mb-8 text-4xl text-[rgb(var(--foreground))]">💡 Core Features</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div class="p-8 bg-[rgb(var(--card))] rounded-2xl shadow-md transition-transform duration-200 hover:-translate-y-1 border border-[rgb(var(--border))]">
@@ -92,7 +92,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       </section>
 
       <!-- Components Preview -->
-      <section class="mb-16">
+      <section>
         <h2 class="text-center mb-8 text-4xl text-[rgb(var(--foreground))]">📦 Implemented Components</h2>
         <div class="flex flex-col gap-4 max-w-4xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start gap-2 p-4 bg-[rgb(var(--card))] rounded-lg shadow-sm border border-[rgb(var(--border))]">
