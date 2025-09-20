@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { NavigationItem } from './types';
+import { NavigationItem } from '../../types/navigations.type';
 import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
 import { VerticalNavigationCollapsableItem } from './vertical-navigation-collapsable-item';
 

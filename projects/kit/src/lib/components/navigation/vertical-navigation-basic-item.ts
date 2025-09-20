@@ -1,6 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { NavigationItem } from './types';
+import { MatIconModule } from '@angular/material/icon';
+import { NavigationItem } from '../../types/navigations.type';
 
 @Component({
   selector: 'op-vertical-navigation-basic-item',
@@ -14,7 +15,7 @@ import { NavigationItem } from './types';
           (click)="itemClicked.emit(item())"
         >
           @if (item().icon) {
-            <span class="mr-3 text-lg">{{ item().icon }}</span>
+            <mat-icon class="mr-3 text-lg">{{ item().icon }}</mat-icon>
           }
           <span>{{ item().title }}</span>
         </a>
@@ -25,14 +26,14 @@ import { NavigationItem } from './types';
           (click)="itemClicked.emit(item())"
         >
           @if (item().icon) {
-            <span class="mr-3 text-lg">{{ item().icon }}</span>
+            <mat-icon class="mr-3 text-lg">{{ item().icon }}</mat-icon>
           }
           <span>{{ item().title }}</span>
         </div>
       }
     </div>
   `,
-  imports: [RouterLink, RouterLinkActive]
+  imports: [RouterLink, MatIconModule]
 })
 export class VerticalNavigationBasicItem {
   item = input.required<NavigationItem>();

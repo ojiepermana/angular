@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core
 import { ThemeService } from '@ojiepermana/angular';
 
 export type IconStyle = 'default' | 'filled' | 'outline' | 'minimal';
-export type BorderStyle = 'rounded' | 'square' | 'circle' | 'pill';
+export type BorderStyle = 'rounded' | 'square' | 'circle' | 'pill' | 'none';
 
 @Component({
   selector: 'dark-mode-toggle',
@@ -93,6 +93,12 @@ export type BorderStyle = 'rounded' | 'square' | 'circle' | 'pill';
 
     .toggle-btn.pill {
       border-radius: 9999px;
+    }
+
+    .toggle-btn.none {
+      border: none;
+      background: none;
+      border-radius: 0.375rem; /* 6px - subtle rounded corners */
     }
 
     .sun-icon,

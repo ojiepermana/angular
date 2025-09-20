@@ -5,11 +5,14 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app',
   imports: [RouterOutlet],
   template: `
-  <div class="flex h-screen bg-background text-foreground transition-theme">
+  <router-outlet />
+  <!-- <div class="flex h-screen bg-background text-foreground transition-theme">
    <div class="flex h-full w-full">
       <router-outlet />
    </div>
-  </div>`,
+  </div> -->
+
+  `,
   styles: []
 })
 export class AppComponent {
