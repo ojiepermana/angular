@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Navigation } from './navigation';
 
 /**
  * Website Layout Component
@@ -10,31 +11,25 @@ import { RouterOutlet } from '@angular/router';
  */
 @Component({
   selector: 'website-layout',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Navigation],
   template: `
-    <div class="min-h-screen flex flex-col bg-[rgb(var(--background))] text-[rgb(var(--foreground))]">
-      <!-- Header Section -->
-      <header class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white py-4 shadow-lg">
-        <div class="max-w-5xl mx-auto px-6 flex justify-between items-center">
-          <h1 class="text-2xl font-semibold m-0">@ojiepermana/angular</h1>
-          <nav class="flex gap-6">
-            <a href="/" class="text-white no-underline font-medium hover:opacity-80 transition-opacity duration-200">Home</a>
-            <a href="/demo" class="text-white no-underline font-medium hover:opacity-80 transition-opacity duration-200">Demo</a>
-          </nav>
-        </div>
-      </header>
+    <div class="min-h-screen bg-background text-foreground">
+      <!-- Navigation Header -->
+      <website-navigation></website-navigation>
 
-      <!-- Main Content Area -->
-      <main class="flex-1 py-8">
-        <div class="max-w-5xl mx-auto px-6">
-          <router-outlet />
+      <!-- Main Content -->
+      <main>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <router-outlet></router-outlet>
         </div>
       </main>
 
-      <!-- Footer Section -->
-      <footer class="border-t border-[rgb(var(--border))] py-6 mt-auto">
-        <div class="max-w-5xl mx-auto px-6">
-          <p class="m-0 text-center text-[rgb(var(--muted-foreground))] text-sm">&copy; 2025 @ojiepermana/angular. Angular UI Library with op- prefix components.</p>
+      <!-- Footer -->
+      <footer class="border-t border-border mt-auto">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <p class="text-center text-sm text-muted-foreground">
+            &copy; 2025 @ojiepermana/angular. Angular UI Library with op- prefix components.
+          </p>
         </div>
       </footer>
     </div>
