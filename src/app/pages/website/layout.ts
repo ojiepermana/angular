@@ -25,14 +25,14 @@ import { RouterOutlet } from '@angular/router';
       </header>
 
       <!-- Main Content Area -->
-      <main class="flex-1 py-8 bg-[rgb(var(--background))]">
+      <main class="flex-1 py-8">
         <div class="max-w-6xl mx-auto px-4 w-full">
           <router-outlet />
         </div>
       </main>
 
       <!-- Footer Section -->
-      <footer class="bg-[rgb(var(--muted))] border-t border-[rgb(var(--border))] py-6 mt-auto">
+      <footer class="border-t border-[rgb(var(--border))] py-6 mt-auto">
         <div class="max-w-6xl mx-auto px-4">
           <p class="m-0 text-center text-[rgb(var(--muted-foreground))] text-sm">&copy; 2025 @ojiepermana/angular. Angular UI Library with op- prefix components.</p>
         </div>
