@@ -1,7 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { NavigationItem } from './types';
+import { NavigationItem } from '../../types/navigations.type';
 
 @Component({
   selector: 'op-vertical-navigation-basic-item',

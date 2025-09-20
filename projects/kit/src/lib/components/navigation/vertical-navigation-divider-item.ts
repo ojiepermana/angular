@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { NavigationItem } from './types';
+import { NavigationItem } from '../../types/navigations.type';
 
 @Component({
   selector: 'op-vertical-navigation-divider-item',

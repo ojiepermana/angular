@@ -1,6 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { NavigationItem } from './types';
+import { NavigationItem } from '../../types/navigations.type';
 import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
 
 @Component({

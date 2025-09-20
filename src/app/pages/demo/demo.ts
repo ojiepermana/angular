@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DarkModeToggle } from '../../layouts/components/shared/dark-mode-toggle.component';
 import { VerticalNavigation } from '../../../../projects/kit/src/lib/components/navigation/vertical-navigation';
-import { demoNavigationData } from '../../../../projects/kit/src/lib/components/navigation/demo-data';
+import { NavigationService } from '../../../../projects/kit/src/lib/services/navigation.service';
+import { demoNavigationData } from './navigations';
 
 @Component({
   selector: 'demo-page',
@@ -37,9 +38,14 @@ import { demoNavigationData } from '../../../../projects/kit/src/lib/components/
         <div class="flex flex-1 overflow-hidden">
           <!-- Sidebar Navigation -->
           <aside class="flex-shrink-0 w-64 border-r p-4 overflow-y-auto">
+            <!-- Using NavigationService with key -->
             <op-vertical-navigation
-              [navigation]="navigationData">
+              navigationKey="demo">
             </op-vertical-navigation>
+
+            <!-- Alternative: Direct data binding -->
+            <!-- <op-vertical-navigation [navigation]="navigationData"> -->
+            <!-- </op-vertical-navigation> -->
           </aside>
 
           <!-- Page Content -->
@@ -55,7 +61,14 @@ import { demoNavigationData } from '../../../../projects/kit/src/lib/components/
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DemoPage {
+export class DemoPage implements OnInit {
+  private _navigationService = inject(NavigationService);
+
+  ngOnInit(): void {
+    // Store navigation data in service with a key
+    this._navigationService.storeNavigation('demo', demoNavigationData);
+  }
+
   navigationData = demoNavigationData;
   isEcommerceExpanded = false;
   isAuthExpanded = false;
