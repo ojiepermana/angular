@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Test</title>
+    <style>
+        .bg-white { background-color: white; }
+        .dark\:bg-black { background-color: black; }
+        .dark .dark\:bg-black { background-color: black; }
+    </style>
+</head>
+<body>
+    <div class="bg-white dark:bg-black" style="height: 100px; width: 100px; border: 1px solid red;">
+        Test Element
+    </div>
+
+    <button onclick="toggleDark()">Toggle Dark Mode</button>
+
+    <script>
+        function toggleDark() {
+            document.documentElement.classList.toggle('dark');
+            console.log('Classes:', document.documentElement.classList.toString());
+        }
+    </script>
+</body>
+</html>

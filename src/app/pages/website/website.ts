@@ -14,10 +14,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       <!-- Hero Section -->
       <section class="text-center py-16 bg-gradient-to-br from-[rgb(var(--muted))] to-blue-100 rounded-2xl mb-16 border border-[rgb(var(--border))]">
         <h1 class="text-5xl font-bold mb-4 bg-gradient-to-br from-[rgb(var(--primary))] to-purple-600 bg-clip-text text-transparent">@ojiepermana/angular</h1>
-        <p class="text-2xl text-[rgb(var(--muted-foreground))] mb-6 font-medium">Modern Angular UI Library with op- Prefix Components</p>
+        <p class="text-2xl text-[rgb(var(--muted-foreground))] mb-6 font-medium">Modern Angular UI Library with Flat Architecture</p>
         <p class="text-lg text-[rgb(var(--foreground))] max-w-2xl mx-auto mb-8 leading-relaxed">
-          A comprehensive collection of reusable Angular components designed for scalable web applications.
-          Built with TypeScript, signals, and following Angular best practices.
+          A comprehensive collection of reusable Angular components with op- selectors and clean class exports.
+          Built with TypeScript, signals, standalone components, and following Angular best practices.
         </p>
         <div class="flex gap-4 justify-center flex-wrap">
           <a href="/demo" class="px-8 py-3 rounded-lg no-underline font-semibold transition-all duration-200 bg-[rgb(var(--primary))] text-[rgb(var(--primary-foreground))] hover:-translate-y-0.5 hover:shadow-lg">View Demo</a>
@@ -30,24 +30,24 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         <h2 class="text-center mb-8 text-4xl text-[rgb(var(--foreground))]">Key Features</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div class="p-8 bg-[rgb(var(--card))] rounded-2xl shadow-md transition-transform duration-200 hover:-translate-y-1 border border-[rgb(var(--border))]">
-            <h3 class="mb-4 text-[rgb(var(--card-foreground))] text-xl font-semibold">🎯 op- Prefix Components</h3>
-            <p class="m-0 text-[rgb(var(--muted-foreground))] leading-relaxed">All components use the 'op-' prefix for clear identification and avoiding naming conflicts.</p>
+            <h3 class="mb-4 text-[rgb(var(--card-foreground))] text-xl font-semibold">🎯 op- Selectors, Clean Exports</h3>
+            <p class="m-0 text-[rgb(var(--muted-foreground))] leading-relaxed">Components use 'op-' selectors (op-button) but export clean class names (Button) for better developer experience.</p>
           </div>
           <div class="p-8 bg-[rgb(var(--card))] rounded-2xl shadow-md transition-transform duration-200 hover:-translate-y-1 border border-[rgb(var(--border))]">
             <h3 class="mb-4 text-[rgb(var(--card-foreground))] text-xl font-semibold">⚡ Modern Angular</h3>
-            <p class="m-0 text-[rgb(var(--muted-foreground))] leading-relaxed">Built with standalone components, signals, and latest Angular features for optimal performance.</p>
+            <p class="m-0 text-[rgb(var(--muted-foreground))] leading-relaxed">Built with standalone components, signals, control flow, and Angular 20+ features for optimal performance.</p>
           </div>
           <div class="p-8 bg-[rgb(var(--card))] rounded-2xl shadow-md transition-transform duration-200 hover:-translate-y-1 border border-[rgb(var(--border))]">
             <h3 class="mb-4 text-[rgb(var(--card-foreground))] text-xl font-semibold">🏗️ Flat Architecture</h3>
-            <p class="m-0 text-[rgb(var(--muted-foreground))] leading-relaxed">Simple, maintainable project structure with clear separation of concerns.</p>
+            <p class="m-0 text-[rgb(var(--muted-foreground))] leading-relaxed">Simple, maintainable structure: components/, services/, pipes/, directives/, utils/, types/.</p>
           </div>
           <div class="p-8 bg-[rgb(var(--card))] rounded-2xl shadow-md transition-transform duration-200 hover:-translate-y-1 border border-[rgb(var(--border))]">
-            <h3 class="mb-4 text-[rgb(var(--card-foreground))] text-xl font-semibold">🎨 Theme System</h3>
-            <p class="m-0 text-[rgb(var(--muted-foreground))] leading-relaxed">Comprehensive theming system with CSS variables and multiple color schemes.</p>
+            <h3 class="mb-4 text-[rgb(var(--card-foreground))] text-xl font-semibold">🎨 Advanced Theme System</h3>
+            <p class="m-0 text-[rgb(var(--muted-foreground))] leading-relaxed">shadcn/ui inspired themes with Material integration, CSS variables, and multiple color schemes.</p>
           </div>
           <div class="p-8 bg-[rgb(var(--card))] rounded-2xl shadow-md transition-transform duration-200 hover:-translate-y-1 border border-[rgb(var(--border))]">
-            <h3 class="mb-4 text-[rgb(var(--card-foreground))] text-xl font-semibold">📱 Responsive Design</h3>
-            <p class="m-0 text-[rgb(var(--muted-foreground))] leading-relaxed">Mobile-first approach with responsive components that work on all devices.</p>
+            <h3 class="mb-4 text-[rgb(var(--card-foreground))] text-xl font-semibold">� Multi-Level Imports</h3>
+            <p class="m-0 text-[rgb(var(--muted-foreground))] leading-relaxed">Flexible import patterns: main library, category-level, or specific component imports for optimal tree-shaking.</p>
           </div>
           <div class="p-8 bg-[rgb(var(--card))] rounded-2xl shadow-md transition-transform duration-200 hover:-translate-y-1 border border-[rgb(var(--border))]">
             <h3 class="mb-4 text-[rgb(var(--card-foreground))] text-xl font-semibold">♿ Accessibility</h3>
@@ -84,9 +84,62 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         <div class="bg-[rgb(var(--muted))] text-[rgb(var(--muted-foreground))] p-4 rounded-lg mb-4 overflow-x-auto border border-[rgb(var(--border))]">
           <pre class="m-0 font-mono"><code>npm install @ojiepermana/angular</code></pre>
         </div>
-        <p class="my-4 text-[rgb(var(--muted-foreground))]">Import components in your Angular application:</p>
-        <div class="bg-[rgb(var(--muted))] text-[rgb(var(--muted-foreground))] p-4 rounded-lg overflow-x-auto border border-[rgb(var(--border))]">
-          <pre class="m-0 font-mono"><code>import {{ '{' }} OpButton, OpCard {{ '}' }} from '@ojiepermana/angular';</code></pre>
+        <p class="my-4 text-[rgb(var(--muted-foreground))]">Import components with flexible patterns:</p>
+
+        <!-- Import Examples -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+          <div class="text-left">
+            <h4 class="text-lg font-semibold mb-2 text-[rgb(var(--foreground))]">Main Library Import (Recommended)</h4>
+            <div class="bg-[rgb(var(--muted))] text-[rgb(var(--muted-foreground))] p-4 rounded-lg overflow-x-auto border border-[rgb(var(--border))]">
+              <pre class="m-0 font-mono text-sm"><code>import {{ '{' }} Button, Card {{ '}' }} from '@ojiepermana/angular';</code></pre>
+            </div>
+          </div>
+
+          <div class="text-left">
+            <h4 class="text-lg font-semibold mb-2 text-[rgb(var(--foreground))]">Category-Level Import</h4>
+            <div class="bg-[rgb(var(--muted))] text-[rgb(var(--muted-foreground))] p-4 rounded-lg overflow-x-auto border border-[rgb(var(--border))]">
+              <pre class="m-0 font-mono text-sm"><code>import {{ '{' }} Button {{ '}' }} from '@ojiepermana/angular/components';</code></pre>
+            </div>
+          </div>
+
+          <div class="text-left">
+            <h4 class="text-lg font-semibold mb-2 text-[rgb(var(--foreground))]">Specific Component Import</h4>
+            <div class="bg-[rgb(var(--muted))] text-[rgb(var(--muted-foreground))] p-4 rounded-lg overflow-x-auto border border-[rgb(var(--border))]">
+              <pre class="m-0 font-mono text-sm"><code>import {{ '{' }} Button {{ '}' }} from '@ojiepermana/angular/components/button';</code></pre>
+            </div>
+          </div>
+
+          <div class="text-left">
+            <h4 class="text-lg font-semibold mb-2 text-[rgb(var(--foreground))]">Mixed Import Pattern</h4>
+            <div class="bg-[rgb(var(--muted))] text-[rgb(var(--muted-foreground))] p-4 rounded-lg overflow-x-auto border border-[rgb(var(--border))]">
+              <pre class="m-0 font-mono text-sm"><code>import {{ '{' }} Button, Card {{ '}' }} from '@ojiepermana/angular/components';
+import {{ '{' }} ThemeService {{ '}' }} from '@ojiepermana/angular/services';</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Development Info -->
+        <div class="bg-[rgb(var(--card))] p-6 rounded-xl border border-[rgb(var(--border))] text-left max-w-4xl mx-auto">
+          <h3 class="text-xl font-semibold mb-4 text-[rgb(var(--card-foreground))]">📚 Development Guidelines</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 class="font-semibold mb-2 text-[rgb(var(--foreground))]">Component Structure</h4>
+              <ul class="text-sm text-[rgb(var(--muted-foreground))] space-y-1">
+                <li>• Selector: <code class="bg-[rgb(var(--muted))] px-1 rounded">op-button</code></li>
+                <li>• Class: <code class="bg-[rgb(var(--muted))] px-1 rounded">Button</code></li>
+                <li>• File: <code class="bg-[rgb(var(--muted))] px-1 rounded">button.ts</code></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-2 text-[rgb(var(--foreground))]">Architecture</h4>
+              <ul class="text-sm text-[rgb(var(--muted-foreground))] space-y-1">
+                <li>• Standalone components only</li>
+                <li>• Signals for state management</li>
+                <li>• Control flow (&#64;if, &#64;for, &#64;switch)</li>
+                <li>• TypeScript strict mode</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
     </div>

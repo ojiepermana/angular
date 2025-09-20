@@ -1,41 +1,44 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { VerticalMiniDockLayout } from '../components/shared/vertical-mini-dock';
 
 @Component({
-  selector: 'layout',
-  imports: [],
+  selector: 'layout-default',
+  imports: [RouterOutlet, VerticalMiniDockLayout],
   template: `
-    <div id="minibar" class="flex flex-col p-2  items-center h-full bg-gray-2 dark:bg-black/90 border-r">
-          <!-- Theme Toggle Component -->
-          <div class="mb-4"> </div>
-       </div>
-      <div id="content" class="flex h-full flex-1 flex-col bg-white dark:bg-black/90 text-neutral-12 overflow-hidden">
-      <header class=" p-3 border-b">
-        <div class="flex items-center justify-between">
-          <h1 class="text-lg font-semibold"> Edsis</h1>
-          <div class="text-sm text-neutral-11">
-            <!-- themes infor -->
+    <div class="flex h-screen">
+      <vertical-mini-dock-layout></vertical-mini-dock-layout>
+      <!-- Main Content Area -->
+      <div id="content" class="flex flex-1 flex-col overflow-hidden">
+         <!-- Header -->
+        <header class="p-2 border-b">
+          <div class="flex items-center justify-between">
+            <h1 class="text-lg font-semibold">Angular Kit</h1>
+            <div class="text-sm">
+              <!-- Theme info placeholder -->
+              Right Menu
+            </div>
           </div>
-        </div>
-      </header>
-        <main class="flex flex-row h-full overflow-hidden">
-          <!-- Main Conten MFE -->
-          <aside class="w-64 h-full p-4 border-r"></aside>
-          <main class="flex-1 h-full overflow-auto"></main>
-          <!-- End Main Content MFE -->
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex flex-1 overflow-hidden">
+          <!-- Sidebar Navigation -->
+          <aside class="w-64 border-rp-4">
+          </aside>
+
+          <!-- Page Content -->
+          <div class="flex-1 overflow-auto p-6">
+            <router-outlet/>
+          </div>
         </main>
-        <footer class="text-neutral-12 p-3 border-t">
-          <div class="flex items-center justify-between text-sm">
-            <span>edsis © 2025</span>
-            <span class="text-neutral-11">
-              Built with ❤️ by Ojie Permana
-            </span>
-          </div>
-        </footer>
+
+        <!-- Footer -->
+        <!-- <footer-layout></footer-layout> -->
       </div>
+    </div>
   `,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Layout {
-
-}
+export class Layout {}

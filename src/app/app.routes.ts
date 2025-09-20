@@ -7,6 +7,12 @@ export const routes: Routes = [
   },
   {
     path: 'demo',
-    loadChildren: () => import('./pages/demo/routes').then(m => m.routes)
+    loadComponent: () => import('./layouts/layout').then(m => m.Layout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./pages/demo/routes').then(m => m.routes)
+      }
+    ]
   }
 ];

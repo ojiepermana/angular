@@ -3,13 +3,256 @@
 @import "tailwindcss";
 @import "./app/styles/themes.css";
 
+/* Base element styles using CSS variables */
+* {
+  border-color: rgb(var(--border));
+}
+
 html, body {
   height: 100%;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
 }
 
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: rgb(var(--background, 255 255 255));
-  color: rgb(var(--foreground, 9 9 11));
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Global theme-aware utility classes */
+.bg-background {
+  background-color: rgb(var(--background));
+}
+
+.bg-foreground {
+  background-color: rgb(var(--foreground));
+}
+
+.bg-card {
+  background-color: rgb(var(--card));
+}
+
+.bg-card-foreground {
+  background-color: rgb(var(--card-foreground));
+}
+
+.bg-primary {
+  background-color: rgb(var(--primary));
+}
+
+.bg-primary-foreground {
+  background-color: rgb(var(--primary-foreground));
+}
+
+.bg-secondary {
+  background-color: rgb(var(--secondary));
+}
+
+.bg-secondary-foreground {
+  background-color: rgb(var(--secondary-foreground));
+}
+
+.bg-muted {
+  background-color: rgb(var(--muted));
+}
+
+.bg-muted-foreground {
+  background-color: rgb(var(--muted-foreground));
+}
+
+.bg-accent {
+  background-color: rgb(var(--accent));
+}
+
+.bg-accent-foreground {
+  background-color: rgb(var(--accent-foreground));
+}
+
+.bg-destructive {
+  background-color: rgb(var(--destructive));
+}
+
+.bg-border {
+  background-color: rgb(var(--border));
+}
+
+/* Text color utilities */
+.text-foreground {
+  color: rgb(var(--foreground));
+}
+
+.text-background {
+  color: rgb(var(--background));
+}
+
+.text-card {
+  color: rgb(var(--card));
+}
+
+.text-card-foreground {
+  color: rgb(var(--card-foreground));
+}
+
+.text-primary {
+  color: rgb(var(--primary));
+}
+
+.text-primary-foreground {
+  color: rgb(var(--primary-foreground));
+}
+
+.text-secondary {
+  color: rgb(var(--secondary));
+}
+
+.text-secondary-foreground {
+  color: rgb(var(--secondary-foreground));
+}
+
+.text-muted {
+  color: rgb(var(--muted));
+}
+
+.text-muted-foreground {
+  color: rgb(var(--muted-foreground));
+}
+
+.text-accent {
+  color: rgb(var(--accent));
+}
+
+.text-accent-foreground {
+  color: rgb(var(--accent-foreground));
+}
+
+.text-destructive {
+  color: rgb(var(--destructive));
+}
+
+.text-border {
+  color: rgb(var(--border));
+}
+
+/* Border utilities */
+.border-border {
+  border-color: rgb(var(--border));
+}
+
+.border-input {
+  border-color: rgb(var(--input));
+}
+
+.border-ring {
+  border-color: rgb(var(--ring));
+}
+
+/* Ring utilities for focus states */
+.ring-ring {
+  --tw-ring-color: rgb(var(--ring));
+}
+
+/* Sidebar utilities */
+.bg-sidebar {
+  background-color: rgb(var(--sidebar));
+}
+
+.bg-sidebar-foreground {
+  background-color: rgb(var(--sidebar-foreground));
+}
+
+.bg-sidebar-primary {
+  background-color: rgb(var(--sidebar-primary));
+}
+
+.bg-sidebar-primary-foreground {
+  background-color: rgb(var(--sidebar-primary-foreground));
+}
+
+.bg-sidebar-accent {
+  background-color: rgb(var(--sidebar-accent));
+}
+
+.bg-sidebar-accent-foreground {
+  background-color: rgb(var(--sidebar-accent-foreground));
+}
+
+.text-sidebar {
+  color: rgb(var(--sidebar));
+}
+
+.text-sidebar-foreground {
+  color: rgb(var(--sidebar-foreground));
+}
+
+.text-sidebar-primary {
+  color: rgb(var(--sidebar-primary));
+}
+
+.text-sidebar-primary-foreground {
+  color: rgb(var(--sidebar-primary-foreground));
+}
+
+.text-sidebar-accent {
+  color: rgb(var(--sidebar-accent));
+}
+
+.text-sidebar-accent-foreground {
+  color: rgb(var(--sidebar-accent-foreground));
+}
+
+.border-sidebar {
+  border-color: rgb(var(--sidebar-border));
+}
+
+.border-sidebar-border {
+  border-color: rgb(var(--sidebar-border));
+}
+
+/* Chart color utilities */
+.bg-chart-1 {
+  background-color: rgb(var(--chart-1));
+}
+
+.bg-chart-2 {
+  background-color: rgb(var(--chart-2));
+}
+
+.bg-chart-3 {
+  background-color: rgb(var(--chart-3));
+}
+
+.bg-chart-4 {
+  background-color: rgb(var(--chart-4));
+}
+
+.bg-chart-5 {
+  background-color: rgb(var(--chart-5));
+}
+
+.text-chart-1 {
+  color: rgb(var(--chart-1));
+}
+
+.text-chart-2 {
+  color: rgb(var(--chart-2));
+}
+
+.text-chart-3 {
+  color: rgb(var(--chart-3));
+}
+
+.text-chart-4 {
+  color: rgb(var(--chart-4));
+}
+
+.text-chart-5 {
+  color: rgb(var(--chart-5));
+}
+
+/* Additional helper classes */
+.transition-theme {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
