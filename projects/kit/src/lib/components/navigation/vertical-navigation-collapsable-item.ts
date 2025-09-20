@@ -8,17 +8,17 @@ import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
     <div class="op-navigation-collapsable">
       <!-- Parent item -->
       <div
-        class="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md cursor-pointer"
-        [class.bg-gray-100]="isExpanded()"
+        class="flex items-center px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer transition-colors"
+        [class.bg-accent]="isExpanded()"
+        [class.text-accent-foreground]="isExpanded()"
         (click)="toggleExpanded()"
       >
         @if (item().icon) {
           <span class="mr-3 text-lg">{{ item().icon }}</span>
         }
         <span class="flex-1">{{ item().title }}</span>
-        <span class="material-icons-outlined text-base transition-transform duration-200"
-              [class.rotate-180]="isExpanded()">
-          expand_more
+        <span class="text-base font-bold transition-transform duration-200 w-4 h-4 flex items-center justify-center">
+          {{ isExpanded() ? '-' : '+' }}
         </span>
       </div>
 

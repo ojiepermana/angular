@@ -8,11 +8,11 @@ import { VerticalNavigationCollapsableItem } from './vertical-navigation-collaps
   template: `
     <div class="op-navigation-group">
       @if (item().title) {
-        <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+        <div class="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           {{ item().title }}
         </div>
       }
-      
+
       @if (item().children) {
         <div class="space-y-1">
           @for (child of item().children; track child.id || child.title) {

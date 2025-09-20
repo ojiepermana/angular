@@ -10,7 +10,7 @@ import { NavigationItem } from './types';
         <a
           [routerLink]="item().link"
           [title]="item().tooltip"
-          class="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md"
+          class="flex items-center px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
           (click)="itemClicked.emit(item())"
         >
           @if (item().icon) {
@@ -20,7 +20,7 @@ import { NavigationItem } from './types';
         </a>
       } @else {
         <div
-          class="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md cursor-pointer"
+          class="flex items-center px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer transition-colors"
           [title]="item().tooltip"
           (click)="itemClicked.emit(item())"
         >
