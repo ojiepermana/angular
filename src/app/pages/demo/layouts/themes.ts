@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ThemeService, ThemeVariant, ThemeMode } from '@ojiepermana/angular';
+import { LayoutService, LayoutType } from '../../../services/layout.service';
 import { TitleCasePipe } from '@angular/common';
 
 @Component({
-  selector: 'variables-demo',
+  selector: 'layout-themes',
   imports: [RouterLink, TitleCasePipe],
   template: `
     <div class="bg-background text-foreground min-h-screen transition-theme">
@@ -38,9 +39,52 @@ import { TitleCasePipe } from '@angular/common';
 
       <main class="max-w-6xl mx-auto p-6 space-y-8">
 
+        <!-- Layout Controls -->
+        <section class="bg-card text-card-foreground border border-border rounded-lg p-6 transition-theme">
+          <h2 class="text-primary text-2xl font-semibold mb-6">Layout Configuration</h2>
+          <div class="space-y-4">
+            <!-- Current Layout Display -->
+            <div class="bg-muted text-muted-foreground p-4 rounded transition-theme">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-accent-foreground font-medium">Current Layout</h3>
+                  <p class="text-sm mt-1">{{ layoutService.currentLayout() | titlecase }}</p>
+                </div>
+                <div class="text-sm">
+                  <span class="text-accent-foreground font-medium">Theme:</span>
+                  <span class="text-primary ml-2">{{ themeService.variant() | titlecase }} - {{ themeService.mode() | titlecase }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Layout Type Selection -->
+            <div>
+              <label class="text-foreground text-sm font-medium block mb-3">Choose Layout Type</label>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                @for (layout of availableLayouts; track layout) {
+                  <button
+                    (click)="setLayout(layout)"
+                    [class]="getLayoutButtonClass(layout)"
+                    class="p-4 rounded border transition-theme text-left"
+                  >
+                    <div class="font-medium text-sm">{{ layout | titlecase }}</div>
+                    <div class="text-xs mt-1 opacity-75">{{ getLayoutDescription(layout) }}</div>
+                  </button>
+                }
+              </div>
+            </div>
+
+            <!-- Layout Features -->
+            <div class="bg-accent text-accent-foreground p-3 rounded text-sm transition-theme">
+              <div class="font-medium mb-1">Current Layout Features:</div>
+              <div class="text-xs opacity-90">{{ getCurrentLayoutFeatures() }}</div>
+            </div>
+          </div>
+        </section>
+
         <!-- Quick Theme Controls -->
         <section class="bg-card text-card-foreground border border-border rounded-lg p-6 transition-theme">
-          <h2 class="text-primary text-2xl font-semibold mb-6">Quick Theme Toggle</h2>
+          <h2 class="text-primary text-2xl font-semibold mb-6">Theme Configuration</h2>
           <div class="flex flex-wrap gap-4">
             <!-- Mode Toggle -->
             <div>
@@ -275,11 +319,13 @@ import { TitleCasePipe } from '@angular/common';
     </div>
   `
 })
-export class VariablesDemoComponent {
+export class LayoutThemes {
   protected readonly themeService = inject(ThemeService);
+  protected readonly layoutService = inject(LayoutService);
 
   protected readonly availableModes: ThemeMode[] = ['light', 'dark'];
   protected readonly quickVariants: ThemeVariant[] = ['default', 'blue', 'green', 'red', 'violet'];
+  protected readonly availableLayouts: LayoutType[] = ['empty', 'default', 'modern'];
 
   protected readonly exampleCode = `<!-- All elements automatically respond to theme changes -->
 <div class="bg-card text-card-foreground border border-border p-6">
@@ -296,6 +342,10 @@ export class VariablesDemoComponent {
     this.themeService.setMode(mode);
   }
 
+  setLayout(layout: LayoutType): void {
+    this.layoutService.setLayout(layout);
+  }
+
   getVariantButtonClass(variant: ThemeVariant): string {
     const isActive = this.themeService.variant() === variant;
     return isActive
@@ -308,5 +358,31 @@ export class VariablesDemoComponent {
     return isActive
       ? 'bg-primary text-primary-foreground'
       : 'bg-secondary text-secondary-foreground hover:bg-accent';
+  }
+
+  getLayoutButtonClass(layout: LayoutType): string {
+    const isActive = this.layoutService.currentLayout() === layout;
+    return isActive
+      ? 'bg-primary text-primary-foreground border-primary'
+      : 'bg-secondary text-secondary-foreground border-border hover:bg-accent';
+  }
+
+  getLayoutDescription(layout: LayoutType): string {
+    const descriptions = {
+      empty: 'Minimal layout with no navigation or header',
+      default: 'Standard layout with sidebar and header navigation',
+      modern: 'Contemporary layout with mini dock and clean design'
+    };
+    return descriptions[layout];
+  }
+
+  getCurrentLayoutFeatures(): string {
+    const currentLayout = this.layoutService.currentLayout();
+    const features: Record<LayoutType, string> = {
+      empty: 'Clean, distraction-free interface for focused content',
+      default: 'Full navigation sidebar, header with breadcrumbs, responsive design',
+      modern: 'Mini dock navigation, floating panels, optimized for productivity'
+    };
+    return features[currentLayout];
   }
 }
