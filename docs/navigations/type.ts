@@ -4,12 +4,12 @@ import {
     QueryParamsHandling,
 } from '@angular/router';
 
-export interface FuseNavigationItem {
+export interface NavigationItem {
     id?: string;
     title?: string;
     subtitle?: string;
     type: 'aside' | 'basic' | 'collapsable' | 'divider' | 'group' | 'spacer';
-    hidden?: (item: FuseNavigationItem) => boolean;
+    hidden?: (item: NavigationItem) => boolean;
     active?: boolean;
     disabled?: boolean;
     tooltip?: string;
@@ -22,7 +22,7 @@ export interface FuseNavigationItem {
     target?: '_blank' | '_self' | '_parent' | '_top' | string;
     exactMatch?: boolean;
     isActiveMatchOptions?: IsActiveMatchOptions;
-    function?: (item: FuseNavigationItem) => void;
+    function?: (item: NavigationItem) => void;
     classes?: {
         title?: string;
         subtitle?: string;
@@ -34,16 +34,16 @@ export interface FuseNavigationItem {
         title?: string;
         classes?: string;
     };
-    children?: FuseNavigationItem[];
+    children?: NavigationItem[];
     meta?: any;
 }
 
-export type FuseVerticalNavigationAppearance =
+export type VerticalNavigationAppearance =
     | 'default'
     | 'compact'
     | 'dense'
     | 'thin';
 
-export type FuseVerticalNavigationMode = 'over' | 'side';
+export type VerticalNavigationMode = 'over' | 'side';
 
-export type FuseVerticalNavigationPosition = 'left' | 'right';
+export type VerticalNavigationPosition = 'left' | 'right';

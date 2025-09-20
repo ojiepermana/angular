@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { FuseNavigationItem } from './type';
+import { NavigationItem } from './type';
 
-export const Navigation: FuseNavigationItem[] = [
+export const Navigation: NavigationItem[] = [
     {
         id: 'dashboards',
         title: 'Dashboards',
@@ -695,11 +695,11 @@ export const Navigation: FuseNavigationItem[] = [
                 link: '/ui/material-components',
             },
             {
-                id: 'user-interface.fuse-components',
-                title: 'Fuse Components',
+                id: 'user-interface.-components',
+                title: ' Components',
                 type: 'basic',
                 icon: 'square-3-stack-3d',
-                link: '/ui/fuse-components',
+                link: '/ui/-components',
             },
             {
                 id: 'user-interface.other-components',
@@ -962,7 +962,7 @@ export const Navigation: FuseNavigationItem[] = [
     {
         id: 'documentation',
         title: 'Documentation',
-        subtitle: 'Everything you need to know about Fuse',
+        subtitle: 'Everything you need to know about ',
         type: 'group',
         icon: 'information-circle',
         children: [
@@ -992,11 +992,11 @@ export const Navigation: FuseNavigationItem[] = [
                 link: '/ui/material-components',
             },
             {
-                id: 'user-interface.fuse-components',
-                title: 'Fuse Components',
+                id: 'user-interface.-components',
+                title: ' Components',
                 type: 'basic',
                 icon: 'square-3-stack-3d',
-                link: '/ui/fuse-components',
+                link: '/ui/-components',
             },
             {
                 id: 'user-interface.other-components',
