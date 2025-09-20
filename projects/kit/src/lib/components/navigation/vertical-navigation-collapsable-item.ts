@@ -1,0 +1,69 @@
+import { Component, input, output, signal } from '@angular/core';
+import { NavigationItem } from './types';
+import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
+
+@Component({
+  selector: 'op-vertical-navigation-collapsable-item',
+  template: `
+    <div class="op-navigation-collapsable">
+      <!-- Parent item -->
+      <div
+        class="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md cursor-pointer"
+        [class.bg-gray-100]="isExpanded()"
+        (click)="toggleExpanded()"
+      >
+        @if (item().icon) {
+          <span class="mr-3 text-lg">{{ item().icon }}</span>
+        }
+        <span class="flex-1">{{ item().title }}</span>
+        <span class="material-icons-outlined text-base transition-transform duration-200"
+              [class.rotate-180]="isExpanded()">
+          expand_more
+        </span>
+      </div>
+
+      <!-- Children -->
+      @if (isExpanded() && item().children) {
+        <div class="ml-6 mt-1 space-y-1">
+          @for (child of item().children; track child.id || child.title) {
+            @switch (child.type) {
+              @case ('basic') {
+                <op-vertical-navigation-basic-item
+                  [item]="child"
+                  (itemClicked)="onChildItemClicked($event)"
+                />
+              }
+              @case ('collapsable') {
+                <op-vertical-navigation-collapsable-item
+                  [item]="child"
+                  (itemClicked)="onChildItemClicked($event)"
+                />
+              }
+            }
+          }
+        </div>
+      }
+    </div>
+  `,
+  styles: [`
+    .rotate-180 {
+      transform: rotate(180deg);
+    }
+  `],
+  imports: [VerticalNavigationBasicItem]
+})
+export class VerticalNavigationCollapsableItem {
+  item = input.required<NavigationItem>();
+  itemClicked = output<NavigationItem>();
+
+  isExpanded = signal(false);
+
+  toggleExpanded(): void {
+    this.isExpanded.update(expanded => !expanded);
+    this.itemClicked.emit(this.item());
+  }
+
+  onChildItemClicked(item: NavigationItem): void {
+    this.itemClicked.emit(item);
+  }
+}
