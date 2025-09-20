@@ -102,11 +102,11 @@ import { TitleCasePipe } from '@angular/common';
               </div>
             </div>
 
-            <!-- Quick Variant Selection -->
+            <!-- Variant Selection -->
             <div>
-              <label class="text-foreground text-sm font-medium block mb-2">Popular Variants</label>
-              <div class="flex gap-2">
-                @for (variant of quickVariants; track variant) {
+              <label class="text-foreground text-sm font-medium block mb-2">Variants</label>
+              <div class="flex flex-wrap gap-2">
+                @for (variant of allVariants; track variant) {
                   <button
                     (click)="setVariant(variant)"
                     [class]="getVariantButtonClass(variant)"
@@ -324,7 +324,7 @@ export class LayoutThemes {
   protected readonly layoutService = inject(LayoutService);
 
   protected readonly availableModes: ThemeMode[] = ['light', 'dark'];
-  protected readonly quickVariants: ThemeVariant[] = ['default', 'blue', 'green', 'red', 'violet'];
+  protected readonly allVariants: ThemeVariant[] = ['default', 'red', 'rose', 'orange', 'green', 'blue', 'yellow', 'violet', 'zinc', 'slate', 'stone'];
   protected readonly availableLayouts: LayoutType[] = ['empty', 'default', 'modern'];
 
   protected readonly exampleCode = `<!-- All elements automatically respond to theme changes -->
