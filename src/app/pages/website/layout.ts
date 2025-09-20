@@ -26,7 +26,7 @@ import { RouterOutlet } from '@angular/router';
 
       <!-- Main Content Area -->
       <main class="flex-1 py-8 bg-[rgb(var(--background))]">
-        <div class="max-w-6xl mx-auto px-4">
+        <div class="max-w-6xl mx-auto px-4 w-full">
           <router-outlet />
         </div>
       </main>
