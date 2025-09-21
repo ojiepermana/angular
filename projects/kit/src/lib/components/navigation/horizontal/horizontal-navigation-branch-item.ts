@@ -111,7 +111,6 @@ import { NavigationItem } from '../../../types/navigations.type';
                   {{ child.badge?.title }}
                 </span>
               }
-              <mat-icon class="ml-1 text-sm">chevron_right</mat-icon>
             </div>
           </div>
 
@@ -192,7 +191,6 @@ import { NavigationItem } from '../../../types/navigations.type';
                         {{ level2Child.badge?.title }}
                       </span>
                     }
-                    <mat-icon class="ml-1 text-sm">chevron_right</mat-icon>
                   </div>
                 </div>
 
