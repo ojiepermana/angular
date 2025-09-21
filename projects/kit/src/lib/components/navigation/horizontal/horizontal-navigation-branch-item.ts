@@ -34,9 +34,11 @@ import { NavigationItem } from '../../../types/navigations.type';
       <mat-icon class="ml-1 text-sm">expand_more</mat-icon>
     </div>
 
-    <!-- Dropdown Menu -->
+    <!-- Main Dropdown Menu -->
     <mat-menu #matMenu="matMenu" class="op-horizontal-navigation-menu" [hasBackdrop]="true">
       @for (child of item().children || []; track child.id || child.title) {
+
+        <!-- Basic Item -->
         @if (child.type === 'basic') {
           <div mat-menu-item class="px-0">
             @if (child.link) {
@@ -86,15 +88,18 @@ import { NavigationItem } from '../../../types/navigations.type';
           </div>
         }
 
+        <!-- Collapsable Item (Level 2) -->
         @if (child.type === 'collapsable' && child.children) {
-          <!-- Nested Collapsable Item with Sub-Menu -->
           <div
             mat-menu-item
             class="px-0"
-            [matMenuTriggerFor]="nestedMenu"
-            #nestedTrigger="matMenuTrigger"
+            [matMenuTriggerFor]="level2Menu"
+            #level2Trigger="matMenuTrigger"
           >
             <div class="flex items-center w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors">
+              @if (child.icon) {
+                <mat-icon class="mr-2 text-base">{{ child.icon }}</mat-icon>
+              }
               <span class="flex-1">{{ child.title }}</span>
               @if (child.badge?.title) {
                 <span
@@ -110,64 +115,146 @@ import { NavigationItem } from '../../../types/navigations.type';
             </div>
           </div>
 
-          <!-- Nested Sub-Menu -->
-          <mat-menu #nestedMenu="matMenu" class="op-horizontal-navigation-menu">
-            @for (nestedChild of child.children; track nestedChild.id || nestedChild.title) {
-              @if (nestedChild.type === 'basic') {
+          <!-- Level 2 Sub-Menu -->
+          <mat-menu #level2Menu="matMenu" class="op-horizontal-navigation-menu">
+            @for (level2Child of child.children; track level2Child.id || level2Child.title) {
+
+              <!-- Basic Item in Level 2 -->
+              @if (level2Child.type === 'basic') {
                 <div mat-menu-item class="px-0">
-                  @if (nestedChild.link) {
+                  @if (level2Child.link) {
                     <a
-                      [routerLink]="nestedChild.link"
-                      [title]="nestedChild.tooltip"
+                      [routerLink]="level2Child.link"
+                      [title]="level2Child.tooltip"
                       class="flex items-center w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors"
-                      (click)="onChildItemClicked(nestedChild)"
+                      (click)="onChildItemClicked(level2Child)"
                     >
-                      @if (nestedChild.icon) {
-                        <mat-icon class="mr-2 text-base">{{ nestedChild.icon }}</mat-icon>
+                      @if (level2Child.icon) {
+                        <mat-icon class="mr-2 text-base">{{ level2Child.icon }}</mat-icon>
                       }
-                      <span>{{ nestedChild.title }}</span>
-                      @if (nestedChild.badge?.title) {
+                      <span>{{ level2Child.title }}</span>
+                      @if (level2Child.badge?.title) {
                         <span
                           class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
-                          [class.bg-primary]="!nestedChild.badge?.classes"
-                          [class.text-primary-foreground]="!nestedChild.badge?.classes"
-                          [ngClass]="nestedChild.badge?.classes"
+                          [class.bg-primary]="!level2Child.badge?.classes"
+                          [class.text-primary-foreground]="!level2Child.badge?.classes"
+                          [ngClass]="level2Child.badge?.classes"
                         >
-                          {{ nestedChild.badge?.title }}
+                          {{ level2Child.badge?.title }}
                         </span>
                       }
                     </a>
                   } @else {
                     <div
                       class="flex items-center w-full px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded transition-colors"
-                      [title]="nestedChild.tooltip"
-                      (click)="onChildItemClicked(nestedChild)"
+                      [title]="level2Child.tooltip"
+                      (click)="onChildItemClicked(level2Child)"
                     >
-                      @if (nestedChild.icon) {
-                        <mat-icon class="mr-2 text-base">{{ nestedChild.icon }}</mat-icon>
+                      @if (level2Child.icon) {
+                        <mat-icon class="mr-2 text-base">{{ level2Child.icon }}</mat-icon>
                       }
-                      <span>{{ nestedChild.title }}</span>
-                      @if (nestedChild.badge?.title) {
+                      <span>{{ level2Child.title }}</span>
+                      @if (level2Child.badge?.title) {
                         <span
                           class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
-                          [class.bg-primary]="!nestedChild.badge?.classes"
-                          [class.text-primary-foreground]="!nestedChild.badge?.classes"
-                          [ngClass]="nestedChild.badge?.classes"
+                          [class.bg-primary]="!level2Child.badge?.classes"
+                          [class.text-primary-foreground]="!level2Child.badge?.classes"
+                          [ngClass]="level2Child.badge?.classes"
                         >
-                          {{ nestedChild.badge?.title }}
+                          {{ level2Child.badge?.title }}
                         </span>
                       }
                     </div>
                   }
                 </div>
               }
+
+              <!-- Collapsable Item in Level 2 (Level 3) -->
+              @if (level2Child.type === 'collapsable' && level2Child.children) {
+                <div
+                  mat-menu-item
+                  class="px-0"
+                  [matMenuTriggerFor]="level3Menu"
+                  #level3Trigger="matMenuTrigger"
+                >
+                  <div class="flex items-center w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors">
+                    @if (level2Child.icon) {
+                      <mat-icon class="mr-2 text-base">{{ level2Child.icon }}</mat-icon>
+                    }
+                    <span class="flex-1">{{ level2Child.title }}</span>
+                    @if (level2Child.badge?.title) {
+                      <span
+                        class="mx-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                        [class.bg-primary]="!level2Child.badge?.classes"
+                        [class.text-primary-foreground]="!level2Child.badge?.classes"
+                        [ngClass]="level2Child.badge?.classes"
+                      >
+                        {{ level2Child.badge?.title }}
+                      </span>
+                    }
+                    <mat-icon class="ml-1 text-sm">chevron_right</mat-icon>
+                  </div>
+                </div>
+
+                <!-- Level 3 Sub-Menu -->
+                <mat-menu #level3Menu="matMenu" class="op-horizontal-navigation-menu">
+                  @for (level3Child of level2Child.children; track level3Child.id || level3Child.title) {
+                    @if (level3Child.type === 'basic') {
+                      <div mat-menu-item class="px-0">
+                        @if (level3Child.link) {
+                          <a
+                            [routerLink]="level3Child.link"
+                            [title]="level3Child.tooltip"
+                            class="flex items-center w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors"
+                            (click)="onChildItemClicked(level3Child)"
+                          >
+                            @if (level3Child.icon) {
+                              <mat-icon class="mr-2 text-base">{{ level3Child.icon }}</mat-icon>
+                            }
+                            <span>{{ level3Child.title }}</span>
+                            @if (level3Child.badge?.title) {
+                              <span
+                                class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                                [class.bg-primary]="!level3Child.badge?.classes"
+                                [class.text-primary-foreground]="!level3Child.badge?.classes"
+                                [ngClass]="level3Child.badge?.classes"
+                              >
+                                {{ level3Child.badge?.title }}
+                              </span>
+                            }
+                          </a>
+                        } @else {
+                          <div
+                            class="flex items-center w-full px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded transition-colors"
+                            [title]="level3Child.tooltip"
+                            (click)="onChildItemClicked(level3Child)"
+                          >
+                            @if (level3Child.icon) {
+                              <mat-icon class="mr-2 text-base">{{ level3Child.icon }}</mat-icon>
+                            }
+                            <span>{{ level3Child.title }}</span>
+                            @if (level3Child.badge?.title) {
+                              <span
+                                class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                                [class.bg-primary]="!level3Child.badge?.classes"
+                                [class.text-primary-foreground]="!level3Child.badge?.classes"
+                                [ngClass]="level3Child.badge?.classes"
+                              >
+                                {{ level3Child.badge?.title }}
+                              </span>
+                            }
+                          </div>
+                        }
+                      </div>
+                    }
+                  }
+                </mat-menu>
+              }
             }
           </mat-menu>
         }
 
-        @if (child.type === 'divider') {
-          <mat-divider></mat-divider>
-        }
+        <!-- Group Item -->
         @if (child.type === 'group' && child.children) {
           <div class="px-3 py-1">
             <div class="text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -203,86 +290,12 @@ import { NavigationItem } from '../../../types/navigations.type';
                 }
               </div>
             }
-
-            @if (groupChild.type === 'collapsable' && groupChild.children) {
-              <!-- Nested Collapsable Item within Group with Sub-Menu -->
-              <div
-                mat-menu-item
-                class="px-0"
-                [matMenuTriggerFor]="groupNestedMenu"
-                #groupNestedTrigger="matMenuTrigger"
-              >
-                <div class="flex items-center w-full px-6 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors">
-                  <span class="flex-1">{{ groupChild.title }}</span>
-                  @if (groupChild.badge?.title) {
-                    <span
-                      class="mx-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
-                      [class.bg-primary]="!groupChild.badge?.classes"
-                      [class.text-primary-foreground]="!groupChild.badge?.classes"
-                      [ngClass]="groupChild.badge?.classes"
-                    >
-                      {{ groupChild.badge?.title }}
-                    </span>
-                  }
-                  <mat-icon class="ml-1 text-sm">chevron_right</mat-icon>
-                </div>
-              </div>
-
-              <!-- Group Nested Sub-Menu -->
-              <mat-menu #groupNestedMenu="matMenu" class="op-horizontal-navigation-menu">
-                @for (groupNestedChild of groupChild.children; track groupNestedChild.id || groupNestedChild.title) {
-                  @if (groupNestedChild.type === 'basic') {
-                    <div mat-menu-item class="px-0">
-                      @if (groupNestedChild.link) {
-                        <a
-                          [routerLink]="groupNestedChild.link"
-                          [title]="groupNestedChild.tooltip"
-                          class="flex items-center w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors"
-                          (click)="onChildItemClicked(groupNestedChild)"
-                        >
-                          @if (groupNestedChild.icon) {
-                            <mat-icon class="mr-2 text-base">{{ groupNestedChild.icon }}</mat-icon>
-                          }
-                          <span>{{ groupNestedChild.title }}</span>
-                          @if (groupNestedChild.badge?.title) {
-                            <span
-                              class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
-                              [class.bg-primary]="!groupNestedChild.badge?.classes"
-                              [class.text-primary-foreground]="!groupNestedChild.badge?.classes"
-                              [ngClass]="groupNestedChild.badge?.classes"
-                            >
-                              {{ groupNestedChild.badge?.title }}
-                            </span>
-                          }
-                        </a>
-                      } @else {
-                        <div
-                          class="flex items-center w-full px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded transition-colors"
-                          [title]="groupNestedChild.tooltip"
-                          (click)="onChildItemClicked(groupNestedChild)"
-                        >
-                          @if (groupNestedChild.icon) {
-                            <mat-icon class="mr-2 text-base">{{ groupNestedChild.icon }}</mat-icon>
-                          }
-                          <span>{{ groupNestedChild.title }}</span>
-                          @if (groupNestedChild.badge?.title) {
-                            <span
-                              class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
-                              [class.bg-primary]="!groupNestedChild.badge?.classes"
-                              [class.text-primary-foreground]="!groupNestedChild.badge?.classes"
-                              [ngClass]="groupNestedChild.badge?.classes"
-                            >
-                              {{ groupNestedChild.badge?.title }}
-                            </span>
-                          }
-                        </div>
-                      }
-                    </div>
-                  }
-                }
-              </mat-menu>
-            }
           }
+        }
+
+        <!-- Divider -->
+        @if (child.type === 'divider') {
+          <mat-divider></mat-divider>
         }
       }
     </mat-menu>
