@@ -85,6 +85,86 @@ import { NavigationItem } from '../../../types/navigations.type';
             }
           </div>
         }
+
+        @if (child.type === 'collapsable' && child.children) {
+          <!-- Nested Collapsable Item with Sub-Menu -->
+          <div
+            mat-menu-item
+            class="px-0"
+            [matMenuTriggerFor]="nestedMenu"
+            #nestedTrigger="matMenuTrigger"
+          >
+            <div class="flex items-center w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors">
+              <span class="flex-1">{{ child.title }}</span>
+              @if (child.badge?.title) {
+                <span
+                  class="mx-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                  [class.bg-primary]="!child.badge?.classes"
+                  [class.text-primary-foreground]="!child.badge?.classes"
+                  [ngClass]="child.badge?.classes"
+                >
+                  {{ child.badge?.title }}
+                </span>
+              }
+              <mat-icon class="ml-1 text-sm">chevron_right</mat-icon>
+            </div>
+          </div>
+
+          <!-- Nested Sub-Menu -->
+          <mat-menu #nestedMenu="matMenu" class="op-horizontal-navigation-menu">
+            @for (nestedChild of child.children; track nestedChild.id || nestedChild.title) {
+              @if (nestedChild.type === 'basic') {
+                <div mat-menu-item class="px-0">
+                  @if (nestedChild.link) {
+                    <a
+                      [routerLink]="nestedChild.link"
+                      [title]="nestedChild.tooltip"
+                      class="flex items-center w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors"
+                      (click)="onChildItemClicked(nestedChild)"
+                    >
+                      @if (nestedChild.icon) {
+                        <mat-icon class="mr-2 text-base">{{ nestedChild.icon }}</mat-icon>
+                      }
+                      <span>{{ nestedChild.title }}</span>
+                      @if (nestedChild.badge?.title) {
+                        <span
+                          class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                          [class.bg-primary]="!nestedChild.badge?.classes"
+                          [class.text-primary-foreground]="!nestedChild.badge?.classes"
+                          [ngClass]="nestedChild.badge?.classes"
+                        >
+                          {{ nestedChild.badge?.title }}
+                        </span>
+                      }
+                    </a>
+                  } @else {
+                    <div
+                      class="flex items-center w-full px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded transition-colors"
+                      [title]="nestedChild.tooltip"
+                      (click)="onChildItemClicked(nestedChild)"
+                    >
+                      @if (nestedChild.icon) {
+                        <mat-icon class="mr-2 text-base">{{ nestedChild.icon }}</mat-icon>
+                      }
+                      <span>{{ nestedChild.title }}</span>
+                      @if (nestedChild.badge?.title) {
+                        <span
+                          class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                          [class.bg-primary]="!nestedChild.badge?.classes"
+                          [class.text-primary-foreground]="!nestedChild.badge?.classes"
+                          [ngClass]="nestedChild.badge?.classes"
+                        >
+                          {{ nestedChild.badge?.title }}
+                        </span>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            }
+          </mat-menu>
+        }
+
         @if (child.type === 'divider') {
           <mat-divider></mat-divider>
         }
@@ -122,6 +202,85 @@ import { NavigationItem } from '../../../types/navigations.type';
                   </div>
                 }
               </div>
+            }
+
+            @if (groupChild.type === 'collapsable' && groupChild.children) {
+              <!-- Nested Collapsable Item within Group with Sub-Menu -->
+              <div
+                mat-menu-item
+                class="px-0"
+                [matMenuTriggerFor]="groupNestedMenu"
+                #groupNestedTrigger="matMenuTrigger"
+              >
+                <div class="flex items-center w-full px-6 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors">
+                  <span class="flex-1">{{ groupChild.title }}</span>
+                  @if (groupChild.badge?.title) {
+                    <span
+                      class="mx-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                      [class.bg-primary]="!groupChild.badge?.classes"
+                      [class.text-primary-foreground]="!groupChild.badge?.classes"
+                      [ngClass]="groupChild.badge?.classes"
+                    >
+                      {{ groupChild.badge?.title }}
+                    </span>
+                  }
+                  <mat-icon class="ml-1 text-sm">chevron_right</mat-icon>
+                </div>
+              </div>
+
+              <!-- Group Nested Sub-Menu -->
+              <mat-menu #groupNestedMenu="matMenu" class="op-horizontal-navigation-menu">
+                @for (groupNestedChild of groupChild.children; track groupNestedChild.id || groupNestedChild.title) {
+                  @if (groupNestedChild.type === 'basic') {
+                    <div mat-menu-item class="px-0">
+                      @if (groupNestedChild.link) {
+                        <a
+                          [routerLink]="groupNestedChild.link"
+                          [title]="groupNestedChild.tooltip"
+                          class="flex items-center w-full px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors"
+                          (click)="onChildItemClicked(groupNestedChild)"
+                        >
+                          @if (groupNestedChild.icon) {
+                            <mat-icon class="mr-2 text-base">{{ groupNestedChild.icon }}</mat-icon>
+                          }
+                          <span>{{ groupNestedChild.title }}</span>
+                          @if (groupNestedChild.badge?.title) {
+                            <span
+                              class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                              [class.bg-primary]="!groupNestedChild.badge?.classes"
+                              [class.text-primary-foreground]="!groupNestedChild.badge?.classes"
+                              [ngClass]="groupNestedChild.badge?.classes"
+                            >
+                              {{ groupNestedChild.badge?.title }}
+                            </span>
+                          }
+                        </a>
+                      } @else {
+                        <div
+                          class="flex items-center w-full px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded transition-colors"
+                          [title]="groupNestedChild.tooltip"
+                          (click)="onChildItemClicked(groupNestedChild)"
+                        >
+                          @if (groupNestedChild.icon) {
+                            <mat-icon class="mr-2 text-base">{{ groupNestedChild.icon }}</mat-icon>
+                          }
+                          <span>{{ groupNestedChild.title }}</span>
+                          @if (groupNestedChild.badge?.title) {
+                            <span
+                              class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                              [class.bg-primary]="!groupNestedChild.badge?.classes"
+                              [class.text-primary-foreground]="!groupNestedChild.badge?.classes"
+                              [ngClass]="groupNestedChild.badge?.classes"
+                            >
+                              {{ groupNestedChild.badge?.title }}
+                            </span>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                }
+              </mat-menu>
             }
           }
         }

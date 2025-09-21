@@ -373,3 +373,24 @@
   --input: 68 64 60;
   --sidebar-primary: 168 162 158;
 }
+
+/* Material Menu theme support */
+.mat-mdc-menu-panel {
+  background-color: rgb(var(--background)) !important;
+  border: 1px solid rgb(var(--border)) !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+}
+
+.mat-mdc-menu-item {
+  color: rgb(var(--foreground)) !important;
+}
+
+.mat-mdc-menu-item:hover {
+  background-color: rgb(var(--accent)) !important;
+  color: rgb(var(--accent-foreground)) !important;
+}
+
+.mat-mdc-menu-item:focus {
+  background-color: rgb(var(--accent)) !important;
+  color: rgb(var(--accent-foreground)) !important;
+}

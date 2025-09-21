@@ -2,38 +2,11 @@ import { NavigationItem } from '../../../../projects/kit/src/lib/types/navigatio
 
 export const demoNavigationData: NavigationItem[] = [
   {
-    id: 'test-dropdown',
-    title: 'Test Dropdown',
-    type: 'collapsable',
-    icon: 'expand_more',
-    children: [
-      {
-        id: 'item1',
-        title: 'Test Item 1',
-        type: 'basic',
-        icon: 'star',
-        link: '/demo/test1'
-      },
-      {
-        id: 'item2',
-        title: 'Test Item 2',
-        type: 'basic',
-        icon: 'favorite',
-        link: '/demo/test2'
-      },
-      {
-        id: 'item3',
-        title: 'Test Item 3',
-        type: 'basic',
-        icon: 'bookmark',
-        link: '/demo/test3'
-      }
-    ]
-  },
-  {
     id: 'documentation',
     title: 'Documentation',
+    subtitle: 'Guides and getting started resources',
     type: 'group',
+    icon: 'menu_book',
     children: [
       {
         id: 'guides',
@@ -65,7 +38,9 @@ export const demoNavigationData: NavigationItem[] = [
   {
     id: 'user-interface',
     title: 'User Interface',
+    subtitle: 'Components and design elements',
     type: 'group',
+    icon: 'dashboard',
     children: [
       {
         id: 'material-components',
@@ -330,7 +305,9 @@ export const demoNavigationData: NavigationItem[] = [
   {
     id: 'themes',
     title: 'Themes',
+    subtitle: 'Styling and appearance options',
     type: 'group',
+    icon: 'color_lens',
     children: [
       {
         id: 'dark-mode',

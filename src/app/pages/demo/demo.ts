@@ -36,28 +36,20 @@ import { demoNavigationData } from './navigations';
 
         <!-- Horizontal Navigation -->
         <div class="flex-shrink-0 border-b bg-background">
-          <div class="px-4 py-2">
-            <div class="mb-2">
-              <h3 class="text-sm font-medium text-muted-foreground">Horizontal Navigation</h3>
-            </div>
             <op-horizontal-navigation
               name="demo-horizontal"
               [navigation]="navigationData">
             </op-horizontal-navigation>
-          </div>
         </div>
 
         <!-- Main Content -->
         <div class="flex flex-1 overflow-hidden">
           <!-- Vertical Navigation Sidebar -->
           <aside class="flex-shrink-0 w-72 border-r overflow-y-auto">
-            <div class="p-4">
-              <h3 class="text-sm font-medium text-muted-foreground mb-3">Vertical Navigation</h3>
               <op-vertical-navigation
                 name="demo-vertical"
                 [navigation]="navigationData">
               </op-vertical-navigation>
-            </div>
           </aside>
 
           <!-- Page Content -->
