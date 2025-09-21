@@ -31,7 +31,6 @@ yarn-error.log
 # Miscellaneous
 /.angular/cache
 .sass-cache/
-.firebase/
 /connect.lock
 /coverage
 /libpeerconnection.log
@@ -41,3 +40,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Firebase
+.firebase/
