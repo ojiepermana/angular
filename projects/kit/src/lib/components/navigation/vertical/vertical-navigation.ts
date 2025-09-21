@@ -1,5 +1,7 @@
-import { Component, input, output, inject, computed } from '@angular/core';
-import { NavigationItem } from '../../../types/navigations.type';
+import { Component, input, output, inject, computed, signal, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter, Subject, takeUntil } from 'rxjs';
+import { NavigationItem, VerticalNavigationAppearance, VerticalNavigationMode, VerticalNavigationPosition } from '../../../types/navigations.type';
 import { NavigationService } from '../../../services/navigation.service';
 import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
 import { VerticalNavigationCollapsableItem } from './vertical-navigation-collapsable-item';
@@ -35,6 +37,9 @@ import { VerticalNavigationDividerItem } from './vertical-navigation-divider-ite
               @case ('divider') {
                 <op-vertical-navigation-divider-item [item]="item" />
               }
+              @case ('spacer') {
+                <div class="op-vertical-navigation-spacer h-4"></div>
+              }
               @default {
                 <op-vertical-navigation-basic-item
                   [item]="item"
@@ -60,6 +65,12 @@ export class VerticalNavigation {
 
   // Navigation data input (for direct data binding)
   navigation = input<NavigationItem[]>([]);
+
+  // Additional inputs inspired by contekan
+  appearance = input<'default' | 'compact' | 'dense' | 'thin'>('default');
+  mode = input<'over' | 'side'>('side');
+  position = input<'left' | 'right'>('left');
+  autoCollapse = input<boolean>(false);
 
   // Output for item clicks
   itemClicked = output<NavigationItem>();

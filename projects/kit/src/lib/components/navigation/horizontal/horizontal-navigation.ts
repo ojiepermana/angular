@@ -163,7 +163,9 @@ import { NavigationService } from '../../../services/navigation.service';
     }
 
     .op-horizontal-navigation .flex {
-      @apply scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
     }
 
     .op-horizontal-navigation .flex::-webkit-scrollbar {
@@ -210,6 +212,12 @@ export class HorizontalNavigation {
 
   // Input for navigation data
   navigation = input<NavigationItem[]>([]);
+
+  // Additional inputs inspired by contekan for consistency
+  appearance = input<'default' | 'compact' | 'dense' | 'thin'>('default');
+  mode = input<'over' | 'side'>('side');
+  position = input<'left' | 'right'>('left');
+  autoCollapse = input<boolean>(false);
 
   // Output for item clicks
   itemClicked = output<NavigationItem>();
