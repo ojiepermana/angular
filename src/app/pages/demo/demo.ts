@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DarkModeToggle } from '../../layouts/components/shared/dark-mode-toggle.component';
-import { VerticalNavigation } from '../../../../projects/kit/src/lib/components/navigation/vertical-navigation';
+import { VerticalNavigation } from '../../../../projects/kit/src/lib/components/navigation/vertical/vertical-navigation';
+import { HorizontalNavigation } from '../../../../projects/kit/src/lib/components/navigation/horizontal/horizontal-navigation';
 import { NavigationService } from '../../../../projects/kit/src/lib/services/navigation.service';
 import { demoNavigationData } from './navigations';
 
 @Component({
   selector: 'demo-page',
-  imports: [RouterOutlet, DarkModeToggle, VerticalNavigation],
+  imports: [RouterOutlet, DarkModeToggle, VerticalNavigation, HorizontalNavigation],
   host: {
     'class': 'flex flex-col h-full'
   },
@@ -25,7 +26,12 @@ import { demoNavigationData } from './navigations';
               <h1 class="text-lg font-semibold">Angular Kit</h1>
             </div>
             <div class="flex items-center gap-4">
-              <span class="text-sm">Right Menu</span>
+              <button
+                (click)="toggleNavigationType()"
+                class="px-3 py-1 text-xs bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors"
+              >
+                {{ isHorizontalNavigation() ? 'Vertical Nav' : 'Horizontal Nav' }}
+              </button>
               <dark-mode-toggle
                 [iconStyle]="'default'"
                 [borderStyle]="'rounded'"
@@ -34,14 +40,25 @@ import { demoNavigationData } from './navigations';
           </div>
         </header>
 
+        <!-- Horizontal Navigation (when enabled) -->
+        @if (isHorizontalNavigation()) {
+          <div class="flex-shrink-0 border-b bg-background">
+            <div class="px-4 py-2">
+              <op-horizontal-navigation [navigation]="navigationData">
+              </op-horizontal-navigation>
+            </div>
+          </div>
+        }
+
         <!-- Main Content -->
         <div class="flex flex-1 overflow-hidden">
-          <!-- Sidebar Navigation -->
-          <aside class="flex-shrink-0 w-72 border-r overflow-y-auto">
-            <!-- Alternative: Direct data binding -->
-            <op-vertical-navigation [navigation]="navigationData">
-            </op-vertical-navigation>
-          </aside>
+          <!-- Sidebar Navigation (when vertical) -->
+          @if (!isHorizontalNavigation()) {
+            <aside class="flex-shrink-0 w-72 border-r overflow-y-auto">
+              <op-vertical-navigation [navigation]="navigationData">
+              </op-vertical-navigation>
+            </aside>
+          }
 
           <!-- Page Content -->
           <div class="flex-1 overflow-y-auto p-6">
@@ -59,6 +76,9 @@ import { demoNavigationData } from './navigations';
 export class DemoPage implements OnInit {
   private _navigationService = inject(NavigationService);
 
+  // Navigation type toggle
+  isHorizontalNavigation = signal(false);
+
   ngOnInit(): void {
     // Store navigation data in service for global access
     this._navigationService.storeNavigation(demoNavigationData);
@@ -67,6 +87,10 @@ export class DemoPage implements OnInit {
   navigationData = demoNavigationData;
   isEcommerceExpanded = false;
   isAuthExpanded = false;
+
+  toggleNavigationType(): void {
+    this.isHorizontalNavigation.update(isHorizontal => !isHorizontal);
+  }
 
   toggleEcommerceExpanded(): void {
     this.isEcommerceExpanded = !this.isEcommerceExpanded;

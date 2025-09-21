@@ -1,6 +1,6 @@
 import { Component, input, output, inject, computed } from '@angular/core';
-import { NavigationItem } from '../../types/navigations.type';
-import { NavigationService } from '../../services/navigation.service';
+import { NavigationItem } from '../../../types/navigations.type';
+import { NavigationService } from '../../../services/navigation.service';
 import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
 import { VerticalNavigationCollapsableItem } from './vertical-navigation-collapsable-item';
 import { VerticalNavigationGroupItem } from './vertical-navigation-group-item';

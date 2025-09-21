@@ -2,19 +2,31 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 
 ## Project Context: @ojiepermana/angular Library
 
-Angular UI library with **FLAT ARCHITECTURE** using `op-` prefix naming convention.
+Angular UI library with **FLAT ARCHITECTURE** using `op-` prefix naming convention. This is a dual-purpose project:
+- **Library Development** (`projects/kit/`): Core UI library published to npm
+- **Demo Application** (`src/`): Showcase app deployed to Firebase (angular-kit.web.app)
 
 ### CRITICAL Library Structure
 
 ```txt
 projects/kit/src/lib/
-├── components/          # All UI components (op-button, op-card, etc.)
-├── services/           # All services (theme, data, etc.)
+├── components/          # All UI components (op-button, op-navigation, etc.)
+├── services/           # Services (NavigationService, ThemeService)
 ├── pipes/             # All pipes
 ├── directives/        # All directives
 ├── utils/             # Utility functions
-├── types/             # Type definitions
+├── types/             # Type definitions (NavigationItem, etc.)
 └── kit.ts             # Main library component
+```
+
+### Demo App Architecture
+
+```txt
+src/app/
+├── layouts/            # Layout components (empty, default, modern)
+├── pages/             # Route-based pages (demo/, website/)
+├── services/          # App-specific services (LayoutService)
+└── styles/           # Global theme CSS
 ```
 
 ## TypeScript Best Practices
@@ -22,12 +34,14 @@ projects/kit/src/lib/
 - Use strict type checking
 - Prefer type inference when the type is obvious
 - Avoid the `any` type; use `unknown` when type is uncertain
+- Define union types for component variants (see `ButtonVariant`, `ThemeVariant`)
 
 ## Angular Best Practices
 
 - Always use standalone components over NgModules
 - Must NOT set `standalone: true` inside Angular decorators. It's the default.
-- Use signals for state management
+- Use signals for state management (see `ThemeService`, `LayoutService`)
+- Use `inject()` function instead of constructor injection
 - Implement lazy loading for feature routes
 - Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
 - Use `NgOptimizedImage` for all static images.
@@ -70,6 +84,12 @@ projects/kit/src/lib/
 - **Class**: Simple PascalCase without prefix (e.g., `Button`, `Card`)
 - **File**: kebab-case (e.g., `button.ts`, `theme-selector.ts`)
 
+### Architecture Patterns
+- **Navigation System**: Components register with `NavigationService` using component registry pattern
+- **Theme System**: CSS variables with signal-based state management in `ThemeService`
+- **Layout System**: App-level `LayoutService` manages layout types (empty, default, modern)
+- **Host Bindings**: Use `host` object in decorators, not `@HostBinding` (see `Button` component)
+
 ### Export Management
 - Each folder MUST have an `index.ts` file with barrel exports
 - Always update `public-api.ts` when adding new files
@@ -81,6 +101,12 @@ projects/kit/src/lib/
 3. Verify `public-api.ts` exports the folder
 4. Update package.json exports if needed
 5. Build and test: `ng build kit`
+
+### Build & Deploy Commands
+- `npm start` - Demo app development server
+- `ng build kit` - Build library
+- `npm run deploy` - Build production & deploy to Firebase
+- `npm run firebase:serve` - Local Firebase preview
 
 ### Import/Export Patterns
 ```typescript
@@ -114,3 +140,13 @@ import { ThemeService } from '@ojiepermana/angular/services';
 - Use NgModules (standalone only)
 - Forget op- prefix for components
 - Export classes with Op prefix (use simple names like `Button`, not `OpButton`)
+- Use constructor injection (use `inject()` function instead)
+- Set `standalone: true` explicitly (it's the default)
+- Use `ngClass`/`ngStyle` (use direct bindings instead)
+
+## Error Handling Guidelines
+
+### IGNORE Errors in Development Folders
+- **Ignore all errors** from `projects/contekan/` folder - this is a personal development/notes folder
+- Focus only on errors from main library (`projects/kit/`) and demo app (`src/`)
+- Do not attempt to fix or report issues in the contekan folder

@@ -2,7 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { NavigationItem } from '../../types/navigations.type';
+import { NavigationItem } from '../../../types/navigations.type';
 
 @Component({
   selector: 'op-vertical-navigation-basic-item',
