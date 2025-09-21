@@ -1,9 +1,11 @@
-import { Component, input, output, inject, computed, signal } from '@angular/core';
+import { Component, input, output, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { NavigationItem } from '../../../types/navigations.type';
 import { NavigationService } from '../../../services/navigation.service';
+import { HorizontalNavigationBranchItem } from './horizontal-navigation-branch-item';
 
 @Component({
   selector: 'op-horizontal-navigation',
@@ -11,139 +13,107 @@ import { NavigationService } from '../../../services/navigation.service';
     <nav class="op-horizontal-navigation">
       @if (navigationData()) {
         <div class="flex items-center space-x-1 overflow-x-auto pb-2">
-          @for (item of flattenedNavigationData(); track item.id || item.title) {
-            @if (item.type !== 'divider' && item.type !== 'group') {
-              @switch (item.type) {
-                @case ('basic') {
-                  <!-- Basic Item -->
-                  @if (item.link) {
-                    <a
-                      [routerLink]="item.link"
-                      [title]="item.tooltip"
-                      class="flex items-center px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md transition-colors whitespace-nowrap"
-                      (click)="onItemClicked(item)"
-                    >
-                      @if (item.icon) {
-                        <mat-icon class="mr-2 text-base">{{ item.icon }}</mat-icon>
-                      }
-                      <span>{{ item.title }}</span>
-                      @if (item.badge?.title) {
-                        <span
-                          class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
-                          [class.bg-primary]="!item.badge?.classes"
-                          [class.text-primary-foreground]="!item.badge?.classes"
-                          [ngClass]="item.badge?.classes"
-                        >
-                          {{ item.badge?.title }}
-                        </span>
-                      }
-                    </a>
-                  } @else {
-                    <div
-                      class="flex items-center px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md transition-colors whitespace-nowrap"
-                      [title]="item.tooltip"
-                      (click)="onItemClicked(item)"
-                    >
-                      @if (item.icon) {
-                        <mat-icon class="mr-2 text-base">{{ item.icon }}</mat-icon>
-                      }
-                      <span>{{ item.title }}</span>
-                      @if (item.badge?.title) {
-                        <span
-                          class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
-                          [class.bg-primary]="!item.badge?.classes"
-                          [class.text-primary-foreground]="!item.badge?.classes"
-                          [ngClass]="item.badge?.classes"
-                        >
-                          {{ item.badge?.title }}
-                        </span>
-                      }
-                    </div>
-                  }
-                }
-                @case ('collapsable') {
-                  <!-- Collapsable Item -->
-                  <div class="relative">
-                    <div
-                      class="flex items-center px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer transition-colors whitespace-nowrap"
-                      [class.bg-accent]="isExpanded(item.id || item.title || '')"
-                      [class.text-accent-foreground]="isExpanded(item.id || item.title || '')"
-                      (click)="toggleExpanded(item.id || item.title || '')"
-                    >
-                      @if (item.icon) {
-                        <mat-icon class="mr-2 text-base">{{ item.icon }}</mat-icon>
-                      }
-                      <span>{{ item.title }}</span>
-                      @if (item.badge?.title) {
-                        <span
-                          class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
-                          [class.bg-primary]="!item.badge?.classes"
-                          [class.text-primary-foreground]="!item.badge?.classes"
-                          [ngClass]="item.badge?.classes"
-                        >
-                          {{ item.badge?.title }}
-                        </span>
-                      }
-                      <mat-icon class="ml-1 text-sm transition-transform duration-200"
-                                [class.rotate-180]="isExpanded(item.id || item.title || '')">
-                        expand_more
-                      </mat-icon>
-                    </div>
-
-                    <!-- Dropdown Children -->
-                    @if (isExpanded(item.id || item.title || '') && item.children) {
-                      <div class="absolute top-full left-0 mt-1 bg-background border rounded-md shadow-lg z-50 min-w-48">
-                        <div class="py-1 space-y-0.5">
-                          @for (child of item.children; track child.id || child.title) {
-                            @if (child.type === 'basic') {
-                              <div class="px-1">
-                                @if (child.link) {
-                                  <a
-                                    [routerLink]="child.link"
-                                    [title]="child.tooltip"
-                                    class="flex items-center px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors"
-                                    (click)="onChildItemClicked(child, item.id || item.title || '')"
-                                  >
-                                    @if (child.icon) {
-                                      <mat-icon class="mr-2 text-base">{{ child.icon }}</mat-icon>
-                                    }
-                                    <span>{{ child.title }}</span>
-                                  </a>
-                                } @else {
-                                  <div
-                                    class="flex items-center px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded transition-colors"
-                                    [title]="child.tooltip"
-                                    (click)="onChildItemClicked(child, item.id || item.title || '')"
-                                  >
-                                    @if (child.icon) {
-                                      <mat-icon class="mr-2 text-base">{{ child.icon }}</mat-icon>
-                                    }
-                                    <span>{{ child.title }}</span>
-                                  </div>
-                                }
-                              </div>
-                            }
-                          }
-                        </div>
-                      </div>
+          @for (item of navigationData(); track item.id || item.title) {
+            @switch (item.type) {
+              @case ('basic') {
+                <!-- Basic Item -->
+                @if (item.link) {
+                  <a
+                    [routerLink]="item.link"
+                    [title]="item.tooltip"
+                    class="flex items-center px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md transition-colors whitespace-nowrap"
+                    (click)="onItemClicked(item)"
+                  >
+                    @if (item.icon) {
+                      <mat-icon class="mr-2 text-base">{{ item.icon }}</mat-icon>
+                    }
+                    <span>{{ item.title }}</span>
+                    @if (item.badge?.title) {
+                      <span
+                        class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                        [class.bg-primary]="!item.badge?.classes"
+                        [class.text-primary-foreground]="!item.badge?.classes"
+                        [ngClass]="item.badge?.classes"
+                      >
+                        {{ item.badge?.title }}
+                      </span>
+                    }
+                  </a>
+                } @else {
+                  <div
+                    class="flex items-center px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md transition-colors whitespace-nowrap"
+                    [title]="item.tooltip"
+                    (click)="onItemClicked(item)"
+                  >
+                    @if (item.icon) {
+                      <mat-icon class="mr-2 text-base">{{ item.icon }}</mat-icon>
+                    }
+                    <span>{{ item.title }}</span>
+                    @if (item.badge?.title) {
+                      <span
+                        class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium"
+                        [class.bg-primary]="!item.badge?.classes"
+                        [class.text-primary-foreground]="!item.badge?.classes"
+                        [ngClass]="item.badge?.classes"
+                      >
+                        {{ item.badge?.title }}
+                      </span>
                     }
                   </div>
                 }
-                @default {
-                  <!-- Default to basic -->
-                  @if (item.link) {
-                    <a
-                      [routerLink]="item.link"
-                      [title]="item.tooltip"
-                      class="flex items-center px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md transition-colors whitespace-nowrap"
-                      (click)="onItemClicked(item)"
-                    >
-                      @if (item.icon) {
-                        <mat-icon class="mr-2 text-base">{{ item.icon }}</mat-icon>
-                      }
-                      <span>{{ item.title }}</span>
-                    </a>
-                  }
+              }
+
+              @case ('collapsable') {
+                <!-- Collapsable Item with Dropdown -->
+                <op-horizontal-navigation-branch-item
+                  [item]="item"
+                  (itemClicked)="onItemClicked($event)"
+                />
+              }
+
+              @case ('group') {
+                <!-- Group Item with Dropdown -->
+                <op-horizontal-navigation-branch-item
+                  [item]="item"
+                  (itemClicked)="onItemClicked($event)"
+                />
+              }
+
+              @case ('divider') {
+                <!-- Divider -->
+                <div class="w-px h-6 bg-border mx-2"></div>
+              }
+
+              @case ('spacer') {
+                <!-- Spacer -->
+                <div class="flex-1"></div>
+              }
+
+              @default {
+                <!-- Default to basic item -->
+                @if (item.link) {
+                  <a
+                    [routerLink]="item.link"
+                    [title]="item.tooltip"
+                    class="flex items-center px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md transition-colors whitespace-nowrap"
+                    (click)="onItemClicked(item)"
+                  >
+                    @if (item.icon) {
+                      <mat-icon class="mr-2 text-base">{{ item.icon }}</mat-icon>
+                    }
+                    <span>{{ item.title }}</span>
+                  </a>
+                } @else {
+                  <div
+                    class="flex items-center px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md transition-colors whitespace-nowrap"
+                    [title]="item.tooltip"
+                    (click)="onItemClicked(item)"
+                  >
+                    @if (item.icon) {
+                      <mat-icon class="mr-2 text-base">{{ item.icon }}</mat-icon>
+                    }
+                    <span>{{ item.title }}</span>
+                  </div>
                 }
               }
             }
@@ -152,11 +122,6 @@ import { NavigationService } from '../../../services/navigation.service';
       }
     </nav>
   `,
-  imports: [RouterLink, NgClass, MatIconModule],
-  host: {
-    '(document:click)': 'onDocumentClick($event)',
-    '(keydown.escape)': 'closeAllDropdowns()'
-  },
   styles: `
     .op-horizontal-navigation {
       @apply w-full;
@@ -177,38 +142,28 @@ import { NavigationService } from '../../../services/navigation.service';
     }
 
     .op-horizontal-navigation .flex::-webkit-scrollbar-thumb {
-      background: rgb(209 213 219);
+      background: rgba(156, 163, 175, 0.5);
       border-radius: 2px;
     }
 
     .op-horizontal-navigation .flex::-webkit-scrollbar-thumb:hover {
-      background: rgb(156 163 175);
+      background: rgba(156, 163, 175, 0.8);
     }
 
     .rotate-180 {
       transform: rotate(180deg);
     }
-
-    .op-horizontal-navigation .absolute {
-      @apply bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700;
-    }
-
-    .op-horizontal-navigation a:hover {
-      @apply bg-gray-100 dark:bg-gray-800;
-    }
-
-    .op-horizontal-navigation a.router-link-active {
-      @apply bg-primary text-primary-foreground;
-    }
-
-    .op-horizontal-navigation a.router-link-active:hover {
-      @apply bg-primary/90;
-    }
-  `
+  `,
+  imports: [
+    RouterLink,
+    NgClass,
+    MatIconModule,
+    MatMenuModule,
+    HorizontalNavigationBranchItem
+  ]
 })
 export class HorizontalNavigation {
   private _navigationService = inject(NavigationService);
-  private _expandedItems = signal<Set<string>>(new Set());
 
   // Navigation name identifier
   name = input<string>('');
@@ -234,111 +189,31 @@ export class HorizontalNavigation {
     return this._navigationService.getNavigation();
   });
 
-  // Flatten navigation data for horizontal display
-  flattenedNavigationData = computed(() => {
-    const data = this.navigationData();
-    return this.flattenNavigation(data);
-  });
-
   /**
-   * Flatten navigation items for horizontal display
-   * Extracts children from groups and collapsable items
-   */
-  private flattenNavigation(items: NavigationItem[]): NavigationItem[] {
-    const flattened: NavigationItem[] = [];
-
-    for (const item of items) {
-      if (item.type === 'group' && item.children) {
-        // Add group items directly
-        flattened.push(...this.flattenNavigation(item.children));
-      } else if (item.type === 'collapsable') {
-        // Add the collapsable item itself
-        flattened.push(item);
-      } else if (item.type !== 'divider') {
-        // Add regular items (except dividers)
-        flattened.push(item);
-      }
-    }
-
-    return flattened;
-  }
-
-  /**
-   * Check if item is expanded
-   */
-  isExpanded(itemId: string): boolean {
-    return this._expandedItems().has(itemId);
-  }
-
-  /**
-   * Toggle item expansion
-   */
-  toggleExpanded(itemId: string): void {
-    this._expandedItems.update(expanded => {
-      const newSet = new Set(expanded);
-      if (newSet.has(itemId)) {
-        newSet.delete(itemId);
-      } else {
-        newSet.add(itemId);
-      }
-      return newSet;
-    });
-  }
-
-  /**
-   * Close all dropdowns
-   */
-  closeAllDropdowns(): void {
-    this._expandedItems.set(new Set());
-  }
-
-  /**
-   * Handle item click events
+   * Handle item click
    */
   onItemClicked(item: NavigationItem): void {
-    // Execute function if available
-    if (item.function) {
-      item.function(item);
-    }
-
     this.itemClicked.emit(item);
   }
 
   /**
-   * Handle child item click events
+   * Get flat navigation for utility purposes
    */
-  onChildItemClicked(item: NavigationItem, parentId: string): void {
-    // Close the dropdown
-    this._expandedItems.update(expanded => {
-      const newSet = new Set(expanded);
-      newSet.delete(parentId);
-      return newSet;
-    });
-
-    // Execute function if available
-    if (item.function) {
-      item.function(item);
-    }
-
-    this.itemClicked.emit(item);
+  getFlatNavigation(): NavigationItem[] {
+    return this._navigationService.getFlatNavigation(this.navigationData());
   }
 
   /**
-   * Handle document click to close dropdowns
+   * Get navigation item by ID
    */
-  onDocumentClick(event: Event): void {
-    const target = event.target as Element;
-    const navigationElement = (event.currentTarget as Element)?.querySelector('.op-horizontal-navigation');
-
-    if (navigationElement && !navigationElement.contains(target)) {
-      this.closeAllDropdowns();
-    }
+  getItem(id: string): NavigationItem | null {
+    return this._navigationService.getItem(id, this.navigationData());
   }
 
   /**
-   * Track function for ngFor
+   * Get navigation item parent by ID
    */
-  trackByFn(index: number, item: NavigationItem): string {
-    return item.id || item.title || index.toString();
+  getItemParent(id: string): NavigationItem[] | NavigationItem | null {
+    return this._navigationService.getItemParent(id, this.navigationData(), this.navigationData());
   }
 }

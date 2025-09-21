@@ -10,7 +10,7 @@ import { DarkModeToggle } from './dark-mode-toggle.component';
         <!-- Top Section -->
         <div class="flex flex-col items-center space-y-2">
           <!-- Dark Mode Toggle with default settings -->
-          <dark-mode-toggle iconStyle="default" borderStyle="rounded"></dark-mode-toggle>
+          <dark-mode-toggle iconStyle="default" borderStyle="none"></dark-mode-toggle>
         </div>
 
         <!-- Spacer -->

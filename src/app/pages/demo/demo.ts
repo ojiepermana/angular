@@ -28,7 +28,7 @@ import { demoNavigationData } from './navigations';
             <div class="flex items-center gap-4">
               <dark-mode-toggle
                 [iconStyle]="'default'"
-                [borderStyle]="'rounded'"
+                [borderStyle]="'none'"
               />
             </div>
           </div>
@@ -40,7 +40,7 @@ import { demoNavigationData } from './navigations';
             <div class="mb-2">
               <h3 class="text-sm font-medium text-muted-foreground">Horizontal Navigation</h3>
             </div>
-            <op-horizontal-navigation 
+            <op-horizontal-navigation
               name="demo-horizontal"
               [navigation]="navigationData">
             </op-horizontal-navigation>
@@ -53,7 +53,7 @@ import { demoNavigationData } from './navigations';
           <aside class="flex-shrink-0 w-72 border-r overflow-y-auto">
             <div class="p-4">
               <h3 class="text-sm font-medium text-muted-foreground mb-3">Vertical Navigation</h3>
-              <op-vertical-navigation 
+              <op-vertical-navigation
                 name="demo-vertical"
                 [navigation]="navigationData">
               </op-vertical-navigation>
@@ -70,7 +70,7 @@ import { demoNavigationData } from './navigations';
                   Both components share the same navigation data and demonstrate different layout approaches.
                 </p>
               </div>
-              
+
               <div class="grid gap-6 md:grid-cols-2">
                 <div class="p-4 border rounded-lg">
                   <h3 class="font-semibold mb-2">Horizontal Navigation Features</h3>
@@ -81,7 +81,7 @@ import { demoNavigationData } from './navigations';
                     <li>• Badge and icon support</li>
                   </ul>
                 </div>
-                
+
                 <div class="p-4 border rounded-lg">
                   <h3 class="font-semibold mb-2">Vertical Navigation Features</h3>
                   <ul class="text-sm text-muted-foreground space-y-1">
