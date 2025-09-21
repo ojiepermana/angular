@@ -61,24 +61,20 @@ export class VerticalNavigation {
   // Navigation data input (for direct data binding)
   navigation = input<NavigationItem[]>([]);
 
-  // Navigation key input (for service-based data)
-  navigationKey = input<string>('');
-
   // Output for item clicks
   itemClicked = output<NavigationItem>();
 
   // Computed navigation data that supports both direct input and service-based approach
   navigationData = computed(() => {
-    const key = this.navigationKey();
     const directNavigation = this.navigation();
 
-    // If navigationKey is provided, get data from service
-    if (key) {
-      return this._navigationService.getNavigation(key);
+    // Use direct navigation input when provided, otherwise
+    // fall back to the navigation stored in the service
+    if (directNavigation?.length) {
+      return directNavigation;
     }
 
-    // Otherwise use direct navigation input
-    return directNavigation;
+    return this._navigationService.getNavigation();
   });
 
   /**

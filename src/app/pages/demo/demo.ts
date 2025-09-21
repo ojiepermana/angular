@@ -37,15 +37,10 @@ import { demoNavigationData } from './navigations';
         <!-- Main Content -->
         <div class="flex flex-1 overflow-hidden">
           <!-- Sidebar Navigation -->
-          <aside class="flex-shrink-0 w-64 border-r p-4 overflow-y-auto">
-            <!-- Using NavigationService with key -->
-            <op-vertical-navigation
-              navigationKey="demo">
-            </op-vertical-navigation>
-
+          <aside class="flex-shrink-0 w-72 border-r overflow-y-auto">
             <!-- Alternative: Direct data binding -->
-            <!-- <op-vertical-navigation [navigation]="navigationData"> -->
-            <!-- </op-vertical-navigation> -->
+            <op-vertical-navigation [navigation]="navigationData">
+            </op-vertical-navigation>
           </aside>
 
           <!-- Page Content -->
@@ -65,8 +60,8 @@ export class DemoPage implements OnInit {
   private _navigationService = inject(NavigationService);
 
   ngOnInit(): void {
-    // Store navigation data in service with a key
-    this._navigationService.storeNavigation('demo', demoNavigationData);
+    // Store navigation data in service for global access
+    this._navigationService.storeNavigation(demoNavigationData);
   }
 
   navigationData = demoNavigationData;

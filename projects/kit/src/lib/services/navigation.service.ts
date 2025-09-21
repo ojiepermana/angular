@@ -4,10 +4,7 @@ import { NavigationItem } from '../types/navigations.type';
 @Injectable({ providedIn: 'root' })
 export class NavigationService {
     private _componentRegistry: Map<string, any> = new Map<string, any>();
-    private _navigationStore: Map<string, NavigationItem[]> = new Map<
-        string,
-        any
-    >();
+    private _navigation: NavigationItem[] = [];
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
@@ -42,40 +39,31 @@ export class NavigationService {
     }
 
     /**
-     * Store the given navigation with the given key
+     * Store the given navigation
      *
-     * @param key
      * @param navigation
      */
-    storeNavigation(key: string, navigation: NavigationItem[]): void {
-        // Add to the store
-        this._navigationStore.set(key, navigation);
+    storeNavigation(navigation: NavigationItem[]): void {
+        this._navigation = navigation;
     }
 
     /**
-     * Get navigation from storage by key
+     * Get navigation from storage
      *
-     * @param key
      */
-    getNavigation(key: string): NavigationItem[] {
-        return this._navigationStore.get(key) ?? [];
+    getNavigation(): NavigationItem[] {
+        return this._navigation;
     }
 
     /**
      * Delete the navigation from the storage
-     *
-     * @param key
      */
-    deleteNavigation(key: string): void {
-        // Check if the navigation exists
-        if (!this._navigationStore.has(key)) {
-            console.warn(
-                `Navigation with the key '${key}' does not exist in the store.`
-            );
+    deleteNavigation(): void {
+        if (!this._navigation.length) {
+            console.warn('Navigation store is already empty.');
         }
 
-        // Delete from the storage
-        this._navigationStore.delete(key);
+        this._navigation = [];
     }
 
     /**
