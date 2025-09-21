@@ -2,7 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessC
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { LayoutService, NavigationDataService } from './services';
+import { LayoutService, NavigationDataService, NavigationStateService } from './services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -10,6 +10,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     LayoutService,
-    NavigationDataService
+    NavigationDataService,
+    NavigationStateService
   ]
 };

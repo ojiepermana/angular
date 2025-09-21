@@ -1,8 +1,9 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationItem } from '../../../types/navigations.type';
+import { NavigationStateService } from '../../../services/navigation-state.service';
 
 @Component({
   selector: 'op-vertical-navigation-basic-item',
@@ -13,7 +14,9 @@ import { NavigationItem } from '../../../types/navigations.type';
           [routerLink]="item().link"
           [title]="item().tooltip"
           class="flex items-center px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
-          (click)="itemClicked.emit(item())"
+          [class.bg-accent]="isActive()"
+          [class.text-accent-foreground]="isActive()"
+          (click)="onItemClick()"
         >
           @if (item().icon) {
             <mat-icon class="mr-3 text-lg">{{ item().icon }}</mat-icon>
@@ -33,8 +36,10 @@ import { NavigationItem } from '../../../types/navigations.type';
       } @else {
         <div
           class="flex items-center px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer transition-colors"
+          [class.bg-accent]="isActive()"
+          [class.text-accent-foreground]="isActive()"
           [title]="item().tooltip"
-          (click)="itemClicked.emit(item())"
+          (click)="onItemClick()"
         >
           @if (item().icon) {
             <mat-icon class="mr-3 text-lg">{{ item().icon }}</mat-icon>
@@ -59,4 +64,23 @@ import { NavigationItem } from '../../../types/navigations.type';
 export class VerticalNavigationBasicItem {
   item = input.required<NavigationItem>();
   itemClicked = output<NavigationItem>();
+
+  // Inject NavigationStateService
+  private _navigationStateService = inject(NavigationStateService);
+
+  // Check if this item is active
+  isActive = computed(() => {
+    const itemId = this.item().id;
+    return itemId ? this._navigationStateService.isItemActive(itemId) : false;
+  });
+
+  onItemClick(): void {
+    // Set this item as active
+    const itemId = this.item().id;
+    if (itemId) {
+      this._navigationStateService.setActiveItem(itemId);
+    }
+
+    this.itemClicked.emit(this.item());
+  }
 }

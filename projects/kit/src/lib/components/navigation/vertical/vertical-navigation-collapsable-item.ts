@@ -1,8 +1,9 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, output, signal, inject, computed } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationItem } from '../../../types/navigations.type';
 import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
+import { NavigationStateService } from '../../../services/navigation-state.service';
 
 @Component({
   selector: 'op-vertical-navigation-collapsable-item',
@@ -68,14 +69,31 @@ export class VerticalNavigationCollapsableItem {
   item = input.required<NavigationItem>();
   itemClicked = output<NavigationItem>();
 
-  isExpanded = signal(false);
+  // Inject NavigationStateService
+  private _navigationStateService = inject(NavigationStateService);
+
+  // Computed expanded state using service
+  isExpanded = computed(() => {
+    const itemId = this.item().id;
+    return itemId ? this._navigationStateService.isItemExpanded(itemId) : false;
+  });
 
   toggleExpanded(): void {
-    this.isExpanded.update(expanded => !expanded);
+    const itemId = this.item().id;
+
+    if (itemId) {
+      this._navigationStateService.toggleExpanded(itemId);
+    }
+
     this.itemClicked.emit(this.item());
   }
 
   onChildItemClicked(item: NavigationItem): void {
+    // Set active item for basic items
+    if (item.id && item.type === 'basic') {
+      this._navigationStateService.setActiveItem(item.id);
+    }
+
     this.itemClicked.emit(item);
   }
 }
