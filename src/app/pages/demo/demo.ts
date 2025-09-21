@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DarkModeToggle } from '../../layouts/components/shared/dark-mode-toggle.component';
 import { VerticalNavigation } from '../../../../projects/kit/src/lib/components/navigation/vertical/vertical-navigation';
@@ -23,15 +23,9 @@ import { demoNavigationData } from './navigations';
                 <path d="M12 5.5L8.5 17H10.4L11.1 15H12.9L13.6 17H15.5L12 5.5Z" fill="white"/>
                 <path d="M12 8.5L11.4 12H12.6L12 8.5Z" fill="white"/>
               </svg>
-              <h1 class="text-lg font-semibold">Angular Kit</h1>
+              <h1 class="text-lg font-semibold">Angular Kit - Navigation Demo</h1>
             </div>
             <div class="flex items-center gap-4">
-              <button
-                (click)="toggleNavigationType()"
-                class="px-3 py-1 text-xs bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors"
-              >
-                {{ isHorizontalNavigation() ? 'Vertical Nav' : 'Horizontal Nav' }}
-              </button>
               <dark-mode-toggle
                 [iconStyle]="'default'"
                 [borderStyle]="'rounded'"
@@ -40,29 +34,67 @@ import { demoNavigationData } from './navigations';
           </div>
         </header>
 
-        <!-- Horizontal Navigation (when enabled) -->
-        @if (isHorizontalNavigation()) {
-          <div class="flex-shrink-0 border-b bg-background">
-            <div class="px-4 py-2">
-              <op-horizontal-navigation [navigation]="navigationData">
-              </op-horizontal-navigation>
+        <!-- Horizontal Navigation -->
+        <div class="flex-shrink-0 border-b bg-background">
+          <div class="px-4 py-2">
+            <div class="mb-2">
+              <h3 class="text-sm font-medium text-muted-foreground">Horizontal Navigation</h3>
             </div>
+            <op-horizontal-navigation 
+              name="demo-horizontal"
+              [navigation]="navigationData">
+            </op-horizontal-navigation>
           </div>
-        }
+        </div>
 
         <!-- Main Content -->
         <div class="flex flex-1 overflow-hidden">
-          <!-- Sidebar Navigation (when vertical) -->
-          @if (!isHorizontalNavigation()) {
-            <aside class="flex-shrink-0 w-72 border-r overflow-y-auto">
-              <op-vertical-navigation [navigation]="navigationData">
+          <!-- Vertical Navigation Sidebar -->
+          <aside class="flex-shrink-0 w-72 border-r overflow-y-auto">
+            <div class="p-4">
+              <h3 class="text-sm font-medium text-muted-foreground mb-3">Vertical Navigation</h3>
+              <op-vertical-navigation 
+                name="demo-vertical"
+                [navigation]="navigationData">
               </op-vertical-navigation>
-            </aside>
-          }
+            </div>
+          </aside>
 
           <!-- Page Content -->
           <div class="flex-1 overflow-y-auto p-6">
-            <router-outlet/>
+            <div class="max-w-4xl mx-auto">
+              <div class="mb-6">
+                <h2 class="text-2xl font-bold mb-2">Navigation Components Demo</h2>
+                <p class="text-muted-foreground">
+                  This demo showcases both horizontal and vertical navigation components running simultaneously.
+                  Both components share the same navigation data and demonstrate different layout approaches.
+                </p>
+              </div>
+              
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="p-4 border rounded-lg">
+                  <h3 class="font-semibold mb-2">Horizontal Navigation Features</h3>
+                  <ul class="text-sm text-muted-foreground space-y-1">
+                    <li>• Scrollable horizontal layout</li>
+                    <li>• Dropdown support for collapsable items</li>
+                    <li>• Responsive design</li>
+                    <li>• Badge and icon support</li>
+                  </ul>
+                </div>
+                
+                <div class="p-4 border rounded-lg">
+                  <h3 class="font-semibold mb-2">Vertical Navigation Features</h3>
+                  <ul class="text-sm text-muted-foreground space-y-1">
+                    <li>• Hierarchical structure</li>
+                    <li>• Collapsable groups</li>
+                    <li>• Dividers and spacers</li>
+                    <li>• Active state management</li>
+                  </ul>
+                </div>
+              </div>
+
+              <router-outlet/>
+            </div>
           </div>
         </div>
   `,
@@ -76,27 +108,10 @@ import { demoNavigationData } from './navigations';
 export class DemoPage implements OnInit {
   private _navigationService = inject(NavigationService);
 
-  // Navigation type toggle
-  isHorizontalNavigation = signal(false);
+  navigationData = demoNavigationData;
 
   ngOnInit(): void {
     // Store navigation data in service for global access
     this._navigationService.storeNavigation(demoNavigationData);
-  }
-
-  navigationData = demoNavigationData;
-  isEcommerceExpanded = false;
-  isAuthExpanded = false;
-
-  toggleNavigationType(): void {
-    this.isHorizontalNavigation.update(isHorizontal => !isHorizontal);
-  }
-
-  toggleEcommerceExpanded(): void {
-    this.isEcommerceExpanded = !this.isEcommerceExpanded;
-  }
-
-  toggleAuthExpanded(): void {
-    this.isAuthExpanded = !this.isAuthExpanded;
   }
 }
