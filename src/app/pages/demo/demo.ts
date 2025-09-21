@@ -5,7 +5,6 @@ import { VerticalNavigation } from '../../../../projects/kit/src/lib/components/
 import { HorizontalNavigation } from '../../../../projects/kit/src/lib/components/navigation/horizontal/horizontal-navigation';
 import { NavigationService } from '../../../../projects/kit/src/lib/services/navigation.service';
 import { NavigationDataService } from '../../services/navigation-data.service';
-import { demoNavigationData } from './navigations';
 
 @Component({
   selector: 'demo-page',
@@ -102,12 +101,11 @@ export class DemoPage implements OnInit {
   private _navigationService = inject(NavigationService);
   private _navigationDataService = inject(NavigationDataService);
 
-  // Get navigation data from service
+  // Get navigation data from global service
   navigationData = this._navigationDataService.navigationData;
 
   ngOnInit(): void {
-    // Store navigation data in both services for compatibility
-    this._navigationService.storeNavigation(demoNavigationData);
-    // NavigationDataService already has the data from its constructor
+    // Store navigation data in NavigationService for compatibility with existing components
+    this._navigationService.storeNavigation(this._navigationDataService.navigationData());
   }
 }
