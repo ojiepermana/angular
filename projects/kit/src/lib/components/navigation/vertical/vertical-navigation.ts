@@ -63,6 +63,9 @@ export class VerticalNavigation {
   // Inject NavigationService
   private _navigationService = inject(NavigationService);
 
+  // Navigation name identifier
+  name = input<string>('');
+
   // Navigation data input (for direct data binding)
   navigation = input<NavigationItem[]>([]);
 

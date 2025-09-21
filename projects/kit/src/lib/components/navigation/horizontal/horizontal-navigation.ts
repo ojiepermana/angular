@@ -210,6 +210,9 @@ export class HorizontalNavigation {
   private _navigationService = inject(NavigationService);
   private _expandedItems = signal<Set<string>>(new Set());
 
+  // Navigation name identifier
+  name = input<string>('');
+
   // Input for navigation data
   navigation = input<NavigationItem[]>([]);
 
