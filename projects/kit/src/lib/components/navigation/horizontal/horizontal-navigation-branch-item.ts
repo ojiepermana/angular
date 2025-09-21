@@ -13,6 +13,8 @@ import { NavigationItem } from '../../../types/navigations.type';
     <div
       class="relative inline-flex items-center px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer transition-colors whitespace-nowrap"
       [matMenuTriggerFor]="matMenu"
+      (menuOpened)="onMenuOpened()"
+      (menuClosed)="onMenuClosed()"
       #trigger="matMenuTrigger"
     >
       @if (item().icon) {
@@ -33,8 +35,8 @@ import { NavigationItem } from '../../../types/navigations.type';
     </div>
 
     <!-- Dropdown Menu -->
-    <mat-menu #matMenu="matMenu" class="op-horizontal-navigation-menu">
-      @for (child of item().children; track child.id || child.title) {
+    <mat-menu #matMenu="matMenu" class="op-horizontal-navigation-menu" [hasBackdrop]="true">
+      @for (child of item().children || []; track child.id || child.title) {
         @if (child.type === 'basic') {
           <div mat-menu-item class="px-0">
             @if (child.link) {
@@ -129,11 +131,16 @@ import { NavigationItem } from '../../../types/navigations.type';
   styles: `
     .op-horizontal-navigation-menu {
       min-width: 200px;
+      z-index: 1000;
     }
 
     .op-horizontal-navigation-menu .mat-mdc-menu-item {
       min-height: auto;
       line-height: normal;
+    }
+
+    :host ::ng-deep .cdk-overlay-pane {
+      z-index: 1000 !important;
     }
   `,
   imports: [
@@ -156,5 +163,13 @@ export class HorizontalNavigationBranchItem {
 
   onChildItemClicked(child: NavigationItem): void {
     this.itemClicked.emit(child);
+  }
+
+  onMenuOpened(): void {
+    console.log('Menu opened');
+  }
+
+  onMenuClosed(): void {
+    console.log('Menu closed');
   }
 }

@@ -2,6 +2,35 @@ import { NavigationItem } from '../../../../projects/kit/src/lib/types/navigatio
 
 export const demoNavigationData: NavigationItem[] = [
   {
+    id: 'test-dropdown',
+    title: 'Test Dropdown',
+    type: 'collapsable',
+    icon: 'expand_more',
+    children: [
+      {
+        id: 'item1',
+        title: 'Test Item 1',
+        type: 'basic',
+        icon: 'star',
+        link: '/demo/test1'
+      },
+      {
+        id: 'item2',
+        title: 'Test Item 2',
+        type: 'basic',
+        icon: 'favorite',
+        link: '/demo/test2'
+      },
+      {
+        id: 'item3',
+        title: 'Test Item 3',
+        type: 'basic',
+        icon: 'bookmark',
+        link: '/demo/test3'
+      }
+    ]
+  },
+  {
     id: 'documentation',
     title: 'Documentation',
     type: 'group',
