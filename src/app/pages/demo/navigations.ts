@@ -98,7 +98,8 @@ export const demoNavigationData: NavigationItem[] = [
             title: 'Chips',
             type: 'basic',
             icon: 'sell',
-            link: '/demo/ui/material/chips'
+            link: '/demo/ui/material/chips',
+            badge: { title: 'New', classes: 'ml-2 px-2 py-0.5 rounded-full text-xs bg-green-500 text-white' }
           },
           {
             id: 'datepicker',
@@ -318,10 +319,11 @@ export const demoNavigationData: NavigationItem[] = [
       },
       {
         id: 'themes-color',
-        title: 'Themes Color',
+        title: 'Themes Variables',
         type: 'basic',
         icon: 'palette',
         link: '/demo/themes/color'
+  ,badge: { title: 'Beta', classes: 'ml-2 px-2 py-0.5 rounded-full text-xs bg-yellow-500 text-white' }
       }
     ]
   }

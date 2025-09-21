@@ -1,45 +1,16 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { ThemeService, ThemeVariant, ThemeMode } from '@ojiepermana/angular';
 import { LayoutService, LayoutType } from '../../../services/layout.service';
 import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'layout-themes',
-  imports: [RouterLink, TitleCasePipe],
+  imports: [TitleCasePipe],
   template: `
     <div class="bg-background text-foreground transition-theme">
-      <!-- Header -->
-      <header class="bg-card text-card-foreground border-b border-border p-6 transition-theme">
-        <div class="max-w-6xl mx-auto">
-          <div class="flex items-center justify-between">
-            <div>
-              <h1 class="text-primary text-3xl font-bold">CSS Variables Demo</h1>
-              <p class="text-muted-foreground mt-2">
-                All elements below use CSS variables and will automatically respond to theme changes
-              </p>
-              <div class="mt-3 text-sm">
-                <span class="text-accent-foreground font-medium">Current Theme:</span>
-                <span class="text-primary ml-2">{{ themeService.variant() | titlecase }} - {{ themeService.mode() | titlecase }}</span>
-              </div>
-            </div>
-            <nav class="flex gap-2">
-              <a routerLink="/demo"
-                 class="bg-secondary text-secondary-foreground px-4 py-2 rounded hover:bg-accent transition-theme">
-                Back to Demo
-              </a>
-              <a routerLink="/demo/themes"
-                 class="bg-primary text-primary-foreground px-4 py-2 rounded hover:opacity-90 transition-theme">
-                Theme Controls
-              </a>
-            </nav>
-          </div>
-        </div>
-      </header>
-
-      <main class="max-w-6xl mx-auto p-6 space-y-8">
+      <main class="space-y-8">
         <!-- Layout Controls -->
-        <section class="bg-card text-card-foreground border border-border rounded-lg p-6 transition-theme">
+        <section class="bg-card text-card-foreground  transition-theme">
           <h2 class="text-primary text-2xl font-semibold mb-6">Layout Configuration</h2>
           <div class="space-y-4">
             <!-- Current Layout Display -->
