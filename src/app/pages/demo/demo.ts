@@ -4,6 +4,7 @@ import { DarkModeToggle } from '../../layouts/components/shared/dark-mode-toggle
 import { VerticalNavigation } from '../../../../projects/kit/src/lib/components/navigation/vertical/vertical-navigation';
 import { HorizontalNavigation } from '../../../../projects/kit/src/lib/components/navigation/horizontal/horizontal-navigation';
 import { NavigationService } from '../../../../projects/kit/src/lib/services/navigation.service';
+import { NavigationDataService } from '../../services/navigation-data.service';
 import { demoNavigationData } from './navigations';
 
 @Component({
@@ -38,7 +39,7 @@ import { demoNavigationData } from './navigations';
         <div class="flex-shrink-0 border-b bg-background">
             <op-horizontal-navigation
               name="demo-horizontal"
-              [navigation]="navigationData">
+              [navigation]="navigationData()">
             </op-horizontal-navigation>
         </div>
 
@@ -48,7 +49,7 @@ import { demoNavigationData } from './navigations';
           <aside class="flex-shrink-0 w-72 border-r overflow-y-auto">
               <op-vertical-navigation
                 name="demo-vertical"
-                [navigation]="navigationData">
+                [navigation]="navigationData()">
               </op-vertical-navigation>
           </aside>
 
@@ -99,11 +100,14 @@ import { demoNavigationData } from './navigations';
 })
 export class DemoPage implements OnInit {
   private _navigationService = inject(NavigationService);
+  private _navigationDataService = inject(NavigationDataService);
 
-  navigationData = demoNavigationData;
+  // Get navigation data from service
+  navigationData = this._navigationDataService.navigationData;
 
   ngOnInit(): void {
-    // Store navigation data in service for global access
+    // Store navigation data in both services for compatibility
     this._navigationService.storeNavigation(demoNavigationData);
+    // NavigationDataService already has the data from its constructor
   }
 }

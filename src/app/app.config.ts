@@ -2,13 +2,14 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessC
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { LayoutService } from './services/layout.service';
+import { LayoutService, NavigationDataService } from './services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
-    LayoutService
+    LayoutService,
+    NavigationDataService
   ]
 };
