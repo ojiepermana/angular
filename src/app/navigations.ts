@@ -9,25 +9,33 @@ export const demoNavigationData: NavigationItem[] = [
     icon: 'menu_book',
     children: [
       {
-        id: 'guides',
+        id: 'documentation-guides',
         title: 'Guides',
         type: 'basic',
         icon: 'menu_book',
         link: '/demo/docs/guides'
       },
       {
-        id: 'getting-started',
+        id: 'documentation-getting-started',
         title: 'Getting started',
         type: 'basic',
         icon: 'rocket_launch',
         link: '/demo/docs/getting-started'
       },
       {
-        id: 'changelog',
+        id: 'documentation-changelog',
         title: 'Changelog',
         type: 'basic',
         icon: 'history',
         link: '/demo/docs/changelog'
+      },
+      {
+        id: 'documentation-material-symbols',
+        title: 'Material Symbols',
+        type: 'basic',
+        icon: 'font_download',
+        link: '/demo/material-symbols',
+        badge: { title: 'Demo', classes: 'ml-2 px-2 py-0.5 rounded-full text-xs bg-blue-500 text-white' }
       }
     ]
   },
@@ -43,75 +51,75 @@ export const demoNavigationData: NavigationItem[] = [
     icon: 'dashboard',
     children: [
       {
-        id: 'material-components',
+        id: 'user-interface-material-components',
         title: 'Material Components',
         type: 'collapsable',
         icon: 'widgets',
         children: [
           {
-            id: 'inputs-forms',
+            id: 'user-interface-material-components-inputs-forms',
             title: 'Inputs & Forms',
             type: 'collapsable',
             icon: 'input',
             children: [
               {
-                id: 'autocomplete',
+                id: 'user-interface-material-components-inputs-forms-autocomplete',
                 title: 'Autocomplete',
                 type: 'basic',
                 icon: 'search',
                 link: '/demo/ui/material/autocomplete'
               },
               {
-                id: 'checkbox',
+                id: 'user-interface-material-components-inputs-forms-checkbox',
                 title: 'Checkbox',
                 type: 'basic',
                 icon: 'check_box',
                 link: '/demo/ui/material/checkbox'
               },
               {
-                id: 'datepicker',
+                id: 'user-interface-material-components-inputs-forms-datepicker',
                 title: 'Datepicker',
                 type: 'basic',
                 icon: 'date_range',
                 link: '/demo/ui/material/datepicker'
               },
               {
-                id: 'form-field',
+                id: 'user-interface-material-components-inputs-forms-form-field',
                 title: 'Form field',
                 type: 'basic',
                 icon: 'text_fields',
                 link: '/demo/ui/material/form-field'
               },
               {
-                id: 'input',
+                id: 'user-interface-material-components-inputs-forms-input',
                 title: 'Input',
                 type: 'basic',
                 icon: 'input',
                 link: '/demo/ui/material/input'
               },
               {
-                id: 'radio-button',
+                id: 'user-interface-material-components-inputs-forms-radio-button',
                 title: 'Radio button',
                 type: 'basic',
                 icon: 'radio_button_checked',
                 link: '/demo/ui/material/radio'
               },
               {
-                id: 'select',
+                id: 'user-interface-material-components-inputs-forms-select',
                 title: 'Select',
                 type: 'basic',
                 icon: 'arrow_drop_down',
                 link: '/demo/ui/material/select'
               },
               {
-                id: 'slider',
+                id: 'user-interface-material-components-inputs-forms-slider',
                 title: 'Slider',
                 type: 'basic',
                 icon: 'tune',
                 link: '/demo/ui/material/slider'
               },
               {
-                id: 'slide-toggle',
+                id: 'user-interface-material-components-inputs-forms-slide-toggle',
                 title: 'Slide toggle',
                 type: 'basic',
                 icon: 'toggle_on',
@@ -120,27 +128,27 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'buttons-actions',
+            id: 'user-interface-material-components-buttons-actions',
             title: 'Buttons & Actions',
             type: 'collapsable',
             icon: 'smart_button',
             children: [
               {
-                id: 'button',
+                id: 'user-interface-material-components-buttons-actions-button',
                 title: 'Button',
                 type: 'basic',
                 icon: 'smart_button',
                 link: '/demo/ui/material/button'
               },
               {
-                id: 'button-toggle',
+                id: 'user-interface-material-components-buttons-actions-button-toggle',
                 title: 'Button toggle',
                 type: 'basic',
                 icon: 'view_week',
                 link: '/demo/ui/material/button-toggle'
               },
               {
-                id: 'chips',
+                id: 'user-interface-material-components-buttons-actions-chips',
                 title: 'Chips',
                 type: 'basic',
                 icon: 'sell',
@@ -148,14 +156,14 @@ export const demoNavigationData: NavigationItem[] = [
                 badge: { title: 'New', classes: 'ml-2 px-2 py-0.5 rounded-full text-xs bg-green-500 text-white' }
               },
               {
-                id: 'menu',
+                id: 'user-interface-material-components-buttons-actions-menu',
                 title: 'Menu',
                 type: 'basic',
                 icon: 'menu',
                 link: '/demo/ui/material/menu'
               },
               {
-                id: 'ripples',
+                id: 'user-interface-material-components-buttons-actions-ripples',
                 title: 'Ripples',
                 type: 'basic',
                 icon: 'touch_app',
@@ -164,62 +172,62 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'layout-containers',
+            id: 'user-interface-material-components-layout-containers',
             title: 'Layout & Containers',
             type: 'collapsable',
             icon: 'view_quilt',
             children: [
               {
-                id: 'card',
+                id: 'user-interface-material-components-layout-containers-card',
                 title: 'Card',
                 type: 'basic',
                 icon: 'credit_card',
                 link: '/demo/ui/material/card'
               },
               {
-                id: 'divider',
+                id: 'user-interface-material-components-layout-containers-divider',
                 title: 'Divider',
                 type: 'basic',
                 icon: 'horizontal_rule',
                 link: '/demo/ui/material/divider'
               },
               {
-                id: 'expansion-panel',
+                id: 'user-interface-material-components-layout-containers-expansion-panel',
                 title: 'Expansion Panel',
                 type: 'basic',
                 icon: 'expand_more',
                 link: '/demo/ui/material/expansion'
               },
               {
-                id: 'grid-list',
+                id: 'user-interface-material-components-layout-containers-grid-list',
                 title: 'Grid list',
                 type: 'basic',
                 icon: 'grid_view',
                 link: '/demo/ui/material/grid-list'
               },
               {
-                id: 'list',
+                id: 'user-interface-material-components-layout-containers-list',
                 title: 'List',
                 type: 'basic',
                 icon: 'list',
                 link: '/demo/ui/material/list'
               },
               {
-                id: 'sidenav',
+                id: 'user-interface-material-components-layout-containers-sidenav',
                 title: 'Sidenav',
                 type: 'basic',
                 icon: 'menu_open',
                 link: '/demo/ui/material/sidenav'
               },
               {
-                id: 'tabs',
+                id: 'user-interface-material-components-layout-containers-tabs',
                 title: 'Tabs',
                 type: 'basic',
                 icon: 'tab',
                 link: '/demo/ui/material/tabs'
               },
               {
-                id: 'toolbar',
+                id: 'user-interface-material-components-layout-containers-toolbar',
                 title: 'Toolbar',
                 type: 'basic',
                 icon: 'build',
@@ -228,62 +236,62 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'data-display',
+            id: 'user-interface-material-components-data-display',
             title: 'Data & Display',
             type: 'collapsable',
             icon: 'analytics',
             children: [
               {
-                id: 'badge',
+                id: 'user-interface-material-components-data-display-badge',
                 title: 'Badge',
                 type: 'basic',
                 icon: 'new_releases',
                 link: '/demo/ui/material/badge'
               },
               {
-                id: 'icon',
+                id: 'user-interface-material-components-data-display-icon',
                 title: 'Icon',
                 type: 'basic',
                 icon: 'star',
                 link: '/demo/ui/material/icon'
               },
               {
-                id: 'paginator',
+                id: 'user-interface-material-components-data-display-paginator',
                 title: 'Paginator',
                 type: 'basic',
                 icon: 'keyboard_arrow_left',
                 link: '/demo/ui/material/paginator'
               },
               {
-                id: 'progress-bar',
+                id: 'user-interface-material-components-data-display-progress-bar',
                 title: 'Progress bar',
                 type: 'basic',
                 icon: 'linear_scale',
                 link: '/demo/ui/material/progress-bar'
               },
               {
-                id: 'progress-spinner',
+                id: 'user-interface-material-components-data-display-progress-spinner',
                 title: 'Progress spinner',
                 type: 'basic',
                 icon: 'rotate_right',
                 link: '/demo/ui/material/progress-spinner'
               },
               {
-                id: 'sort',
+                id: 'user-interface-material-components-data-display-sort',
                 title: 'Sort header',
                 type: 'basic',
                 icon: 'sort',
                 link: '/demo/ui/material/sort'
               },
               {
-                id: 'table',
+                id: 'user-interface-material-components-data-display-table',
                 title: 'Table',
                 type: 'basic',
                 icon: 'table_chart',
                 link: '/demo/ui/material/table'
               },
               {
-                id: 'tree',
+                id: 'user-interface-material-components-data-display-tree',
                 title: 'Tree',
                 type: 'basic',
                 icon: 'account_tree',
@@ -292,34 +300,34 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'overlays-modals',
+            id: 'user-interface-material-components-overlays-modals',
             title: 'Overlays & Modals',
             type: 'collapsable',
             icon: 'layers',
             children: [
               {
-                id: 'bottom-sheet',
+                id: 'user-interface-material-components-overlays-modals-bottom-sheet',
                 title: 'Bottom Sheet',
                 type: 'basic',
                 icon: 'vertical_align_bottom',
                 link: '/demo/ui/material/bottom-sheet'
               },
               {
-                id: 'dialog',
+                id: 'user-interface-material-components-overlays-modals-dialog',
                 title: 'Dialog',
                 type: 'basic',
                 icon: 'chat_bubble',
                 link: '/demo/ui/material/dialog'
               },
               {
-                id: 'snack-bar',
+                id: 'user-interface-material-components-overlays-modals-snack-bar',
                 title: 'Snack-bar',
                 type: 'basic',
                 icon: 'announcement',
                 link: '/demo/ui/material/snack-bar'
               },
               {
-                id: 'tooltip',
+                id: 'user-interface-material-components-overlays-modals-tooltip',
                 title: 'Tooltip',
                 type: 'basic',
                 icon: 'help',
@@ -328,13 +336,13 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'navigation-stepper',
+            id: 'user-interface-material-components-navigation-stepper',
             title: 'Navigation & Steps',
             type: 'collapsable',
             icon: 'stairs',
             children: [
               {
-                id: 'stepper',
+                id: 'user-interface-material-components-navigation-stepper-stepper',
                 title: 'Stepper',
                 type: 'basic',
                 icon: 'stairs',
@@ -345,47 +353,47 @@ export const demoNavigationData: NavigationItem[] = [
         ]
       },
       {
-        id: 'angular-cdk',
+        id: 'user-interface-angular-cdk',
         title: 'Angular CDK',
         type: 'collapsable',
         icon: 'construction',
         children: [
           {
-            id: 'accessibility-navigation',
+            id: 'user-interface-angular-cdk-accessibility-navigation',
             title: 'Accessibility & Navigation',
             type: 'collapsable',
             icon: 'accessibility',
             children: [
               {
-                id: 'a11y',
+                id: 'user-interface-angular-cdk-accessibility-navigation-a11y',
                 title: 'Accessibility',
                 type: 'basic',
                 icon: 'accessibility',
                 link: '/demo/ui/cdk/a11y'
               },
               {
-                id: 'focus-trap',
+                id: 'user-interface-angular-cdk-accessibility-navigation-focus-trap',
                 title: 'Focus Trap',
                 type: 'basic',
                 icon: 'center_focus_strong',
                 link: '/demo/ui/cdk/focus-trap'
               },
               {
-                id: 'live-announcer',
+                id: 'user-interface-angular-cdk-accessibility-navigation-live-announcer',
                 title: 'Live Announcer',
                 type: 'basic',
                 icon: 'campaign',
                 link: '/demo/ui/cdk/live-announcer'
               },
               {
-                id: 'listbox',
+                id: 'user-interface-angular-cdk-accessibility-navigation-listbox',
                 title: 'Listbox',
                 type: 'basic',
                 icon: 'list',
                 link: '/demo/ui/cdk/listbox'
               },
               {
-                id: 'menu-cdk',
+                id: 'user-interface-angular-cdk-accessibility-navigation-menu-cdk',
                 title: 'Menu',
                 type: 'basic',
                 icon: 'menu',
@@ -394,41 +402,41 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'layout-positioning',
+            id: 'user-interface-angular-cdk-layout-positioning',
             title: 'Layout & Positioning',
             type: 'collapsable',
             icon: 'dashboard',
             children: [
               {
-                id: 'layout',
+                id: 'user-interface-angular-cdk-layout-positioning-layout',
                 title: 'Layout',
                 type: 'basic',
                 icon: 'view_quilt',
                 link: '/demo/ui/cdk/layout'
               },
               {
-                id: 'overlay',
+                id: 'user-interface-angular-cdk-layout-positioning-overlay',
                 title: 'Overlay',
                 type: 'basic',
                 icon: 'layers',
                 link: '/demo/ui/cdk/overlay'
               },
               {
-                id: 'portal',
+                id: 'user-interface-angular-cdk-layout-positioning-portal',
                 title: 'Portal',
                 type: 'basic',
                 icon: 'input',
                 link: '/demo/ui/cdk/portal'
               },
               {
-                id: 'scrolling',
+                id: 'user-interface-angular-cdk-layout-positioning-scrolling',
                 title: 'Scrolling',
                 type: 'basic',
                 icon: 'unfold_more',
                 link: '/demo/ui/cdk/scrolling'
               },
               {
-                id: 'virtual-scrolling',
+                id: 'user-interface-angular-cdk-layout-positioning-virtual-scrolling',
                 title: 'Virtual Scrolling',
                 type: 'basic',
                 icon: 'view_stream',
@@ -437,34 +445,34 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'interaction-behavior',
+            id: 'user-interface-angular-cdk-interaction-behavior',
             title: 'Interaction & Behavior',
             type: 'collapsable',
             icon: 'touch_app',
             children: [
               {
-                id: 'drag-drop',
+                id: 'user-interface-angular-cdk-interaction-behavior-drag-drop',
                 title: 'Drag and Drop',
                 type: 'basic',
                 icon: 'open_with',
                 link: '/demo/ui/cdk/drag-drop'
               },
               {
-                id: 'observers',
+                id: 'user-interface-angular-cdk-interaction-behavior-observers',
                 title: 'Observers',
                 type: 'basic',
                 icon: 'visibility',
                 link: '/demo/ui/cdk/observers'
               },
               {
-                id: 'platform',
+                id: 'user-interface-angular-cdk-interaction-behavior-platform',
                 title: 'Platform',
                 type: 'basic',
                 icon: 'devices',
                 link: '/demo/ui/cdk/platform'
               },
               {
-                id: 'stepper-cdk',
+                id: 'user-interface-angular-cdk-interaction-behavior-stepper-cdk',
                 title: 'Stepper',
                 type: 'basic',
                 icon: 'stairs',
@@ -473,27 +481,27 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'forms-data',
+            id: 'user-interface-angular-cdk-forms-data',
             title: 'Forms & Data',
             type: 'collapsable',
             icon: 'storage',
             children: [
               {
-                id: 'accordion',
+                id: 'user-interface-angular-cdk-forms-data-accordion',
                 title: 'Accordion',
                 type: 'basic',
                 icon: 'expand_more',
                 link: '/demo/ui/cdk/accordion'
               },
               {
-                id: 'table-cdk',
+                id: 'user-interface-angular-cdk-forms-data-table-cdk',
                 title: 'Table',
                 type: 'basic',
                 icon: 'table_chart',
                 link: '/demo/ui/cdk/table'
               },
               {
-                id: 'tree-cdk',
+                id: 'user-interface-angular-cdk-forms-data-tree-cdk',
                 title: 'Tree',
                 type: 'basic',
                 icon: 'account_tree',
@@ -502,41 +510,41 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'utilities-helpers',
+            id: 'user-interface-angular-cdk-utilities-helpers',
             title: 'Utilities & Helpers',
             type: 'collapsable',
             icon: 'build',
             children: [
               {
-                id: 'bidi',
+                id: 'user-interface-angular-cdk-utilities-helpers-bidi',
                 title: 'Bidirectionality',
                 type: 'basic',
                 icon: 'compare_arrows',
                 link: '/demo/ui/cdk/bidi'
               },
               {
-                id: 'clipboard',
+                id: 'user-interface-angular-cdk-utilities-helpers-clipboard',
                 title: 'Clipboard',
                 type: 'basic',
                 icon: 'content_copy',
                 link: '/demo/ui/cdk/clipboard'
               },
               {
-                id: 'coercion',
+                id: 'user-interface-angular-cdk-utilities-helpers-coercion',
                 title: 'Coercion',
                 type: 'basic',
                 icon: 'transform',
                 link: '/demo/ui/cdk/coercion'
               },
               {
-                id: 'collections',
+                id: 'user-interface-angular-cdk-utilities-helpers-collections',
                 title: 'Collections',
                 type: 'basic',
                 icon: 'collections',
                 link: '/demo/ui/cdk/collections'
               },
               {
-                id: 'keycodes',
+                id: 'user-interface-angular-cdk-utilities-helpers-keycodes',
                 title: 'Keycodes',
                 type: 'basic',
                 icon: 'keyboard',
@@ -545,20 +553,20 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'testing-tools',
+            id: 'user-interface-angular-cdk-testing-tools',
             title: 'Testing Tools',
             type: 'collapsable',
             icon: 'bug_report',
             children: [
               {
-                id: 'component-harnesses',
+                id: 'user-interface-angular-cdk-testing-tools-component-harnesses',
                 title: 'Component Harnesses',
                 type: 'basic',
                 icon: 'science',
                 link: '/demo/ui/cdk/testing'
               },
               {
-                id: 'test-harnesses',
+                id: 'user-interface-angular-cdk-testing-tools-test-harnesses',
                 title: 'Test Harnesses',
                 type: 'basic',
                 icon: 'quiz',
@@ -567,20 +575,20 @@ export const demoNavigationData: NavigationItem[] = [
             ]
           },
           {
-            id: 'advanced-features',
+            id: 'user-interface-angular-cdk-advanced-features',
             title: 'Advanced Features',
             type: 'collapsable',
             icon: 'settings',
             children: [
               {
-                id: 'dialog-cdk',
+                id: 'user-interface-angular-cdk-advanced-features-dialog-cdk',
                 title: 'Dialog',
                 type: 'basic',
                 icon: 'chat_bubble',
                 link: '/demo/ui/cdk/dialog'
               },
               {
-                id: 'text-field',
+                id: 'user-interface-angular-cdk-advanced-features-text-field',
                 title: 'Text Field',
                 type: 'basic',
                 icon: 'text_fields',
@@ -597,33 +605,107 @@ export const demoNavigationData: NavigationItem[] = [
     type: 'divider'
   },
   {
-    id: 'themes',
-    title: 'Themes',
-    subtitle: 'Styling and appearance options',
+    id: 'features',
+    title: 'Features',
+    subtitle: 'Advanced functionality and customization options',
     type: 'group',
+    icon: 'settings',
+    children: [
+      {
+    id: 'features-themes',
+    title: 'Themes',
+    type: 'collapsable',
     icon: 'color_lens',
     children: [
       {
-        id: 'dark-mode',
+        id: 'features-themes-dark-mode',
         title: 'Dark Mode',
         type: 'basic',
         icon: 'dark_mode',
         link: '/demo/themes/dark-mode'
       },
       {
-        id: 'layout',
+        id: 'features-themes-layout',
         title: 'Layout',
-        type: 'basic',
+        type: 'collapsable',
         icon: 'view_quilt',
-        link: '/demo/themes/layout'
+        children: [
+          {
+            id: 'features-themes-layout-apps',
+            title: 'Application',
+            type: 'basic',
+            icon: 'apps',
+            link: '/demo/features/themes/layout/apps'
+          },
+          {
+            id: 'features-themes-layout-pages',
+            title: 'Pages',
+            type: 'basic',
+            icon: 'pages',
+            link: '/demo/features/themes/layout/pages'
+          }
+        ]
       },
       {
-        id: 'themes-color',
+        id: 'features-themes-color',
         title: 'Themes Variables',
         type: 'basic',
         icon: 'palette',
         link: '/demo/themes/color'
   ,badge: { title: 'Beta', classes: 'ml-2 px-2 py-0.5 rounded-full text-xs bg-yellow-500 text-white' }
+      }
+    ]
+  },
+      {
+        id: 'features-navigation',
+        title: 'Navigation',
+        type: 'collapsable',
+        icon: 'navigation',
+        children: [
+          {
+            id: 'features-navigation-horizontal-navigation',
+            title: 'Horizontal ',
+            type: 'basic',
+            icon: 'view_week',
+            link: '/demo/features/navigation/horizontal'
+          },
+          {
+            id: 'features-navigation-vertical-navigation',
+            title: 'Vertical ',
+            type: 'collapsable',
+            icon: 'view_stream',
+            children: [
+              {
+                id: 'features-navigation-vertical-navigation-default',
+                title: 'Default',
+                type: 'basic',
+                icon: 'view_stream',
+                link: '/demo/features/navigation/default'
+              },
+              {
+                id: 'features-navigation-vertical-navigation-thin',
+                title: 'Thin',
+                type: 'basic',
+                icon: 'view_stream',
+                link: '/demo/features/navigation/thin'
+              },
+              {
+                id: 'features-navigation-vertical-navigation-compact',
+                title: 'Compact',
+                type: 'basic',
+                icon: 'view_stream',
+                link: '/demo/features/navigation/compact'
+              },
+              {
+                id: 'features-navigation-vertical-navigation-dense',
+                title: 'Dense',
+                type: 'basic',
+                icon: 'view_stream',
+                link: '/demo/features/navigation/dense'
+              }
+            ]
+          }
+        ]
       }
     ]
   }

@@ -13,6 +13,10 @@ export const routes: Routes = [
       {
         path: 'layouts',
         loadChildren: () => import('./layouts/layouts.routes').then(m => m.routes)
+      },
+      {
+        path: 'material-symbols',
+        loadComponent: () => import('./material-symbols-demo').then(m => m.MaterialSymbolsDemo)
       }
 
     ]
