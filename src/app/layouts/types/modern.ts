@@ -9,11 +9,11 @@ import { NavigationDataService } from '../../services';
   selector: 'layout-modern',
   imports: [RouterOutlet, DarkModeToggle, HorizontalNavigation],
   template: `
-    <div class="h-screen  bg-background text-foreground p-16">
-      <div class="flex flex-col h-full max-w-7xl mx-auto border border-border rounded-lg shadow-xs  overflow-hidden">
+    <div class="h-screen bg-background text-foreground p-16">
+      <div class="flex flex-col h-full max-w-7xl mx-auto border border-border rounded-lg shadow-xs overflow-hidden relative">
         <!-- Navigation Header -->
-       <header class="flex-shrink-0 px-4 border-b">
-          <div class="flex items-center justify-between">
+        <header class="absolute top-0 left-0 right-0 z-10 px-4  glass-header border-b">
+          <div class="flex items-center justify-between h-12">
             <div class="flex items-center gap-3">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2L2 7L3 18L12 22L21 18L22 7L12 2Z" fill="#DD0031"/>
@@ -21,11 +21,11 @@ import { NavigationDataService } from '../../services';
                 <path d="M12 5.5L8.5 17H10.4L11.1 15H12.9L13.6 17H15.5L12 5.5Z" fill="white"/>
                 <path d="M12 8.5L11.4 12H12.6L12 8.5Z" fill="white"/>
               </svg>
-              <h1 class="text-sm font-semibold mr-32">Angular Kit</h1>
-              <op-horizontal-navigation class="pt-2"
-              name="demo-horizontal"
-              [navigation]="navigationData()">
-            </op-horizontal-navigation>
+              <h1 class="text-sm font-semibold mr-8">Angular Kit</h1>
+              <op-horizontal-navigation
+                name="demo-horizontal"
+                [navigation]="navigationData()">
+              </op-horizontal-navigation>
             </div>
 
             <div class="flex items-center gap-4">
@@ -38,13 +38,13 @@ import { NavigationDataService } from '../../services';
         </header>
 
         <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto p-4 min-h-0">
+        <main class="flex-1 overflow-y-auto p-4 min-h-0" style="padding-top: 5rem; padding-bottom: 4rem;">
           <router-outlet></router-outlet>
         </main>
 
         <!-- Footer -->
-        <footer class="flex-shrink-0 p-4 border-t">
-         Built with ❤️ by Ojie Permana and AI
+        <footer class="absolute bottom-0 left-0 right-0 z-10 p-3 glass-footer text-center text-sm border-t">
+          Built with ❤️ by Ojie Permana and AI
         </footer>
       </div>
     </div>
