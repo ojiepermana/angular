@@ -9,11 +9,18 @@ export const demoNavigationData: NavigationItem[] = [
     icon: 'menu_book',
     children: [
       {
-        id: 'documentation-guides',
-        title: 'Guides',
+        id: 'documentation-introduction',
+        title: 'Introduction',
         type: 'basic',
         icon: 'menu_book',
-        link: '/demo/docs/guides'
+        link: '/demo/docs/introduction'
+      },
+      {
+        id: 'documentation-installation',
+        title: 'Installation',
+        type: 'basic',
+        icon: 'download',
+        link: '/demo/docs/installation'
       },
       {
         id: 'documentation-getting-started',
@@ -23,6 +30,13 @@ export const demoNavigationData: NavigationItem[] = [
         link: '/demo/docs/getting-started'
       },
       {
+        id: 'documentation-upgrade-guide',
+        title: 'Upgrade Guide',
+        type: 'basic',
+        icon: 'upgrade',
+        link: '/demo/docs/upgrade-guide'
+      },
+      {
         id: 'documentation-changelog',
         title: 'Changelog',
         type: 'basic',
@@ -30,11 +44,11 @@ export const demoNavigationData: NavigationItem[] = [
         link: '/demo/docs/changelog'
       },
       {
-        id: 'documentation-material-symbols',
-        title: 'Material Symbols',
+        id: 'documentation-material-icons',
+        title: 'Material Icons',
         type: 'basic',
-        icon: 'font_download',
-        link: '/demo/material-symbols',
+        icon: 'insert_emoticon',
+        link: '/demo/material-icons',
         badge: { title: 'Demo', classes: 'ml-2 px-2 py-0.5 rounded-full text-xs bg-blue-500 text-white' }
       }
     ]
