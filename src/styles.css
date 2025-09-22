@@ -85,15 +85,6 @@ mat-icon {
     'opsz' 24;
 }
 
-/* Material Symbols variant classes - different font families */
-.material-symbols-sharp {
-  font-family: 'Material Symbols Sharp' !important;
-}
-
-.material-symbols-outlined-font {
-  font-family: 'Material Symbols Outlined' !important;
-}
-
 /* Size utility classes */
 .material-symbols-small {
   font-size: 18px;

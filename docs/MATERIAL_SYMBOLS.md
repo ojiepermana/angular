@@ -12,6 +12,23 @@ All `mat-icon` components and `.material-icons` classes now automatically use Ma
 - **Grade**: 0 (normal)
 - **Optical Size**: 24px
 
+## Why Only One Font Family?
+
+We use only Material Symbols Rounded for several reasons:
+- **Performance**: Loading only one font family reduces bundle size and loading time
+- **Consistency**: Single font family ensures consistent design language
+- **Flexibility**: All icon variations (filled, outlined, different weights) can be achieved using font-variation-settings
+- **Simplicity**: Easier to maintain and fewer CSS rules
+
+## Font Variation Settings
+
+Material Symbols Rounded supports all variations through CSS font-variation-settings:
+
+- **FILL**: 0 (outlined) to 1 (filled)
+- **wght**: 100-700 (weight/thickness)  
+- **GRAD**: -50 to 200 (grade/emphasis)
+- **opsz**: 20-48 (optical size)
+
 ## Usage Examples
 
 ### Basic Usage (Default Rounded Style)
@@ -27,13 +44,13 @@ All `mat-icon` components and `.material-icons` classes now automatically use Ma
 <mat-icon class="material-symbols-filled">favorite</mat-icon>
 ```
 
-#### Different Font Variants
+#### Different Variations
 ```html
-<!-- Sharp variant -->
-<mat-icon class="material-symbols-sharp">settings</mat-icon>
+<!-- Simulate "Sharp" look with different GRAD settings -->
+<mat-icon style="font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' -25, 'opsz' 24;">settings</mat-icon>
 
-<!-- Outlined variant -->
-<mat-icon class="material-symbols-outlined-font">notifications</mat-icon>
+<!-- Simulate "Outlined" look (default) -->
+<mat-icon>notifications</mat-icon>
 ```
 
 #### Different Weights
@@ -71,11 +88,15 @@ You can customize icons using CSS font-variation-settings:
 }
 ```
 
-## Available Font Families
+## Available Styles
 
-1. **Material Symbols Rounded** (default)
-2. **Material Symbols Outlined**
-3. **Material Symbols Sharp**
+Since we use Material Symbols Rounded with font-variation-settings, you can achieve different looks:
+
+1. **Outlined** (default): FILL = 0
+2. **Filled**: FILL = 1  
+3. **Different weights**: wght = 100-700
+4. **Different grades**: GRAD = -50 to 200
+5. **Different sizes**: opsz = 20-48
 
 ## Migration from Material Icons
 

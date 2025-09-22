@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
   template: `
     <div class="p-6 space-y-8">
       <h1 class="text-2xl font-bold mb-6">Material Symbols Demo</h1>
-      
+
       <!-- Default Rounded Style -->
       <section class="space-y-4">
         <h2 class="text-xl font-semibold">Default Style (Rounded)</h2>
@@ -31,15 +31,34 @@ import { MatIconModule } from '@angular/material/icon';
         </div>
       </section>
 
-      <!-- Sharp Style -->
+      <!-- Outlined Style (using font-variation-settings) -->
       <section class="space-y-4">
-        <h2 class="text-xl font-semibold">Sharp Style</h2>
+        <h2 class="text-xl font-semibold">Outlined Style (Default)</h2>
         <div class="flex items-center space-x-4">
-          <mat-icon class="material-symbols-sharp">search</mat-icon>
-          <mat-icon class="material-symbols-sharp">home</mat-icon>
-          <mat-icon class="material-symbols-sharp">favorite</mat-icon>
-          <mat-icon class="material-symbols-sharp">settings</mat-icon>
-          <mat-icon class="material-symbols-sharp">account_circle</mat-icon>
+          <mat-icon class="material-symbols-outlined">search</mat-icon>
+          <mat-icon class="material-symbols-outlined">home</mat-icon>
+          <mat-icon class="material-symbols-outlined">favorite</mat-icon>
+          <mat-icon class="material-symbols-outlined">settings</mat-icon>
+          <mat-icon class="material-symbols-outlined">account_circle</mat-icon>
+        </div>
+      </section>
+
+      <!-- Custom Rounded with different GRAD settings -->
+      <section class="space-y-4">
+        <h2 class="text-xl font-semibold">Rounded Style Variations</h2>
+        <div class="flex items-center space-x-4">
+          <div class="text-center">
+            <mat-icon style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' -25, 'opsz' 24;">star</mat-icon>
+            <p class="text-xs mt-1">GRAD: -25</p>
+          </div>
+          <div class="text-center">
+            <mat-icon>star</mat-icon>
+            <p class="text-xs mt-1">GRAD: 0 (default)</p>
+          </div>
+          <div class="text-center">
+            <mat-icon style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 25, 'opsz' 24;">star</mat-icon>
+            <p class="text-xs mt-1">GRAD: 25</p>
+          </div>
         </div>
       </section>
 
@@ -89,7 +108,7 @@ import { MatIconModule } from '@angular/material/icon';
       <section class="space-y-4">
         <h2 class="text-xl font-semibold">Custom Style Example</h2>
         <div class="flex items-center space-x-4">
-          <mat-icon 
+          <mat-icon
             style="font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 25, 'opsz' 48; font-size: 48px;"
           >
             favorite
