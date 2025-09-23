@@ -58,7 +58,7 @@
 .op-navigation-item-arrow mat-icon { font-size: 18px; width: 18px; height: 18px; }
 
 /* Children container and rotate animation */
-.op-navigation-item-children { margin-top: 4px; margin-left: 30px; padding-left: 0; }
+.op-navigation-item-children { margin-top: 4px; margin-left: 16px; padding-left: 0; }
 .op-navigation-item-children > * + * { margin-top: 2px; }
 .rotate-180 { transform: rotate(180deg); }
 

@@ -40,5 +40,14 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
+  "exports": {
+    ".": "./public-api.ts",
+    "./components": "./lib/components/index.ts",
+    "./services": "./lib/services/index.ts",
+    "./types": "./lib/types/index.ts",
+    "./utils": "./lib/utils/index.ts",
+    "./pipes": "./lib/pipes/index.ts",
+    "./directives": "./lib/directives/index.ts"
+  },
   "sideEffects": false
 }
