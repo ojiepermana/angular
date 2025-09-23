@@ -2,8 +2,8 @@ import { Component, computed, inject, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { NavigationItem } from '../../../types/navigations.type';
-import { NavigationStateService } from '../../../services/navigation-state.service';
+import { NavigationItem } from '../../../../types/navigations.type';
+import { NavigationStateService } from '../../../../services/navigation-state.service';
 
 @Component({
   selector: 'op-vertical-navigation-basic-item',

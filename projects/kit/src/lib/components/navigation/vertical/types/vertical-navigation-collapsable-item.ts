@@ -1,9 +1,9 @@
 import { Component, input, output, signal, inject, computed } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { NavigationItem } from '../../../types/navigations.type';
+import { NavigationItem } from '../../../../types/navigations.type';
 import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
-import { NavigationStateService } from '../../../services/navigation-state.service';
+import { NavigationStateService } from '../../../../services/navigation-state.service';
 
 @Component({
   selector: 'op-vertical-navigation-collapsable-item',
