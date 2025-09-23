@@ -48,6 +48,12 @@
   margin-left: 0;
 }
 
+/* Aside wrapper positioning for default appearance */
+.op-vertical-navigation.op-vertical-navigation-appearance-default ~ .op-vertical-navigation-aside-wrapper,
+.op-vertical-navigation.op-vertical-navigation-appearance-default .op-vertical-navigation-aside-wrapper {
+  left: var(--op-vertical-navigation-width);
+}
+
 /* Position: Right */
 .op-vertical-navigation.op-vertical-navigation-position-right {
   right: 0;

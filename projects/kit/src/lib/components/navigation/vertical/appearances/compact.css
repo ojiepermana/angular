@@ -1,70 +1,17 @@
 /* Variables for compact appearance */
 :root {
-  --op-vertical-navigation-compact-width: 112px;
+  --op-vertical-navigation-compact-width: 240px;
 }
 
-/* Compact appearance overrides */
+/* Compact appearance */
 .op-vertical-navigation.op-vertical-navigation-appearance-compact {
   width: var(--op-vertical-navigation-compact-width);
   min-width: var(--op-vertical-navigation-compact-width);
   max-width: var(--op-vertical-navigation-compact-width);
 }
 
-/* Position adjustments for compact */
-.op-vertical-navigation.op-vertical-navigation-appearance-compact.op-vertical-navigation-position-left.op-vertical-navigation-mode-side:not(.op-vertical-navigation-opened) {
-  margin-left: calc(var(--op-vertical-navigation-compact-width) * -1);
-}
-
-.op-vertical-navigation.op-vertical-navigation-appearance-compact.op-vertical-navigation-position-right.op-vertical-navigation-mode-side:not(.op-vertical-navigation-opened) {
-  margin-right: calc(var(--op-vertical-navigation-compact-width) * -1);
-}
-
-/* Compact navigation content */
-.op-vertical-navigation.op-vertical-navigation-appearance-compact nav {
-  padding: 0.75rem 0.5rem;
-}
-
-/* Hide text in compact mode, show only icons */
-.op-vertical-navigation.op-vertical-navigation-appearance-compact .op-navigation-item-title {
-  display: none;
-}
-
-.op-vertical-navigation.op-vertical-navigation-appearance-compact .op-navigation-item-subtitle {
-  display: none;
-}
-
-/* Center icons in compact mode */
-.op-vertical-navigation.op-vertical-navigation-appearance-compact .op-navigation-item {
-  justify-content: center;
-  padding: 0.75rem;
-  min-height: 48px;
-}
-
-.op-vertical-navigation.op-vertical-navigation-appearance-compact .op-navigation-item .op-navigation-item-icon {
-  margin-right: 0;
-  margin-left: 0;
-}
-
-/* Tooltip support for compact mode */
-.op-vertical-navigation.op-vertical-navigation-appearance-compact .op-navigation-item {
-  position: relative;
-}
-
-/* Glass variant specific styles for compact */
-.op-vertical-navigation.op-vertical-navigation-appearance-compact.op-vertical-navigation-glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.op-vertical-navigation.op-vertical-navigation-appearance-compact.op-vertical-navigation-glass .op-navigation-item {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  margin-bottom: 4px;
-}
-
-.op-vertical-navigation.op-vertical-navigation-appearance-compact.op-vertical-navigation-glass .op-navigation-item:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+/* Aside wrapper positioning for compact appearance */
+.op-vertical-navigation.op-vertical-navigation-appearance-compact ~ .op-vertical-navigation-aside-wrapper,
+.op-vertical-navigation.op-vertical-navigation-appearance-compact .op-vertical-navigation-aside-wrapper {
+  left: var(--op-vertical-navigation-compact-width);
 }

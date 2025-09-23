@@ -3,3 +3,75 @@
 @import './appearances/compact.css';
 @import './appearances/dense.css';
 @import './appearances/thin.css';
+
+/* Base navigation container styling */
+.op-navigation-container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Base aside wrapper and sidebar */
+.op-vertical-navigation-aside-wrapper {
+  position: absolute;
+  top: 0;
+  left: 100%; /* Position next to the navigation */
+  width: 256px;
+  height: 100%;
+  background: var(--background, #ffffff);
+  border-left: 1px solid var(--border, #e5e7eb);
+  overflow-y: auto;
+  z-index: 30;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Aside wrapper for different navigation widths */
+.op-vertical-navigation-appearance-default .op-vertical-navigation-aside-wrapper {
+  left: 280px; /* Default navigation width */
+}
+
+.op-vertical-navigation-appearance-compact .op-vertical-navigation-aside-wrapper {
+  left: 240px; /* Compact navigation width */
+}
+
+.op-vertical-navigation-appearance-dense .op-vertical-navigation-aside-wrapper {
+  left: 200px; /* Dense navigation width */
+}
+
+.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper {
+  left: 80px; /* Thin navigation width */
+}
+
+/* Aside item wrapper styling */
+.op-navigation-aside-wrapper {
+  padding: 0;
+  background: transparent;
+}
+
+.op-navigation-aside-wrapper .op-navigation-item {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.op-navigation-aside-children {
+  margin-top: 8px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border, #e5e7eb);
+}
+
+/* Ensure proper spacing for aside children */
+.op-navigation-aside-children > * + * {
+  margin-top: 2px;
+}
+
+/* Style aside children items properly */
+.op-navigation-aside-children .op-navigation-item {
+  padding: 8px 16px;
+  margin-bottom: 1px;
+  border-radius: 4px;
+}
+
+.op-navigation-aside-children .op-navigation-item:hover {
+  background: var(--accent, #f1f5f9);
+}

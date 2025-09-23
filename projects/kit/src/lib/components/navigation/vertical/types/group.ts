@@ -1,7 +1,7 @@
 import { Component, input, output, forwardRef, computed } from '@angular/core';
 import { NavigationItem } from '../../../../types/navigations.type';
-import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
-import { VerticalNavigationCollapsableItem } from './vertical-navigation-collapsable-item';
+import { VerticalNavigationBasicItem } from './basic';
+import { VerticalNavigationCollapsableItem } from './collapsable';
 
 @Component({
   selector: 'op-vertical-navigation-group-item',

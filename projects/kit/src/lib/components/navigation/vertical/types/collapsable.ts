@@ -2,8 +2,8 @@ import { Component, input, output, signal, inject, computed, forwardRef } from '
 import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationItem } from '../../../../types/navigations.type';
-import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
-import { VerticalNavigationDividerItem } from './vertical-navigation-divider-item';
+import { VerticalNavigationBasicItem } from './basic';
+import { VerticalNavigationDividerItem } from './divider';
 import { NavigationStateService } from '../../../../services/navigation-state.service';
 
 @Component({
