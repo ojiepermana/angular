@@ -1,0 +1,5 @@
+/* Import all appearance styles */
+@import './appearances/default.css';
+@import './appearances/compact.css';
+@import './appearances/dense.css';
+@import './appearances/thin.css';

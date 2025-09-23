@@ -3,14 +3,11 @@
   --op-vertical-navigation-width: 280px;
 }
 
-/* Default appearance styles */
+/* Default appearance styles - flexible width from parent */
 .op-vertical-navigation {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: var(--op-vertical-navigation-width);
-  min-width: var(--op-vertical-navigation-width);
-  max-width: var(--op-vertical-navigation-width);
   height: 100vh;
   min-height: 100vh;
   max-height: 100vh;
@@ -18,7 +15,7 @@
   transition: all 0.3s ease-in-out;
 }
 
-/* Appearance: Default */
+/* Appearance: Default - explicit default width */
 .op-vertical-navigation.op-vertical-navigation-appearance-default {
   width: var(--op-vertical-navigation-width);
   min-width: var(--op-vertical-navigation-width);

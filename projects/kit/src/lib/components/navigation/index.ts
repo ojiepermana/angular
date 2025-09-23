@@ -1,5 +1,5 @@
 // Vertical Navigation Components
-export * from './vertical/vertical-navigation';
+export * from './vertical';
 
 // Horizontal Navigation Components
 export * from './horizontal/horizontal-navigation';

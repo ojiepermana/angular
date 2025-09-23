@@ -1,12 +1,11 @@
 import { Component, input, output, inject, computed, signal, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter, Subject, takeUntil } from 'rxjs';
-import { NavigationItem, VerticalNavigationAppearance, VerticalNavigationMode, VerticalNavigationPosition } from '../../../types/navigations.type';
+import { NavigationItem} from '../../../types/navigations.type';
 import { NavigationService } from '../../../services/navigation.service';
 import { VerticalNavigationBasicItem } from './types/vertical-navigation-basic-item';
 import { VerticalNavigationCollapsableItem } from './types/vertical-navigation-collapsable-item';
 import { VerticalNavigationGroupItem } from './types/vertical-navigation-group-item';
 import { VerticalNavigationDividerItem } from './types/vertical-navigation-divider-item';
+import { VerticalNavigationAsideItem } from './types/vertical-navigation-aside-item';
 
 /**
  * Vertical Navigation Component
@@ -70,6 +69,13 @@ import { VerticalNavigationDividerItem } from './types/vertical-navigation-divid
                   (itemClicked)="onItemClicked($event)"
                 />
               }
+              @case ('aside') {
+                <op-vertical-navigation-aside-item
+                  [item]="item"
+                  [variant]="effectiveVariant()"
+                  (itemClicked)="onItemClicked($event)"
+                />
+              }
               @case ('divider') {
                 <op-vertical-navigation-divider-item
                   [item]="item"
@@ -95,7 +101,8 @@ import { VerticalNavigationDividerItem } from './types/vertical-navigation-divid
     VerticalNavigationBasicItem,
     VerticalNavigationCollapsableItem,
     VerticalNavigationGroupItem,
-    VerticalNavigationDividerItem
+    VerticalNavigationDividerItem,
+    VerticalNavigationAsideItem
   ]
 })
 export class VerticalNavigation {

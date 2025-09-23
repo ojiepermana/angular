@@ -8,9 +8,9 @@ import { demoNavigationData } from './navigations';
   template: `
     <div class="p-8 space-y-8">
       <div class="space-y-4">
-        <h1 class="text-3xl font-bold">Vertical Navigation - Thin Appearance</h1>
+        <h1 class="text-3xl font-bold">Vertical Navigation - Thin Appearance & Aside Component</h1>
         <p class="text-muted-foreground text-lg">
-          Minimal ultra-narrow navigation designed for maximum space efficiency with essential navigation only.
+          Minimal ultra-narrow navigation designed for maximum space efficiency with essential navigation only. Plus demonstration of the aside component for organized content sections.
         </p>
       </div>
 
@@ -26,33 +26,16 @@ import { demoNavigationData } from './navigations';
 
           <!-- Default Thin Navigation -->
           <div class="space-y-4">
-            <h3 class="text-lg font-medium">Default Thin (80px width)</h3>
-            <div class="border border-color rounded-lg p-6 bg-card">
-              <div class="w-full max-w-[100px] h-96 overflow-y-auto bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 rounded-lg">
-                <op-vertical-navigation
+            <h3 class="text-lg font-medium">Default Thin </h3>
+           <op-vertical-navigation
                   name="demo-vertical-thin-default"
                   [navigation]="navigationData()"
                   variant="default"
                   appearance="thin">
                 </op-vertical-navigation>
-              </div>
-            </div>
           </div>
 
-          <!-- Glass Thin Navigation -->
-          <div class="space-y-4">
-            <h3 class="text-lg font-medium">Glass Thin (Translucent Effect)</h3>
-            <div class="border border-color rounded-lg p-6 bg-card">
-              <div class="w-full max-w-[100px] h-96 overflow-y-auto bg-gradient-to-br from-purple-100 via-pink-50 to-orange-100 dark:from-purple-900 dark:via-pink-950 dark:to-orange-950 rounded-lg">
-                <op-vertical-navigation
-                  name="demo-vertical-thin-glass"
-                  [navigation]="navigationData()"
-                  variant="glass"
-                  appearance="thin">
-                </op-vertical-navigation>
-              </div>
-            </div>
-          </div>
+
         </div>
 
         <!-- Right Column - Information -->
@@ -61,11 +44,24 @@ import { demoNavigationData } from './navigations';
           <div class="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
             <h3 class="font-medium mb-2 text-blue-900 dark:text-blue-100">🎯 Thin Appearance Features</h3>
             <ul class="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-              <li>• <strong>Ultra-minimal</strong> 80px width for maximum space efficiency</li>
+              <li>• <strong>Ultra-minimal</strong> 52px width for maximum space efficiency</li>
               <li>• <strong>Icon-only display</strong> without text labels</li>
               <li>• <strong>No hover expansion</strong> unlike dense mode</li>
               <li>• <strong>Glass variant support</strong> for modern translucent effects</li>
               <li>• <strong>Tooltip-ready</strong> for accessibility and usability</li>
+            </ul>
+          </div>
+
+          <!-- Aside Component Features -->
+          <div class="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
+            <h3 class="font-medium mb-2 text-green-900 dark:text-green-100">📋 Aside Component Features</h3>
+            <ul class="text-sm text-green-800 dark:text-green-200 space-y-1">
+              <li>• <strong>Section headers</strong> with title and subtitle support</li>
+              <li>• <strong>Icon integration</strong> for visual hierarchy</li>
+              <li>• <strong>Badge support</strong> for status indicators</li>
+              <li>• <strong>Nested children</strong> support for sub-navigation</li>
+              <li>• <strong>Glass variant</strong> compatible for consistency</li>
+              <li>• <strong>Bordered design</strong> for content separation</li>
             </ul>
           </div>
 
@@ -80,7 +76,7 @@ import { demoNavigationData } from './navigations';
               </div>
               <div class="grid grid-cols-3 gap-2">
                 <span>Width</span>
-                <span>80px fixed</span>
+                <span>52px fixed</span>
                 <span>80px → 280px</span>
               </div>
               <div class="grid grid-cols-3 gap-2">
@@ -144,7 +140,7 @@ import { demoNavigationData } from './navigations';
                 <div class="grid grid-cols-3 gap-2">
                   <span class="font-mono text-xs bg-background px-2 py-1 rounded">appearance</span>
                   <span class="text-muted-foreground">"thin"</span>
-                  <span class="text-xs">Fixed 80px width</span>
+                  <span class="text-xs">Fixed 52px width</span>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                   <span class="font-mono text-xs bg-background px-2 py-1 rounded">variant</span>
@@ -188,6 +184,28 @@ import { demoNavigationData } from './navigations';
   variant="glass"
   position="left"&gt;
 &lt;/op-vertical-navigation&gt;</code></pre>
+              </div>
+
+              <!-- Aside Component -->
+              <div class="bg-muted rounded-lg p-4 overflow-x-auto">
+                <h4 class="font-medium mb-2 text-sm">Aside Component Data</h4>
+                <pre class="text-xs"><code>{{ '{' }}
+  id: 'documentation',
+  title: 'Documentation',
+  subtitle: 'Guides and getting started resources',
+  type: 'aside',
+  icon: 'menu_book',
+  children: [
+    {{ '{' }}
+      id: 'intro',
+      title: 'Introduction',
+      type: 'basic',
+      icon: 'menu_book',
+      link: '/docs/intro'
+    {{ '}' }}
+    // ... more children
+  ]
+{{ '}' }}</code></pre>
               </div>
             </div>
           </div>

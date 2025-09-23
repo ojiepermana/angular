@@ -1,9 +1,9 @@
-/* Variables for thin appearance */
+/* Variables for thin appearance - minimal width for icon only */
 :root {
-  --op-vertical-navigation-thin-width: 80px;
+  --op-vertical-navigation-thin-width: 52px;
 }
 
-/* Thin appearance overrides */
+/* Thin appearance overrides - explicit width control */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin {
   width: var(--op-vertical-navigation-thin-width);
   min-width: var(--op-vertical-navigation-thin-width);
@@ -19,75 +19,149 @@
   margin-right: calc(var(--op-vertical-navigation-thin-width) * -1);
 }
 
-/* Thin navigation content */
+/* Thin navigation content - minimal padding for 48px width */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin nav {
-  padding: 0.5rem 0.25rem;
+  padding: 0.25rem 0;
 }
 
-/* Hide text in thin mode, show only icons */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-title {
-  display: none;
-}
-
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-subtitle {
-  display: none;
-}
-
-/* Thin navigation items - very minimal */
+/* Thin navigation items - minimal and centered with optimal icon size */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item {
+  display: flex;
   justify-content: center;
-  padding: 0.375rem;
-  min-height: 36px;
+  align-items: center;
+  padding: 0.5rem 0;
+  min-height: 48px;
   margin-bottom: 1px;
   border-radius: 4px;
+  flex-direction: column;
+  text-align: center;
 }
 
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item .op-navigation-item-icon {
-  margin-right: 0;
-  margin-left: 0;
-  font-size: 1.125rem;
+/* Icon styling for thin mode - optimal size for visibility */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item mat-icon {
+  margin: 0;
+  font-size: 1.65rem;
+  line-height: 1;
+  width: 1.65rem;
+  height: 1.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Thin mode - no hover expansion (stays minimal) */
+/* Hide text elements in thin mode, show only icons */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item span:not(.op-navigation-item-badge) {
+  display: none;
+}
+
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item .flex-1 {
+  display: none;
+}
+
+/* Hide badges in thin mode for minimal look */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item .ml-2 {
+  display: none;
+}
+
+/* Thin mode hover states */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item:hover {
   background: rgba(0, 0, 0, 0.05);
 }
 
-/* Group and collapsible items in thin mode */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-group-title {
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item.bg-accent {
+  background: var(--accent) !important;
+}
+
+/* Aside component specific styling for thin mode */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside {
+  margin-bottom: 0.5rem;
+  text-align: center;
+  width: 100%;
+}
+
+/* Aside header styling for thin mode - show only icon */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside > div:first-child {
+  padding: 0.25rem 0;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 48px;
+}
+
+/* Ensure aside icons are visible and centered - optimal size */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside mat-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  font-size: 1.65rem !important;
+  width: 1.65rem !important;
+  height: 1.65rem !important;
+  color: inherit !important;
+}
+
+/* Hide aside children content area in thin mode */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside .p-2 {
   display: none;
 }
 
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-collapsible-indicator {
+/* Group items in thin mode */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-group .px-4 {
   display: none;
 }
 
-/* Divider in thin mode */
+/* Collapsible items - hide in thin mode for simplicity */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin op-vertical-navigation-collapsable-item {
+  display: none;
+}
+
+/* Divider styling for thin mode */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-divider {
-  margin: 0.25rem 0;
+  margin: 0.5rem 1rem;
   height: 1px;
+  background: var(--border);
 }
 
 /* Glass variant specific styles for thin */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass .op-navigation-item {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass .op-navigation-item:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Thin glass mode - extra subtle */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
+.op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass .op-navigation-item.bg-accent {
+  background: rgba(59, 130, 246, 0.15) !important;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Dark mode adjustments for glass */
+@media (prefers-color-scheme: dark) {
+  .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass {
+    background: rgba(0, 0, 0, 0.4);
+    border-right-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass .op-navigation-item {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass .op-navigation-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
 }

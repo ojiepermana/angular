@@ -5,7 +5,7 @@ export const demoNavigationData: NavigationItem[] = [
     id: 'documentation',
     title: 'Documentation',
     subtitle: 'Guides and getting started resources',
-    type: 'group',
+    type: 'aside',
     icon: 'menu_book',
     children: [
       {
@@ -61,7 +61,7 @@ export const demoNavigationData: NavigationItem[] = [
     id: 'user-interface',
     title: 'User Interface',
     subtitle: 'Components and design elements',
-    type: 'group',
+    type: 'aside',
     icon: 'dashboard',
     children: [
       {
@@ -622,7 +622,7 @@ export const demoNavigationData: NavigationItem[] = [
     id: 'features',
     title: 'Features',
     subtitle: 'Advanced functionality and customization options',
-    type: 'group',
+    type: 'aside',
     icon: 'settings',
     children: [
       {
