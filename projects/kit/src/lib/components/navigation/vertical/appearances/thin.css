@@ -16,252 +16,88 @@
   left: var(--op-vertical-navigation-thin-width);
 }
 
-/* Left positioned thin navigation */
+/* Position overrides for thin navigation */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-position-left.op-vertical-navigation-mode-side:not(.op-vertical-navigation-opened) {
   margin-left: calc(var(--op-vertical-navigation-thin-width) * -1);
 }
-
 .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-position-left.op-vertical-navigation-opened {
   margin-left: 0;
 }
-
-/* Right positioned thin navigation */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-position-right.op-vertical-navigation-mode-side:not(.op-vertical-navigation-opened) {
   margin-right: calc(var(--op-vertical-navigation-thin-width) * -1);
 }
-
 .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-position-right.op-vertical-navigation-opened {
   margin-right: 0;
 }
 
-/* Thin navigation content - minimal padding */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin nav {
-  padding: 0.25rem 0;
-}
-
-/* Thin navigation aside and basic items - centered icon layout */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside-wrapper,
+/* Content and items layout for thin mode */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin nav { padding: 0.25rem 0; }
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 64px;
-  min-height: 64px;
-  max-height: 64px;
-  padding: 0 16px;
-  text-align: center;
-  border-radius: 4px;
-  margin-bottom: 1px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  height: 64px; min-height: 64px; max-height: 64px; padding: 0 16px; text-align: center;
+  border-radius: 4px; margin-bottom: 1px;
 }
 
-/* Override aside children styling in thin mode to show normal layout */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside-children .op-navigation-item {
-  display: flex;
-  flex-direction: row; /* Horizontal layout for aside children */
-  align-items: center;
-  height: auto;
-  min-height: 40px;
-  padding: 8px 16px;
-  text-align: left;
+/* Children and aside overrides - normal horizontal layout */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item,
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item {
+  display: flex !important; flex-direction: row !important; align-items: center !important;
+  height: auto !important; min-height: 40px !important; padding: 8px 16px !important; text-align: left !important;
 }
 
-/* Override collapsable children styling in thin mode to show normal layout */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item {
-  display: flex;
-  flex-direction: row; /* Horizontal layout for collapsable children */
-  align-items: center;
-  height: auto;
-  min-height: 40px;
-  padding: 8px 16px;
-  text-align: left;
+/* Icon styling - large centered for main, normal for children/aside */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item mat-icon {
+  margin: 0; font-size: 1.5rem; width: 1.5rem; height: 1.5rem;
+  display: flex; align-items: center; justify-content: center;
 }
-
-/* Ensure labels are visible in aside children */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside-children .op-navigation-item span {
-  display: inline-block;
-}
-
-/* Ensure title and subtitle are visible in aside wrapper */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-title-wrapper,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-title,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-subtitle {
-  display: block;
-}
-
-/* Icons in aside children should have normal spacing */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside-children .op-navigation-item mat-icon {
-  margin-right: 12px;
-}
-
-/* Icons in collapsable children should have normal spacing */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item mat-icon {
-  margin-right: 12px;
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-}
-
-/* Override icon styling for children - use normal size, not large centered icons */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item-icon,
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-icon {
-  margin: 0 12px 0 0 !important;
-  font-size: 18px !important;
-  width: 18px !important;
-  height: 18px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  margin: 0 12px 0 0 !important; font-size: 18px !important; width: 18px !important; height: 18px !important;
 }
 
-/* Icon styling for thin mode - centered and prominent */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item mat-icon,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside mat-icon {
-  margin: 0;
-  font-size: 1.5rem;
-  line-height: 1;
-  width: 1.5rem;
-  height: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Hide text elements in thin mode - show only icons FOR MAIN NAVIGATION ONLY */
+/* Text visibility - hide in main navigation, show in children/aside */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav .op-navigation-item-title-wrapper,
 .op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav .op-navigation-item-badge,
 .op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav .op-navigation-item-arrow,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav .op-navigation-item-subtitle {
-  display: none;
-}
+.op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav span:not(.material-icons) { display: none; }
 
-/* Override specific selectors to hide only main navigation text, not children or aside */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav > div > .op-navigation-item-wrapper > .op-navigation-item .op-navigation-item-title-wrapper,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav > div > .op-navigation-item-wrapper > .op-navigation-item .op-navigation-item-subtitle,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav > div > .op-navigation-item-wrapper > .op-navigation-item .op-navigation-item-badge,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav > div > .op-navigation-item-wrapper > .op-navigation-item .op-navigation-item-arrow {
-  display: none !important;
-}
-
-/* But ALWAYS show title/subtitle in aside wrapper */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-title-wrapper,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-title,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-subtitle {
-  display: block !important;
-}
-
-/* Also ALWAYS show title/subtitle in children (collapsable expanded items) */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item-title-wrapper,
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item-title,
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item-subtitle,
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item-badge,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item-arrow {
-  display: block !important;
-}
-
-/* Hide badges and text content in MAIN navigation only */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav .op-navigation-item-badge-content,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav span:not(.material-icons) {
-  display: none;
-}
-
-/* But SHOW text content in children and aside */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item-arrow,
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children span:not(.material-icons),
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-title-wrapper,
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-title,
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-subtitle,
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper span:not(.material-icons) {
-  display: inline !important;
+  display: block !important; opacity: 1 !important; visibility: visible !important;
 }
 
-/* Extra specific overrides for text visibility in children */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item-title span,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children .op-navigation-item-subtitle span,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-title span,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper .op-navigation-item-subtitle span {
-  display: inline !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  color: inherit !important;
-}
-
-/* Allow collapsable items in thin mode but style them specially */
+/* Collapsable items styling */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin op-vertical-navigation-collapsable-item .op-navigation-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 64px;
-  min-height: 64px;
-  max-height: 64px;
-  padding: 0 16px;
-  text-align: center;
-  border-radius: 4px;
-  margin-bottom: 1px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  height: 64px; min-height: 64px; max-height: 64px; padding: 0 16px; text-align: center;
+  border-radius: 4px; margin-bottom: 1px;
+}
+.op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav > div > op-vertical-navigation-collapsable-item .op-navigation-item .op-navigation-item-title-wrapper { display: none !important; }
+
+/* Aside children should be hidden in thin mode */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside-children { display: none; }
+
+/* Hover and active states */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item:hover { background: rgba(0, 0, 0, 0.05); }
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item.op-navigation-item-active {
+  background: var(--accent, #3b82f6); color: var(--accent-foreground, white);
 }
 
-/* Hide titles in main collapsable items (only for direct children of nav) */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav > div > op-vertical-navigation-collapsable-item .op-navigation-item .op-navigation-item-title-wrapper {
-  display: none !important;
-}
+/* Spacing between items */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin nav > div > * + * { margin-top: 2px; }
 
-/* BUT! Show collapsable items that are children of other items with normal layout */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children op-vertical-navigation-collapsable-item .op-navigation-item,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper op-vertical-navigation-collapsable-item .op-navigation-item {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  height: auto !important;
-  min-height: 40px !important;
-  padding: 8px 16px !important;
-  text-align: left !important;
-}
-
-/* Show titles in collapsable children */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item-children op-vertical-navigation-collapsable-item .op-navigation-item .op-navigation-item-title-wrapper,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-wrapper op-vertical-navigation-collapsable-item .op-navigation-item .op-navigation-item-title-wrapper {
-  display: block !important;
-}
-
-/* Hide group item wrappers (but show children) */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin op-vertical-navigation-group-item > .op-navigation-item {
-  display: none;
-}
-
-/* Aside children should be hidden in thin mode (they show in sidebar) */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside-children {
-  display: none;
-}
-
-/* Thin mode hover states */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item:hover,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-/* Active states for thin mode */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item.op-navigation-item-active,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside-wrapper.op-navigation-item-active {
-  background: var(--accent, #3b82f6);
-  color: var(--accent-foreground, white);
-}
-
-/* Ensure aside items are clickable and properly styled */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-aside-wrapper {
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-/* Ensure proper spacing between items */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin nav > div > * + * {
-  margin-top: 2px;
-}
-
-/* Glass variant support for thin mode */
+/* Glass variant support */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
-
-.op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass .op-navigation-item:hover,
-.op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass .op-navigation-aside:hover {
+.op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass .op-navigation-item:hover {
   background: rgba(255, 255, 255, 0.1);
 }
