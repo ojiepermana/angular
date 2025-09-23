@@ -17,13 +17,10 @@
   position: absolute;
   top: 0;
   left: 100%; /* Position next to the navigation */
-  width: 256px;
+  width: 300px;
   height: 100%;
   background: var(--background, #ffffff);
-  border-left: 1px solid var(--border, #e5e7eb);
   overflow-y: auto;
-  z-index: 30;
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Aside wrapper for different navigation widths */

@@ -19,7 +19,7 @@ import { VerticalNavigationDividerItem } from './divider';
   template: `
     <!-- Aside content wrapper (following contekan pattern) -->
     <div
-      class="op-navigation-item-wrapper"
+      class="op-navigation-item-wrapper border-b"
       [class.op-navigation-item-has-subtitle]="!!item().subtitle"
       [ngClass]="item().classes?.wrapper"
     >
