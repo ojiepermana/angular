@@ -22,28 +22,28 @@ import { VerticalNavigationDividerItem } from './vertical-navigation-divider-ite
               @case ('basic') {
                 <op-vertical-navigation-basic-item
                   [item]="item"
-                  [variant]="variant()"
+                  [variant]="effectiveVariant()"
                   (itemClicked)="onItemClicked($event)"
                 />
               }
               @case ('collapsable') {
                 <op-vertical-navigation-collapsable-item
                   [item]="item"
-                  [variant]="variant()"
+                  [variant]="effectiveVariant()"
                   (itemClicked)="onItemClicked($event)"
                 />
               }
               @case ('group') {
                 <op-vertical-navigation-group-item
                   [item]="item"
-                  [variant]="variant()"
+                  [variant]="effectiveVariant()"
                   (itemClicked)="onItemClicked($event)"
                 />
               }
               @case ('divider') {
                 <op-vertical-navigation-divider-item
                   [item]="item"
-                  [variant]="variant()" />
+                  [variant]="effectiveVariant()" />
               }
               @case ('spacer') {
                 <div class="op-vertical-navigation-spacer h-4"></div>
@@ -51,7 +51,7 @@ import { VerticalNavigationDividerItem } from './vertical-navigation-divider-ite
               @default {
                 <op-vertical-navigation-basic-item
                   [item]="item"
-                  [variant]="variant()"
+                  [variant]="effectiveVariant()"
                   (itemClicked)="onItemClicked($event)"
                 />
               }
@@ -83,7 +83,15 @@ export class VerticalNavigation {
 
   // Computed glass class for host binding
   glassClass = computed(() => {
-    return this.variant() === 'glass' ? 'op-vertical-navigation-glass' : '';
+    const currentVariant = this.variant();
+    const currentAppearance = this.appearance();
+
+    // Glass variant only available for 'compact', 'dense', 'thin' appearances
+    if (currentVariant === 'glass' && ['compact', 'dense', 'thin'].includes(currentAppearance)) {
+      return 'op-vertical-navigation-glass';
+    }
+
+    return '';
   });
 
   // Additional inputs inspired by contekan
@@ -91,6 +99,18 @@ export class VerticalNavigation {
   mode = input<'over' | 'side'>('side');
   position = input<'left' | 'right'>('left');
   autoCollapse = input<boolean>(false);
+
+  // Computed variant for child components (only glass for specific appearances)
+  effectiveVariant = computed(() => {
+    const currentVariant = this.variant();
+    const currentAppearance = this.appearance();
+
+    if (currentVariant === 'glass' && ['compact', 'dense', 'thin'].includes(currentAppearance)) {
+      return 'glass';
+    }
+
+    return 'default';
+  });
 
   // Output for item clicks
   itemClicked = output<NavigationItem>();

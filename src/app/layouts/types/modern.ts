@@ -3,13 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { DarkModeToggle } from '../components/shared/dark-mode-toggle.component';
 import { HorizontalNavigation } from '../../../../projects/kit/src/lib/components/navigation/horizontal/horizontal-navigation';
-import { VerticalNavigation } from '../../../../projects/kit/src/lib/components/navigation/vertical/vertical-navigation';
 import { NavigationService } from '../../../../projects/kit/src/lib/services/navigation.service';
 import { NavigationDataService } from '../../services';
 
 @Component({
   selector: 'layout-modern',
-  imports: [RouterOutlet, DarkModeToggle, HorizontalNavigation, VerticalNavigation],
+  imports: [RouterOutlet, DarkModeToggle, HorizontalNavigation],
   template: `
     <div class="h-screen bg-background text-foreground p-16">
       <div class="flex flex-col h-full max-w-7xl mx-auto border border-color rounded-lg shadow-xs overflow-hidden relative">
@@ -42,16 +41,6 @@ import { NavigationDataService } from '../../services';
 
         <!-- Main Content -->
         <main class="flex-1 overflow-y-auto flex min-h-0" style="padding-top: 5rem; padding-bottom: 4rem;">
-          <!-- Sidebar with Vertical Navigation -->
-          <aside class="w-64 border-r border-color p-4 overflow-y-auto glass-sidebar">
-            <h3 class="text-sm font-semibold mb-4 text-muted-foreground">Glass Vertical Navigation Test</h3>
-            <op-vertical-navigation
-              name="demo-vertical"
-              [navigation]="navigationData()"
-              variant="glass">
-            </op-vertical-navigation>
-          </aside>
-
           <!-- Main Content Area -->
           <div class="flex-1 p-4">
             <router-outlet></router-outlet>

@@ -694,28 +694,28 @@ export const demoNavigationData: NavigationItem[] = [
                 title: 'Default',
                 type: 'basic',
                 icon: 'view_stream',
-                link: '/demo/features/navigation/default'
+                link: '/demo/features/navigation/vertical/default'
               },
               {
                 id: 'features-navigation-vertical-navigation-thin',
                 title: 'Thin',
                 type: 'basic',
                 icon: 'view_stream',
-                link: '/demo/features/navigation/thin'
+                link: '/demo/features/navigation/vertical/thin'
               },
               {
                 id: 'features-navigation-vertical-navigation-compact',
                 title: 'Compact',
                 type: 'basic',
                 icon: 'view_stream',
-                link: '/demo/features/navigation/compact'
+                link: '/demo/features/navigation/vertical/compact'
               },
               {
                 id: 'features-navigation-vertical-navigation-dense',
                 title: 'Dense',
                 type: 'basic',
                 icon: 'view_stream',
-                link: '/demo/features/navigation/dense'
+                link: '/demo/features/navigation/vertical/dense'
               }
             ]
           }
