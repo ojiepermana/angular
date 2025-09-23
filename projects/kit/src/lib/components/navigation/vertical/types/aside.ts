@@ -1,8 +1,9 @@
-import { Component, computed, inject, input, output, OnInit, OnDestroy } from '@angular/core';
+import { Component, computed, inject, input, output, ChangeDetectionStrategy, effect, DestroyRef } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, NavigationEnd } from '@angular/router';
-import { Subject, filter, takeUntil } from 'rxjs';
+import { filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationItem } from '../../../../types/navigations.type';
 import { NavigationStateService } from '../../../../services/navigation-state.service';
 
@@ -14,6 +15,7 @@ import { VerticalNavigationDividerItem } from './divider';
 
 @Component({
   selector: 'op-vertical-navigation-aside-item',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <!-- Aside content wrapper (following contekan pattern) -->
     <div
@@ -124,7 +126,7 @@ import { VerticalNavigationDividerItem } from './divider';
     VerticalNavigationDividerItem
   ]
 })
-export class VerticalNavigationAsideItem implements OnInit, OnDestroy {
+export class VerticalNavigationAsideItem {
   // Inputs
   item = input.required<NavigationItem>();
   variant = input<'default' | 'glass'>('default');
@@ -138,9 +140,7 @@ export class VerticalNavigationAsideItem implements OnInit, OnDestroy {
   // Injected services
   private _router = inject(Router);
   private _navigationStateService = inject(NavigationStateService);
-
-  // Private properties
-  private _unsubscribeAll = new Subject<void>();
+  private _destroyRef = inject(DestroyRef);
 
   // Computed active state
   active = computed(() => {
@@ -161,21 +161,16 @@ export class VerticalNavigationAsideItem implements OnInit, OnDestroy {
     return this._hasActiveChild(this.item(), this._router.url);
   });
 
-  ngOnInit(): void {
-    // Listen to router events to update active state
+  constructor() {
+    // Listen to router events to update active state using modern pattern
     this._router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        takeUntil(this._unsubscribeAll)
+        takeUntilDestroyed(this._destroyRef)
       )
       .subscribe(() => {
         // Active state will be automatically recalculated via computed signal
       });
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribeAll.next();
-    this._unsubscribeAll.complete();
   }
 
   /**

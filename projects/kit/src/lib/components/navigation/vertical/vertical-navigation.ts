@@ -1,4 +1,4 @@
-import { Component, input, output, inject, computed, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, input, output, inject, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationItem} from '../../../types/navigations.type';
 import { NavigationService } from '../../../services/navigation.service';
@@ -10,6 +10,7 @@ import { VerticalNavigationAsideItem } from './types/aside';
 
 @Component({
   selector: 'op-vertical-navigation',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'hostClasses()',
     '[style.visibility]': 'opened() ? "visible" : "hidden"'
@@ -145,7 +146,11 @@ import { VerticalNavigationAsideItem } from './types/aside';
     VerticalNavigationAsideItem
   ]
 })
-export class VerticalNavigation implements OnInit, OnDestroy {
+export class VerticalNavigation {
+  constructor() {
+    // Component initialization using constructor pattern
+  }
+
   // Inject NavigationService
   private _navigationService = inject(NavigationService);
 
@@ -344,19 +349,5 @@ export class VerticalNavigation implements OnInit, OnDestroy {
    */
   closeAside(): void {
     this.activeAsideItemId = null;
-  }
-
-  /**
-   * Lifecycle: Initialize component
-   */
-  ngOnInit(): void {
-    // Component initialization
-  }
-
-  /**
-   * Lifecycle: Cleanup component
-   */
-  ngOnDestroy(): void {
-    // Component cleanup
   }
 }

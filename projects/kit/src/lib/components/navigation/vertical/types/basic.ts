@@ -11,52 +11,100 @@ import { NavigationStateService } from '../../../../services/navigation-state.se
     '[class]': 'glassClass()'
   },
   template: `
-    <div class="op-navigation-item">
+    <div
+      class="op-navigation-item-wrapper"
+      [class.op-navigation-item-has-subtitle]="!!item().subtitle"
+      [ngClass]="item().classes?.wrapper"
+    >
       @if (item().link) {
         <a
           [routerLink]="item().link"
           [title]="item().tooltip"
-          class="flex items-center px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
-          [class.bg-accent]="isActive()"
-          [class.text-accent-foreground]="isActive()"
+          class="op-navigation-item"
+          [class.op-navigation-item-active]="isActive()"
+          [class.op-navigation-item-disabled]="item().disabled"
+          [class.op-navigation-item-active-forced]="item().active"
           (click)="onItemClick()"
         >
           @if (item().icon) {
-            <mat-icon class="mr-3 text-lg">{{ item().icon }}</mat-icon>
-          }
-          <span class="flex-1">{{ item().title }}</span>
-          @if (item().badge?.title) {
-            <span
-              class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
-              [class.bg-primary]="!item().badge?.classes"
-              [class.text-primary-foreground]="!item().badge?.classes"
-              [ngClass]="item().badge?.classes"
+            <mat-icon
+              class="op-navigation-item-icon"
+              [ngClass]="item().classes?.icon"
             >
-              {{ item().badge?.title }}
-            </span>
+              {{ item().icon }}
+            </mat-icon>
+          }
+
+          <!-- Title & Subtitle -->
+          <div class="op-navigation-item-title-wrapper">
+            <div class="op-navigation-item-title">
+              <span [ngClass]="item().classes?.title">
+                {{ item().title }}
+              </span>
+            </div>
+            @if (item().subtitle) {
+              <div class="op-navigation-item-subtitle">
+                <span [ngClass]="item().classes?.subtitle">
+                  {{ item().subtitle }}
+                </span>
+              </div>
+            }
+          </div>
+
+          @if (item().badge?.title) {
+            <div class="op-navigation-item-badge">
+              <div
+                class="op-navigation-item-badge-content"
+                [ngClass]="item().badge?.classes"
+              >
+                {{ item().badge?.title }}
+              </div>
+            </div>
           }
         </a>
       } @else {
         <div
-          class="flex items-center px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer transition-colors"
-          [class.bg-accent]="isActive()"
-          [class.text-accent-foreground]="isActive()"
+          class="op-navigation-item"
+          [class.op-navigation-item-active]="isActive()"
+          [class.op-navigation-item-disabled]="item().disabled"
+          [class.op-navigation-item-active-forced]="item().active"
           [title]="item().tooltip"
           (click)="onItemClick()"
         >
           @if (item().icon) {
-            <mat-icon class="mr-3 text-lg">{{ item().icon }}</mat-icon>
-          }
-          <span class="flex-1">{{ item().title }}</span>
-          @if (item().badge?.title) {
-            <span
-              class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
-              [class.bg-primary]="!item().badge?.classes"
-              [class.text-primary-foreground]="!item().badge?.classes"
-              [ngClass]="item().badge?.classes"
+            <mat-icon
+              class="op-navigation-item-icon"
+              [ngClass]="item().classes?.icon"
             >
-              {{ item().badge?.title }}
-            </span>
+              {{ item().icon }}
+            </mat-icon>
+          }
+
+          <!-- Title & Subtitle -->
+          <div class="op-navigation-item-title-wrapper">
+            <div class="op-navigation-item-title">
+              <span [ngClass]="item().classes?.title">
+                {{ item().title }}
+              </span>
+            </div>
+            @if (item().subtitle) {
+              <div class="op-navigation-item-subtitle">
+                <span [ngClass]="item().classes?.subtitle">
+                  {{ item().subtitle }}
+                </span>
+              </div>
+            }
+          </div>
+
+          @if (item().badge?.title) {
+            <div class="op-navigation-item-badge">
+              <div
+                class="op-navigation-item-badge-content"
+                [ngClass]="item().badge?.classes"
+              >
+                {{ item().badge?.title }}
+              </div>
+            </div>
           }
         </div>
       }

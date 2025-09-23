@@ -12,36 +12,67 @@ import { NavigationStateService } from '../../../../services/navigation-state.se
     '[class]': 'glassClass()'
   },
   template: `
-    <div class="op-navigation-collapsable">
+    <div
+      class="op-navigation-item-wrapper"
+      [class.op-navigation-item-has-subtitle]="!!item().subtitle"
+      [ngClass]="item().classes?.wrapper"
+    >
       <!-- Parent item -->
       <div
-        class="flex items-center px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer transition-colors"
-        [class.bg-accent]="isExpanded()"
-        [class.text-accent-foreground]="isExpanded()"
+        class="op-navigation-item"
+        [class.op-navigation-item-active]="isExpanded()"
+        [class.op-navigation-item-disabled]="item().disabled"
+        [class.op-navigation-item-active-forced]="item().active"
+        [title]="item().tooltip || ''"
         (click)="toggleExpanded()"
       >
         @if (item().icon) {
-          <mat-icon class="mr-3 text-lg">{{ item().icon }}</mat-icon>
-        }
-        <span class="flex-1">{{ item().title }}</span>
-        @if (item().badge?.title) {
-          <span
-            class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
-            [class.bg-primary]="!item().badge?.classes"
-            [class.text-primary-foreground]="!item().badge?.classes"
-            [ngClass]="item().badge?.classes"
+          <mat-icon
+            class="op-navigation-item-icon"
+            [ngClass]="item().classes?.icon"
           >
-            {{ item().badge?.title }}
-          </span>
+            {{ item().icon }}
+          </mat-icon>
         }
-        <span class="text-base font-bold transition-transform duration-200 w-4 h-4 flex items-center justify-center">
-          {{ isExpanded() ? '-' : '+' }}
-        </span>
+
+        <!-- Title & Subtitle -->
+        <div class="op-navigation-item-title-wrapper">
+          <div class="op-navigation-item-title">
+            <span [ngClass]="item().classes?.title">
+              {{ item().title }}
+            </span>
+          </div>
+          @if (item().subtitle) {
+            <div class="op-navigation-item-subtitle">
+              <span [ngClass]="item().classes?.subtitle">
+                {{ item().subtitle }}
+              </span>
+            </div>
+          }
+        </div>
+
+        @if (item().badge?.title) {
+          <div class="op-navigation-item-badge">
+            <div
+              class="op-navigation-item-badge-content"
+              [ngClass]="item().badge?.classes"
+            >
+              {{ item().badge?.title }}
+            </div>
+          </div>
+        }
+
+        <!-- Arrow -->
+        <div class="op-navigation-item-arrow">
+          <mat-icon class="text-base transition-transform duration-200" [class.rotate-180]="isExpanded()">
+            keyboard_arrow_down
+          </mat-icon>
+        </div>
       </div>
 
       <!-- Children -->
       @if (isExpanded() && item().children) {
-        <div class="ml-6 mt-1 space-y-1">
+        <div class="op-navigation-item-children">
           @for (child of item().children; track child.id || child.title) {
             @switch (child.type) {
               @case ('basic') {
