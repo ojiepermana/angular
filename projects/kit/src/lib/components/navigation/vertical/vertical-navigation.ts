@@ -1,4 +1,5 @@
 import { Component, input, output, inject, computed, signal, OnInit, OnDestroy } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { NavigationItem} from '../../../types/navigations.type';
 import { NavigationService } from '../../../services/navigation.service';
 import { VerticalNavigationBasicItem } from './types/vertical-navigation-basic-item';
@@ -43,7 +44,8 @@ import { VerticalNavigationAsideItem } from './types/vertical-navigation-aside-i
   },
   styleUrl: `./vertical-navigation.css`,
   template: `
-    <nav class="op-vertical-navigation">
+    <div class="op-navigation-container relative">
+      <nav class="op-vertical-navigation">
       @if (navigationData()) {
         <div class="space-y-1">
           @for (item of navigationData(); track item.id || item.title) {
@@ -73,6 +75,7 @@ import { VerticalNavigationAsideItem } from './types/vertical-navigation-aside-i
                 <op-vertical-navigation-aside-item
                   [item]="item"
                   [variant]="effectiveVariant()"
+                  [appearance]="appearance()"
                   (itemClicked)="onItemClicked($event)"
                 />
               }
@@ -96,8 +99,115 @@ import { VerticalNavigationAsideItem } from './types/vertical-navigation-aside-i
         </div>
       }
     </nav>
+
+    <!-- Expandable Aside Sidebar (for thin mode) -->
+    @if (appearance() === 'thin' && activeAsideId()) {
+      <!-- Backdrop/Overlay for click-outside to close -->
+      <div
+        class="op-aside-overlay absolute inset-0 bg-black/20 z-40"
+        (click)="closeAside()">
+      </div>
+
+      <!-- Expandable Sidebar -->
+      <div
+        class="op-aside-sidebar absolute top-0 z-50 h-full w-64 bg-background border shadow-lg"
+        [style.left.px]="position() === 'left' ? 52 : null"
+        [style.right.px]="position() === 'right' ? 52 : null"
+      >
+        @for (item of navigationData(); track item.id || item.title) {
+          @if (item.type === 'aside' && (item.id || item.title) && isAsideActive(item.id || item.title || '')) {
+            <div class="h-full flex flex-col">
+              <!-- Sidebar Header -->
+              <div class="px-4 py-3 border-b">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-3 flex-1">
+                    @if (item.icon) {
+                      <mat-icon class="text-lg">{{ item.icon }}</mat-icon>
+                    }
+                    <div class="flex-1">
+                      @if (item.title) {
+                        <h3 class="font-medium">{{ item.title }}</h3>
+                      }
+                      @if (item.subtitle) {
+                        <p class="text-sm text-muted-foreground">{{ item.subtitle }}</p>
+                      }
+                    </div>
+                  </div>
+                  <button
+                    class="p-1 rounded hover:bg-muted transition-colors"
+                    (click)="closeAside()"
+                  >
+                    <mat-icon class="text-sm">close</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Sidebar Content - Scrollable -->
+              <div class="flex-1 overflow-y-auto p-2">
+                @if (item.children && item.children.length > 0) {
+                  <div class="space-y-1">
+                    @for (child of item.children; track child.id || child.title) {
+                      @switch (child.type) {
+                        @case ('basic') {
+                          <op-vertical-navigation-basic-item
+                            [item]="child"
+                            [variant]="effectiveVariant()"
+                            (itemClicked)="onSidebarItemClicked($event)"
+                          />
+                        }
+                        @case ('collapsable') {
+                          <op-vertical-navigation-collapsable-item
+                            [item]="child"
+                            [variant]="effectiveVariant()"
+                            (itemClicked)="onSidebarItemClicked($event)"
+                          />
+                        }
+                        @case ('group') {
+                          <op-vertical-navigation-group-item
+                            [item]="child"
+                            [variant]="effectiveVariant()"
+                            (itemClicked)="onSidebarItemClicked($event)"
+                          />
+                        }
+                        @case ('aside') {
+                          <op-vertical-navigation-aside-item
+                            [item]="child"
+                            [variant]="effectiveVariant()"
+                            (itemClicked)="onSidebarItemClicked($event)"
+                          />
+                        }
+                        @case ('divider') {
+                          <op-vertical-navigation-divider-item
+                            [item]="child"
+                            [variant]="effectiveVariant()"
+                          />
+                        }
+                        @default {
+                          <!-- Default case for items without explicit type -->
+                          <op-vertical-navigation-basic-item
+                            [item]="child"
+                            [variant]="effectiveVariant()"
+                            (itemClicked)="onSidebarItemClicked($event)"
+                          />
+                        }
+                      }
+                    }
+                  </div>
+                } @else {
+                  <div class="p-4 text-center text-muted-foreground">
+                    <p class="text-sm">No items available</p>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
   `,
   imports: [
+    MatIconModule,
     VerticalNavigationBasicItem,
     VerticalNavigationCollapsableItem,
     VerticalNavigationGroupItem,
@@ -105,7 +215,7 @@ import { VerticalNavigationAsideItem } from './types/vertical-navigation-aside-i
     VerticalNavigationAsideItem
   ]
 })
-export class VerticalNavigation {
+export class VerticalNavigation implements OnInit, OnDestroy {
   // Inject NavigationService
   private _navigationService = inject(NavigationService);
 
@@ -278,5 +388,76 @@ export class VerticalNavigation {
    */
   getItemParent(id: string): NavigationItem[] | NavigationItem | null {
     return this._navigationService.getItemParent(id, this.navigationData(), this.navigationData());
+  }
+
+  // Aside expandable state management (for thin mode)
+  private _activeAsideId = signal<string | null>(null);
+  activeAsideId = this._activeAsideId.asReadonly();
+
+  /**
+   * Toggle aside (for thin mode)
+   */
+  toggleAside(asideId: string): void {
+    const currentActiveId = this._activeAsideId();
+
+    if (currentActiveId === asideId) {
+      // Close if already open
+      this._activeAsideId.set(null);
+    } else {
+      // Open the aside
+      this._activeAsideId.set(asideId);
+    }
+  }
+
+  /**
+   * Close aside (for thin mode)
+   */
+  closeAside(): void {
+    this._activeAsideId.set(null);
+  }
+
+  /**
+   * Check if aside is active/expanded
+   */
+  isAsideActive(asideId: string): boolean {
+    return this._activeAsideId() === asideId;
+  }
+
+  /**
+   * Handle sidebar item click and close sidebar
+   */
+  onSidebarItemClicked(item: NavigationItem): void {
+    this.itemClicked.emit(item);
+    this.closeAside(); // Auto-close sidebar after item selection
+  }
+
+  /**
+   * Lifecycle: Initialize component
+   */
+  ngOnInit(): void {
+    // Listen for aside header clicks from child components
+    if (typeof window !== 'undefined') {
+      window.addEventListener('aside-header-clicked', this.handleAsideHeaderClick.bind(this));
+    }
+  }
+
+  /**
+   * Lifecycle: Cleanup component
+   */
+  ngOnDestroy(): void {
+    // Remove event listeners
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('aside-header-clicked', this.handleAsideHeaderClick.bind(this));
+    }
+  }
+
+  /**
+   * Handle aside header click events from child components
+   */
+  private handleAsideHeaderClick(event: any): void {
+    const { asideId } = event.detail;
+    if (asideId) {
+      this.toggleAside(asideId);
+    }
   }
 }

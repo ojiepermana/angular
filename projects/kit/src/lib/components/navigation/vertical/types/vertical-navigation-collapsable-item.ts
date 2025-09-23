@@ -1,8 +1,9 @@
-import { Component, input, output, signal, inject, computed } from '@angular/core';
+import { Component, input, output, signal, inject, computed, forwardRef } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationItem } from '../../../../types/navigations.type';
 import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
+import { VerticalNavigationDividerItem } from './vertical-navigation-divider-item';
 import { NavigationStateService } from '../../../../services/navigation-state.service';
 
 @Component({
@@ -57,6 +58,20 @@ import { NavigationStateService } from '../../../../services/navigation-state.se
                   (itemClicked)="onChildItemClicked($event)"
                 />
               }
+              @case ('divider') {
+                <op-vertical-navigation-divider-item
+                  [item]="child"
+                  [variant]="variant()"
+                />
+              }
+              @default {
+                <!-- Default to basic item for items without explicit type -->
+                <op-vertical-navigation-basic-item
+                  [item]="child"
+                  [variant]="variant()"
+                  (itemClicked)="onChildItemClicked($event)"
+                />
+              }
             }
           }
         </div>
@@ -68,7 +83,13 @@ import { NavigationStateService } from '../../../../services/navigation-state.se
       transform: rotate(180deg);
     }
   `],
-  imports: [VerticalNavigationBasicItem, MatIconModule, NgClass]
+  imports: [
+    VerticalNavigationBasicItem,
+    MatIconModule,
+    NgClass,
+    VerticalNavigationDividerItem,
+    forwardRef(() => VerticalNavigationCollapsableItem)
+  ]
 })
 export class VerticalNavigationCollapsableItem {
   item = input.required<NavigationItem>();
@@ -96,7 +117,8 @@ export class VerticalNavigationCollapsableItem {
       this._navigationStateService.toggleExpanded(itemId);
     }
 
-    this.itemClicked.emit(this.item());
+    // For collapsable items, we don't emit itemClicked on toggle
+    // to prevent sidebar from closing. Only emit on child clicks.
   }
 
   onChildItemClicked(item: NavigationItem): void {

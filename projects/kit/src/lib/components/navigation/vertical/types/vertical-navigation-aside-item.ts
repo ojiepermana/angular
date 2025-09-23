@@ -13,74 +13,90 @@ import { VerticalNavigationDividerItem } from './vertical-navigation-divider-ite
     '[class]': 'glassClass()'
   },
   template: `
-    <div class="op-navigation-aside">
-      <!-- Aside Header -->
-      <div class="py-3 border-b border-color">
-        <div class="flex items-start space-x-3">
-          @if (item().icon) {
-            <div class="flex-shrink-0">
-              <mat-icon class="text-lg text-muted-foreground">{{ item().icon }}</mat-icon>
-            </div>
-          }
-          @if (item().badge?.title) {
-            <div class="flex-shrink-0">
-              <span
-                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
-                [class.bg-primary]="!item().badge?.classes"
-                [class.text-primary-foreground]="!item().badge?.classes"
-                [ngClass]="item().badge?.classes"
-              >
-                {{ item().badge?.title }}
-              </span>
-            </div>
-          }
-        </div>
+    @if (appearance() === 'thin') {
+      <!-- Thin mode: Show as icon-only clickable item like basic -->
+      <div
+        class="op-navigation-item"
+        (click)="onAsideHeaderClick()"
+      >
+        @if (item().icon) {
+          <mat-icon>{{ item().icon }}</mat-icon>
+        }
       </div>
-
-      <!-- Aside Content -->
-      @if (item().children) {
-        <div class="p-2 space-y-1">
-          @for (child of item().children; track child.id || child.title) {
-            @switch (child.type) {
-                @case ('basic') {
-                  <op-vertical-navigation-basic-item
-                    [item]="child"
-                    [variant]="variant()"
-                    (itemClicked)="onChildItemClicked($event)"
-                  />
-                }
-                @case ('collapsable') {
-                  <op-vertical-navigation-collapsable-item
-                    [item]="child"
-                    [variant]="variant()"
-                    (itemClicked)="onChildItemClicked($event)"
-                  />
-                }
-                @case ('group') {
-                  <op-vertical-navigation-group-item
-                    [item]="child"
-                    [variant]="variant()"
-                    (itemClicked)="onChildItemClicked($event)"
-                  />
-                }
-                @case ('aside') {
-                  <op-vertical-navigation-aside-item
-                    [item]="child"
-                    [variant]="variant()"
-                    (itemClicked)="onChildItemClicked($event)"
-                  />
-                }
-                @case ('divider') {
-                  <op-vertical-navigation-divider-item
-                    [item]="child"
-                    [variant]="variant()"
-                  />
-                }
+    } @else {
+      <!-- Default mode: Show full aside content -->
+      <div class="op-navigation-aside">
+        <!-- Aside Header -->
+        <div
+          class="py-3 border-b border-color cursor-pointer"
+          (click)="onAsideHeaderClick()"
+        >
+          <div class="flex items-start space-x-3">
+            @if (item().icon) {
+              <div class="flex-shrink-0">
+                <mat-icon class="text-lg text-muted-foreground">{{ item().icon }}</mat-icon>
+              </div>
             }
-          }
+            @if (item().badge?.title) {
+              <div class="flex-shrink-0">
+                <span
+                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                  [class.bg-primary]="!item().badge?.classes"
+                  [class.text-primary-foreground]="!item().badge?.classes"
+                  [ngClass]="item().badge?.classes"
+                >
+                  {{ item().badge?.title }}
+                </span>
+              </div>
+            }
+          </div>
         </div>
-      }
-    </div>
+
+        <!-- Aside Content -->
+        @if (item().children) {
+          <div class="p-2 space-y-1">
+            @for (child of item().children; track child.id || child.title) {
+              @switch (child.type) {
+                  @case ('basic') {
+                    <op-vertical-navigation-basic-item
+                      [item]="child"
+                      [variant]="variant()"
+                      (itemClicked)="onChildItemClicked($event)"
+                    />
+                  }
+                  @case ('collapsable') {
+                    <op-vertical-navigation-collapsable-item
+                      [item]="child"
+                      [variant]="variant()"
+                      (itemClicked)="onChildItemClicked($event)"
+                    />
+                  }
+                  @case ('group') {
+                    <op-vertical-navigation-group-item
+                      [item]="child"
+                      [variant]="variant()"
+                      (itemClicked)="onChildItemClicked($event)"
+                    />
+                  }
+                  @case ('aside') {
+                    <op-vertical-navigation-aside-item
+                      [item]="child"
+                      [variant]="variant()"
+                      (itemClicked)="onChildItemClicked($event)"
+                    />
+                  }
+                  @case ('divider') {
+                    <op-vertical-navigation-divider-item
+                      [item]="child"
+                      [variant]="variant()"
+                    />
+                  }
+              }
+            }
+          </div>
+        }
+      </div>
+    }
   `,
   imports: [
     NgClass,
@@ -95,6 +111,7 @@ import { VerticalNavigationDividerItem } from './vertical-navigation-divider-ite
 export class VerticalNavigationAsideItem {
   item = input.required<NavigationItem>();
   variant = input<'default' | 'glass'>('default');
+  appearance = input<'default' | 'compact' | 'dense' | 'thin'>('default'); // Add appearance input
   itemClicked = output<NavigationItem>();
 
   // Computed glass class for host binding
@@ -104,5 +121,24 @@ export class VerticalNavigationAsideItem {
 
   onChildItemClicked(item: NavigationItem): void {
     this.itemClicked.emit(item);
+  }
+
+  onAsideHeaderClick(): void {
+    // Create a custom event to communicate with parent navigation
+    const event = new CustomEvent('aside-header-clicked', {
+      detail: {
+        asideId: this.item().id || this.item().title,
+        item: this.item()
+      },
+      bubbles: true
+    });
+
+    // Dispatch the event to be caught by parent navigation
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(event);
+    }
+
+    // Also emit through itemClicked for consistency
+    this.itemClicked.emit(this.item());
   }
 }

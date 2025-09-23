@@ -37,6 +37,19 @@
   text-align: center;
 }
 
+/* But NOT for items inside sidebar - override thin mode for sidebar items */
+.op-aside-sidebar .op-navigation-item {
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  padding: 0 !important;
+  min-height: auto !important;
+  margin-bottom: 1px !important;
+  border-radius: 0 !important;
+  flex-direction: row !important;
+  text-align: left !important;
+}
+
 /* Icon styling for thin mode - optimal size for visibility */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item mat-icon {
   margin: 0;
@@ -111,9 +124,187 @@
   display: none;
 }
 
-/* Collapsible items - hide in thin mode for simplicity */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin op-vertical-navigation-collapsable-item {
+/* Collapsible items - hide in thin mode main navigation for simplicity */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin > nav op-vertical-navigation-collapsable-item {
   display: none;
+}
+
+/* But show collapsible items in sidebar */
+.op-aside-sidebar op-vertical-navigation-collapsable-item {
+  display: block !important;
+}
+
+/* Style collapsible items in sidebar */
+.op-aside-sidebar .op-navigation-collapsable {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Collapsible parent item styling in sidebar */
+.op-aside-sidebar .op-navigation-collapsable > div {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.5rem 0.75rem !important;
+  margin-bottom: 1px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100% !important;
+}
+
+.op-aside-sidebar .op-navigation-collapsable > div:hover {
+  background-color: var(--muted, #f1f5f9) !important;
+}
+
+/* Collapsible children indentation in sidebar */
+.op-aside-sidebar .op-navigation-collapsable .ml-6 {
+  margin-left: 1rem !important; /* Reduce indentation in sidebar */
+}
+
+/* Style collapsible children items in sidebar */
+.op-aside-sidebar .op-navigation-collapsable .ml-6 .op-navigation-item {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.5rem 0.75rem !important;
+  margin-bottom: 1px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100% !important;
+  flex-direction: row !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+  min-height: auto !important;
+}
+
+.op-aside-sidebar .op-navigation-collapsable .ml-6 .op-navigation-item:hover {
+  background-color: var(--muted, #f1f5f9) !important;
+}
+
+.op-aside-sidebar .op-navigation-collapsable .ml-6 .op-navigation-item.bg-accent {
+  background-color: var(--accent, #3b82f6) !important;
+  color: var(--accent-foreground, #ffffff) !important;
+}
+
+/* Children icons in sidebar - override thin mode styles */
+.op-aside-sidebar .op-navigation-collapsable .ml-6 .op-navigation-item mat-icon {
+  margin-right: 0.75rem !important;
+  margin-left: 0 !important;
+  font-size: 1.125rem !important;
+  line-height: 1 !important;
+  width: 1.125rem !important;
+  height: 1.125rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+/* Children text in sidebar - ensure proper display */
+.op-aside-sidebar .op-navigation-collapsable .ml-6 .op-navigation-item span {
+  display: block !important;
+  flex: 1 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  color: inherit !important;
+  text-align: left !important;
+}
+
+/* Children links in sidebar - override any thin mode restrictions */
+.op-aside-sidebar .op-navigation-collapsable .ml-6 .op-navigation-item > a,
+.op-aside-sidebar .op-navigation-collapsable .ml-6 .op-navigation-item > div {
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  flex-direction: row !important;
+}
+
+/* Override the very specific thin mode rules for navigation items in sidebar */
+.op-aside-sidebar .op-navigation-collapsable .ml-6 .op-navigation-item > a {
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  flex-direction: row !important;
+}
+
+.op-aside-sidebar .op-navigation-collapsable .ml-6 .op-navigation-item > div {
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  flex-direction: row !important;
+}
+
+/* Specific override for basic item children in collapsable items within sidebar */
+.op-aside-sidebar op-vertical-navigation-collapsable-item .ml-6 op-vertical-navigation-basic-item .op-navigation-item {
+  display: block !important;
+  padding: 0 !important;
+  margin-bottom: 1px !important;
+  border-radius: 0 !important;
+  min-height: auto !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+.op-aside-sidebar op-vertical-navigation-collapsable-item .ml-6 op-vertical-navigation-basic-item .op-navigation-item > a,
+.op-aside-sidebar op-vertical-navigation-collapsable-item .ml-6 op-vertical-navigation-basic-item .op-navigation-item > div {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.5rem 1rem !important;
+  width: 100% !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  flex-direction: row !important;
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.op-aside-sidebar op-vertical-navigation-collapsable-item .ml-6 op-vertical-navigation-basic-item .op-navigation-item:hover > a,
+.op-aside-sidebar op-vertical-navigation-collapsable-item .ml-6 op-vertical-navigation-basic-item .op-navigation-item:hover > div {
+  background-color: var(--muted, #f1f5f9) !important;
+}
+
+.op-aside-sidebar op-vertical-navigation-collapsable-item .ml-6 op-vertical-navigation-basic-item .op-navigation-item > a mat-icon,
+.op-aside-sidebar op-vertical-navigation-collapsable-item .ml-6 op-vertical-navigation-basic-item .op-navigation-item > div mat-icon {
+  margin-right: 0.75rem !important;
+  margin-left: 0 !important;
+  font-size: 1.125rem !important;
+  line-height: 1 !important;
+  width: 1.125rem !important;
+  height: 1.125rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.op-aside-sidebar op-vertical-navigation-collapsable-item .ml-6 op-vertical-navigation-basic-item .op-navigation-item > a span,
+.op-aside-sidebar op-vertical-navigation-collapsable-item .ml-6 op-vertical-navigation-basic-item .op-navigation-item > div span {
+  display: block !important;
+  flex: 1 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  color: inherit !important;
+  text-align: left !important;
+}
+
+/* Icon and text styling for collapsible items in sidebar */
+.op-aside-sidebar .op-navigation-collapsable mat-icon {
+  margin-right: 0.75rem !important;
+  font-size: 1.25rem !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+.op-aside-sidebar .op-navigation-collapsable span {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
 }
 
 /* Divider styling for thin mode */
@@ -163,5 +354,181 @@
   .op-vertical-navigation.op-vertical-navigation-appearance-thin.op-vertical-navigation-glass .op-navigation-item:hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* Expandable Aside Functionality for Thin Mode */
+
+/* Navigation container positioning */
+.op-navigation-container {
+  position: relative;
+  height: 100%;
+}
+
+/* Aside items clickable cursor */
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-item .op-navigation-aside .py-3 {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-item .op-navigation-aside .py-3:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Expandable Aside Overlay - for click-outside-to-close */
+.op-aside-overlay {
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.15s ease-out;
+  cursor: pointer;
+  z-index: 40;
+}
+
+/* Expandable Aside Sidebar - positioned next to thin navigation */
+.op-aside-sidebar {
+  background: var(--background, #ffffff);
+  border: 1px solid var(--border, #e5e7eb);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  animation: slideInFromLeft 0.2s ease-out;
+  z-index: 50;
+}
+
+/* Sidebar animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Sidebar header styling */
+.op-aside-sidebar .border-b {
+  border-color: var(--border, #e5e7eb);
+}
+
+/* Close button hover effect */
+.op-aside-sidebar button:hover {
+  background-color: var(--muted, #f1f5f9);
+}
+
+/* Navigation items in sidebar styling - override thin mode styles */
+.op-aside-sidebar .op-navigation-item {
+  display: block !important; /* Override thin mode flex/center */
+  padding: 0 !important; /* Reset padding, let inner elements handle it */
+  margin-bottom: 1px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+  min-height: auto !important; /* Override thin mode min-height */
+  flex-direction: row !important; /* Override thin mode column */
+  text-align: left !important; /* Override thin mode center */
+}
+
+/* Inner content styling for sidebar items - ensure proper layout */
+.op-aside-sidebar .op-navigation-item > a,
+.op-aside-sidebar .op-navigation-item > div {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.5rem 0.75rem !important;
+  width: 100% !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.op-aside-sidebar .op-navigation-item:hover > a,
+.op-aside-sidebar .op-navigation-item:hover > div {
+  background-color: var(--muted, #f1f5f9) !important;
+}
+
+.op-aside-sidebar .op-navigation-item.bg-accent > a,
+.op-aside-sidebar .op-navigation-item.bg-accent > div {
+  background-color: var(--accent, #3b82f6) !important;
+  color: var(--accent-foreground, #ffffff) !important;
+}
+
+/* Icon styling in sidebar - override thin mode icon rules */
+.op-aside-sidebar .op-navigation-item mat-icon {
+  margin-right: 0.75rem !important;
+  font-size: 1.25rem !important;
+  line-height: 1 !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Text styling in sidebar - ensure it's visible */
+.op-aside-sidebar .op-navigation-item span {
+  display: block !important;
+  flex: 1 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  color: inherit !important;
+}
+
+/* Scrollbar styling for sidebar */
+.op-aside-sidebar .overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.op-aside-sidebar .overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.op-aside-sidebar .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--muted, #f1f5f9);
+  border-radius: 3px;
+}
+
+.op-aside-sidebar .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground, #64748b);
+}
+
+/* Dark mode support for sidebar */
+@media (prefers-color-scheme: dark) {
+  .op-aside-sidebar {
+    background: var(--background, #0f172a);
+    border-color: var(--border, #334155);
+  }
+
+  .op-aside-sidebar button:hover {
+    background-color: var(--muted, #1e293b);
+  }
+
+  .op-aside-sidebar .op-navigation-item:hover > a,
+  .op-aside-sidebar .op-navigation-item:hover > div {
+    background-color: var(--muted, #1e293b) !important;
+  }
+
+  .op-aside-sidebar .overflow-y-auto::-webkit-scrollbar-thumb {
+    background: var(--muted, #1e293b);
+  }
+
+  .op-aside-sidebar .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-foreground, #94a3b8);
+  }
+
+  .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-vertical-navigation-aside-item .op-navigation-aside .py-3:hover {
+    background-color: rgba(255, 255, 255, 0.05);
   }
 }
