@@ -32,6 +32,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  max-height: 100%;
   overflow: hidden;
 }
 
@@ -39,15 +40,34 @@
 .op-navigation-aside-header {
   flex-shrink: 0; /* Don't shrink */
   background: var(--background, #ffffff);
-  /* border-bottom: 1px solid var(--border, #e5e7eb); */
+  border-bottom: 1px solid var(--border, #e5e7eb);
 }
 
 /* Aside scrollable content area */
 .op-navigation-aside-scrollable {
-  flex: 1; /* Take remaining space */
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 8px 0;
+  min-height: 0; /* Important: allows flexbox to shrink below content size */
+}
+
+/* Custom scrollbar for aside content */
+.op-navigation-aside-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.op-navigation-aside-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.op-navigation-aside-scrollable::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.op-navigation-aside-scrollable::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
 }
 
 /* Aside wrapper for different navigation widths */

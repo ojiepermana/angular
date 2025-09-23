@@ -75,7 +75,7 @@ import { VerticalNavigationDividerItem } from './divider';
 
       <!-- Children content (scrollable) -->
       @if (!skipChildren() && item().children?.length) {
-        <div class="op-navigation-item-children op-navigation-aside-scrollable flex-1 overflow-y-auto">
+        <div class="op-navigation-item-children op-navigation-aside-scrollable">
           @for (childItem of item().children; track trackByFn($index, childItem)) {
             <!-- Skip the hidden items -->
             @if ((childItem.hidden && !childItem.hidden(childItem)) || !childItem.hidden) {
