@@ -8,10 +8,14 @@ export const routes: Routes = [
   },
   {
     path: 'default',
-    loadComponent: () => import('./default').then(m => m.NavigationVerticalDefault)
+    loadComponent: () => import('./default/default').then(m => m.NavigationVerticalDefault)
   },
   {
     path: 'compact',
-    loadComponent: () => import('./compact').then(m => m.NavigationVerticalCompact)
+    loadComponent: () => import('./compact/compact').then(m => m.NavigationVerticalCompact)
+  },
+  {
+    path: 'thin',
+    loadComponent: () => import('./thin/thin').then(m => m.NavigationVerticalThin)
   }
 ];

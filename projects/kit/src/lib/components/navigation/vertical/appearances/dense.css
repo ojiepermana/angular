@@ -1,0 +1,98 @@
+/* Variables for dense appearance */
+:root {
+  --op-vertical-navigation-dense-width: 80px;
+}
+
+/* Dense appearance overrides */
+.op-vertical-navigation.op-vertical-navigation-appearance-dense {
+  width: var(--op-vertical-navigation-dense-width);
+  min-width: var(--op-vertical-navigation-dense-width);
+  max-width: var(--op-vertical-navigation-dense-width);
+}
+
+/* Position adjustments for dense */
+.op-vertical-navigation.op-vertical-navigation-appearance-dense.op-vertical-navigation-position-left.op-vertical-navigation-mode-side:not(.op-vertical-navigation-opened) {
+  margin-left: calc(var(--op-vertical-navigation-dense-width) * -1);
+}
+
+.op-vertical-navigation.op-vertical-navigation-appearance-dense.op-vertical-navigation-position-right.op-vertical-navigation-mode-side:not(.op-vertical-navigation-opened) {
+  margin-right: calc(var(--op-vertical-navigation-dense-width) * -1);
+}
+
+/* Dense navigation content */
+.op-vertical-navigation.op-vertical-navigation-appearance-dense nav {
+  padding: 0.5rem 0.25rem;
+}
+
+/* Hide text in dense mode, show only icons */
+.op-vertical-navigation.op-vertical-navigation-appearance-dense .op-navigation-item-title {
+  display: none;
+}
+
+.op-vertical-navigation.op-vertical-navigation-appearance-dense .op-navigation-item-subtitle {
+  display: none;
+}
+
+/* Dense navigation items */
+.op-vertical-navigation.op-vertical-navigation-appearance-dense .op-navigation-item {
+  justify-content: center;
+  padding: 0.5rem;
+  min-height: 40px;
+  margin-bottom: 2px;
+}
+
+.op-vertical-navigation.op-vertical-navigation-appearance-dense .op-navigation-item .op-navigation-item-icon {
+  margin-right: 0;
+  margin-left: 0;
+  font-size: 1.25rem;
+}
+
+/* Dense mode hover expansion (optional feature) */
+.op-vertical-navigation.op-vertical-navigation-appearance-dense:hover {
+  width: var(--op-vertical-navigation-width);
+  min-width: var(--op-vertical-navigation-width);
+  max-width: var(--op-vertical-navigation-width);
+  transition: all 0.3s ease-in-out;
+}
+
+.op-vertical-navigation.op-vertical-navigation-appearance-dense:hover .op-navigation-item-title {
+  display: block;
+  opacity: 0;
+  animation: fadeIn 0.2s ease-in-out 0.1s forwards;
+}
+
+.op-vertical-navigation.op-vertical-navigation-appearance-dense:hover .op-navigation-item {
+  justify-content: flex-start;
+  padding: 0.75rem 1rem;
+}
+
+.op-vertical-navigation.op-vertical-navigation-appearance-dense:hover .op-navigation-item .op-navigation-item-icon {
+  margin-right: 0.75rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Glass variant specific styles for dense */
+.op-vertical-navigation.op-vertical-navigation-appearance-dense.op-vertical-navigation-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.op-vertical-navigation.op-vertical-navigation-appearance-dense.op-vertical-navigation-glass .op-navigation-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+.op-vertical-navigation.op-vertical-navigation-appearance-dense.op-vertical-navigation-glass .op-navigation-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}

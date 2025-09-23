@@ -20,5 +20,5 @@ export * from './lib/services';
 // Utilities (commented until actual utilities are added)
 // export * from './lib/utils';
 
-// Types (commented until actual types are added)
-// export * from './lib/types';
+// Types
+export * from './lib/types';

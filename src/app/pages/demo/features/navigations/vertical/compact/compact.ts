@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { VerticalNavigation } from '../../../../../../../projects/kit/src/lib/components/navigation/vertical/vertical-navigation';
-import { NavigationDataService } from '../../../../../services/navigation-data.service';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { VerticalNavigation } from '../../../../../../../../projects/kit/src/lib/components/navigation/vertical/vertical-navigation';
+import { demoNavigationData } from './navigations';
 
 @Component({
   selector: 'navigation-vertical-compact',
@@ -198,8 +198,6 @@ import { NavigationDataService } from '../../../../../services/navigation-data.s
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationVerticalCompact {
-  private _navigationDataService = inject(NavigationDataService);
-
-  // Get navigation data from global service
-  navigationData = this._navigationDataService.navigationData;
+  // Use local navigation data specific to compact appearance
+  navigationData = signal(demoNavigationData);
 }

@@ -5,6 +5,12 @@
 @import "./app/styles/material/icon.css";
 @import "./app/styles/themes/glass.css";
 
+/* Navigation appearance styles */
+@import "../projects/kit/src/lib/components/navigation/vertical/appearances/default.css";
+@import "../projects/kit/src/lib/components/navigation/vertical/appearances/compact.css";
+@import "../projects/kit/src/lib/components/navigation/vertical/appearances/dense.css";
+@import "../projects/kit/src/lib/components/navigation/vertical/appearances/thin.css";
+
 /* Base element styles using CSS variables */
 * {
   border-color: rgb(var(--border));

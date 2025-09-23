@@ -8,10 +8,39 @@ import { VerticalNavigationCollapsableItem } from './vertical-navigation-collaps
 import { VerticalNavigationGroupItem } from './vertical-navigation-group-item';
 import { VerticalNavigationDividerItem } from './vertical-navigation-divider-item';
 
+/**
+ * Vertical Navigation Component
+ *
+ * A comprehensive vertical navigation component with multiple appearance modes,
+ * glass variant support, and flexible positioning options.
+ *
+ * Features:
+ * - Multiple appearances: default, compact, dense, thin
+ * - Glass variant support for compact/dense/thin appearances
+ * - Flexible positioning: left/right
+ * - Multiple modes: side/over
+ * - Programmable open/close states
+ * - Event emissions for all property changes
+ *
+ * @example
+ * ```html
+ * <op-vertical-navigation
+ *   [navigation]="navigationItems"
+ *   appearance="compact"
+ *   variant="glass"
+ *   position="left"
+ *   mode="side"
+ *   [opened]="true"
+ *   (itemClicked)="onItemClicked($event)"
+ *   (appearanceChanged)="onAppearanceChanged($event)">
+ * </op-vertical-navigation>
+ * ```
+ */
 @Component({
   selector: 'op-vertical-navigation',
   host: {
-    '[class]': 'glassClass()'
+    '[class]': 'hostClasses()',
+    '[style.visibility]': 'opened() ? "visible" : "hidden"'
   },
   template: `
     <nav class="op-vertical-navigation">
@@ -81,7 +110,41 @@ export class VerticalNavigation {
   // Glass variant support
   variant = input<'default' | 'glass'>('default');
 
-  // Computed glass class for host binding
+  // Additional inputs inspired by contekan
+  appearance = input<'default' | 'compact' | 'dense' | 'thin'>('default');
+  mode = input<'over' | 'side'>('side');
+  position = input<'left' | 'right'>('left');
+  opened = input<boolean>(true);
+  autoCollapse = input<boolean>(false);
+
+  // Computed host classes for comprehensive styling
+  hostClasses = computed(() => {
+    const currentAppearance = this.appearance();
+    const currentMode = this.mode();
+    const currentPosition = this.position();
+    const currentOpened = this.opened();
+    const currentVariant = this.variant();
+
+    const classes: string[] = [
+      'op-vertical-navigation',
+      `op-vertical-navigation-appearance-${currentAppearance}`,
+      `op-vertical-navigation-mode-${currentMode}`,
+      `op-vertical-navigation-position-${currentPosition}`
+    ];
+
+    if (currentOpened) {
+      classes.push('op-vertical-navigation-opened');
+    }
+
+    // Add glass class for specific appearances and glass variant
+    if (currentVariant === 'glass' && ['compact', 'dense', 'thin'].includes(currentAppearance)) {
+      classes.push('op-vertical-navigation-glass');
+    }
+
+    return classes.join(' ');
+  });
+
+  // Computed glass class for backward compatibility (deprecated - use hostClasses instead)
   glassClass = computed(() => {
     const currentVariant = this.variant();
     const currentAppearance = this.appearance();
@@ -93,12 +156,6 @@ export class VerticalNavigation {
 
     return '';
   });
-
-  // Additional inputs inspired by contekan
-  appearance = input<'default' | 'compact' | 'dense' | 'thin'>('default');
-  mode = input<'over' | 'side'>('side');
-  position = input<'left' | 'right'>('left');
-  autoCollapse = input<boolean>(false);
 
   // Computed variant for child components (only glass for specific appearances)
   effectiveVariant = computed(() => {
@@ -114,6 +171,12 @@ export class VerticalNavigation {
 
   // Output for item clicks
   itemClicked = output<NavigationItem>();
+
+  // Output events for property changes (following contekan pattern)
+  appearanceChanged = output<'default' | 'compact' | 'dense' | 'thin'>();
+  modeChanged = output<'over' | 'side'>();
+  positionChanged = output<'left' | 'right'>();
+  openedChanged = output<boolean>();
 
   // Computed navigation data that supports both direct input and service-based approach
   navigationData = computed(() => {
@@ -133,6 +196,59 @@ export class VerticalNavigation {
    */
   onItemClicked(item: NavigationItem): void {
     this.itemClicked.emit(item);
+  }
+
+  /**
+   * Toggle navigation opened state
+   */
+  toggle(): void {
+    const currentOpened = this.opened();
+    this.openedChanged.emit(!currentOpened);
+  }
+
+  /**
+   * Open navigation
+   */
+  open(): void {
+    if (!this.opened()) {
+      this.openedChanged.emit(true);
+    }
+  }
+
+  /**
+   * Close navigation
+   */
+  close(): void {
+    if (this.opened()) {
+      this.openedChanged.emit(false);
+    }
+  }
+
+  /**
+   * Set appearance
+   */
+  setAppearance(appearance: 'default' | 'compact' | 'dense' | 'thin'): void {
+    if (this.appearance() !== appearance) {
+      this.appearanceChanged.emit(appearance);
+    }
+  }
+
+  /**
+   * Set mode
+   */
+  setMode(mode: 'over' | 'side'): void {
+    if (this.mode() !== mode) {
+      this.modeChanged.emit(mode);
+    }
+  }
+
+  /**
+   * Set position
+   */
+  setPosition(position: 'left' | 'right'): void {
+    if (this.position() !== position) {
+      this.positionChanged.emit(position);
+    }
   }
 
   /**

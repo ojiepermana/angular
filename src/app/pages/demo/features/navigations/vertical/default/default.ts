@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { VerticalNavigation } from '../../../../../../../projects/kit/src/lib/components/navigation/vertical/vertical-navigation';
-import { NavigationDataService } from '../../../../../services/navigation-data.service';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { VerticalNavigation } from '../../../../../../../../projects/kit/src/lib/components/navigation/vertical/vertical-navigation';
+import { demoNavigationData } from './navigations';
 
 @Component({
   selector: 'navigation-vertical-default',
@@ -168,8 +168,6 @@ import { NavigationDataService } from '../../../../../services/navigation-data.s
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationVerticalDefault {
-  private _navigationDataService = inject(NavigationDataService);
-
-  // Get navigation data from global service
-  navigationData = this._navigationDataService.navigationData;
+  // Use local navigation data specific to default appearance
+  navigationData = signal(demoNavigationData);
 }
