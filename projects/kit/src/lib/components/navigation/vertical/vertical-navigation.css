@@ -20,7 +20,32 @@
   width: 300px;
   height: 100%;
   background: var(--background, #ffffff);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent wrapper from scrolling, only children should scroll */
+}
+
+/* Aside content container - full height flex layout */
+.op-navigation-aside-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Aside header - sticky at top */
+.op-navigation-aside-header {
+  flex-shrink: 0; /* Don't shrink */
+  background: var(--background, #ffffff);
+  border-bottom: 1px solid var(--border, #e5e7eb);
+}
+
+/* Aside scrollable content area */
+.op-navigation-aside-scrollable {
+  flex: 1; /* Take remaining space */
   overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 0;
 }
 
 /* Aside wrapper for different navigation widths */
@@ -52,9 +77,9 @@
 }
 
 .op-navigation-aside-children {
-  margin-top: 8px;
-  padding: 8px 0;
-  border-top: 1px solid var(--border, #e5e7eb);
+  margin-top: 0; /* Remove margin since it's now handled by scrollable container */
+  padding: 0; /* Remove padding since it's now handled by scrollable container */
+  border-top: none; /* Remove border since header has it */
 }
 
 /* Ensure proper spacing for aside children */
@@ -63,12 +88,14 @@
 }
 
 /* Style aside children items properly */
-.op-navigation-aside-children .op-navigation-item {
+.op-navigation-aside-children .op-navigation-item,
+.op-navigation-aside-scrollable .op-navigation-item {
   padding: 8px 16px;
   margin-bottom: 1px;
   border-radius: 4px;
 }
 
-.op-navigation-aside-children .op-navigation-item:hover {
+.op-navigation-aside-children .op-navigation-item:hover,
+.op-navigation-aside-scrollable .op-navigation-item:hover {
   background: var(--accent, #f1f5f9);
 }

@@ -17,105 +17,109 @@ import { VerticalNavigationDividerItem } from './divider';
   selector: 'op-vertical-navigation-aside-item',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <!-- Aside content wrapper (following contekan pattern) -->
-    <div
-      class="op-navigation-item-wrapper border-b"
-      [class.op-navigation-item-has-subtitle]="!!item().subtitle"
-      [ngClass]="item().classes?.wrapper"
-    >
-      <!-- Item content -->
+    <!-- Aside content container with flex layout -->
+    <div class="op-navigation-aside-content">
+      <!-- Aside header wrapper (sticky) -->
       <div
-        class="op-navigation-item"
-        [class.op-navigation-item-active]="active()"
-        [class.op-navigation-item-disabled]="item().disabled"
-        [class.op-navigation-item-active-forced]="item().active"
-        [attr.title]="item().tooltip || ''"
+        class="op-navigation-item-wrapper op-navigation-aside-header border-b sticky top-0 z-10"
+        [class.op-navigation-item-has-subtitle]="!!item().subtitle"
+        [ngClass]="item().classes?.wrapper"
+        [style.background-color]="'rgb(var(--background))'"
       >
-        <!-- Icon -->
-        @if (item().icon) {
-          <mat-icon
-            class="op-navigation-item-icon"
-            [ngClass]="item().classes?.icon"
-          >
-            {{ item().icon }}
-          </mat-icon>
-        }
+        <!-- Item content -->
+        <div
+          class="op-navigation-item"
+          [class.op-navigation-item-active]="active()"
+          [class.op-navigation-item-disabled]="item().disabled"
+          [class.op-navigation-item-active-forced]="item().active"
+          [attr.title]="item().tooltip || ''"
+        >
+          <!-- Icon -->
+          @if (item().icon) {
+            <mat-icon
+              class="op-navigation-item-icon"
+              [ngClass]="item().classes?.icon"
+            >
+              {{ item().icon }}
+            </mat-icon>
+          }
 
-        <!-- Title & Subtitle -->
-        <div class="op-navigation-item-title-wrapper">
-          <div class="op-navigation-item-title">
-            <span [ngClass]="item().classes?.title">
-              {{ item().title }}
-            </span>
-          </div>
-          @if (item().subtitle) {
-            <div class="op-navigation-item-subtitle">
-              <span [ngClass]="item().classes?.subtitle">
-                {{ item().subtitle }}
+          <!-- Title & Subtitle -->
+          <div class="op-navigation-item-title-wrapper">
+            <div class="op-navigation-item-title">
+              <span [ngClass]="item().classes?.title">
+                {{ item().title }}
               </span>
+            </div>
+            @if (item().subtitle) {
+              <div class="op-navigation-item-subtitle">
+                <span [ngClass]="item().classes?.subtitle">
+                  {{ item().subtitle }}
+                </span>
+              </div>
+            }
+          </div>
+
+          <!-- Badge -->
+          @if (item().badge?.title) {
+            <div class="op-navigation-item-badge">
+              <div
+                class="op-navigation-item-badge-content"
+                [ngClass]="item().badge?.classes"
+              >
+                {{ item().badge?.title }}
+              </div>
             </div>
           }
         </div>
-
-        <!-- Badge -->
-        @if (item().badge?.title) {
-          <div class="op-navigation-item-badge">
-            <div
-              class="op-navigation-item-badge-content"
-              [ngClass]="item().badge?.classes"
-            >
-              {{ item().badge?.title }}
-            </div>
-          </div>
-        }
       </div>
-    </div>
 
-    <!-- Children content (following contekan pattern) -->
-    @if (!skipChildren() && item().children?.length) {
-      <div class="op-navigation-item-children">
-        @for (childItem of item().children; track trackByFn($index, childItem)) {
-          <!-- Skip the hidden items -->
-          @if ((childItem.hidden && !childItem.hidden(childItem)) || !childItem.hidden) {
-            <!-- Basic -->
-            @if (childItem.type === 'basic') {
-              <op-vertical-navigation-basic-item
-                [item]="childItem"
-                [variant]="variant()"
-                (itemClicked)="onChildItemClicked($event)"
-              />
-            }
-            <!-- Collapsable -->
-            @if (childItem.type === 'collapsable') {
-              <op-vertical-navigation-collapsable-item
-                [item]="childItem"
-                [variant]="variant()"
-                (itemClicked)="onChildItemClicked($event)"
-              />
-            }
-            <!-- Group -->
-            @if (childItem.type === 'group') {
-              <op-vertical-navigation-group-item
-                [item]="childItem"
-                [variant]="variant()"
-                (itemClicked)="onChildItemClicked($event)"
-              />
-            }
-            <!-- Divider -->
-            @if (childItem.type === 'divider') {
-              <op-vertical-navigation-divider-item
-                [item]="childItem"
-                [variant]="variant()"
-              />
-            }
-            <!-- Spacer -->
-            @if (childItem.type === 'spacer') {
-              <div class="op-navigation-spacer h-4"></div>
+      <!-- Children content (scrollable) -->
+      @if (!skipChildren() && item().children?.length) {
+        <div class="op-navigation-item-children op-navigation-aside-scrollable flex-1 overflow-y-auto">
+          @for (childItem of item().children; track trackByFn($index, childItem)) {
+            <!-- Skip the hidden items -->
+            @if ((childItem.hidden && !childItem.hidden(childItem)) || !childItem.hidden) {
+              <!-- Basic -->
+              @if (childItem.type === 'basic') {
+                <op-vertical-navigation-basic-item
+                  [item]="childItem"
+                  [variant]="variant()"
+                  (itemClicked)="onChildItemClicked($event)"
+                />
+              }
+              <!-- Collapsable -->
+              @if (childItem.type === 'collapsable') {
+                <op-vertical-navigation-collapsable-item
+                  [item]="childItem"
+                  [variant]="variant()"
+                  (itemClicked)="onChildItemClicked($event)"
+                />
+              }
+              <!-- Group -->
+              @if (childItem.type === 'group') {
+                <op-vertical-navigation-group-item
+                  [item]="childItem"
+                  [variant]="variant()"
+                  (itemClicked)="onChildItemClicked($event)"
+                />
+              }
+              <!-- Divider -->
+              @if (childItem.type === 'divider') {
+                <op-vertical-navigation-divider-item
+                  [item]="childItem"
+                  [variant]="variant()"
+                />
+              }
+              <!-- Spacer -->
+              @if (childItem.type === 'spacer') {
+                <div class="op-navigation-spacer h-4"></div>
+              }
             }
           }
-        }
-      </div>
-    }
+        </div>
+      }
+    </div>
   `,
   imports: [
     NgClass,

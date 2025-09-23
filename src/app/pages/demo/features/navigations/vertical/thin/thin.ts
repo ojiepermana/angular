@@ -6,12 +6,13 @@ import { demoNavigationData } from './navigations';
   selector: 'navigation-vertical-thin',
   imports: [VerticalNavigation],
   template: `
-    <op-vertical-navigation
-                  name="demo-vertical-thin-default"
-                  [navigation]="navigationData()"
-                  variant="default"
-                  appearance="thin">
-                </op-vertical-navigation>
+    <div class="h-96 bg-amber-400">
+      <op-vertical-navigation
+      name="demo-vertical-thin-default"
+      [navigation]="navigationData()"
+      variant="default"
+      appearance="thin" />
+    </div>
   `,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush

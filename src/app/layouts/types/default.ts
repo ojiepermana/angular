@@ -56,36 +56,6 @@ import { NavigationDataService } from '../../services';
           <!-- Page Content -->
           <div class="flex-1 overflow-y-auto p-6">
             <div class="max-w-4xl mx-auto">
-              <div class="mb-6">
-                <h2 class="text-2xl font-bold mb-2">Navigation Components Demo</h2>
-                <p class="text-muted-foreground">
-                  This demo showcases both horizontal and vertical navigation components running simultaneously.
-                  Both components share the same navigation data and demonstrate different layout approaches.
-                </p>
-              </div>
-
-              <div class="grid gap-6 md:grid-cols-2">
-                <div class="p-4 border rounded-lg">
-                  <h3 class="font-semibold mb-2">Horizontal Navigation Features</h3>
-                  <ul class="text-sm text-muted-foreground space-y-1">
-                    <li>• Scrollable horizontal layout</li>
-                    <li>• Dropdown support for collapsable items</li>
-                    <li>• Responsive design</li>
-                    <li>• Badge and icon support</li>
-                  </ul>
-                </div>
-
-                <div class="p-4 border rounded-lg">
-                  <h3 class="font-semibold mb-2">Vertical Navigation Features</h3>
-                  <ul class="text-sm text-muted-foreground space-y-1">
-                    <li>• Hierarchical structure</li>
-                    <li>• Collapsable groups</li>
-                    <li>• Dividers and spacers</li>
-                    <li>• Active state management</li>
-                  </ul>
-                </div>
-              </div>
-
               <router-outlet/>
             </div>
           </div>
