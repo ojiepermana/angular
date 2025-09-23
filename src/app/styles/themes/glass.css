@@ -124,3 +124,78 @@
 :root.dark .glass-navbar {
   background-color: rgba(0, 0, 0, 0.05);
 }
+
+/* Glass effect for Angular Material menus */
+.glass-menu .mat-mdc-menu-panel {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37) !important;
+}
+
+:root.dark .glass-menu .mat-mdc-menu-panel {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* More aggressive selectors for glass effect */
+.cdk-overlay-pane .glass-menu {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37) !important;
+}
+
+:root.dark .cdk-overlay-pane .glass-menu {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Direct targeting of menu panels */
+.mat-mdc-menu-panel.glass-menu {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37) !important;
+}
+
+:root.dark .mat-mdc-menu-panel.glass-menu {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Global glass effect when navigation has glass variant */
+body:has(.op-glass-navigation) .mat-mdc-menu-panel {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37) !important;
+}
+
+:root.dark body:has(.op-glass-navigation) .mat-mdc-menu-panel {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Alternative: Direct class targeting for Material menu panels */
+.op-glass-navigation-active .mat-mdc-menu-panel {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37) !important;
+}
+
+:root.dark .op-glass-navigation-active .mat-mdc-menu-panel {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}

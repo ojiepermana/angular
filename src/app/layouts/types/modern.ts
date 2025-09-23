@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, OnDestroy, Renderer2, PLATFORM_ID } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 import { DarkModeToggle } from '../components/shared/dark-mode-toggle.component';
 import { HorizontalNavigation } from '../../../../projects/kit/src/lib/components/navigation/horizontal/horizontal-navigation';
 import { NavigationService } from '../../../../projects/kit/src/lib/services/navigation.service';
@@ -24,7 +25,8 @@ import { NavigationDataService } from '../../services';
               <h1 class="text-sm font-semibold mr-8">Angular Kit</h1>
               <op-horizontal-navigation
                 name="demo-horizontal"
-                [navigation]="navigationData()">
+                [navigation]="navigationData()"
+                variant="glass">
               </op-horizontal-navigation>
             </div>
 
@@ -52,9 +54,11 @@ import { NavigationDataService } from '../../services';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Layout implements OnInit {
+export class Layout implements OnInit, OnDestroy {
   private _navigationService = inject(NavigationService);
   private _navigationDataService = inject(NavigationDataService);
+  private _renderer = inject(Renderer2);
+  private _platformId = inject(PLATFORM_ID);
 
   // Get navigation data from global service
   navigationData = this._navigationDataService.navigationData;
@@ -62,6 +66,18 @@ export class Layout implements OnInit {
   ngOnInit(): void {
     // Store navigation data in NavigationService for compatibility with existing components
     this._navigationService.storeNavigation(this._navigationDataService.navigationData());
+
+    // Add glass navigation class to body for global CSS targeting
+    if (isPlatformBrowser(this._platformId)) {
+      this._renderer.addClass(document.body, 'op-glass-navigation-active');
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Clean up glass navigation class
+    if (isPlatformBrowser(this._platformId)) {
+      this._renderer.removeClass(document.body, 'op-glass-navigation-active');
+    }
   }
 }
 

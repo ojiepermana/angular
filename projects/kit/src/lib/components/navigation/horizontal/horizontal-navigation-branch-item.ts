@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, ViewChild, inject, computed } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
@@ -8,6 +8,10 @@ import { NavigationItem } from '../../../types/navigations.type';
 
 @Component({
   selector: 'op-horizontal-navigation-branch-item',
+  host: {
+    '[class.glass-variant]': 'variant() === "glass"',
+    '[class.op-glass-navigation]': 'variant() === "glass"'
+  },
   template: `
     <!-- Trigger Button -->
     <div
@@ -35,7 +39,7 @@ import { NavigationItem } from '../../../types/navigations.type';
     </div>
 
     <!-- Main Dropdown Menu -->
-    <mat-menu #matMenu="matMenu" class="op-horizontal-navigation-menu" [hasBackdrop]="true">
+    <mat-menu #matMenu="matMenu" class="op-horizontal-navigation-menu" [ngClass]="glassClass()" [hasBackdrop]="true">
       @for (child of item().children || []; track child.id || child.title) {
 
         <!-- Basic Item -->
@@ -115,7 +119,7 @@ import { NavigationItem } from '../../../types/navigations.type';
           </div>
 
           <!-- Level 2 Sub-Menu -->
-          <mat-menu #level2Menu="matMenu" class="op-horizontal-navigation-menu">
+          <mat-menu #level2Menu="matMenu" class="op-horizontal-navigation-menu" [ngClass]="glassClass()">
             @for (level2Child of child.children; track level2Child.id || level2Child.title) {
 
               <!-- Basic Item in Level 2 -->
@@ -195,7 +199,7 @@ import { NavigationItem } from '../../../types/navigations.type';
                 </div>
 
                 <!-- Level 3 Sub-Menu -->
-                <mat-menu #level3Menu="matMenu" class="op-horizontal-navigation-menu">
+                <mat-menu #level3Menu="matMenu" class="op-horizontal-navigation-menu" [ngClass]="glassClass()">
                   @for (level3Child of level2Child.children; track level3Child.id || level3Child.title) {
                     @if (level3Child.type === 'basic') {
                       <div mat-menu-item class="px-0">
@@ -312,6 +316,54 @@ import { NavigationItem } from '../../../types/navigations.type';
     :host ::ng-deep .cdk-overlay-pane {
       z-index: 1000 !important;
     }
+
+    /* Glass effect for mat-menu using host class */
+    :host.glass-variant ::ng-deep .mat-mdc-menu-panel {
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      background-color: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37) !important;
+    }
+
+    /* Dark mode glass effect using host class */
+    :root.dark :host.glass-variant ::ng-deep .mat-mdc-menu-panel {
+      background-color: rgba(0, 0, 0, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Original glass effect for mat-menu */
+    :host ::ng-deep .glass-menu .mat-mdc-menu-panel {
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      background-color: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37) !important;
+    }
+
+    /* Dark mode glass effect */
+    :root.dark :host ::ng-deep .glass-menu .mat-mdc-menu-panel {
+      background-color: rgba(0, 0, 0, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Alternative selector for glass effect */
+    :host ::ng-deep .mat-mdc-menu-panel.glass-menu {
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      background-color: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37) !important;
+    }
+
+    /* Dark mode for alternative selector */
+    :root.dark :host ::ng-deep .mat-mdc-menu-panel.glass-menu {
+      background-color: rgba(0, 0, 0, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+    }
   `,
   imports: [
     MatIconModule,
@@ -328,8 +380,16 @@ export class HorizontalNavigationBranchItem {
   // Input for navigation item
   item = input.required<NavigationItem>();
 
+  // Variant input for glass effect
+  variant = input<'default' | 'glass'>('default');
+
   // Output for item clicks
   itemClicked = output<NavigationItem>();
+
+  // Computed glass class for mat-menu
+  glassClass = computed(() => {
+    return this.variant() === 'glass' ? 'glass-menu' : '';
+  });
 
   onChildItemClicked(child: NavigationItem): void {
     this.itemClicked.emit(child);

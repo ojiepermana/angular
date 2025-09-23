@@ -68,6 +68,7 @@ import { HorizontalNavigationBranchItem } from './horizontal-navigation-branch-i
                 @if (item.children && item.children.length > 0) {
                   <op-horizontal-navigation-branch-item
                     [item]="item"
+                    [variant]="variant()"
                     (itemClicked)="onItemClicked($event)"
                   />
                 } @else {
@@ -104,6 +105,7 @@ import { HorizontalNavigationBranchItem } from './horizontal-navigation-branch-i
                 @if (item.children && item.children.length > 0) {
                   <op-horizontal-navigation-branch-item
                     [item]="item"
+                    [variant]="variant()"
                     (itemClicked)="onItemClicked($event)"
                   />
                 } @else {
@@ -226,6 +228,9 @@ export class HorizontalNavigation {
 
   // Input for navigation data
   navigation = input<NavigationItem[]>([]);
+
+  // Glass variant support
+  variant = input<'default' | 'glass'>('default');
 
   // Additional inputs inspired by contekan for consistency
   appearance = input<'default' | 'compact' | 'dense' | 'thin'>('default');
