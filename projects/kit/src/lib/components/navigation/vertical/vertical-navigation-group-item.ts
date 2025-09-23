@@ -1,10 +1,13 @@
-import { Component, input, output, forwardRef } from '@angular/core';
+import { Component, input, output, forwardRef, computed } from '@angular/core';
 import { NavigationItem } from '../../../types/navigations.type';
 import { VerticalNavigationBasicItem } from './vertical-navigation-basic-item';
 import { VerticalNavigationCollapsableItem } from './vertical-navigation-collapsable-item';
 
 @Component({
   selector: 'op-vertical-navigation-group-item',
+  host: {
+    '[class]': 'glassClass()'
+  },
   template: `
     <div class="op-navigation-group">
       @if (item().title) {
@@ -27,18 +30,21 @@ import { VerticalNavigationCollapsableItem } from './vertical-navigation-collaps
               @case ('basic') {
                 <op-vertical-navigation-basic-item
                   [item]="child"
+                  [variant]="variant()"
                   (itemClicked)="onChildItemClicked($event)"
                 />
               }
               @case ('collapsable') {
                 <op-vertical-navigation-collapsable-item
                   [item]="child"
+                  [variant]="variant()"
                   (itemClicked)="onChildItemClicked($event)"
                 />
               }
               @case ('group') {
                 <op-vertical-navigation-group-item
                   [item]="child"
+                  [variant]="variant()"
                   (itemClicked)="onChildItemClicked($event)"
                 />
               }
@@ -56,7 +62,13 @@ import { VerticalNavigationCollapsableItem } from './vertical-navigation-collaps
 })
 export class VerticalNavigationGroupItem {
   item = input.required<NavigationItem>();
+  variant = input<'default' | 'glass'>('default');
   itemClicked = output<NavigationItem>();
+
+  // Computed glass class for host binding
+  glassClass = computed(() => {
+    return this.variant() === 'glass' ? 'op-vertical-navigation-group-item-glass' : '';
+  });
 
   onChildItemClicked(item: NavigationItem): void {
     this.itemClicked.emit(item);

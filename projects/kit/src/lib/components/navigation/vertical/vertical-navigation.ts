@@ -10,6 +10,9 @@ import { VerticalNavigationDividerItem } from './vertical-navigation-divider-ite
 
 @Component({
   selector: 'op-vertical-navigation',
+  host: {
+    '[class]': 'glassClass()'
+  },
   template: `
     <nav class="op-vertical-navigation">
       @if (navigationData()) {
@@ -19,23 +22,28 @@ import { VerticalNavigationDividerItem } from './vertical-navigation-divider-ite
               @case ('basic') {
                 <op-vertical-navigation-basic-item
                   [item]="item"
+                  [variant]="variant()"
                   (itemClicked)="onItemClicked($event)"
                 />
               }
               @case ('collapsable') {
                 <op-vertical-navigation-collapsable-item
                   [item]="item"
+                  [variant]="variant()"
                   (itemClicked)="onItemClicked($event)"
                 />
               }
               @case ('group') {
                 <op-vertical-navigation-group-item
                   [item]="item"
+                  [variant]="variant()"
                   (itemClicked)="onItemClicked($event)"
                 />
               }
               @case ('divider') {
-                <op-vertical-navigation-divider-item [item]="item" />
+                <op-vertical-navigation-divider-item
+                  [item]="item"
+                  [variant]="variant()" />
               }
               @case ('spacer') {
                 <div class="op-vertical-navigation-spacer h-4"></div>
@@ -43,6 +51,7 @@ import { VerticalNavigationDividerItem } from './vertical-navigation-divider-ite
               @default {
                 <op-vertical-navigation-basic-item
                   [item]="item"
+                  [variant]="variant()"
                   (itemClicked)="onItemClicked($event)"
                 />
               }
@@ -68,6 +77,14 @@ export class VerticalNavigation {
 
   // Navigation data input (for direct data binding)
   navigation = input<NavigationItem[]>([]);
+
+  // Glass variant support
+  variant = input<'default' | 'glass'>('default');
+
+  // Computed glass class for host binding
+  glassClass = computed(() => {
+    return this.variant() === 'glass' ? 'op-vertical-navigation-glass' : '';
+  });
 
   // Additional inputs inspired by contekan
   appearance = input<'default' | 'compact' | 'dense' | 'thin'>('default');

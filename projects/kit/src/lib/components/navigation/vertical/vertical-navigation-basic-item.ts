@@ -7,6 +7,9 @@ import { NavigationStateService } from '../../../services/navigation-state.servi
 
 @Component({
   selector: 'op-vertical-navigation-basic-item',
+  host: {
+    '[class]': 'glassClass()'
+  },
   template: `
     <div class="op-navigation-item">
       @if (item().link) {
@@ -63,7 +66,13 @@ import { NavigationStateService } from '../../../services/navigation-state.servi
 })
 export class VerticalNavigationBasicItem {
   item = input.required<NavigationItem>();
+  variant = input<'default' | 'glass'>('default');
   itemClicked = output<NavigationItem>();
+
+  // Computed glass class for host binding
+  glassClass = computed(() => {
+    return this.variant() === 'glass' ? 'op-vertical-navigation-basic-item-glass' : '';
+  });
 
   // Inject NavigationStateService
   private _navigationStateService = inject(NavigationStateService);

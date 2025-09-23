@@ -7,6 +7,9 @@ import { NavigationStateService } from '../../../services/navigation-state.servi
 
 @Component({
   selector: 'op-vertical-navigation-collapsable-item',
+  host: {
+    '[class]': 'glassClass()'
+  },
   template: `
     <div class="op-navigation-collapsable">
       <!-- Parent item -->
@@ -43,12 +46,14 @@ import { NavigationStateService } from '../../../services/navigation-state.servi
               @case ('basic') {
                 <op-vertical-navigation-basic-item
                   [item]="child"
+                  [variant]="variant()"
                   (itemClicked)="onChildItemClicked($event)"
                 />
               }
               @case ('collapsable') {
                 <op-vertical-navigation-collapsable-item
                   [item]="child"
+                  [variant]="variant()"
                   (itemClicked)="onChildItemClicked($event)"
                 />
               }
@@ -67,7 +72,13 @@ import { NavigationStateService } from '../../../services/navigation-state.servi
 })
 export class VerticalNavigationCollapsableItem {
   item = input.required<NavigationItem>();
+  variant = input<'default' | 'glass'>('default');
   itemClicked = output<NavigationItem>();
+
+  // Computed glass class for host binding
+  glassClass = computed(() => {
+    return this.variant() === 'glass' ? 'op-vertical-navigation-collapsable-item-glass' : '';
+  });
 
   // Inject NavigationStateService
   private _navigationStateService = inject(NavigationStateService);

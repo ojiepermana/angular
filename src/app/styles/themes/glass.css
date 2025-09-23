@@ -199,3 +199,82 @@ body:has(.op-glass-navigation) .mat-mdc-menu-panel {
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
 }
+
+/* Vertical Navigation Glass Effects */
+.op-vertical-navigation-glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+}
+
+:root.dark .op-vertical-navigation-glass {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.op-vertical-navigation-basic-item-glass {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.op-vertical-navigation-basic-item-glass:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+:root.dark .op-vertical-navigation-basic-item-glass {
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+:root.dark .op-vertical-navigation-basic-item-glass:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.op-vertical-navigation-collapsable-item-glass {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.op-vertical-navigation-collapsable-item-glass:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+:root.dark .op-vertical-navigation-collapsable-item-glass {
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+:root.dark .op-vertical-navigation-collapsable-item-glass:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.op-vertical-navigation-group-item-glass {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+:root.dark .op-vertical-navigation-group-item-glass {
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.op-vertical-navigation-divider-item-glass {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+:root.dark .op-vertical-navigation-divider-item-glass {
+  background-color: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
