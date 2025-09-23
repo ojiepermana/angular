@@ -24,7 +24,6 @@ import { VerticalNavigationDividerItem } from './divider';
         class="op-navigation-item-wrapper op-navigation-aside-header border-b sticky top-0 z-10"
         [class.op-navigation-item-has-subtitle]="!!item().subtitle"
         [ngClass]="item().classes?.wrapper"
-        [style.background-color]="'rgb(var(--background))'"
       >
         <!-- Item content -->
         <div
