@@ -7,7 +7,8 @@
 /* Base navigation container styling */
 .op-navigation-container {
   position: relative;
-  height: 100%;
+  height: inherit; /* Inherit height from parent instead of 100% */
+  max-height: inherit; /* Also respect max-height */
   display: flex;
   flex-direction: row;
   overflow: hidden; /* Ensure container doesn't exceed parent bounds */
