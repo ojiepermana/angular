@@ -47,27 +47,27 @@
 .op-navigation-aside-scrollable {
   flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: hidden;  
   padding: 8px 0;
   min-height: 0; /* Important: allows flexbox to shrink below content size */
 }
 
 /* Custom scrollbar for aside content */
 .op-navigation-aside-scrollable::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .op-navigation-aside-scrollable::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .op-navigation-aside-scrollable::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
 }
 
 .op-navigation-aside-scrollable::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 /* Aside wrapper for different navigation widths */
@@ -115,6 +115,8 @@
   padding: 8px 16px;
   margin-bottom: 1px;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
 }
 
 .op-navigation-aside-children .op-navigation-item:hover,

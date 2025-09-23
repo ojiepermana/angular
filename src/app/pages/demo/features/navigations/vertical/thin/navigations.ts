@@ -65,6 +65,90 @@ export const demoNavigationData: NavigationItem[] = [
     icon: 'dashboard',
     children: [
       {
+        id: 'ui-item-1',
+        title: 'Item 1 - Very Long Title Name',
+        type: 'basic',
+        icon: 'widgets',
+        link: '/demo/ui/item1'
+      },
+      {
+        id: 'ui-item-2',
+        title: 'Item 2 - Another Long Title',
+        type: 'basic',
+        icon: 'settings',
+        link: '/demo/ui/item2'
+      },
+      {
+        id: 'ui-item-3',
+        title: 'Item 3 - More Content Here',
+        type: 'basic',
+        icon: 'dashboard',
+        link: '/demo/ui/item3'
+      },
+      {
+        id: 'ui-item-4',
+        title: 'Item 4 - Testing Scroll',
+        type: 'basic',
+        icon: 'code',
+        link: '/demo/ui/item4'
+      },
+      {
+        id: 'ui-item-5',
+        title: 'Item 5 - More Testing',
+        type: 'basic',
+        icon: 'build',
+        link: '/demo/ui/item5'
+      },
+      {
+        id: 'ui-item-6',
+        title: 'Item 6 - Even More Content',
+        type: 'basic',
+        icon: 'layers',
+        link: '/demo/ui/item6'
+      },
+      {
+        id: 'ui-item-7',
+        title: 'Item 7 - Keep Adding Items',
+        type: 'basic',
+        icon: 'extension',
+        link: '/demo/ui/item7'
+      },
+      {
+        id: 'ui-item-8',
+        title: 'Item 8 - This Should Scroll',
+        type: 'basic',
+        icon: 'view_module',
+        link: '/demo/ui/item8'
+      },
+      {
+        id: 'ui-item-9',
+        title: 'Item 9 - More and More',
+        type: 'basic',
+        icon: 'view_list',
+        link: '/demo/ui/item9'
+      },
+      {
+        id: 'ui-item-10',
+        title: 'Item 10 - Definitely Scrolling Now',
+        type: 'basic',
+        icon: 'view_array',
+        link: '/demo/ui/item10'
+      },
+      {
+        id: 'ui-item-11',
+        title: 'Item 11 - Testing Scroll Behavior',
+        type: 'basic',
+        icon: 'grid_view',
+        link: '/demo/ui/item11'
+      },
+      {
+        id: 'ui-item-12',
+        title: 'Item 12 - Final Test Item',
+        type: 'basic',
+        icon: 'apps',
+        link: '/demo/ui/item12'
+      },
+      {
         id: 'user-interface-material-components',
         title: 'Material Components',
         type: 'collapsable',
