@@ -1,117 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
-@import "./app/styles/themes.css";
-
-/* Material Symbols Configuration */
-.material-symbols-rounded {
-  font-family: 'Material Symbols Rounded';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased;
-
-  /* Default Material Symbols settings */
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
-/* Material Icons compatibility class for existing components */
-.material-icons,
-mat-icon {
-  font-family: 'Material Symbols Rounded' !important;
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased;
-
-  /* Default settings for rounded style */
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
-/* Material Symbols utility classes for different styles */
-.material-symbols-filled {
-  font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
-.material-symbols-outlined {
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
-.material-symbols-light {
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 200,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
-.material-symbols-bold {
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 700,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
-/* Size utility classes */
-.material-symbols-small {
-  font-size: 18px;
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 20;
-}
-
-.material-symbols-large {
-  font-size: 36px;
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 40;
-}
-
-.material-symbols-xl {
-  font-size: 48px;
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 48;
-}
+@import "./app/styles/variables.css";
+@import "./app/styles/material/icon.css";
+@import "./app/styles/themes/glass.css";
 
 /* Base element styles using CSS variables */
 * {
@@ -245,7 +137,7 @@ body {
 }
 
 /* Border utilities */
-.border-border {
+.border-color {
   border-color: rgb(var(--border));
 }
 
@@ -258,7 +150,7 @@ body {
 }
 
 /* Ring utilities for focus states */
-.ring-ring {
+.ring-color {
   --tw-ring-color: rgb(var(--ring));
 }
 
@@ -363,131 +255,4 @@ body {
 /* Additional helper classes */
 .transition-theme {
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-/* Glassmorphism utility classes */
-.glass {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-:root.dark .glass {
-  background-color: rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-light {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-:root.dark .glass-light {
-  background-color: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-medium {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-:root.dark .glass-medium {
-  background-color: rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-strong {
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-:root.dark .glass-strong {
-  background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.glass-extra-strong {
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-:root.dark .glass-extra-strong {
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-/* Glass header specific class */
-.glass-header {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-:root.dark .glass-header {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* Glass footer specific class */
-.glass-footer {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-:root.dark .glass-footer {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* Glass card specific class */
-.glass-card {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-}
-
-:root.dark .glass-card {
-  background-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-}
-
-/* Glass sidebar specific class */
-.glass-sidebar {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-:root.dark .glass-sidebar {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-/* Glass modal/overlay specific class */
-.glass-modal {
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-:root.dark .glass-modal {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-/* Glass navbar specific class */
-.glass-navbar {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-:root.dark .glass-navbar {
-  background-color: rgba(0, 0, 0, 0.05);
 }

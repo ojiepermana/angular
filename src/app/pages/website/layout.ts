@@ -25,7 +25,7 @@ import { Navigation } from './navigation';
       </main>
 
       <!-- Footer -->
-      <footer class="border-t border-border mt-auto">
+      <footer class="border-t border-color mt-auto">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p class="text-center text-sm text-muted-foreground">
             &copy; 2025 @ojiepermana/angular. Angular UI Library with op- prefix components.

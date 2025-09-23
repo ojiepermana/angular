@@ -10,7 +10,7 @@ import { NavigationDataService } from '../../services';
   imports: [RouterOutlet, DarkModeToggle, HorizontalNavigation],
   template: `
     <div class="h-screen bg-background text-foreground p-16">
-      <div class="flex flex-col h-full max-w-7xl mx-auto border border-border rounded-lg shadow-xs overflow-hidden relative">
+      <div class="flex flex-col h-full max-w-7xl mx-auto border border-color rounded-lg shadow-xs overflow-hidden relative">
         <!-- Navigation Header -->
         <header class="absolute top-0 left-0 right-0 z-10 px-4  glass-header border-b">
           <div class="flex items-center justify-between h-12">

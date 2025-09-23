@@ -53,7 +53,7 @@ import { TitleCasePipe } from '@angular/common';
         </section>
 
         <!-- Quick Theme Controls -->
-        <section class="bg-card text-card-foreground border border-border rounded-lg p-6 transition-theme">
+        <section class="bg-card text-card-foreground border border-color rounded-lg p-6 transition-theme">
           <h2 class="text-primary text-2xl font-semibold mb-6">Theme Configuration</h2>
           <div class="flex flex-wrap gap-4">
             <!-- Mode Toggle -->
@@ -91,20 +91,20 @@ import { TitleCasePipe } from '@angular/common';
         </section>
 
         <!-- Color Palette Display -->
-        <section class="bg-card text-card-foreground border border-border rounded-lg p-6 transition-theme">
+        <section class="bg-card text-card-foreground border border-color rounded-lg p-6 transition-theme">
           <h2 class="text-primary text-2xl font-semibold mb-6">Active Theme Colors</h2>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <!-- Background Colors -->
             <div class="space-y-2">
               <h3 class="text-accent-foreground font-medium">Backgrounds</h3>
-              <div class="bg-background border border-border p-3 rounded text-center transition-theme">
+              <div class="bg-background border border-color p-3 rounded text-center transition-theme">
                 <div class="text-foreground text-sm">background</div>
               </div>
-              <div class="bg-card border border-border p-3 rounded text-center transition-theme">
+              <div class="bg-card border border-color p-3 rounded text-center transition-theme">
                 <div class="text-card-foreground text-sm">card</div>
               </div>
-              <div class="bg-muted border border-border p-3 rounded text-center transition-theme">
+              <div class="bg-muted border border-color p-3 rounded text-center transition-theme">
                 <div class="text-muted-foreground text-sm">muted</div>
               </div>
             </div>
@@ -154,15 +154,15 @@ import { TitleCasePipe } from '@angular/common';
         </section>
 
         <!-- UI Components Demo -->
-        <section class="bg-card text-card-foreground border border-border rounded-lg p-6 transition-theme">
+        <section class="bg-card text-card-foreground border border-color rounded-lg p-6 transition-theme">
           <h2 class="text-primary text-2xl font-semibold mb-6">UI Components with Variables</h2>
 
           <div class="grid md:grid-cols-2 gap-6">
 
             <!-- Card Example -->
-            <div class="bg-muted border border-border rounded-lg p-4 transition-theme">
+            <div class="bg-muted border border-color rounded-lg p-4 transition-theme">
               <h3 class="text-primary text-lg font-semibold mb-3">Product Card</h3>
-              <div class="bg-card text-card-foreground border border-border rounded p-4 transition-theme">
+              <div class="bg-card text-card-foreground border border-color rounded p-4 transition-theme">
                 <h4 class="text-accent-foreground font-medium">Premium Widget</h4>
                 <p class="text-muted-foreground text-sm mt-1">High-quality component for your app</p>
                 <div class="flex gap-2 mt-4">
@@ -180,7 +180,7 @@ import { TitleCasePipe } from '@angular/common';
             </div>
 
             <!-- Form Example -->
-            <div class="bg-muted border border-border rounded-lg p-4 transition-theme">
+            <div class="bg-muted border border-color rounded-lg p-4 transition-theme">
               <h3 class="text-primary text-lg font-semibold mb-3">Form Elements</h3>
               <div class="space-y-3">
                 <div>
@@ -188,7 +188,7 @@ import { TitleCasePipe } from '@angular/common';
                   <input
                     type="text"
                     placeholder="Enter your name"
-                    class="w-full bg-background text-foreground border border-input rounded px-3 py-2 text-sm transition-theme focus:ring-2 focus:ring-ring focus:outline-none"
+                    class="w-full bg-background text-foreground border border-input rounded px-3 py-2 text-sm transition-theme focus:ring-2 focus:ring-color focus:outline-none"
                   >
                 </div>
                 <div>
@@ -196,7 +196,7 @@ import { TitleCasePipe } from '@angular/common';
                   <textarea
                     placeholder="Your message..."
                     rows="3"
-                    class="w-full bg-background text-foreground border border-input rounded px-3 py-2 text-sm transition-theme focus:ring-2 focus:ring-ring focus:outline-none"
+                    class="w-full bg-background text-foreground border border-input rounded px-3 py-2 text-sm transition-theme focus:ring-2 focus:ring-color focus:outline-none"
                   ></textarea>
                 </div>
                 <button class="bg-primary text-primary-foreground px-4 py-2 rounded text-sm w-full transition-theme hover:opacity-90">
@@ -209,7 +209,7 @@ import { TitleCasePipe } from '@angular/common';
         </section>
 
         <!-- Interactive Elements -->
-        <section class="bg-card text-card-foreground border border-border rounded-lg p-6 transition-theme">
+        <section class="bg-card text-card-foreground border border-color rounded-lg p-6 transition-theme">
           <h2 class="text-primary text-2xl font-semibold mb-6">Interactive Elements</h2>
 
           <div class="grid md:grid-cols-3 gap-4">
@@ -267,7 +267,7 @@ import { TitleCasePipe } from '@angular/common';
         </section>
 
         <!-- Code Example -->
-        <section class="bg-card text-card-foreground border border-border rounded-lg p-6 transition-theme">
+        <section class="bg-card text-card-foreground border border-color rounded-lg p-6 transition-theme">
           <h2 class="text-primary text-2xl font-semibold mb-6">Example Usage</h2>
 
           <div class="bg-muted text-muted-foreground p-4 rounded text-sm font-mono transition-theme">
@@ -298,7 +298,7 @@ export class LayoutThemes {
   protected readonly availableLayouts: LayoutType[] = ['empty', 'default', 'modern'];
 
   protected readonly exampleCode = `<!-- All elements automatically respond to theme changes -->
-<div class="bg-card text-card-foreground border border-border p-6">
+<div class="bg-card text-card-foreground border border-color p-6">
   <h2 class="text-primary">Title</h2>
   <p class="text-muted-foreground">Description</p>
   <button class="bg-primary text-primary-foreground">Action</button>
@@ -334,7 +334,7 @@ export class LayoutThemes {
     const isActive = this.layoutService.currentLayout() === layout;
     return isActive
       ? 'bg-primary text-primary-foreground border-primary'
-      : 'bg-secondary text-secondary-foreground border-border hover:bg-accent';
+      : 'bg-secondary text-secondary-foreground border-color hover:bg-accent';
   }
 
   getLayoutDescription(layout: LayoutType): string {
