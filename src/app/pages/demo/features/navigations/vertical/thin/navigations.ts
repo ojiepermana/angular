@@ -705,7 +705,7 @@ export const demoNavigationData: NavigationItem[] = [
   {
     id: 'features',
     title: 'Features',
-    subtitle: 'Advanced functionality and customization options',
+    subtitle: 'Advanced  and customization options',
     type: 'aside',
     icon: 'settings',
     children: [

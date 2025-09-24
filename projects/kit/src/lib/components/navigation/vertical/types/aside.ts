@@ -21,7 +21,7 @@ import { VerticalNavigationDividerItem } from './divider';
     <div class="op-navigation-aside-content">
       <!-- Aside header wrapper (sticky) -->
       <div
-        class="op-navigation-item-wrapper op-navigation-aside-header border-b sticky top-0 z-10"
+        class="op-navigation-item-wrapper op-navigation-aside-header border-b sticky top-0 z-10 py-1"
         [class.op-navigation-item-has-subtitle]="!!item().subtitle"
         [ngClass]="item().classes?.wrapper"
       >

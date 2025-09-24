@@ -116,7 +116,7 @@ import { VerticalNavigationAsideItem } from './types/aside';
 
   <!-- Aside -->
   @if (activeAsideItemId) {
-    <div class="op-vertical-navigation-aside-wrapper border shadow">
+    <div class="op-vertical-navigation-aside-wrapper border-x">
       <!-- Items -->
       @for (item of navigationData(); track item.id || item.title) {
         <!-- Skip the hidden items -->

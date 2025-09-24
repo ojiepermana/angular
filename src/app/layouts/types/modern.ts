@@ -40,11 +40,9 @@ import { NavigationDataService } from '../../services';
         </header>
 
         <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto flex min-h-0" style="padding-top: 5rem; padding-bottom: 4rem;">
+        <main class="flex-1 overflow-y-auto flex min-h-0" style="padding-top: 3rem; padding-bottom: 2.8rem;">
           <!-- Main Content Area -->
-          <div class="flex-1 p-4">
             <router-outlet></router-outlet>
-          </div>
         </main>
 
         <!-- Footer -->

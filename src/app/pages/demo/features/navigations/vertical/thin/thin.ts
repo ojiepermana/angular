@@ -6,7 +6,7 @@ import { demoNavigationData } from './navigations';
   selector: 'navigation-vertical-thin',
   imports: [VerticalNavigation],
   template: `
-    <div class="h-96 bg-amber-400">
+    <div class="h-full border-r">
       <op-vertical-navigation
       name="demo-vertical-thin-default"
       [navigation]="navigationData()"

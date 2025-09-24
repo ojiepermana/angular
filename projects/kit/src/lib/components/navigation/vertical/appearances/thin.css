@@ -1,6 +1,6 @@
 /* Variables for thin appearance - minimal width for icon only */
 :root {
-  --op-vertical-navigation-thin-width: 80px;
+  --op-vertical-navigation-thin-width: 64px;
 }
 
 /* Thin appearance overrides */
@@ -31,10 +31,10 @@
 }
 
 /* Content and items layout for thin mode */
-.op-vertical-navigation.op-vertical-navigation-appearance-thin nav { padding: 0.25rem 0; }
+.op-vertical-navigation.op-vertical-navigation-appearance-thin nav { padding: 0.05rem 0; }
 .op-vertical-navigation.op-vertical-navigation-appearance-thin .op-navigation-item {
   display: flex; flex-direction: column; justify-content: center; align-items: center;
-  height: 64px; min-height: 64px; max-height: 64px; padding: 0 16px; text-align: center;
+  height: 48px; min-height: 48px; max-height: 48px; padding: 0 8px; text-align: center;
   border-radius: 4px; margin-bottom: 1px;
 }
 
@@ -77,7 +77,7 @@
 /* Collapsable items styling */
 .op-vertical-navigation.op-vertical-navigation-appearance-thin op-vertical-navigation-collapsable-item .op-navigation-item {
   display: flex; flex-direction: column; justify-content: center; align-items: center;
-  height: 64px; min-height: 64px; max-height: 64px; padding: 0 16px; text-align: center;
+  height: 48px; min-height: 48px; max-height: 48px; padding: 0 12px; text-align: center;
   border-radius: 4px; margin-bottom: 1px;
 }
 .op-vertical-navigation.op-vertical-navigation-appearance-thin > div > nav > div > op-vertical-navigation-collapsable-item .op-navigation-item .op-navigation-item-title-wrapper { display: none !important; }
