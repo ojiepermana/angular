@@ -115,8 +115,9 @@ import { VerticalNavigationAsideItem } from './types/aside';
   </div>
 
   <!-- Aside -->
+  <!-- border bisa di sesuaikan, ketika kondisi layout akan bertabrakan -->
   @if (activeAsideItemId) {
-    <div class="op-vertical-navigation-aside-wrapper border-x">
+    <div class="op-vertical-navigation-aside-wrapper border-r border-color">
       <!-- Items -->
       @for (item of navigationData(); track item.id || item.title) {
         <!-- Skip the hidden items -->

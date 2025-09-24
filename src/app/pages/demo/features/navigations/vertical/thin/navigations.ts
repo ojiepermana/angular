@@ -806,5 +806,16 @@ export const demoNavigationData: NavigationItem[] = [
         ]
       }
     ]
-  }
+  },
+  {
+    id: 'divider2',
+    type: 'divider'
+  },
+  {
+        id: 'documentation-introduction',
+        title: 'Introduction',
+        type: 'basic',
+        icon: 'menu_book',
+        link: '/demo/docs/introduction'
+      },
 ];
