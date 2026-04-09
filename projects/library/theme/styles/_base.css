@@ -1,0 +1,61 @@
+/* Base reset, typography tokens, and semantic utility helpers. */
+:root {
+  --mat-sys-surface: #fafafa;
+  --mat-sys-on-surface: #1c1b1f;
+  --mat-sys-background: #ffffff;
+  --mat-sys-on-background: #1c1b1f;
+  --mat-sys-outline: #79747e;
+  --mat-sys-outline-variant: #cac4d0;
+  --mat-sys-surface-container: #f3f3f3;
+  --mat-sys-surface-container-low: #f7f7f7;
+  --mat-sys-surface-container-high: #ececec;
+  --mat-sys-surface-container-highest: #e6e6e6;
+  --mat-sys-inverse-surface: #313033;
+  --mat-sys-inverse-on-surface: #f4eff4;
+  --mat-sys-surface-variant: #e7e0ec;
+  --mat-sys-on-surface-variant: #49454f;
+  --mat-sys-error: #b3261e;
+  --mat-sys-on-error: #ffffff;
+  --mat-sys-error-container: #f9dedc;
+  --mat-sys-on-error-container: #410e0b;
+}
+
+.bg-background {
+  background-color: var(--mat-sys-background);
+}
+
+.bg-foreground {
+  background-color: var(--mat-sys-on-background);
+}
+
+.text-background {
+  color: var(--mat-sys-background);
+}
+
+.text-foreground {
+  color: var(--mat-sys-on-background);
+}
+
+.text-foreground\/50 {
+  color: color-mix(in srgb, var(--mat-sys-on-background) 50%, transparent);
+}
+
+.text-foreground\/60 {
+  color: color-mix(in srgb, var(--mat-sys-on-background) 60%, transparent);
+}
+
+.text-foreground\/65 {
+  color: color-mix(in srgb, var(--mat-sys-on-background) 65%, transparent);
+}
+
+.text-foreground\/70 {
+  color: color-mix(in srgb, var(--mat-sys-on-background) 70%, transparent);
+}
+
+.text-foreground\/75 {
+  color: color-mix(in srgb, var(--mat-sys-on-background) 75%, transparent);
+}
+
+.border-border {
+  border-color: color-mix(in srgb, var(--mat-sys-outline-variant) 72%, transparent);
+}
