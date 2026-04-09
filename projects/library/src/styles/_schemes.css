@@ -1,0 +1,79 @@
+/* Light / Dark / System scheme variables */
+
+/* ── Light mode ──────────────────────────────── */
+[theme-schemes='light'],
+[theme-schemes='system'] {
+  --mat-sys-primary: var(--scheme-primary);
+  --mat-sys-on-primary: var(--scheme-on-primary);
+  --mat-sys-primary-container: var(--scheme-primary-container);
+  --mat-sys-on-primary-container: var(--scheme-on-primary-container);
+  --mat-sys-secondary: var(--scheme-secondary);
+  --mat-sys-on-secondary: var(--scheme-on-secondary);
+  --mat-sys-secondary-container: var(--scheme-secondary-container);
+  --mat-sys-on-secondary-container: var(--scheme-on-secondary-container);
+  --mat-sys-tertiary: var(--scheme-tertiary);
+  --mat-sys-on-tertiary: var(--scheme-on-tertiary);
+  --mat-sys-tertiary-container: var(--scheme-tertiary-container);
+  --mat-sys-on-tertiary-container: var(--scheme-on-tertiary-container);
+  --mat-sys-surface: #fafafa;
+  --mat-sys-on-surface: #1c1b1f;
+  --mat-sys-background: #ffffff;
+  --mat-sys-on-background: #1c1b1f;
+  --mat-sys-surface-container: #f3f3f3;
+  --mat-sys-surface-container-low: #f7f7f7;
+  --mat-sys-surface-container-high: #ececec;
+  --mat-sys-surface-container-highest: #e6e6e6;
+  color-scheme: light;
+}
+
+/* ── Dark mode ───────────────────────────────── */
+[theme-schemes='dark'] {
+  --mat-sys-primary: var(--scheme-primary);
+  --mat-sys-on-primary: var(--scheme-on-primary);
+  --mat-sys-primary-container: var(--scheme-on-primary-container);
+  --mat-sys-on-primary-container: var(--scheme-primary-container);
+  --mat-sys-secondary: var(--scheme-secondary);
+  --mat-sys-on-secondary: var(--scheme-on-secondary);
+  --mat-sys-secondary-container: var(--scheme-on-secondary-container);
+  --mat-sys-on-secondary-container: var(--scheme-secondary-container);
+  --mat-sys-tertiary: var(--scheme-tertiary);
+  --mat-sys-on-tertiary: var(--scheme-on-tertiary);
+  --mat-sys-tertiary-container: var(--scheme-on-tertiary-container);
+  --mat-sys-on-tertiary-container: var(--scheme-tertiary-container);
+  --mat-sys-surface: #1c1b1f;
+  --mat-sys-on-surface: #e6e1e5;
+  --mat-sys-background: #121212;
+  --mat-sys-on-background: #e6e1e5;
+  --mat-sys-surface-container: #211f26;
+  --mat-sys-surface-container-low: #1d1b20;
+  --mat-sys-surface-container-high: #2b2930;
+  --mat-sys-surface-container-highest: #36343b;
+  color-scheme: dark;
+}
+
+/* ── System preference (dark) ────────────────── */
+@media (prefers-color-scheme: dark) {
+  [theme-schemes='system'] {
+    --mat-sys-primary: var(--scheme-primary);
+    --mat-sys-on-primary: var(--scheme-on-primary);
+    --mat-sys-primary-container: var(--scheme-on-primary-container);
+    --mat-sys-on-primary-container: var(--scheme-primary-container);
+    --mat-sys-secondary: var(--scheme-secondary);
+    --mat-sys-on-secondary: var(--scheme-on-secondary);
+    --mat-sys-secondary-container: var(--scheme-on-secondary-container);
+    --mat-sys-on-secondary-container: var(--scheme-secondary-container);
+    --mat-sys-tertiary: var(--scheme-tertiary);
+    --mat-sys-on-tertiary: var(--scheme-on-tertiary);
+    --mat-sys-tertiary-container: var(--scheme-on-tertiary-container);
+    --mat-sys-on-tertiary-container: var(--scheme-tertiary-container);
+    --mat-sys-surface: #1c1b1f;
+    --mat-sys-on-surface: #e6e1e5;
+    --mat-sys-background: #121212;
+    --mat-sys-on-background: #e6e1e5;
+    --mat-sys-surface-container: #211f26;
+    --mat-sys-surface-container-low: #1d1b20;
+    --mat-sys-surface-container-high: #2b2930;
+    --mat-sys-surface-container-highest: #36343b;
+    color-scheme: dark;
+  }
+}

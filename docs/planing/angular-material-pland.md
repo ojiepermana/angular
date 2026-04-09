@@ -2,7 +2,7 @@
 
 ## Overview
 
-Library Angular yang menyediakan **multiple-axis theming system** untuk Angular Material + Tailwind CSS v4. Setiap aplikasi cukup install library ini untuk mendapatkan theming yang konsisten.
+Library Angular yang menyediakan **multiple-axis theming system** untuk Angular Material + Tailwind CSS v4.1++ Setiap aplikasi cukup install library ini untuk mendapatkan theming yang konsisten.
 
 ---
 
