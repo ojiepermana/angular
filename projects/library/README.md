@@ -40,18 +40,32 @@ Import the library styles once in the consuming application so the theme tokens 
 
 ```css
 @import 'tailwindcss';
-@import '@ojiepermana/angular/styles/index.css';
+@import '@ojiepermana/angular/theme/styles/index.css';
 ```
 
 Provide the theme service at application bootstrap:
 
 ```ts
-import { provideNgTheme } from '@ojiepermana/angular';
+import { provideNgTheme } from '@ojiepermana/angular/theme/service';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideNgTheme()],
 };
 ```
+
+## Library Pattern
+
+The library public APIs are organized by domain and must be imported from their dedicated entry points:
+
+- `@ojiepermana/angular/layouts` for layout shell components.
+- `@ojiepermana/angular/theme/service` for theme services, providers, tokens, and types.
+- `@ojiepermana/angular/theme/component` for theme switchers and presentational controls.
+- `@ojiepermana/angular/theme/directive` for theme directives.
+- `@ojiepermana/angular/theme/styles/index.css` for shared theme tokens and layout variables.
+
+Do not import those APIs from `@ojiepermana/angular` root.
+Do not create broad type-based entry points like `@ojiepermana/angular/components` when the APIs belong to a domain such as theme.
+Prefer the narrowest feature entry point available.
 
 ## Code scaffolding
 
@@ -88,9 +102,10 @@ Once the project is built, you can publish your library by following these steps
    ```
 
 2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
+
+```bash
+npm publish
+```
 
 ## Running unit tests
 

@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideNgTheme } from 'library';
+import { provideNgTheme } from '@ojiepermana/angular/theme/service';
 
 import { routes } from './app.routes';
 

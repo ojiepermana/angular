@@ -118,8 +118,8 @@ export class DemoDashboardPageComponent {
     { label: 'Shells', value: '2', caption: 'demo wrappers using content projection' },
     {
       label: 'Exports',
-      value: 'scoped',
-      caption: 'available from the layouts secondary entry point',
+      value: 'domain-first',
+      caption: 'layouts and theme APIs are split by feature-focused entry points',
     },
   ];
 
@@ -143,9 +143,9 @@ export class DemoDashboardPageComponent {
       tag: 'DX',
     },
     {
-      title: 'Secondary entry point rule',
+      title: 'Domain-based entry point rule',
       description:
-        'Layout shells are consumed from a dedicated layouts entry point instead of the root package to keep the public API explicit.',
+        'Layouts stay in a dedicated entry point while theme APIs are grouped under theme/service, theme/component, and theme/directive.',
       tag: 'Packaging',
     },
   ];
@@ -164,7 +164,7 @@ export class DemoDashboardPageComponent {
     {
       title: 'Import the shared styles and provider once.',
       description:
-        'The theme provider sets the DOM attributes and the library stylesheet supplies the design tokens and layout variables.',
+        'The theme provider now comes from theme/service and the stylesheet comes from theme/styles so the domain stays self-contained.',
     },
   ];
 
@@ -181,8 +181,8 @@ export class DemoDashboardPageComponent {
     },
     {
       label: 'Build target',
-      value: 'Pending',
-      detail: 'validated after the library and demo builds complete',
+      value: 'Ready',
+      detail: 'library packaging and demo consumption are validated against the domain-based entry points',
     },
   ];
 }

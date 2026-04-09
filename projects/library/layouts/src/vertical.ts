@@ -10,7 +10,7 @@ import { RouterOutlet } from '@angular/router';
   template: `
     <div class="layout min-h-screen bg-background p-0 text-foreground md:p-4">
       <div
-        class="layout-content mx-auto flex min-h-screen w-full overflow-hidden border border-border bg-background text-foreground shadow-sm md:min-h-[calc(100vh-2rem)] md:rounded-[2rem]"
+        class="layout-content mx-auto flex min-h-screen w-full overflow-hidden border border-border bg-background text-foreground shadow-sm md:min-h-[calc(100vh-2rem)] md:rounded-4xl"
         style="max-width: var(--layout-container-max-width);"
       >
         <aside

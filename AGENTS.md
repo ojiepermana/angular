@@ -12,7 +12,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Must NOT set `standalone: true` inside Angular decorators. It's the default in Angular v20+.
 - Use signals for state management
 - Implement lazy loading for feature routes
-- Layout shell components must be imported from the `@ojiepermana/angular/layouts` secondary entry point. Do not import `LayoutHorizontalComponent` or `LayoutVerticalComponent` from the root package.
+- Public library APIs must be imported from domain-based secondary entry points: `@ojiepermana/angular/layouts`, `@ojiepermana/angular/theme/service`, `@ojiepermana/angular/theme/component`, and `@ojiepermana/angular/theme/directive`. Import theme styles from `@ojiepermana/angular/theme/styles/index.css`. Do not import these APIs from the root package.
 - In this library, all icons must use `@lucide/angular`; do not use Material icons or other icon sets.
 - In this library, every Lucide icon must set `absoluteStrokeWidth`.
 - Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead

@@ -10,7 +10,7 @@
     "library": {
       "projectType": "library",
       "root": "projects/library",
-      "sourceRoot": "projects/library/src",
+      "sourceRoot": "projects/library",
       "prefix": "lib",
       "architect": {
         "build": {

@@ -4,8 +4,8 @@ import {
   AppearanceSwitcherComponent,
   LayoutContainerSwitcherComponent,
   SchemeSwitcherComponent,
-} from 'library';
-import { LayoutHorizontalComponent } from 'library/layouts';
+} from '@ojiepermana/angular/theme/component';
+import { LayoutHorizontalComponent } from '@ojiepermana/angular/layouts';
 
 @Component({
   selector: 'app-demo-horizontal-shell',

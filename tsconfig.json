@@ -7,8 +7,18 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
-      "library": ["./dist/library"],
-      "library/layouts": ["./dist/library/layouts"]
+      "@ojiepermana/angular": ["./projects/library/public-api.ts"],
+      "@ojiepermana/angular/layouts": ["./projects/library/layouts/public-api.ts"],
+      "@ojiepermana/angular/theme": ["./projects/library/theme/public-api.ts"],
+      "@ojiepermana/angular/theme/component": ["./projects/library/theme/component/public-api.ts"],
+      "@ojiepermana/angular/theme/directive": ["./projects/library/theme/directive/public-api.ts"],
+      "@ojiepermana/angular/theme/service": ["./projects/library/theme/service/public-api.ts"],
+      "library": ["./projects/library/public-api.ts"],
+      "library/layouts": ["./projects/library/layouts/public-api.ts"],
+      "library/theme": ["./projects/library/theme/public-api.ts"],
+      "library/theme/component": ["./projects/library/theme/component/public-api.ts"],
+      "library/theme/directive": ["./projects/library/theme/directive/public-api.ts"],
+      "library/theme/service": ["./projects/library/theme/service/public-api.ts"]
     },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

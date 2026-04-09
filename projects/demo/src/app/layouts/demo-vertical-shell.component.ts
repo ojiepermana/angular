@@ -5,8 +5,8 @@ import {
   ColorPickerComponent,
   LayoutContainerSwitcherComponent,
   SchemeSwitcherComponent,
-} from 'library';
-import { LayoutVerticalComponent } from 'library/layouts';
+} from '@ojiepermana/angular/theme/component';
+import { LayoutVerticalComponent } from '@ojiepermana/angular/layouts';
 
 @Component({
   selector: 'app-demo-vertical-shell',
