@@ -2,6 +2,57 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
 
+## Layouts
+
+The library exposes reusable shell components for the two legacy layouts through a dedicated secondary entry point:
+
+- `LayoutHorizontalComponent`
+- `LayoutVerticalComponent`
+
+### Usage Rule
+
+Layout shell components must be imported from `@ojiepermana/angular/layouts`.
+
+- Do use `@ojiepermana/angular/layouts` for `LayoutHorizontalComponent` and `LayoutVerticalComponent`.
+- Do not import layout shell components from `@ojiepermana/angular` root.
+
+Use the prefixed selectors in consuming apps:
+
+```ts
+import { LayoutHorizontalComponent, LayoutVerticalComponent } from '@ojiepermana/angular/layouts';
+```
+
+```html
+<ngt-layout-horizontal>
+  <div headerBrand>...</div>
+  <nav headerNavigation>...</nav>
+  <div headerActions>...</div>
+</ngt-layout-horizontal>
+
+<ngt-layout-vertical>
+  <nav navigation>...</nav>
+</ngt-layout-vertical>
+```
+
+These layout components are intended to be wrapped by an application shell component that projects navigation and header content into the slots above. The shell's child route is then rendered by the internal `<router-outlet />` inside the layout component.
+
+Import the library styles once in the consuming application so the theme tokens and layout variables are available:
+
+```css
+@import 'tailwindcss';
+@import '@ojiepermana/angular/styles/index.css';
+```
+
+Provide the theme service at application bootstrap:
+
+```ts
+import { provideNgTheme } from '@ojiepermana/angular';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideNgTheme()],
+};
+```
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
