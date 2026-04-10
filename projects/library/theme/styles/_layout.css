@@ -41,12 +41,12 @@
 }
 
 [layout-container='boxed'] {
-  @apply [--layout-container-max-width:1280px] md:[--layout-shell-padding:24px_16px] md:[--layout-shell-radius:0.5rem];
+  @apply [--layout-container-max-width:1280px] md:[--layout-shell-padding:48px_16px] md:[--layout-shell-radius:0.5rem];
 }
 
 [layout-mode='horizontal'] > layout,
 [layout-mode='vertical'] > layout {
-  @apply block box-border min-h-screen h-dvh bg-[var(--mat-sys-background)] text-[var(--mat-sys-on-background)] p-0 [padding:var(--layout-shell-padding)];
+  @apply block box-border min-h-screen h-dvh bg-[var(--mat-sys-background)] text-[var(--mat-sys-on-background)] p-(--layout-shell-padding);
 }
 
 [layout-mode='horizontal'] > layout > content,
