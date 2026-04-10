@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'ngt-layout-vertical, layout-vertical',
+  selector: 'vertical',
   imports: [RouterOutlet],
   host: {
     class: 'block',

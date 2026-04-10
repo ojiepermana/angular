@@ -119,7 +119,7 @@ export class DemoDashboardPageComponent {
     {
       label: 'Exports',
       value: 'domain-first',
-      caption: 'layouts and theme APIs are split by feature-focused entry points',
+      caption: 'layout shells now ship from the dedicated theme layout entry point',
     },
   ];
 
@@ -145,7 +145,7 @@ export class DemoDashboardPageComponent {
     {
       title: 'Domain-based entry point rule',
       description:
-        'Layouts stay in a dedicated entry point while theme APIs are grouped under theme/service, theme/component, and theme/directive.',
+        'Layout shells now live under theme/layout, while service, component, and directive APIs stay on their own theme entry points.',
       tag: 'Packaging',
     },
   ];
@@ -182,7 +182,8 @@ export class DemoDashboardPageComponent {
     {
       label: 'Build target',
       value: 'Ready',
-      detail: 'library packaging and demo consumption are validated against the domain-based entry points',
+      detail:
+        'library packaging and demo consumption are validated against the domain-based entry points',
     },
   ];
 }

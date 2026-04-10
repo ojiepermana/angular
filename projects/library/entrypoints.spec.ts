@@ -1,8 +1,8 @@
 import * as libraryRoot from '@ojiepermana/angular';
 import * as themeRoot from '@ojiepermana/angular/theme';
-import * as layoutsEntry from '@ojiepermana/angular/layouts';
 import * as themeComponentEntry from '@ojiepermana/angular/theme/component';
 import * as themeDirectiveEntry from '@ojiepermana/angular/theme/directive';
+import * as themeLayoutEntry from '@ojiepermana/angular/theme/layout';
 import * as themeServiceEntry from '@ojiepermana/angular/theme/service';
 
 describe('library entrypoints', () => {
@@ -12,13 +12,6 @@ describe('library entrypoints', () => {
 
   it('keeps the theme namespace entrypoint empty', () => {
     expect(Object.keys(themeRoot).filter((key) => key !== 'default')).toEqual([]);
-  });
-
-  it('exposes layout shells from the layouts entrypoint', () => {
-    expect(layoutsEntry).toMatchObject({
-      LayoutHorizontalComponent: expect.any(Function),
-      LayoutVerticalComponent: expect.any(Function),
-    });
   });
 
   it('exposes theme services from the service entrypoint', () => {
@@ -36,6 +29,13 @@ describe('library entrypoints', () => {
       LayoutContainerSwitcherComponent: expect.any(Function),
       LayoutModeSwitcherComponent: expect.any(Function),
       SchemeSwitcherComponent: expect.any(Function),
+    });
+  });
+
+  it('exposes layout shells from the layout entrypoint', () => {
+    expect(themeLayoutEntry).toMatchObject({
+      LayoutHorizontalComponent: expect.any(Function),
+      LayoutVerticalComponent: expect.any(Function),
     });
   });
 

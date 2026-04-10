@@ -5,7 +5,7 @@ import {
   LayoutContainerSwitcherComponent,
   SchemeSwitcherComponent,
 } from '@ojiepermana/angular/theme/component';
-import { LayoutHorizontalComponent } from '@ojiepermana/angular/layouts';
+import { LayoutHorizontalComponent } from '@ojiepermana/angular/theme/layout';
 
 @Component({
   selector: 'app-demo-horizontal-shell',
@@ -19,7 +19,7 @@ import { LayoutHorizontalComponent } from '@ojiepermana/angular/layouts';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <ngt-layout-horizontal>
+    <horizontal>
       <div headerBrand class="flex min-w-0 items-center gap-3">
         <div
           class="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-border text-sm font-semibold"
@@ -57,7 +57,7 @@ import { LayoutHorizontalComponent } from '@ojiepermana/angular/layouts';
         <ngt-layout-container-switcher />
         <ngt-scheme-switcher />
       </div>
-    </ngt-layout-horizontal>
+    </horizontal>
   `,
 })
 export class DemoHorizontalShellComponent {

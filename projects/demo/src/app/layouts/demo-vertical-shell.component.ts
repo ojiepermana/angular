@@ -6,7 +6,7 @@ import {
   LayoutContainerSwitcherComponent,
   SchemeSwitcherComponent,
 } from '@ojiepermana/angular/theme/component';
-import { LayoutVerticalComponent } from '@ojiepermana/angular/layouts';
+import { LayoutVerticalComponent } from '@ojiepermana/angular/theme/layout';
 
 @Component({
   selector: 'app-demo-vertical-shell',
@@ -21,7 +21,7 @@ import { LayoutVerticalComponent } from '@ojiepermana/angular/layouts';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <ngt-layout-vertical>
+    <vertical>
       <nav navigation class="flex h-full w-full flex-col gap-6 px-4 py-5">
         <div class="space-y-2">
           <p class="text-[0.7rem] uppercase tracking-[0.28em] text-foreground/50">Legacy Layout</p>
@@ -65,7 +65,7 @@ import { LayoutVerticalComponent } from '@ojiepermana/angular/layouts';
           </div>
         </section>
       </nav>
-    </ngt-layout-vertical>
+    </vertical>
   `,
 })
 export class DemoVerticalShellComponent {

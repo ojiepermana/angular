@@ -4,34 +4,37 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Layouts
 
-The library exposes reusable shell components for the two legacy layouts through a dedicated secondary entry point:
+The library exposes reusable shell components for the two legacy layouts through the theme layout entry point:
 
 - `LayoutHorizontalComponent`
 - `LayoutVerticalComponent`
 
 ### Usage Rule
 
-Layout shell components must be imported from `@ojiepermana/angular/layouts`.
+Layout shell components must be imported from `@ojiepermana/angular/theme/layout`.
 
-- Do use `@ojiepermana/angular/layouts` for `LayoutHorizontalComponent` and `LayoutVerticalComponent`.
+- Do use `@ojiepermana/angular/theme/layout` for `LayoutHorizontalComponent` and `LayoutVerticalComponent`.
 - Do not import layout shell components from `@ojiepermana/angular` root.
 
-Use the prefixed selectors in consuming apps:
+Use the selectors in consuming apps:
 
 ```ts
-import { LayoutHorizontalComponent, LayoutVerticalComponent } from '@ojiepermana/angular/layouts';
+import {
+  LayoutHorizontalComponent,
+  LayoutVerticalComponent,
+} from '@ojiepermana/angular/theme/layout';
 ```
 
 ```html
-<ngt-layout-horizontal>
+<horizontal>
   <div headerBrand>...</div>
   <nav headerNavigation>...</nav>
   <div headerActions>...</div>
-</ngt-layout-horizontal>
+</horizontal>
 
-<ngt-layout-vertical>
+<vertical>
   <nav navigation>...</nav>
-</ngt-layout-vertical>
+</vertical>
 ```
 
 These layout components are intended to be wrapped by an application shell component that projects navigation and header content into the slots above. The shell's child route is then rendered by the internal `<router-outlet />` inside the layout component.
@@ -57,15 +60,16 @@ export const appConfig: ApplicationConfig = {
 
 The library public APIs are organized by domain and must be imported from their dedicated entry points:
 
-- `@ojiepermana/angular/layouts` for layout shell components.
 - `@ojiepermana/angular/theme/service` for theme services, providers, tokens, and types.
 - `@ojiepermana/angular/theme/component` for theme switchers and presentational controls.
 - `@ojiepermana/angular/theme/directive` for theme directives.
+- `@ojiepermana/angular/theme/layout` for layout shell components.
 - `@ojiepermana/angular/theme/styles/index.css` for shared theme tokens and layout variables.
 
 Do not import those APIs from `@ojiepermana/angular` root.
 Do not create broad type-based entry points like `@ojiepermana/angular/components` when the APIs belong to a domain such as theme.
 Prefer the narrowest feature entry point available.
+For library source files, omit the `.component` suffix from component filenames and use names like `appearance-switcher.ts`, `horizontal.ts`, and `vertical.ts`.
 
 ## Code scaffolding
 
