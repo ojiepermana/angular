@@ -83,3 +83,8 @@ vertical {
   block-size: 44px;
   padding: 10px;
 }
+
+.ngt-icon-button.mat-mdc-icon-button .lucide {
+  inline-size: 20px;
+  block-size: 20px;
+}

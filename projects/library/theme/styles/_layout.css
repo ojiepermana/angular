@@ -4,7 +4,7 @@
 :root {
   --layout-sidebar-width: 260px;
   --layout-sidebar-collapsed-width: 64px;
-  --layout-header-height: 64px;
+  --layout-header-height: 44px;
   --layout-sidebar-display: flex;
   --layout-topnav-display: none;
   --layout-container-max-width: 100%;
@@ -15,7 +15,7 @@
 [layout-mode='vertical'] {
   --layout-sidebar-width: 260px;
   --layout-sidebar-collapsed-width: 64px;
-  --layout-header-height: 64px;
+  --layout-header-height: 44px;
   --layout-sidebar-display: flex;
   --layout-topnav-display: none;
 }
@@ -23,7 +23,7 @@
 [layout-mode='horizontal'] {
   --layout-sidebar-width: 0;
   --layout-sidebar-collapsed-width: 0;
-  --layout-header-height: 56px;
+  --layout-header-height: 44px;
   --layout-sidebar-display: none;
   --layout-topnav-display: flex;
 }

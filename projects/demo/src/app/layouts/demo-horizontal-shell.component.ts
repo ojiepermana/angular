@@ -22,7 +22,7 @@ import { LayoutHorizontalComponent } from '@ojiepermana/angular/theme/layout';
     <horizontal>
       <div headerBrand class="flex min-w-0 items-center gap-3">
         <div
-          class="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-border text-sm font-semibold"
+          class="flex size-10 shrink-0 items-center justify-center rounded-2xl border border-border text-sm font-semibold"
           aria-hidden="true"
         >
           H
@@ -35,12 +35,7 @@ import { LayoutHorizontalComponent } from '@ojiepermana/angular/theme/layout';
         </div>
       </div>
 
-      <div
-        headerNavigation
-        class="flex items-center gap-2 py-2"
-        role="navigation"
-        aria-label="Primary"
-      >
+      <div headerNavigation class="flex items-center gap-2" role="navigation" aria-label="Primary">
         @for (link of links; track link.path) {
           <a
             [routerLink]="link.path"
