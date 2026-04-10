@@ -1,21 +1,31 @@
 /* Flat and glass appearance variables. */
 :root {
-  --appearance-surface: var(--mat-sys-background);
-  --appearance-border: color-mix(in srgb, var(--mat-sys-outline-variant) 72%, transparent);
-  --appearance-shadow: 0 10px 24px -18px rgb(15 23 42 / 0.28);
-  --appearance-backdrop-filter: none;
+  --ngt-appearance-flat-surface: var(--mat-sys-background);
+  --ngt-appearance-flat-border: color-mix(in srgb, var(--mat-sys-outline-variant) 72%, transparent);
+  --ngt-appearance-flat-shadow: 0 10px 24px -18px rgb(15 23 42 / 0.28);
+  --ngt-appearance-flat-backdrop-filter: none;
+
+  --ngt-appearance-glass-surface: color-mix(in srgb, var(--mat-sys-background) 92%, transparent);
+  --ngt-appearance-glass-border: color-mix(in srgb, var(--mat-sys-outline) 18%, transparent);
+  --ngt-appearance-glass-shadow: 0 14px 30px -24px rgb(15 23 42 / 0.26);
+  --ngt-appearance-glass-backdrop-filter: blur(6px);
+
+  --appearance-surface: var(--ngt-appearance-flat-surface);
+  --appearance-border: var(--ngt-appearance-flat-border);
+  --appearance-shadow: var(--ngt-appearance-flat-shadow);
+  --appearance-backdrop-filter: var(--ngt-appearance-flat-backdrop-filter);
 }
 
 [theme-appearances='flat'] {
-  --appearance-surface: var(--mat-sys-background);
-  --appearance-border: color-mix(in srgb, var(--mat-sys-outline-variant) 72%, transparent);
-  --appearance-shadow: 0 10px 24px -18px rgb(15 23 42 / 0.28);
-  --appearance-backdrop-filter: none;
+  --appearance-surface: var(--ngt-appearance-flat-surface);
+  --appearance-border: var(--ngt-appearance-flat-border);
+  --appearance-shadow: var(--ngt-appearance-flat-shadow);
+  --appearance-backdrop-filter: var(--ngt-appearance-flat-backdrop-filter);
 }
 
 [theme-appearances='glass'] {
-  --appearance-surface: color-mix(in srgb, var(--mat-sys-background) 92%, transparent);
-  --appearance-border: color-mix(in srgb, var(--mat-sys-outline) 18%, transparent);
-  --appearance-shadow: 0 14px 30px -24px rgb(15 23 42 / 0.26);
-  --appearance-backdrop-filter: blur(6px);
+  --appearance-surface: var(--ngt-appearance-glass-surface);
+  --appearance-border: var(--ngt-appearance-glass-border);
+  --appearance-shadow: var(--ngt-appearance-glass-shadow);
+  --appearance-backdrop-filter: var(--ngt-appearance-glass-backdrop-filter);
 }

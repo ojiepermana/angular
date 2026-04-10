@@ -1,4 +1,3 @@
-
 You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
 ## TypeScript Best Practices
@@ -13,6 +12,13 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Must NOT set `standalone: true` inside Angular decorators. It's the default in Angular v20+.
 - Use signals for state management
 - Implement lazy loading for feature routes
+- Treat Angular Material as the behavior layer and the library theme as the visual source of truth.
+- In application code, prefer Tailwind CSS utility classes in templates for layout, spacing, typography, sizing, and interaction states.
+- In library code, choose styling by scope: shared or global styling belongs in `.css` files, while small local cases may use inline class or style bindings, or local component styles, when that is clearer and more maintainable.
+- Use theme variables for design values such as color, surface, border, shadow, and radius instead of hardcoded visual values.
+- Dark mode must be controlled by global theme variables, not inline Tailwind `dark:` utilities or component-local dark-mode classes.
+- Put shared theme primitives in `projects/library/theme/styles/_*.css` and Angular Material overrides in `projects/library/theme/styles/overrides/*.css`.
+- Prefer Angular Material or MDC tokens, CSS custom properties, and supported selectors before using deep overrides.
 - Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
 - Use `NgOptimizedImage` for all static images.
   - `NgOptimizedImage` does not work for inline base64 images.
