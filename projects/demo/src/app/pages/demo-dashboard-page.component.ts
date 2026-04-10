@@ -1,5 +1,16 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
+import {
+  DashboardDataListDirective,
+  DashboardDataRowDirective,
+  DashboardEyebrowDirective,
+  DashboardMetricCardComponent,
+  DashboardPanelDirective,
+  DashboardProgressBarComponent,
+  DashboardSurfaceDirective,
+  DashboardToggleGroupComponent,
+} from './dashboard-primitives';
+
 type TimeframeKey = 'month' | 'quarter' | 'ytd';
 type RegionKey = 'global' | 'americas' | 'emea' | 'apac';
 
@@ -786,6 +797,16 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
 @Component({
   selector: 'app-demo-dashboard-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    DashboardDataListDirective,
+    DashboardDataRowDirective,
+    DashboardEyebrowDirective,
+    DashboardMetricCardComponent,
+    DashboardPanelDirective,
+    DashboardProgressBarComponent,
+    DashboardSurfaceDirective,
+    DashboardToggleGroupComponent,
+  ],
   host: {
     class: 'block',
   },
@@ -793,27 +814,42 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
     @let current = snapshot();
     @let chart = trendChart();
 
-    <section class="sales-dashboard min-h-full px-5 py-6 sm:px-8 sm:py-8">
-      <div class="mx-auto flex w-full max-w-448 flex-col gap-5">
+    <section
+      class="min-h-full px-5 py-6 sm:px-8 sm:py-8 [--sales-blue:var(--mat-sys-primary)] [--sales-indigo:color-mix(in_srgb,var(--mat-sys-secondary)_82%,var(--mat-sys-primary))] [--sales-cyan:color-mix(in_srgb,var(--mat-sys-tertiary)_72%,var(--mat-sys-background))] [--sales-emerald:var(--mat-sys-tertiary)] [--sales-amber:color-mix(in_oklch,var(--mat-sys-secondary)_72%,var(--mat-sys-primary))] [--sales-panel-radius:1.35rem] [--sales-surface-radius:1rem] [--sales-control-radius:1rem] [--sales-badge-radius:0.85rem] [--sales-pill-radius:999px] [background:radial-gradient(circle_at_top_center,color-mix(in_oklch,var(--mat-sys-primary)_10%,transparent)_0%,transparent_40%),linear-gradient(180deg,color-mix(in_oklch,var(--mat-sys-background)_98%,var(--mat-sys-secondary)_2%)_0%,transparent_100%)]"
+    >
+      <div class="mx-auto flex w-full flex-col gap-5">
         <header
-          class="executive-band grid gap-6 px-5 py-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)] lg:px-6 lg:py-6"
+          dashboardPanel
+          class="grid gap-6 px-5 py-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)] lg:px-6 lg:py-6"
         >
           <div class="flex flex-col gap-5">
             <div class="flex flex-wrap items-center gap-3">
-              <span class="live-pill">Live forecast sync</span>
-              <span class="text-xs font-medium uppercase tracking-[0.2em] text-foreground/62">
+              <span
+                class="inline-flex items-center gap-[0.55rem] rounded-full border border-[color-mix(in_srgb,var(--sales-blue)_18%,transparent)] bg-[color-mix(in_oklch,var(--sales-blue)_10%,transparent)] px-[0.8rem] py-[0.45rem] text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[color-mix(in_srgb,var(--sales-blue)_72%,var(--mat-sys-on-background))] before:size-2 before:rounded-full before:bg-(--sales-blue) before:content-[''] before:animate-pulse motion-reduce:before:animate-none"
+              >
+                Live forecast sync
+              </span>
+              <span
+                class="text-xs font-medium uppercase tracking-[0.2em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_62%,transparent)]"
+              >
                 {{ current.rangeLabel }}
               </span>
             </div>
 
             <div class="max-w-[64ch]">
-              <p class="eyebrow">Sales Command Center</p>
+              <p
+                class="text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_55%,transparent)]"
+              >
+                Sales Command Center
+              </p>
               <h1
-                class="mt-3 max-w-[16ch] text-[2.1rem] font-semibold leading-[1.03] tracking-[-0.04em] sm:text-[2.8rem]"
+                class="mt-3 max-w-[16ch] text-[2.1rem] font-semibold leading-[1.03] tracking-[-0.04em] text-foreground sm:text-[2.8rem]"
               >
                 Revenue health without the dashboard noise.
               </h1>
-              <p class="mt-4 max-w-[58ch] text-[0.98rem] leading-7 text-foreground/78">
+              <p
+                class="mt-4 max-w-[58ch] text-[0.98rem] leading-7 text-[color-mix(in_srgb,var(--mat-sys-on-background)_78%,transparent)]"
+              >
                 {{ current.summary }}
               </p>
             </div>
@@ -821,119 +857,89 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
 
           <div class="grid gap-4 lg:justify-items-end">
             <div class="flex w-full flex-col gap-4 lg:max-w-[24rem]">
-              <section>
-                <p class="eyebrow">Timeframe</p>
-                <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Timeframe">
-                  @for (timeframe of timeframeOptions; track timeframe.id) {
-                    <button
-                      type="button"
-                      class="sales-toggle px-4 py-2 text-sm font-medium"
-                      [class.sales-toggle-active]="selectedTimeframe() === timeframe.id"
-                      [attr.aria-pressed]="selectedTimeframe() === timeframe.id"
-                      (click)="selectTimeframe(timeframe.id)"
-                    >
-                      {{ timeframe.label }}
-                    </button>
-                  }
-                </div>
-              </section>
+              <app-dashboard-toggle-group
+                label="Timeframe"
+                groupLabel="Timeframe"
+                [options]="timeframeOptions"
+                [selectedId]="selectedTimeframe()"
+                (selectionChange)="selectTimeframe($event)"
+              />
 
-              <section>
-                <p class="eyebrow">Territory</p>
-                <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Region filter">
-                  @for (region of regionOptions; track region.id) {
-                    <button
-                      type="button"
-                      class="sales-toggle px-4 py-2 text-sm font-medium"
-                      [class.sales-toggle-active]="selectedRegion() === region.id"
-                      [attr.aria-pressed]="selectedRegion() === region.id"
-                      (click)="selectRegion(region.id)"
-                    >
-                      {{ region.label }}
-                    </button>
-                  }
-                </div>
-              </section>
+              <app-dashboard-toggle-group
+                label="Territory"
+                groupLabel="Region filter"
+                [options]="regionOptions"
+                [selectedId]="selectedRegion()"
+                (selectionChange)="selectRegion($event)"
+              />
             </div>
 
-            <section class="note-surface w-full px-4 py-4 lg:max-w-[24rem]">
-              <p class="eyebrow">This Week</p>
-              <h2 class="mt-2 text-lg font-semibold leading-7 text-foreground/96">
+            <section dashboardSurface class="w-full px-4 py-4 lg:max-w-[24rem]">
+              <p dashboardEyebrow>This Week</p>
+              <h2 class="mt-2 text-lg font-semibold leading-7 text-foreground">
                 {{ current.focus }}
               </h2>
-              <p class="mt-2 text-sm leading-6 text-foreground/74">{{ current.focusDetail }}</p>
+              <p
+                class="mt-2 text-sm leading-6 text-[color-mix(in_srgb,var(--mat-sys-on-background)_74%,transparent)]"
+              >
+                {{ current.focusDetail }}
+              </p>
             </section>
           </div>
         </header>
 
-        <section class="panel px-4 py-4 sm:px-5 sm:py-5">
+        <section dashboardPanel class="px-4 py-4 sm:px-5 sm:py-5">
           <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p class="eyebrow">Executive Summary</p>
-              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground/96">
+              <p dashboardEyebrow>Executive Summary</p>
+              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground">
                 Quarter pacing and operating signals
               </h2>
             </div>
-            <p class="max-w-[48ch] text-sm leading-6 text-foreground/70">
+            <p
+              class="max-w-[48ch] text-sm leading-6 text-[color-mix(in_srgb,var(--mat-sys-on-background)_70%,transparent)]"
+            >
               The headline numbers stay in one shared strip so the top of the page reads faster and
               feels less fragmented.
             </p>
           </div>
 
-          <div class="metric-strip mt-5 grid overflow-hidden md:grid-cols-2 xl:grid-cols-4">
+          <div dashboardSurface class="mt-5 grid overflow-hidden md:grid-cols-2 xl:grid-cols-4">
             @for (metric of current.metrics; track metric.label) {
-              <article class="metric-cell">
-                <p
-                  class="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-foreground/54"
-                >
-                  {{ metric.label }}
-                </p>
-                <p
-                  class="metric-value mt-3 text-[1.9rem] font-semibold tracking-[-0.04em] text-foreground/98"
-                >
-                  {{ metric.value }}
-                </p>
-                <div class="mt-4 flex items-end justify-between gap-3">
-                  <p
-                    class="text-sm font-semibold"
-                    [class.metric-delta-positive]="metric.positive"
-                    [class.metric-delta-negative]="!metric.positive"
-                  >
-                    {{ metric.delta }}
-                  </p>
-                  <p class="max-w-[22ch] text-right text-xs leading-5 text-foreground/66">
-                    {{ metric.note }}
-                  </p>
-                </div>
-              </article>
+              <app-dashboard-metric-card [metric]="metric" />
             }
           </div>
         </section>
 
         <div class="grid gap-5 xl:grid-cols-[minmax(0,1.4fr)_minmax(20rem,0.72fr)]">
-          <section class="panel px-5 py-5">
+          <section dashboardPanel class="px-5 py-5">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p class="eyebrow">Revenue Cadence</p>
-                <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground/96">
+                <p dashboardEyebrow>Revenue Cadence</p>
+                <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground">
                   Closed-won revenue versus target trajectory
                 </h2>
               </div>
               <div
-                class="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.18em] text-foreground/62"
+                class="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.18em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_62%,transparent)]"
               >
                 <span class="inline-flex items-center gap-2">
                   <span class="size-2 rounded-full bg-(--sales-blue)"></span>
                   Closed won
                 </span>
                 <span class="inline-flex items-center gap-2">
-                  <span class="h-px w-6 border-t border-dashed border-foreground/30"></span>
+                  <span
+                    class="h-px w-6 border-t border-dashed border-[color-mix(in_srgb,var(--mat-sys-on-background)_30%,transparent)]"
+                  ></span>
                   Target
                 </span>
               </div>
             </div>
 
-            <div class="chart-frame mt-5 p-4 sm:p-5">
+            <div
+              dashboardSurface
+              class="mt-5 overflow-hidden bg-[linear-gradient(180deg,color-mix(in_oklch,var(--sales-blue)_7%,transparent)_0%,transparent_100%),color-mix(in_oklch,var(--appearance-surface)_98%,transparent)] p-4 sm:p-5"
+            >
               <svg
                 viewBox="0 0 720 280"
                 class="h-auto w-full"
@@ -942,38 +948,59 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                 @for (tick of chart.ticks; track tick.label) {
                   <g>
                     <line
-                      class="sales-chart-grid"
+                      class="stroke-[color-mix(in_srgb,var(--mat-sys-outline-variant)_60%,transparent)] [stroke-dasharray:4_10]"
                       x1="30"
                       [attr.y1]="tick.y"
                       x2="700"
                       [attr.y2]="tick.y"
                     />
-                    <text class="sales-chart-axis" x="0" [attr.y]="tick.y + 4">
+                    <text
+                      class="fill-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)] text-[11px] tracking-[0.02em]"
+                      x="0"
+                      [attr.y]="tick.y + 4"
+                    >
                       {{ tick.label }}
                     </text>
                   </g>
                 }
 
-                <path class="sales-chart-area" [attr.d]="chart.areaPath" />
-                <path class="sales-chart-target" [attr.d]="chart.targetPath" />
-                <path class="sales-chart-line" [attr.d]="chart.revenuePath" />
+                <path
+                  class="fill-[color-mix(in_oklch,var(--sales-blue)_16%,transparent)]"
+                  [attr.d]="chart.areaPath"
+                />
+                <path
+                  class="fill-none stroke-[color-mix(in_srgb,var(--mat-sys-on-background)_34%,transparent)] [stroke-dasharray:8_8] [stroke-linecap:round] stroke-2"
+                  [attr.d]="chart.targetPath"
+                />
+                <path
+                  class="fill-none stroke-(--sales-blue) [stroke-linecap:round] [stroke-linejoin:round] stroke-3"
+                  [attr.d]="chart.revenuePath"
+                />
 
                 @for (point of chart.points; track point.label) {
                   <g>
                     <circle
-                      class="sales-chart-point"
+                      class="fill-(--sales-blue) stroke-[color-mix(in_srgb,white_80%,transparent)] stroke-2"
                       [attr.cx]="point.x"
                       [attr.cy]="point.y"
                       r="5"
                     />
-                    <text class="sales-chart-axis" [attr.x]="point.x - 16" [attr.y]="point.y - 12">
+                    <text
+                      class="fill-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)] text-[11px] tracking-[0.02em]"
+                      [attr.x]="point.x - 16"
+                      [attr.y]="point.y - 12"
+                    >
                       {{ point.valueLabel }}
                     </text>
                   </g>
                 }
 
                 @for (label of chart.labels; track label.label) {
-                  <text class="sales-chart-axis" [attr.x]="label.x - 14" y="270">
+                  <text
+                    class="fill-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)] text-[11px] tracking-[0.02em]"
+                    [attr.x]="label.x - 14"
+                    y="270"
+                  >
                     {{ label.label }}
                   </text>
                 }
@@ -981,31 +1008,37 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
             </div>
           </section>
 
-          <aside class="panel px-5 py-5">
+          <aside dashboardPanel class="px-5 py-5">
             <div>
-              <p class="eyebrow">Territory Brief</p>
-              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground/96">
+              <p dashboardEyebrow>Territory Brief</p>
+              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground">
                 {{ current.regionLabel }}
               </h2>
-              <p class="mt-3 text-sm leading-6 text-foreground/74">
+              <p
+                class="mt-3 text-sm leading-6 text-[color-mix(in_srgb,var(--mat-sys-on-background)_74%,transparent)]"
+              >
                 Focus on the operating levers that are moving fastest inside the selected territory.
               </p>
             </div>
 
-            <ul class="data-list mt-5 list-none p-0">
+            <ul dashboardDataList class="mt-5">
               @for (signalCard of current.signals; track signalCard.label) {
-                <li class="data-row">
+                <li dashboardDataRow>
                   <div class="flex items-start justify-between gap-4">
                     <div>
                       <p
-                        class="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-foreground/54"
+                        class="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_54%,transparent)]"
                       >
                         {{ signalCard.label }}
                       </p>
-                      <p class="mt-2 text-sm leading-6 text-foreground/72">{{ signalCard.note }}</p>
+                      <p
+                        class="mt-2 text-sm leading-6 text-[color-mix(in_srgb,var(--mat-sys-on-background)_72%,transparent)]"
+                      >
+                        {{ signalCard.note }}
+                      </p>
                     </div>
                     <p
-                      class="signal-value shrink-0 text-lg font-semibold tracking-[-0.03em]"
+                      class="shrink-0 tabular-nums text-lg font-semibold tracking-[-0.03em]"
                       [style.color]="signalCard.tone"
                     >
                       {{ signalCard.value }}
@@ -1018,26 +1051,30 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
         </div>
 
         <div class="grid gap-5 xl:grid-cols-2">
-          <section class="panel px-5 py-5">
+          <section dashboardPanel class="px-5 py-5">
             <div>
-              <p class="eyebrow">Revenue Composition</p>
-              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground/96">
+              <p dashboardEyebrow>Revenue Composition</p>
+              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground">
                 Channel mix and funnel velocity
               </h2>
             </div>
 
-            <div class="subsection mt-5 border-t-0 pt-0">
+            <div class="mt-5 pt-0">
               <div>
-                <p class="text-sm font-semibold text-foreground/92">Channel mix</p>
-                <p class="mt-1 text-sm text-foreground/68">
+                <p class="text-sm font-semibold text-foreground">Channel mix</p>
+                <p
+                  class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_68%,transparent)]"
+                >
                   Where closed revenue is landing right now.
                 </p>
               </div>
 
-              <div class="mix-bar mt-4">
+              <div
+                class="mt-4 flex gap-[0.35rem] rounded-full bg-[color-mix(in_oklch,var(--mat-sys-background)_95%,var(--sales-blue)_5%)] p-[0.35rem]"
+              >
                 @for (channel of current.channels; track channel.label) {
                   <span
-                    class="mix-segment"
+                    class="block min-h-3 rounded-full bg-(--segment-tone)"
                     [style.width.%]="channel.share"
                     [style.--segment-tone]="channel.tone"
                     [attr.aria-label]="channel.label + ' ' + channel.shareLabel"
@@ -1045,144 +1082,167 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                 }
               </div>
 
-              <ul class="data-list mt-4 list-none p-0">
+              <ul dashboardDataList class="mt-4">
                 @for (channel of current.channels; track channel.label) {
-                  <li class="data-row">
+                  <li dashboardDataRow>
                     <div
                       class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:gap-4"
                     >
                       <div>
-                        <p class="font-medium text-foreground/94">{{ channel.label }}</p>
-                        <p class="mt-1 text-sm text-foreground/66">{{ channel.amount }}</p>
+                        <p class="font-medium text-foreground">{{ channel.label }}</p>
+                        <p
+                          class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)]"
+                        >
+                          {{ channel.amount }}
+                        </p>
                       </div>
-                      <p class="row-value text-sm font-semibold text-foreground/92">
+                      <p class="tabular-nums text-sm font-semibold text-foreground">
                         {{ channel.shareLabel }}
                       </p>
-                      <p class="text-sm text-foreground/64">{{ channel.momentum }}</p>
+                      <p
+                        class="text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_64%,transparent)]"
+                      >
+                        {{ channel.momentum }}
+                      </p>
                     </div>
                   </li>
                 }
               </ul>
             </div>
 
-            <div class="subsection">
+            <div class="mt-6 border-t border-border pt-6">
               <div>
-                <p class="text-sm font-semibold text-foreground/92">Funnel velocity</p>
-                <p class="mt-1 text-sm text-foreground/68">
+                <p class="text-sm font-semibold text-foreground">Funnel velocity</p>
+                <p
+                  class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_68%,transparent)]"
+                >
                   Compression and momentum by late-stage pipeline band.
                 </p>
               </div>
 
-              <ul class="data-list mt-4 list-none p-0">
+              <ul dashboardDataList class="mt-4">
                 @for (stage of current.funnel; track stage.label) {
-                  <li class="data-row">
+                  <li dashboardDataRow>
                     <div
                       class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:gap-4"
                     >
                       <div>
-                        <p class="font-medium text-foreground/94">{{ stage.label }}</p>
-                        <p class="mt-1 text-sm text-foreground/66">{{ stage.deals }} deals</p>
+                        <p class="font-medium text-foreground">{{ stage.label }}</p>
+                        <p
+                          class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)]"
+                        >
+                          {{ stage.deals }} deals
+                        </p>
                       </div>
-                      <p class="row-value text-sm font-semibold text-foreground/92">
+                      <p class="tabular-nums text-sm font-semibold text-foreground">
                         {{ stage.value }}
                       </p>
-                      <p class="text-sm text-foreground/64">{{ stage.velocity }}</p>
+                      <p
+                        class="text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_64%,transparent)]"
+                      >
+                        {{ stage.velocity }}
+                      </p>
                     </div>
-                    <div class="progress-track mt-3">
-                      <span
-                        class="progress-fill"
-                        [style.width.%]="stage.progress"
-                        [style.--fill-tone]="stage.tone"
-                      ></span>
-                    </div>
+                    <app-dashboard-progress [value]="stage.progress" [tone]="stage.tone" />
                   </li>
                 }
               </ul>
             </div>
           </section>
 
-          <section class="panel px-5 py-5">
+          <section dashboardPanel class="px-5 py-5">
             <div>
-              <p class="eyebrow">Execution Coverage</p>
-              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground/96">
+              <p dashboardEyebrow>Execution Coverage</p>
+              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground">
                 Team attainment and active deals
               </h2>
             </div>
 
-            <div class="subsection mt-5 border-t-0 pt-0">
+            <div class="mt-5 pt-0">
               <div>
-                <p class="text-sm font-semibold text-foreground/92">Quota scorecard</p>
-                <p class="mt-1 text-sm text-foreground/68">
+                <p class="text-sm font-semibold text-foreground">Quota scorecard</p>
+                <p
+                  class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_68%,transparent)]"
+                >
                   Contribution by team and attainment against target.
                 </p>
               </div>
 
-              <ul class="data-list mt-4 list-none p-0">
+              <ul dashboardDataList class="mt-4">
                 @for (rep of current.board; track rep.label) {
-                  <li class="data-row">
+                  <li dashboardDataRow>
                     <div
                       class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:gap-4"
                     >
                       <div>
-                        <p class="font-medium text-foreground/94">{{ rep.label }}</p>
-                        <p class="mt-1 text-sm text-foreground/66">{{ rep.revenue }}</p>
+                        <p class="font-medium text-foreground">{{ rep.label }}</p>
+                        <p
+                          class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)]"
+                        >
+                          {{ rep.revenue }}
+                        </p>
                       </div>
-                      <p class="row-value text-sm font-semibold text-foreground/92">
+                      <p class="tabular-nums text-sm font-semibold text-foreground">
                         {{ rep.attainmentLabel }}
                       </p>
-                      <p class="text-sm text-foreground/64">{{ rep.delta }}</p>
+                      <p
+                        class="text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_64%,transparent)]"
+                      >
+                        {{ rep.delta }}
+                      </p>
                     </div>
-                    <div class="progress-track mt-3">
-                      <span
-                        class="progress-fill"
-                        [style.width.%]="rep.attainment > 100 ? 100 : rep.attainment"
-                        [style.--fill-tone]="rep.tone"
-                      ></span>
-                    </div>
+                    <app-dashboard-progress
+                      [value]="rep.attainment > 100 ? 100 : rep.attainment"
+                      [tone]="rep.tone"
+                    />
                   </li>
                 }
               </ul>
             </div>
 
-            <div class="subsection">
+            <div class="mt-6 border-t border-border pt-6">
               <div>
-                <p class="text-sm font-semibold text-foreground/92">Active deals</p>
-                <p class="mt-1 text-sm text-foreground/68">
+                <p class="text-sm font-semibold text-foreground">Active deals</p>
+                <p
+                  class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_68%,transparent)]"
+                >
                   Large opportunities that still need executive attention.
                 </p>
               </div>
 
-              <ul class="data-list mt-4 list-none p-0">
+              <ul dashboardDataList class="mt-4">
                 @for (deal of current.deals; track deal.account) {
-                  <li class="data-row">
+                  <li dashboardDataRow>
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div class="min-w-0">
                         <div class="flex flex-wrap items-center gap-2">
-                          <h3 class="truncate text-base font-semibold text-foreground/96">
+                          <h3 class="truncate text-base font-semibold text-foreground">
                             {{ deal.account }}
                           </h3>
-                          <span class="stage-chip">{{ deal.stage }}</span>
+                          <span
+                            class="inline-flex items-center rounded-(--sales-badge-radius) border border-(--appearance-border) px-[0.55rem] py-[0.28rem] text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_68%,transparent)]"
+                          >
+                            {{ deal.stage }}
+                          </span>
                         </div>
-                        <p class="mt-2 text-sm text-foreground/66">
+                        <p
+                          class="mt-2 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)]"
+                        >
                           Owner {{ deal.owner }} · Expected {{ deal.window }}
                         </p>
                       </div>
                       <div class="shrink-0 text-left sm:text-right">
-                        <p class="deal-value text-base font-semibold text-foreground/94">
+                        <p class="tabular-nums text-base font-semibold text-foreground">
                           {{ deal.value }}
                         </p>
-                        <p class="mt-1 text-sm text-foreground/64">
+                        <p
+                          class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_64%,transparent)]"
+                        >
                           {{ deal.confidence }}% confidence
                         </p>
                       </div>
                     </div>
-                    <div class="progress-track mt-3">
-                      <span
-                        class="progress-fill"
-                        [style.width.%]="deal.confidence"
-                        [style.--fill-tone]="'var(--sales-blue)'"
-                      ></span>
-                    </div>
+                    <app-dashboard-progress [value]="deal.confidence" tone="var(--sales-blue)" />
                   </li>
                 }
               </ul>
@@ -1205,11 +1265,11 @@ export class DemoDashboardPageComponent {
 
   protected readonly trendChart = computed(() => createTrendChartModel(this.snapshot().trend));
 
-  protected selectTimeframe(timeframe: TimeframeKey): void {
-    this.selectedTimeframe.set(timeframe);
+  protected selectTimeframe(timeframe: string): void {
+    this.selectedTimeframe.set(timeframe as TimeframeKey);
   }
 
-  protected selectRegion(region: RegionKey): void {
-    this.selectedRegion.set(region);
+  protected selectRegion(region: string): void {
+    this.selectedRegion.set(region as RegionKey);
   }
 }
