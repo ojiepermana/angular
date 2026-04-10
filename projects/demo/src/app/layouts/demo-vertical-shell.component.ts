@@ -53,15 +53,15 @@ import { LayoutVerticalComponent } from '@ojiepermana/angular/theme/layout';
               <p class="text-sm font-medium">Shell Controls</p>
             </div>
             <div class="flex items-center gap-1">
-              <ngt-appearance-switcher />
-              <ngt-layout-container-switcher />
-              <ngt-scheme-switcher />
+              <appearance-switcher />
+              <layout-container-switcher />
+              <scheme-switcher />
             </div>
           </div>
 
           <div class="space-y-2">
             <p class="text-xs uppercase tracking-[0.24em] text-foreground/50">Accent Color</p>
-            <ngt-color-picker />
+            <color-picker />
           </div>
         </section>
       </nav>

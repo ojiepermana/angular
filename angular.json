@@ -52,6 +52,7 @@
               }
             ],
             "styles": [
+              "projects/library/theme/styles/index.css",
               "projects/demo/src/styles.css"
             ]
           },

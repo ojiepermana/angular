@@ -7,10 +7,20 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 To start a local development server, run:
 
 ```bash
-ng serve
+npm start
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+The default development target is the `demo` application. It consumes the library directly from source through the root TypeScript path aliases in `tsconfig.json`, for example:
+
+- `@ojiepermana/angular/theme/component` -> `projects/library/theme/component/public-api.ts`
+- `@ojiepermana/angular/theme/layout` -> `projects/library/theme/layout/public-api.ts`
+- `@ojiepermana/angular/theme/service` -> `projects/library/theme/service/public-api.ts`
+
+The demo loads the shared theme stylesheet directly from the build configuration in `angular.json`.
+
+This means day-to-day demo development does not require running `ng build library` first. Changes under `projects/library/**` are compiled as part of the demo build and picked up by `ng serve demo`.
 
 ## Code scaffolding
 
@@ -31,10 +41,23 @@ ng generate --help
 To build the project run:
 
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+This builds the `demo` application and stores the artifacts in `dist/demo`.
+
+To package the library separately, run:
+
+```bash
+npm run build:library
+```
+
+To watch the demo or library independently during development, use:
+
+```bash
+npm run watch
+npm run watch:library
+```
 
 ## Running unit tests
 

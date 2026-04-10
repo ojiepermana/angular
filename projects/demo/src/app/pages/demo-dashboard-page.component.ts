@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="min-h-full px-5 py-6 sm:px-8 sm:py-8">
-      <div class="mx-auto flex w-full max-w-6xl flex-col gap-6">
+      <div class="mx-auto flex w-full  flex-col gap-6">
         <header class="grid gap-4 rounded-4xl border border-border p-6 lg:grid-cols-[1.4fr,0.8fr]">
           <div class="space-y-4">
             <p class="text-[0.72rem] uppercase tracking-[0.32em] text-foreground/50">
@@ -172,7 +172,7 @@ export class DemoDashboardPageComponent {
     {
       label: 'Projection slots',
       value: 'Ready',
-      detail: 'navigation, headerBrand, headerNavigation, header, headerActions',
+      detail: 'navigation, headerBrand, headerNavigation, headerActions',
     },
     {
       label: 'Theme controls',

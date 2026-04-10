@@ -3,26 +3,38 @@ import { MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { LucideExpand, LucideShrink } from '@lucide/angular';
 import { ThemeService } from '@ojiepermana/angular/theme/service';
+import { ThemeLucideConfigDirective } from './theme-icon.directive';
 
 @Component({
-  selector: 'ngt-layout-container-switcher',
+  selector: 'layout-container-switcher',
   imports: [MatIconButton, MatTooltip, LucideExpand, LucideShrink],
+  hostDirectives: [ThemeLucideConfigDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <button mat-icon-button [attr.aria-label]="label()" [matTooltip]="label()" (click)="toggle()">
+    <button
+      class="ngt-icon-button"
+      type="button"
+      mat-icon-button
+      aria-label="Boxed layout container"
+      [attr.aria-pressed]="theme.layoutContainer() === 'boxed'"
+      [matTooltip]="label()"
+      (click)="toggle()"
+    >
       @if (theme.layoutContainer() === 'full') {
-        <svg lucideExpand [absoluteStrokeWidth]="true"></svg>
+        <svg lucideExpand aria-hidden="true"></svg>
       } @else {
-        <svg lucideShrink [absoluteStrokeWidth]="true"></svg>
+        <svg lucideShrink aria-hidden="true"></svg>
       }
     </button>
   `,
 })
 export class LayoutContainerSwitcherComponent {
-  protected theme = inject(ThemeService);
+  protected readonly theme = inject(ThemeService);
 
-  label = computed(() =>
-    this.theme.layoutContainer() === 'full' ? 'Switch to Boxed' : 'Switch to Full',
+  protected readonly label = computed(() =>
+    this.theme.layoutContainer() === 'boxed'
+      ? 'Boxed layout container enabled'
+      : 'Boxed layout container disabled',
   );
 
   toggle(): void {

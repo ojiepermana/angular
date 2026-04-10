@@ -31,11 +31,16 @@ import { LayoutHorizontalComponent } from '@ojiepermana/angular/theme/layout';
           <p class="truncate text-[0.7rem] uppercase tracking-[0.28em] text-foreground/50">
             Legacy Layout
           </p>
-          <h1 class="truncate text-sm font-semibold">Horizontal Showcase</h1>
+          <h1 class="truncate text-sm font-semibold">Showcase</h1>
         </div>
       </div>
 
-      <nav headerNavigation class="flex items-center gap-2 py-2">
+      <div
+        headerNavigation
+        class="flex items-center gap-2 py-2"
+        role="navigation"
+        aria-label="Primary"
+      >
         @for (link of links; track link.path) {
           <a
             [routerLink]="link.path"
@@ -46,16 +51,12 @@ import { LayoutHorizontalComponent } from '@ojiepermana/angular/theme/layout';
             {{ link.label }}
           </a>
         }
-      </nav>
-
-      <div header class="text-sm text-foreground/60">
-        Reusable application shell for top-nav flows.
       </div>
 
       <div headerActions class="flex items-center gap-1 sm:gap-2">
-        <ngt-appearance-switcher />
-        <ngt-layout-container-switcher />
-        <ngt-scheme-switcher />
+        <appearance-switcher />
+        <layout-container-switcher />
+        <scheme-switcher />
       </div>
     </horizontal>
   `,

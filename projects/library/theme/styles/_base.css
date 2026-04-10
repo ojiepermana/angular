@@ -20,6 +20,11 @@
   --mat-sys-on-error-container: #410e0b;
 }
 
+horizontal,
+vertical {
+  display: block;
+}
+
 .bg-background {
   background-color: var(--mat-sys-background);
 }
@@ -37,7 +42,7 @@
 }
 
 .text-foreground\/50 {
-  color: color-mix(in srgb, var(--mat-sys-on-background) 50%, transparent);
+  color: color-mix(in srgb, var(--mat-sys-on-background) 60%, transparent);
 }
 
 .text-foreground\/60 {
@@ -58,4 +63,23 @@
 
 .border-border {
   border-color: color-mix(in srgb, var(--mat-sys-outline-variant) 72%, transparent);
+}
+
+.appearance-shell {
+  background-color: var(--appearance-surface);
+  border-color: var(--appearance-border);
+  box-shadow: var(--appearance-shadow);
+  backdrop-filter: var(--appearance-backdrop-filter);
+  -webkit-backdrop-filter: var(--appearance-backdrop-filter);
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--mat-sys-primary);
+  outline-offset: 2px;
+}
+
+.ngt-icon-button.mat-mdc-icon-button {
+  inline-size: 44px;
+  block-size: 44px;
+  padding: 10px;
 }

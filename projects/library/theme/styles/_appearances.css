@@ -1,21 +1,21 @@
 /* Flat and glass appearance variables. */
 :root {
-  --appearance-surface-opacity: 1;
-  --appearance-backdrop-blur: 0;
-  --appearance-border-opacity: 1;
-  --appearance-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --appearance-surface: var(--mat-sys-background);
+  --appearance-border: color-mix(in srgb, var(--mat-sys-outline-variant) 72%, transparent);
+  --appearance-shadow: 0 10px 24px -18px rgb(15 23 42 / 0.28);
+  --appearance-backdrop-filter: none;
 }
 
 [theme-appearances='flat'] {
-  --appearance-surface-opacity: 1;
-  --appearance-backdrop-blur: 0;
-  --appearance-border-opacity: 1;
-  --appearance-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --appearance-surface: var(--mat-sys-background);
+  --appearance-border: color-mix(in srgb, var(--mat-sys-outline-variant) 72%, transparent);
+  --appearance-shadow: 0 10px 24px -18px rgb(15 23 42 / 0.28);
+  --appearance-backdrop-filter: none;
 }
 
 [theme-appearances='glass'] {
-  --appearance-surface-opacity: 0.7;
-  --appearance-backdrop-blur: 12px;
-  --appearance-border-opacity: 0.2;
-  --appearance-shadow: 0 8px 32px 0 rgb(0 0 0 / 0.1);
+  --appearance-surface: color-mix(in srgb, var(--mat-sys-background) 92%, transparent);
+  --appearance-border: color-mix(in srgb, var(--mat-sys-outline) 18%, transparent);
+  --appearance-shadow: 0 14px 30px -24px rgb(15 23 42 / 0.26);
+  --appearance-backdrop-filter: blur(6px);
 }

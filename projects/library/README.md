@@ -28,7 +28,7 @@ import {
 ```html
 <horizontal>
   <div headerBrand>...</div>
-  <nav headerNavigation>...</nav>
+  <div headerNavigation role="navigation" aria-label="Primary">...</div>
   <div headerActions>...</div>
 </horizontal>
 
