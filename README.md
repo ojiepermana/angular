@@ -4,30 +4,30 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Development server
 
-To start a local development server, run:
+This workspace is now library-only, so there is no demo application or local dev server target.
+
+To keep the library rebuilding in development mode, run:
 
 ```bash
 npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+This watches the `library` build with the development configuration and recompiles when source files change.
 
-The default development target is the `demo` application. It consumes the library directly from source through the root TypeScript path aliases in `tsconfig.json`, for example:
+The root TypeScript path aliases in `tsconfig.json` still point directly at the library source entry points, for example:
 
 - `@ojiepermana/angular/theme/component` -> `projects/library/theme/component/public-api.ts`
 - `@ojiepermana/angular/theme/layout` -> `projects/library/theme/layout/public-api.ts`
 - `@ojiepermana/angular/theme/service` -> `projects/library/theme/service/public-api.ts`
 
-The demo loads the shared theme stylesheet directly from the build configuration in `angular.json`.
-
-This means day-to-day demo development does not require running `ng build library` first. Changes under `projects/library/**` are compiled as part of the demo build and picked up by `ng serve demo`.
+If you add a consuming application later, register `projects/library/theme/styles/index.css` from that application's build config.
 
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
 ```bash
-ng generate component component-name
+ng generate component component-name --project library
 ```
 
 For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
@@ -44,7 +44,7 @@ To build the project run:
 npm run build
 ```
 
-This builds the `demo` application and stores the artifacts in `dist/demo`.
+This builds the `library` package and stores the artifacts in `dist/library`.
 
 To package the library separately, run:
 
@@ -52,7 +52,7 @@ To package the library separately, run:
 npm run build:library
 ```
 
-To watch the demo or library independently during development, use:
+To watch the library explicitly during development, use:
 
 ```bash
 npm run watch
@@ -64,18 +64,12 @@ npm run watch:library
 To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
 
 ```bash
-ng test
+npm test
 ```
 
 ## Running end-to-end tests
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+There is no end-to-end target configured because this workspace no longer includes a demo application.
 
 ## Additional Resources
 

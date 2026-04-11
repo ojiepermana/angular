@@ -5,7 +5,6 @@
 @import './presets/appearances/index.css';
 @import './layout/index.css';
 @import './utilities/index.css';
-@import './_demo-dashboard.css';
 @import './adapters/material-ui/index.css';
 
 /* Legacy files under styles/_*.css and styles/overrides/ are intentionally not imported. */

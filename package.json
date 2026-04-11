@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve demo",
-    "build": "ng build demo",
+    "start": "npm run watch:library",
+    "build": "npm run build:library",
     "build:library": "ng build library",
     "format": "prettier --write .",
-    "watch": "ng build demo --watch --configuration development",
+    "watch": "npm run watch:library",
     "watch:library": "ng build library --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test library"
   },
   "private": true,
   "packageManager": "npm@10.9.4",
