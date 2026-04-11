@@ -6,7 +6,5 @@ export type {
   ThemeColor,
   ThemeColorOption,
   ThemeAppearance,
-  LayoutMode,
-  LayoutContainer,
   NgThemeConfig,
 } from './src/theme.types';

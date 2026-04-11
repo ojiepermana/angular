@@ -1,8 +1,8 @@
 import * as libraryRoot from '@ojiepermana/angular';
+import * as layoutEntry from '@ojiepermana/angular/layout';
 import * as themeRoot from '@ojiepermana/angular/theme';
 import * as themeComponentEntry from '@ojiepermana/angular/theme/component';
 import * as themeDirectiveEntry from '@ojiepermana/angular/theme/directive';
-import * as themeLayoutEntry from '@ojiepermana/angular/theme/layout';
 import * as themeServiceEntry from '@ojiepermana/angular/theme/service';
 
 describe('library entrypoints', () => {
@@ -26,16 +26,20 @@ describe('library entrypoints', () => {
     expect(themeComponentEntry).toMatchObject({
       AppearanceSwitcherComponent: expect.any(Function),
       ColorPickerComponent: expect.any(Function),
-      LayoutContainerSwitcherComponent: expect.any(Function),
-      LayoutModeSwitcherComponent: expect.any(Function),
       SchemeSwitcherComponent: expect.any(Function),
     });
   });
 
-  it('exposes layout shells from the layout entrypoint', () => {
-    expect(themeLayoutEntry).toMatchObject({
+  it('exposes layout runtime and controls from the layout entrypoint', () => {
+    expect(layoutEntry).toMatchObject({
+      LayoutContainerSwitcherComponent: expect.any(Function),
+      LayoutHostDirective: expect.any(Function),
       LayoutHorizontalComponent: expect.any(Function),
+      LayoutModeSwitcherComponent: expect.any(Function),
+      LayoutService: expect.any(Function),
       LayoutVerticalComponent: expect.any(Function),
+      NG_LAYOUT_CONFIG: expect.any(Object),
+      provideNgLayout: expect.any(Function),
     });
   });
 

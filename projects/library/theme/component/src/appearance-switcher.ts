@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
+import { libraryLucideConfigProvider } from '@ojiepermana/angular/internal';
 import { LucideBlend, LucideLayoutDashboard } from '@lucide/angular';
 import { ThemeService } from '@ojiepermana/angular/theme/service';
-import { ThemeLucideConfigDirective } from './theme-icon.directive';
 
 @Component({
   selector: 'appearance-switcher',
   imports: [MatIconButton, MatTooltip, LucideBlend, LucideLayoutDashboard],
-  hostDirectives: [ThemeLucideConfigDirective],
+  providers: [libraryLucideConfigProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <button

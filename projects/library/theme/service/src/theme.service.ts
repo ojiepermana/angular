@@ -9,14 +9,7 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { NG_THEME_CONFIG } from './theme.token';
-import {
-  LayoutContainer,
-  LayoutMode,
-  ThemeAppearance,
-  ThemeColor,
-  ThemeColorOption,
-  ThemeScheme,
-} from './theme.types';
+import { ThemeAppearance, ThemeColor, ThemeColorOption, ThemeScheme } from './theme.types';
 
 const THEME_COLOR_OPTIONS: readonly ThemeColorOption[] = [
   { value: 'brand', label: 'Brand' },
@@ -32,8 +25,6 @@ const STORAGE_KEYS = {
   scheme: 'theme-scheme',
   color: 'theme-color',
   appearance: 'theme-appearance',
-  'layout-mode': 'layout-mode',
-  'layout-container': 'layout-container',
 } as const;
 
 type ThemeStorageAxis = keyof typeof STORAGE_KEYS;
@@ -66,12 +57,6 @@ export class ThemeService {
   );
   readonly appearance = signal<ThemeAppearance>(
     this.readStored('appearance', this.config.defaultAppearance, this.isThemeAppearance),
-  );
-  readonly layoutMode = signal<LayoutMode>(
-    this.readStored('layout-mode', this.config.defaultLayoutMode, this.isLayoutMode),
-  );
-  readonly layoutContainer = signal<LayoutContainer>(
-    this.readStored('layout-container', this.config.defaultLayoutContainer, this.isLayoutContainer),
   );
   readonly colorOptions = computed<readonly ThemeColorOption[]>(() => {
     const allowedColors = this.config.colors?.filter(this.isThemeColor) ?? [];
@@ -128,16 +113,6 @@ export class ThemeService {
     this.appearance.set(value);
   }
 
-  setLayoutMode(value: LayoutMode): void {
-    this.persist('layout-mode', value);
-    this.layoutMode.set(value);
-  }
-
-  setLayoutContainer(value: LayoutContainer): void {
-    this.persist('layout-container', value);
-    this.layoutContainer.set(value);
-  }
-
   toggleScheme(): void {
     const next: ThemeScheme =
       this.scheme() === 'light' ? 'dark' : this.scheme() === 'dark' ? 'system' : 'light';
@@ -151,8 +126,6 @@ export class ThemeService {
     element.dataset['themeScheme'] = this.scheme();
     element.dataset['themeColor'] = this.color();
     element.dataset['themeAppearance'] = this.appearance();
-    element.dataset['layoutMode'] = this.layoutMode();
-    element.dataset['layoutContainer'] = this.layoutContainer();
     element.style.colorScheme = this.resolvedScheme();
   }
 
@@ -207,13 +180,5 @@ export class ThemeService {
 
   private isThemeAppearance(value: string): value is ThemeAppearance {
     return value === 'flat' || value === 'glass';
-  }
-
-  private isLayoutMode(value: string): value is LayoutMode {
-    return value === 'vertical' || value === 'horizontal' || value === 'empty';
-  }
-
-  private isLayoutContainer(value: string): value is LayoutContainer {
-    return value === 'full' || value === 'boxed';
   }
 }

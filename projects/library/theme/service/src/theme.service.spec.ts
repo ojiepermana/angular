@@ -26,8 +26,6 @@ function resetRootContract(): void {
   root.removeAttribute('data-theme-scheme');
   root.removeAttribute('data-theme-color');
   root.removeAttribute('data-theme-appearance');
-  root.removeAttribute('data-layout-mode');
-  root.removeAttribute('data-layout-container');
   root.style.colorScheme = '';
 }
 
@@ -48,8 +46,6 @@ describe('ThemeService', () => {
           defaultScheme: 'system',
           defaultColor: 'brand',
           defaultAppearance: 'flat',
-          defaultLayoutMode: 'vertical',
-          defaultLayoutContainer: 'full',
           colors: ['brand', 'green'],
         }),
       ],
@@ -68,8 +64,6 @@ describe('ThemeService', () => {
     service.setScheme('dark');
     service.setColor('green');
     service.setAppearance('glass');
-    service.setLayoutMode('horizontal');
-    service.setLayoutContainer('boxed');
     TestBed.flushEffects();
 
     const root = document.documentElement;
@@ -78,8 +72,6 @@ describe('ThemeService', () => {
     expect(root.dataset['themeScheme']).toBe('dark');
     expect(root.dataset['themeColor']).toBe('green');
     expect(root.dataset['themeAppearance']).toBe('glass');
-    expect(root.dataset['layoutMode']).toBe('horizontal');
-    expect(root.dataset['layoutContainer']).toBe('boxed');
     expect(root.style.colorScheme).toBe('dark');
   });
 
@@ -103,41 +95,29 @@ describe('ThemeService', () => {
     service.setScheme('dark');
     service.setColor('green');
     service.setAppearance('glass');
-    service.setLayoutMode('horizontal');
-    service.setLayoutContainer('boxed');
 
     expect(localStorage.getItem('theme-scheme')).toBe('dark');
     expect(localStorage.getItem('theme-color')).toBe('green');
     expect(localStorage.getItem('theme-appearance')).toBe('glass');
-    expect(localStorage.getItem('layout-mode')).toBe('horizontal');
-    expect(localStorage.getItem('layout-container')).toBe('boxed');
   });
 
   it('migrates legacy versioned localStorage keys to the flat keys', () => {
     localStorage.setItem('ng-theme:v2:scheme', 'dark');
     localStorage.setItem('ng-theme:v2:color', 'green');
     localStorage.setItem('ng-theme:v2:appearance', 'glass');
-    localStorage.setItem('ng-theme:v2:layout-mode', 'horizontal');
-    localStorage.setItem('ng-theme:v2:layout-container', 'boxed');
 
     const service = TestBed.inject(ThemeService);
 
     expect(service.scheme()).toBe('dark');
     expect(service.color()).toBe('green');
     expect(service.appearance()).toBe('glass');
-    expect(service.layoutMode()).toBe('horizontal');
-    expect(service.layoutContainer()).toBe('boxed');
 
     expect(localStorage.getItem('theme-scheme')).toBe('dark');
     expect(localStorage.getItem('theme-color')).toBe('green');
     expect(localStorage.getItem('theme-appearance')).toBe('glass');
-    expect(localStorage.getItem('layout-mode')).toBe('horizontal');
-    expect(localStorage.getItem('layout-container')).toBe('boxed');
 
     expect(localStorage.getItem('ng-theme:v2:scheme')).toBeNull();
     expect(localStorage.getItem('ng-theme:v2:color')).toBeNull();
     expect(localStorage.getItem('ng-theme:v2:appearance')).toBeNull();
-    expect(localStorage.getItem('ng-theme:v2:layout-mode')).toBeNull();
-    expect(localStorage.getItem('ng-theme:v2:layout-container')).toBeNull();
   });
 });

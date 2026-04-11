@@ -6,8 +6,6 @@ const defaultConfig: NgThemeConfig = {
   defaultScheme: 'system',
   defaultColor: 'brand',
   defaultAppearance: 'flat',
-  defaultLayoutMode: 'vertical',
-  defaultLayoutContainer: 'full',
 };
 
 export function provideNgTheme(config: Partial<NgThemeConfig> = {}): EnvironmentProviders {

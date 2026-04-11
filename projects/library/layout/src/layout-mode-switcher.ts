@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatTooltip } from '@angular/material/tooltip';
+import { libraryLucideConfigProvider } from '@ojiepermana/angular/internal';
 import { LucideAppWindow, LucidePanelLeft, LucidePanelTop } from '@lucide/angular';
-import { ThemeService } from '@ojiepermana/angular/theme/service';
-import { ThemeLucideConfigDirective } from './theme-icon.directive';
+import { LayoutService } from './layout.service';
 
 @Component({
   selector: 'layout-mode-switcher',
@@ -18,7 +18,7 @@ import { ThemeLucideConfigDirective } from './theme-icon.directive';
     LucidePanelTop,
     LucideAppWindow,
   ],
-  hostDirectives: [ThemeLucideConfigDirective],
+  providers: [libraryLucideConfigProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <button
@@ -29,7 +29,7 @@ import { ThemeLucideConfigDirective } from './theme-icon.directive';
       [matTooltip]="'Layout mode: ' + currentOption().label"
       [matMenuTriggerFor]="menu"
     >
-      @switch (theme.layoutMode()) {
+      @switch (layout.mode()) {
         @case ('vertical') {
           <svg lucidePanelLeft aria-hidden="true"></svg>
         }
@@ -41,16 +41,17 @@ import { ThemeLucideConfigDirective } from './theme-icon.directive';
         }
       }
     </button>
+
     <mat-menu #menu="matMenu">
-      @for (opt of options; track opt.value) {
+      @for (option of options; track option.value) {
         <button
           type="button"
           mat-menu-item
           role="menuitemradio"
-          [attr.aria-checked]="theme.layoutMode() === opt.value"
-          (click)="theme.setLayoutMode(opt.value)"
+          [attr.aria-checked]="layout.mode() === option.value"
+          (click)="layout.setMode(option.value)"
         >
-          @switch (opt.value) {
+          @switch (option.value) {
             @case ('vertical') {
               <svg lucidePanelLeft aria-hidden="true"></svg>
             }
@@ -61,14 +62,14 @@ import { ThemeLucideConfigDirective } from './theme-icon.directive';
               <svg lucideAppWindow aria-hidden="true"></svg>
             }
           }
-          <span>{{ opt.label }}</span>
+          <span>{{ option.label }}</span>
         </button>
       }
     </mat-menu>
   `,
 })
 export class LayoutModeSwitcherComponent {
-  protected readonly theme = inject(ThemeService);
+  protected readonly layout = inject(LayoutService);
 
   protected readonly options = [
     { value: 'vertical' as const, label: 'Vertical Sidebar' },
@@ -77,7 +78,7 @@ export class LayoutModeSwitcherComponent {
 
   protected readonly currentOption = computed(
     () =>
-      this.options.find((option) => option.value === this.theme.layoutMode()) ?? {
+      this.options.find((option) => option.value === this.layout.mode()) ?? {
         value: 'empty' as const,
         label: 'Content Only',
       },

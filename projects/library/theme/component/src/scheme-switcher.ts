@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { MatIconButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
+import { libraryLucideConfigProvider } from '@ojiepermana/angular/internal';
 import { LucideMonitorCog, LucideMoonStar, LucideSun } from '@lucide/angular';
 import { ThemeService } from '@ojiepermana/angular/theme/service';
-import { ThemeLucideConfigDirective } from './theme-icon.directive';
 
 @Component({
   selector: 'scheme-switcher',
@@ -18,7 +18,7 @@ import { ThemeLucideConfigDirective } from './theme-icon.directive';
     LucideMoonStar,
     LucideMonitorCog,
   ],
-  hostDirectives: [ThemeLucideConfigDirective],
+  providers: [libraryLucideConfigProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <button
