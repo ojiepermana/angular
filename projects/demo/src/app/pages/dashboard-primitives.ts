@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, Directive, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Directive,
+  computed,
+  input,
+  output,
+} from '@angular/core';
+
+type DashboardSchemeRole = 'primary' | 'secondary' | 'tertiary';
 
 export interface DashboardToggleOption {
   readonly id: string;
@@ -18,6 +27,15 @@ const DASHBOARD_SURFACE_CLASSES =
   'appearance-shell rounded-(--sales-surface-radius) border border-(--appearance-border) bg-[color-mix(in_oklch,var(--appearance-surface)_98%,var(--sales-blue)_2%)] shadow-none';
 const DASHBOARD_EYEBROW_CLASSES =
   'text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_55%,transparent)]';
+const DASHBOARD_HERO_TITLE_CLASSES =
+  'text-[color-mix(in_oklch,var(--mat-sys-primary)_84%,var(--mat-sys-on-background))]';
+const DASHBOARD_SECTION_TITLE_ROLE_CLASSES: Readonly<Record<DashboardSchemeRole, string>> = {
+  primary: 'text-[color-mix(in_oklch,var(--mat-sys-primary)_72%,var(--mat-sys-on-background))]',
+  secondary: 'text-[color-mix(in_oklch,var(--mat-sys-secondary)_78%,var(--mat-sys-on-background))]',
+  tertiary: 'text-[color-mix(in_oklch,var(--mat-sys-tertiary)_82%,var(--mat-sys-on-background))]',
+};
+const DASHBOARD_LARGE_VALUE_CLASSES =
+  'text-[color-mix(in_oklch,var(--sales-blue)_78%,var(--mat-sys-on-background))]';
 const DASHBOARD_DATA_LIST_CLASSES = 'list-none p-0 [&>li+li]:border-t [&>li+li]:border-border';
 const DASHBOARD_DATA_ROW_CLASSES = 'py-[0.95rem]';
 const DASHBOARD_TOGGLE_BUTTON_CLASSES =
@@ -56,6 +74,36 @@ export class DashboardSurfaceDirective {}
   },
 })
 export class DashboardEyebrowDirective {}
+
+@Directive({
+  selector: '[dashboardHeroTitle]',
+  host: {
+    class: DASHBOARD_HERO_TITLE_CLASSES,
+  },
+})
+export class DashboardHeroTitleDirective {}
+
+@Directive({
+  selector: '[dashboardSectionTitle]',
+  host: {
+    '[class]': 'titleClass()',
+  },
+})
+export class DashboardSectionTitleDirective {
+  readonly dashboardSectionTitle = input<DashboardSchemeRole>('primary');
+
+  protected readonly titleClass = computed(
+    () => DASHBOARD_SECTION_TITLE_ROLE_CLASSES[this.dashboardSectionTitle()],
+  );
+}
+
+@Directive({
+  selector: '[dashboardLargeValue]',
+  host: {
+    class: DASHBOARD_LARGE_VALUE_CLASSES,
+  },
+})
+export class DashboardLargeValueDirective {}
 
 @Directive({
   selector: 'ul[dashboardDataList]',
@@ -121,7 +169,7 @@ export class DashboardToggleGroupComponent {
     >
       {{ metric().label }}
     </p>
-    <p class="mt-3 tabular-nums text-[1.9rem] font-semibold tracking-[-0.04em] text-foreground">
+    <p dashboardLargeValue class="mt-3 tabular-nums text-[1.9rem] font-semibold tracking-[-0.04em]">
       {{ metric().value }}
     </p>
     <div class="mt-4 flex items-end justify-between gap-3">
@@ -138,6 +186,7 @@ export class DashboardToggleGroupComponent {
       </p>
     </div>
   `,
+  imports: [DashboardLargeValueDirective],
 })
 export class DashboardMetricCardComponent {
   readonly metric = input.required<DashboardMetricCardData>();

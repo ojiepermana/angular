@@ -4,9 +4,12 @@ import {
   DashboardDataListDirective,
   DashboardDataRowDirective,
   DashboardEyebrowDirective,
+  DashboardHeroTitleDirective,
+  DashboardLargeValueDirective,
   DashboardMetricCardComponent,
   DashboardPanelDirective,
   DashboardProgressBarComponent,
+  DashboardSectionTitleDirective,
   DashboardSurfaceDirective,
   DashboardToggleGroupComponent,
 } from './dashboard-primitives';
@@ -801,9 +804,12 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
     DashboardDataListDirective,
     DashboardDataRowDirective,
     DashboardEyebrowDirective,
+    DashboardHeroTitleDirective,
+    DashboardLargeValueDirective,
     DashboardMetricCardComponent,
     DashboardPanelDirective,
     DashboardProgressBarComponent,
+    DashboardSectionTitleDirective,
     DashboardSurfaceDirective,
     DashboardToggleGroupComponent,
   ],
@@ -815,7 +821,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
     @let chart = trendChart();
 
     <section
-      class="min-h-full px-5 py-6 sm:px-8 sm:py-8 [--sales-blue:var(--mat-sys-primary)] [--sales-indigo:color-mix(in_srgb,var(--mat-sys-secondary)_82%,var(--mat-sys-primary))] [--sales-cyan:color-mix(in_srgb,var(--mat-sys-tertiary)_72%,var(--mat-sys-background))] [--sales-emerald:var(--mat-sys-tertiary)] [--sales-amber:color-mix(in_oklch,var(--mat-sys-secondary)_72%,var(--mat-sys-primary))] [--sales-panel-radius:1.35rem] [--sales-surface-radius:1rem] [--sales-control-radius:1rem] [--sales-badge-radius:0.85rem] [--sales-pill-radius:999px] [background:radial-gradient(circle_at_top_center,color-mix(in_oklch,var(--mat-sys-primary)_10%,transparent)_0%,transparent_40%),linear-gradient(180deg,color-mix(in_oklch,var(--mat-sys-background)_98%,var(--mat-sys-secondary)_2%)_0%,transparent_100%)]"
+      class="min-h-full px-5 py-6 sm:px-8 sm:py-8 [--sales-blue:var(--mat-sys-primary)] [--sales-indigo:color-mix(in_srgb,var(--mat-sys-secondary)_82%,var(--mat-sys-primary))] [--sales-cyan:color-mix(in_srgb,var(--mat-sys-tertiary)_72%,var(--mat-sys-background))] [--sales-emerald:var(--mat-sys-tertiary)] [--sales-amber:color-mix(in_oklch,var(--mat-sys-secondary)_72%,var(--mat-sys-primary))] [--sales-panel-radius:max(var(--layout-shell-radius),0.125rem)] [--sales-surface-radius:max(var(--layout-shell-radius),0.125rem)] [--sales-control-radius:max(var(--layout-shell-radius),0.125rem)] [--sales-badge-radius:0.125rem] [--sales-pill-radius:999px] [background:radial-gradient(circle_at_top_center,color-mix(in_oklch,var(--mat-sys-primary)_10%,transparent)_0%,transparent_40%),linear-gradient(180deg,color-mix(in_oklch,var(--mat-sys-background)_98%,var(--mat-sys-secondary)_2%)_0%,transparent_100%)]"
     >
       <div class="mx-auto flex w-full flex-col gap-5">
         <header
@@ -843,7 +849,8 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                 Sales Command Center
               </p>
               <h1
-                class="mt-3 max-w-[16ch] text-[2.1rem] font-semibold leading-[1.03] tracking-[-0.04em] text-foreground sm:text-[2.8rem]"
+                dashboardHeroTitle
+                class="mt-3 max-w-[16ch] text-[2.1rem] font-semibold leading-[1.03] tracking-[-0.04em] sm:text-[2.8rem]"
               >
                 Revenue health without the dashboard noise.
               </h1>
@@ -876,7 +883,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
 
             <section dashboardSurface class="w-full px-4 py-4 lg:max-w-[24rem]">
               <p dashboardEyebrow>This Week</p>
-              <h2 class="mt-2 text-lg font-semibold leading-7 text-foreground">
+              <h2 dashboardSectionTitle="secondary" class="mt-2 text-lg font-semibold leading-7">
                 {{ current.focus }}
               </h2>
               <p
@@ -892,7 +899,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
           <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p dashboardEyebrow>Executive Summary</p>
-              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground">
+              <h2 dashboardSectionTitle="primary" class="mt-2 text-xl font-semibold tracking-tight">
                 Quarter pacing and operating signals
               </h2>
             </div>
@@ -916,7 +923,10 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p dashboardEyebrow>Revenue Cadence</p>
-                <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground">
+                <h2
+                  dashboardSectionTitle="primary"
+                  class="mt-2 text-xl font-semibold tracking-tight"
+                >
                   Closed-won revenue versus target trajectory
                 </h2>
               </div>
@@ -1011,7 +1021,10 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
           <aside dashboardPanel class="px-5 py-5">
             <div>
               <p dashboardEyebrow>Territory Brief</p>
-              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground">
+              <h2
+                dashboardSectionTitle="secondary"
+                class="mt-2 text-xl font-semibold tracking-tight"
+              >
                 {{ current.regionLabel }}
               </h2>
               <p
@@ -1054,7 +1067,10 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
           <section dashboardPanel class="px-5 py-5">
             <div>
               <p dashboardEyebrow>Revenue Composition</p>
-              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground">
+              <h2
+                dashboardSectionTitle="secondary"
+                class="mt-2 text-xl font-semibold tracking-tight"
+              >
                 Channel mix and funnel velocity
               </h2>
             </div>
@@ -1153,7 +1169,10 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
           <section dashboardPanel class="px-5 py-5">
             <div>
               <p dashboardEyebrow>Execution Coverage</p>
-              <h2 class="mt-2 text-xl font-semibold tracking-tight text-foreground">
+              <h2
+                dashboardSectionTitle="tertiary"
+                class="mt-2 text-xl font-semibold tracking-tight"
+              >
                 Team attainment and active deals
               </h2>
             </div>
@@ -1232,7 +1251,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                         </p>
                       </div>
                       <div class="shrink-0 text-left sm:text-right">
-                        <p class="tabular-nums text-base font-semibold text-foreground">
+                        <p dashboardLargeValue class="tabular-nums text-base font-semibold">
                           {{ deal.value }}
                         </p>
                         <p
