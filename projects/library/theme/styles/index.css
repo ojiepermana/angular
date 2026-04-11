@@ -3,8 +3,7 @@
 @import './modes/dark.css';
 @import './presets/colors/index.css';
 @import './presets/appearances/index.css';
+@import './roles/index.css';
 @import './layout/index.css';
 @import './utilities/index.css';
 @import './adapters/material-ui/index.css';
-
-/* Legacy files under styles/_*.css and styles/overrides/ are intentionally not imported. */

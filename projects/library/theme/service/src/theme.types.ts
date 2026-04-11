@@ -15,7 +15,13 @@ export interface NgThemeConfig {
   defaultAppearance: ThemeAppearance;
   defaultLayoutMode: LayoutMode;
   defaultLayoutContainer: LayoutContainer;
+  /**
+   * @deprecated Local storage keys are fixed and no longer configurable.
+   */
   storageKey?: string;
+  /**
+   * @deprecated Local storage keys are fixed and no longer versioned.
+   */
   storageVersion?: string;
   colors?: readonly ThemeColor[];
 }

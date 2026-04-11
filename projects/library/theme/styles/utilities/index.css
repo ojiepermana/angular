@@ -20,16 +20,16 @@ a {
 }
 
 .appearance-shell {
-  background: var(--shell-surface);
-  color: var(--shell-foreground);
-  border: 1px solid var(--shell-border);
-  box-shadow: var(--shell-shadow);
-  backdrop-filter: var(--shell-backdrop);
-  -webkit-backdrop-filter: var(--shell-backdrop);
+  background: var(--container-surface);
+  color: var(--container-foreground);
+  border: 1px solid var(--container-border);
+  box-shadow: var(--container-shadow);
+  backdrop-filter: var(--container-backdrop);
+  -webkit-backdrop-filter: var(--container-backdrop);
 }
 
 .focus-ring:focus-visible {
-  outline: 2px solid var(--ring);
+  outline: 2px solid var(--control-focus-ring);
   outline-offset: 2px;
 }
 

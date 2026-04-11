@@ -8,8 +8,6 @@ const defaultConfig: NgThemeConfig = {
   defaultAppearance: 'flat',
   defaultLayoutMode: 'vertical',
   defaultLayoutContainer: 'full',
-  storageKey: 'ng-theme',
-  storageVersion: 'v2',
 };
 
 export function provideNgTheme(config: Partial<NgThemeConfig> = {}): EnvironmentProviders {

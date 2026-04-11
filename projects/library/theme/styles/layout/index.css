@@ -36,13 +36,13 @@ vertical > layout > content {
   inline-size: min(100%, var(--layout-shell-max-width));
   min-block-size: calc(100dvh - (var(--layout-shell-padding) * 2));
   margin-inline: auto;
-  border: 1px solid var(--shell-border);
+  border: 1px solid var(--container-border);
   border-radius: var(--layout-shell-radius);
-  background: var(--shell-surface);
-  color: var(--shell-foreground);
-  box-shadow: var(--shell-shadow);
-  backdrop-filter: var(--shell-backdrop);
-  -webkit-backdrop-filter: var(--shell-backdrop);
+  background: var(--container-surface);
+  color: var(--container-foreground);
+  box-shadow: var(--container-shadow);
+  backdrop-filter: var(--container-backdrop);
+  -webkit-backdrop-filter: var(--container-backdrop);
   overflow: hidden;
 }
 
@@ -61,8 +61,9 @@ horizontal > layout > content > header {
   gap: 1rem;
   min-block-size: var(--layout-header-height);
   padding: 0.875rem 1rem;
-  border-bottom: 1px solid var(--border);
-  background: color-mix(in oklab, var(--shell-surface) 92%, transparent);
+  border-bottom: 1px solid var(--nav-border);
+  background: var(--nav-surface);
+  color: var(--nav-foreground);
 }
 
 horizontal > layout > content > header > brand,
@@ -94,9 +95,9 @@ vertical > layout > content > aside {
   display: var(--layout-sidebar-display);
   flex-direction: column;
   inline-size: 100%;
-  border-bottom: 1px solid var(--sidebar-border);
-  background: var(--sidebar);
-  color: var(--sidebar-foreground);
+  border-bottom: 1px solid var(--sidebar-chrome-border);
+  background: var(--sidebar-chrome-surface);
+  color: var(--sidebar-chrome-foreground);
 }
 
 horizontal > layout > content > main,
@@ -121,7 +122,7 @@ vertical > layout > content > main {
   vertical > layout > content > aside {
     inline-size: var(--layout-sidebar-width);
     border-bottom: 0;
-    border-right: 1px solid var(--sidebar-border);
+    border-right: 1px solid var(--sidebar-chrome-border);
   }
 }
 

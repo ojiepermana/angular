@@ -28,6 +28,18 @@ const THEME_COLOR_OPTIONS: readonly ThemeColorOption[] = [
   { value: 'orange', label: 'Orange' },
 ] as const;
 
+const STORAGE_KEYS = {
+  scheme: 'theme-scheme',
+  color: 'theme-color',
+  appearance: 'theme-appearance',
+  'layout-mode': 'layout-mode',
+  'layout-container': 'layout-container',
+} as const;
+
+type ThemeStorageAxis = keyof typeof STORAGE_KEYS;
+
+const LEGACY_STORAGE_PREFIX = 'ng-theme:v2';
+
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly config = inject(NG_THEME_CONFIG);
@@ -38,8 +50,12 @@ export class ThemeService {
     : null;
   private readonly systemPrefersDark = signal(this.mediaQuery?.matches ?? false);
 
-  private key(axis: string): string {
-    return `${this.config.storageKey}:${this.config.storageVersion ?? 'v1'}:${axis}`;
+  private key(axis: ThemeStorageAxis): string {
+    return STORAGE_KEYS[axis];
+  }
+
+  private legacyKey(axis: ThemeStorageAxis): string {
+    return `${LEGACY_STORAGE_PREFIX}:${axis}`;
   }
 
   readonly scheme = signal<ThemeScheme>(
@@ -140,12 +156,17 @@ export class ThemeService {
     element.style.colorScheme = this.resolvedScheme();
   }
 
-  private persist(axis: string, value: string): void {
-    if (this.isBrowser) localStorage.setItem(this.key(axis), value);
+  private persist(axis: ThemeStorageAxis, value: string): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
+    localStorage.setItem(this.key(axis), value);
+    localStorage.removeItem(this.legacyKey(axis));
   }
 
   private readStored<T extends string>(
-    axis: string,
+    axis: ThemeStorageAxis,
     fallback: T,
     isValid: (value: string) => value is T,
   ): T {
@@ -153,7 +174,19 @@ export class ThemeService {
 
     const storedValue = localStorage.getItem(this.key(axis));
 
-    return storedValue && isValid(storedValue) ? storedValue : fallback;
+    if (storedValue && isValid(storedValue)) {
+      return storedValue;
+    }
+
+    const legacyValue = localStorage.getItem(this.legacyKey(axis));
+
+    if (legacyValue && isValid(legacyValue)) {
+      localStorage.setItem(this.key(axis), legacyValue);
+      localStorage.removeItem(this.legacyKey(axis));
+      return legacyValue;
+    }
+
+    return fallback;
   }
 
   private isThemeScheme(value: string): value is ThemeScheme {

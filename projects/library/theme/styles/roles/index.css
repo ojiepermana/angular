@@ -1,0 +1,49 @@
+:root {
+  /* Component-group role tokens bridge appearance presets and selectors. */
+  --nav-surface: color-mix(in oklab, var(--shell-surface) 92%, transparent);
+  --nav-foreground: var(--shell-foreground);
+  --nav-border: var(--shell-border);
+  --nav-item-hover-surface: var(--accent);
+  --nav-item-hover-foreground: var(--accent-foreground);
+  --nav-item-active-surface: var(--secondary);
+  --nav-item-active-foreground: var(--secondary-foreground);
+
+  --sidebar-chrome-surface: var(--sidebar);
+  --sidebar-chrome-foreground: var(--sidebar-foreground);
+  --sidebar-chrome-border: var(--sidebar-border);
+  --sidebar-item-hover-surface: var(--sidebar-accent);
+  --sidebar-item-hover-foreground: var(--sidebar-accent-foreground);
+  --sidebar-item-active-surface: var(--sidebar-primary);
+  --sidebar-item-active-foreground: var(--sidebar-primary-foreground);
+
+  --container-surface: var(--shell-surface);
+  --container-foreground: var(--shell-foreground);
+  --container-border: var(--shell-border);
+  --container-shadow: var(--shell-shadow);
+  --container-backdrop: var(--shell-backdrop);
+
+  --overlay-surface: var(--surface-elevated);
+  --overlay-foreground: var(--surface-elevated-foreground);
+  --overlay-border: var(--surface-elevated-border);
+  --overlay-shadow: var(--surface-elevated-shadow);
+  --overlay-backdrop: var(--shell-backdrop);
+
+  --data-surface: var(--container-surface);
+  --data-foreground: var(--container-foreground);
+  --data-border: var(--container-border);
+  --data-header-surface: color-mix(in oklab, var(--overlay-surface) 72%, var(--data-surface));
+  --data-header-foreground: var(--data-foreground);
+  --data-row-hover-surface: color-mix(in oklab, var(--accent) 72%, var(--data-surface));
+  --data-row-selected-surface: var(--secondary);
+
+  --control-surface: var(--container-surface);
+  --control-foreground: var(--container-foreground);
+  --control-border: var(--container-border);
+  --control-shadow: none;
+  --control-backdrop: var(--container-backdrop);
+  --control-hover-surface: var(--accent);
+  --control-hover-foreground: var(--accent-foreground);
+  --control-active-surface: var(--secondary);
+  --control-active-foreground: var(--secondary-foreground);
+  --control-focus-ring: var(--ring);
+}

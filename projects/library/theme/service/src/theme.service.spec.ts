@@ -96,4 +96,48 @@ describe('ThemeService', () => {
     TestBed.flushEffects();
     expect(service.color()).toBe('green');
   });
+
+  it('persists theme state under the flat localStorage keys', () => {
+    const service = TestBed.inject(ThemeService);
+
+    service.setScheme('dark');
+    service.setColor('green');
+    service.setAppearance('glass');
+    service.setLayoutMode('horizontal');
+    service.setLayoutContainer('boxed');
+
+    expect(localStorage.getItem('theme-scheme')).toBe('dark');
+    expect(localStorage.getItem('theme-color')).toBe('green');
+    expect(localStorage.getItem('theme-appearance')).toBe('glass');
+    expect(localStorage.getItem('layout-mode')).toBe('horizontal');
+    expect(localStorage.getItem('layout-container')).toBe('boxed');
+  });
+
+  it('migrates legacy versioned localStorage keys to the flat keys', () => {
+    localStorage.setItem('ng-theme:v2:scheme', 'dark');
+    localStorage.setItem('ng-theme:v2:color', 'green');
+    localStorage.setItem('ng-theme:v2:appearance', 'glass');
+    localStorage.setItem('ng-theme:v2:layout-mode', 'horizontal');
+    localStorage.setItem('ng-theme:v2:layout-container', 'boxed');
+
+    const service = TestBed.inject(ThemeService);
+
+    expect(service.scheme()).toBe('dark');
+    expect(service.color()).toBe('green');
+    expect(service.appearance()).toBe('glass');
+    expect(service.layoutMode()).toBe('horizontal');
+    expect(service.layoutContainer()).toBe('boxed');
+
+    expect(localStorage.getItem('theme-scheme')).toBe('dark');
+    expect(localStorage.getItem('theme-color')).toBe('green');
+    expect(localStorage.getItem('theme-appearance')).toBe('glass');
+    expect(localStorage.getItem('layout-mode')).toBe('horizontal');
+    expect(localStorage.getItem('layout-container')).toBe('boxed');
+
+    expect(localStorage.getItem('ng-theme:v2:scheme')).toBeNull();
+    expect(localStorage.getItem('ng-theme:v2:color')).toBeNull();
+    expect(localStorage.getItem('ng-theme:v2:appearance')).toBeNull();
+    expect(localStorage.getItem('ng-theme:v2:layout-mode')).toBeNull();
+    expect(localStorage.getItem('ng-theme:v2:layout-container')).toBeNull();
+  });
 });

@@ -519,13 +519,9 @@ Definition of done:
 
 Tujuan batch ini adalah mengganti total struktur style lama dengan struktur modular baru.
 
-File lama yang akan dipensiunkan:
+File lama yang sudah dihapus:
 
-- `projects/library/theme/styles/_base.css`
-- `projects/library/theme/styles/_colors.css`
-- `projects/library/theme/styles/_schemes.css`
-- `projects/library/theme/styles/_appearances.css`
-- `projects/library/theme/styles/_layout.css`
+- legacy stylesheet files dari arsitektur pra-semantic-token
 
 File atau folder baru yang harus dibuat:
 
@@ -611,11 +607,6 @@ Definition of done:
 
 Tujuan batch ini adalah memindahkan Angular Material ke adapter internal murni.
 
-File lama yang akan ditulis ulang:
-
-- `projects/library/theme/styles/overrides/index.css`
-- seluruh file di `projects/library/theme/styles/overrides/material-ui/`
-
 Target struktur baru:
 
 - `projects/library/theme/styles/adapters/material-ui/`
@@ -688,7 +679,6 @@ File berikut diasumsikan akan ditulis ulang penuh:
 - `projects/library/theme/layout/src/horizontal.ts`
 - `projects/library/theme/layout/src/vertical.ts`
 - `projects/library/theme/styles/index.css`
-- `projects/library/theme/styles/overrides/index.css`
 - `projects/library/theme/README.md`
 - `projects/library/README.md`
 
@@ -700,16 +690,12 @@ File berikut harus diputuskan tetap dipakai, dipindah, atau dihapus:
 - `projects/library/theme/component/src/theme-icon.directive.ts`
 - `projects/library/theme/service/src/theme.token.ts`
 
-### Dipensiunkan Setelah Struktur Baru Siap
+### Sudah Dihapus Dari Source Aktif
 
-File berikut tidak perlu dipertahankan setelah struktur baru aktif:
+File berikut sudah dihapus dari source aktif:
 
-- `projects/library/theme/styles/_base.css`
-- `projects/library/theme/styles/_colors.css`
-- `projects/library/theme/styles/_schemes.css`
-- `projects/library/theme/styles/_appearances.css`
-- `projects/library/theme/styles/_layout.css`
-- seluruh override lama di `projects/library/theme/styles/overrides/material-ui/`
+- legacy stylesheet files dari arsitektur pra-semantic-token
+- legacy override tree untuk Angular Material
 
 ### Ditambahkan Sebagai Bagian Dari Kontrak Baru
 
