@@ -4,6 +4,11 @@ export type ThemeAppearance = 'flat' | 'glass';
 export type LayoutMode = 'vertical' | 'horizontal' | 'empty';
 export type LayoutContainer = 'full' | 'boxed';
 
+export interface ThemeColorOption {
+  readonly value: ThemeColor;
+  readonly label: string;
+}
+
 export interface NgThemeConfig {
   defaultScheme: ThemeScheme;
   defaultColor: ThemeColor;
@@ -11,5 +16,6 @@ export interface NgThemeConfig {
   defaultLayoutMode: LayoutMode;
   defaultLayoutContainer: LayoutContainer;
   storageKey?: string;
-  colors?: ThemeColor[];
+  storageVersion?: string;
+  colors?: readonly ThemeColor[];
 }

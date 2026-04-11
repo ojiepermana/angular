@@ -1,134 +1,180 @@
 # Library
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+`@ojiepermana/angular` is the shared Angular library package for this workspace.
 
-## Layouts
+At the moment, the active public implementation in this package is the theme system under the `theme/*` secondary entry points. The root package itself is intentionally empty and acts only as a namespace boundary.
 
-The library exposes reusable shell components for the two legacy layouts through the theme layout entry point:
+## Current Package Shape
 
-- `LayoutHorizontalComponent`
-- `LayoutVerticalComponent`
+- `@ojiepermana/angular` is intentionally empty.
+- `@ojiepermana/angular/theme` is also intentionally empty and exists as a namespace marker.
+- Public APIs currently live in these secondary entry points:
+  - `@ojiepermana/angular/theme/service`
+  - `@ojiepermana/angular/theme/component`
+  - `@ojiepermana/angular/theme/directive`
+  - `@ojiepermana/angular/theme/layout`
+  - `@ojiepermana/angular/theme/styles/index.css`
 
-### Usage Rule
+Do not import library APIs from the root package.
 
-Layout shell components must be imported from `@ojiepermana/angular/theme/layout`.
+## What Exists Today
 
-- Do use `@ojiepermana/angular/theme/layout` for `LayoutHorizontalComponent` and `LayoutVerticalComponent`.
-- Do not import layout shell components from `@ojiepermana/angular` root.
+The implemented library surface is the theme library.
 
-Use the selectors in consuming apps:
+It currently provides:
 
-```ts
-import {
-  LayoutHorizontalComponent,
-  LayoutVerticalComponent,
-} from '@ojiepermana/angular/theme/layout';
-```
+- signal-based theme state through `ThemeService`
+- `provideNgTheme()` for bootstrap configuration
+- a runtime theme contract based on `.dark` and `data-*` attributes
+- built-in theme controls such as scheme, appearance, color, and layout switchers
+- reusable layout shells for horizontal and vertical navigation
+- a shared stylesheet bundle with semantic tokens, color presets, appearance presets, layout rules, utilities, and an internal Angular Material adapter layer
 
-```html
-<horizontal>
-  <div headerBrand>...</div>
-  <div headerNavigation role="navigation" aria-label="Primary">...</div>
-  <div headerActions>...</div>
-</horizontal>
+The theme styling model is Tailwind-first.
 
-<vertical>
-  <nav navigation>...</nav>
-</vertical>
-```
+- use Tailwind utility classes in templates whenever possible
+- use direct CSS for token layers, shared selectors, reusable utilities, and internal framework adapters
+- treat Angular Material as a behavior layer, while semantic theme tokens remain the visual source of truth
 
-These layout components are intended to be wrapped by an application shell component that projects navigation and header content into the slots above. The shell's child route is then rendered by the internal `<router-outlet />` inside the layout component.
+## Requirements
 
-Import the library styles once in the consuming application so the theme tokens and layout variables are available:
+The library currently targets:
+
+- `@angular/common` `^21.2.0`
+- `@angular/core` `^21.2.0`
+- `@angular/material` `^21.0.0`
+- `@angular/cdk` `^21.0.0`
+- `@lucide/angular` `>=1.0.0`
+- `tailwindcss` `>=4.0.0`
+
+## Usage
+
+Import the stylesheet bundle once in the consuming application:
 
 ```css
 @import 'tailwindcss';
 @import '@ojiepermana/angular/theme/styles/index.css';
 ```
 
-Provide the theme service at application bootstrap:
+Configure the theme provider during bootstrap:
 
 ```ts
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter } from '@angular/router';
 import { provideNgTheme } from '@ojiepermana/angular/theme/service';
 
+import { routes } from './app.routes';
+
 export const appConfig: ApplicationConfig = {
-  providers: [provideNgTheme()],
+  providers: [
+    provideRouter(routes),
+    provideNgTheme({
+      defaultScheme: 'system',
+      defaultColor: 'brand',
+      defaultAppearance: 'flat',
+      defaultLayoutMode: 'vertical',
+      defaultLayoutContainer: 'boxed',
+      colors: ['brand', 'green', 'orange'],
+    }),
+  ],
 };
 ```
 
-## Library Pattern
+Use the theme controls and layout shell from their secondary entry points:
 
-The library public APIs are organized by domain and must be imported from their dedicated entry points:
+```ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  AppearanceSwitcherComponent,
+  ColorPickerComponent,
+  LayoutContainerSwitcherComponent,
+  SchemeSwitcherComponent,
+} from '@ojiepermana/angular/theme/component';
+import { LayoutVerticalComponent } from '@ojiepermana/angular/theme/layout';
 
-- `@ojiepermana/angular/theme/service` for theme services, providers, tokens, and types.
-- `@ojiepermana/angular/theme/component` for theme switchers and presentational controls.
-- `@ojiepermana/angular/theme/directive` for theme directives.
-- `@ojiepermana/angular/theme/layout` for layout shell components.
-- `@ojiepermana/angular/theme/styles/index.css` for shared theme tokens and layout variables.
+@Component({
+  selector: 'app-shell',
+  imports: [
+    AppearanceSwitcherComponent,
+    ColorPickerComponent,
+    LayoutContainerSwitcherComponent,
+    LayoutVerticalComponent,
+    SchemeSwitcherComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <vertical>
+      <nav navigation class="flex flex-col gap-4 p-4">
+        <div class="flex items-center gap-2">
+          <appearance-switcher />
+          <layout-container-switcher />
+          <scheme-switcher />
+        </div>
 
-Do not import those APIs from `@ojiepermana/angular` root.
-Do not create broad type-based entry points like `@ojiepermana/angular/components` when the APIs belong to a domain such as theme.
-Prefer the narrowest feature entry point available.
-For library source files, omit the `.component` suffix from component filenames and use names like `appearance-switcher.ts`, `horizontal.ts`, and `vertical.ts`.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+        <color-picker />
+      </nav>
+    </vertical>
+  `,
+})
+export class AppShellComponent {}
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Theme Entry Point Summary
 
-```bash
-ng generate --help
-```
+### Service
 
-## Building
+Import from `@ojiepermana/angular/theme/service`.
 
-To build the library, run:
+- `ThemeService`
+- `provideNgTheme()`
+- `NG_THEME_CONFIG`
+- `ThemeScheme`
+- `ThemeColor`
+- `ThemeColorOption`
+- `ThemeAppearance`
+- `LayoutMode`
+- `LayoutContainer`
+- `NgThemeConfig`
 
-```bash
-ng build library
-```
+### Component
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+Import from `@ojiepermana/angular/theme/component`.
 
-### Publishing the Library
+- `AppearanceSwitcherComponent`
+- `ColorPickerComponent`
+- `LayoutContainerSwitcherComponent`
+- `LayoutModeSwitcherComponent`
+- `SchemeSwitcherComponent`
+- `ThemeLucideConfigDirective`
 
-Once the project is built, you can publish your library by following these steps:
+### Directive
 
-1. Navigate to the `dist` directory:
+Import from `@ojiepermana/angular/theme/directive`.
 
-   ```bash
-   cd dist/library
-   ```
+- `ThemeHostDirective`
 
-2. Run the `npm publish` command to publish your library to the npm registry:
+### Layout
 
-```bash
-npm publish
-```
+Import from `@ojiepermana/angular/theme/layout`.
 
-## Running unit tests
+- `LayoutHorizontalComponent`
+- `LayoutVerticalComponent`
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Theme Runtime Contract
 
-```bash
-ng test
-```
+The active theme runtime contract is:
 
-## Running end-to-end tests
+- `.dark`
+- `data-theme-scheme`
+- `data-theme-color`
+- `data-theme-appearance`
+- `data-layout-mode`
+- `data-layout-container`
 
-For end-to-end (e2e) testing, run:
+This contract is driven by `ThemeService` and mirrored by `ThemeHostDirective` when needed.
 
-```bash
-ng e2e
-```
+## Notes
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Angular framework version in this workspace is `21`.
+- The root library package remains empty by design, and that is protected by the entrypoint tests.
+- For theme-specific details, see `projects/library/theme/README.md`.

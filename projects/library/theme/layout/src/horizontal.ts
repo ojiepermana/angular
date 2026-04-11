@@ -17,7 +17,7 @@ import {
     PanelElementDirective,
   ],
   host: {
-    '[attr.layout-mode]': '"horizontal"',
+    '[attr.data-layout-mode]': '"horizontal"',
   },
   template: `
     <layout>

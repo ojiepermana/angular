@@ -6,7 +6,7 @@ import { ContentElementDirective, LayoutElementDirective } from './elements.dire
   selector: 'vertical',
   imports: [RouterOutlet, LayoutElementDirective, ContentElementDirective],
   host: {
-    '[attr.layout-mode]': '"vertical"',
+    '[attr.data-layout-mode]': '"vertical"',
   },
   template: `
     <layout>

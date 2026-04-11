@@ -73,11 +73,13 @@ export class LayoutModeSwitcherComponent {
   protected readonly options = [
     { value: 'vertical' as const, label: 'Vertical Sidebar' },
     { value: 'horizontal' as const, label: 'Horizontal Navbar' },
-    { value: 'empty' as const, label: 'No Layout' },
   ];
 
   protected readonly currentOption = computed(
     () =>
-      this.options.find((option) => option.value === this.theme.layoutMode()) ?? this.options[0],
+      this.options.find((option) => option.value === this.theme.layoutMode()) ?? {
+        value: 'empty' as const,
+        label: 'Content Only',
+      },
   );
 }

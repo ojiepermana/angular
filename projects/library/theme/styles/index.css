@@ -1,7 +1,11 @@
-/* Import order matters: base -> colors -> schemes -> appearances -> layout -> overrides */
-@import './_base.css';
-@import './_colors.css';
-@import './_schemes.css';
-@import './_appearances.css';
-@import './_layout.css';
-@import './overrides/index.css';
+@import './tokens/foundation.css';
+@import './tokens/semantic.css';
+@import './modes/dark.css';
+@import './presets/colors/index.css';
+@import './presets/appearances/index.css';
+@import './layout/index.css';
+@import './utilities/index.css';
+@import './_demo-dashboard.css';
+@import './adapters/material-ui/index.css';
+
+/* Legacy files under styles/_*.css and styles/overrides/ are intentionally not imported. */

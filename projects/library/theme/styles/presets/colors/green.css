@@ -1,0 +1,4 @@
+[data-theme-color='green'] {
+  --theme-primary: oklch(0.68 0.18 153.4);
+  --theme-on-primary: oklch(0.188 0.012 162.1);
+}

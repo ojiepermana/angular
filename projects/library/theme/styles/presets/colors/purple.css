@@ -1,0 +1,4 @@
+[data-theme-color='purple'] {
+  --theme-primary: oklch(0.62 0.21 314.5);
+  --theme-on-primary: oklch(0.985 0 0);
+}

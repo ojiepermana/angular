@@ -1,0 +1,148 @@
+[data-layout-container='full'] {
+  --layout-shell-max-width: 100%;
+  --layout-shell-padding: 0rem;
+  --layout-shell-radius: 0rem;
+}
+
+[data-layout-container='boxed'] {
+  --layout-shell-max-width: 82rem;
+  --layout-shell-padding: clamp(1rem, 2vw, 2rem);
+  --layout-shell-radius: var(--radius-xl);
+}
+
+[data-layout-mode='empty'] {
+  --layout-header-display: none;
+  --layout-sidebar-display: none;
+}
+
+horizontal,
+vertical {
+  display: block;
+  min-block-size: 100dvh;
+}
+
+horizontal > layout,
+vertical > layout {
+  display: block;
+  min-block-size: 100dvh;
+  padding: var(--layout-shell-padding);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+horizontal > layout > content,
+vertical > layout > content {
+  display: flex;
+  inline-size: min(100%, var(--layout-shell-max-width));
+  min-block-size: calc(100dvh - (var(--layout-shell-padding) * 2));
+  margin-inline: auto;
+  border: 1px solid var(--shell-border);
+  border-radius: var(--layout-shell-radius);
+  background: var(--shell-surface);
+  color: var(--shell-foreground);
+  box-shadow: var(--shell-shadow);
+  backdrop-filter: var(--shell-backdrop);
+  -webkit-backdrop-filter: var(--shell-backdrop);
+  overflow: hidden;
+}
+
+horizontal > layout > content {
+  flex-direction: column;
+}
+
+vertical > layout > content {
+  flex-direction: column;
+}
+
+horizontal > layout > content > header {
+  display: var(--layout-header-display);
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  min-block-size: var(--layout-header-height);
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklab, var(--shell-surface) 92%, transparent);
+}
+
+horizontal > layout > content > header > brand,
+horizontal > layout > content > header > panel {
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+}
+
+horizontal > layout > content > header > brand {
+  justify-content: flex-start;
+}
+
+horizontal > layout > content > header > nav {
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+horizontal > layout > content > header > panel {
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+vertical > layout > content > aside {
+  display: var(--layout-sidebar-display);
+  flex-direction: column;
+  inline-size: 100%;
+  border-bottom: 1px solid var(--sidebar-border);
+  background: var(--sidebar);
+  color: var(--sidebar-foreground);
+}
+
+horizontal > layout > content > main,
+vertical > layout > content > main {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: auto;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--background) 94%, white 6%),
+    var(--background)
+  );
+  color: var(--foreground);
+}
+
+@media (min-width: 48rem) {
+  vertical > layout > content {
+    flex-direction: row;
+  }
+
+  vertical > layout > content > aside {
+    inline-size: var(--layout-sidebar-width);
+    border-bottom: 0;
+    border-right: 1px solid var(--sidebar-border);
+  }
+}
+
+@media (max-width: 60rem) {
+  horizontal > layout > content > header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: flex-start;
+  }
+
+  horizontal > layout > content > header > nav {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 40rem) {
+  horizontal > layout > content > header {
+    grid-template-columns: 1fr;
+  }
+
+  horizontal > layout > content > header > panel {
+    justify-content: flex-start;
+  }
+}

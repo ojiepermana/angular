@@ -1,0 +1,12 @@
+:root,
+[data-theme-appearance='flat'] {
+  --shell-surface: var(--card);
+  --shell-foreground: var(--card-foreground);
+  --shell-border: var(--border);
+  --shell-shadow: var(--shadow-xs);
+  --shell-backdrop: var(--backdrop-flat);
+  --surface-elevated: var(--popover);
+  --surface-elevated-foreground: var(--popover-foreground);
+  --surface-elevated-border: var(--border);
+  --surface-elevated-shadow: var(--shadow-sm);
+}

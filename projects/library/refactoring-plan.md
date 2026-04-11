@@ -10,6 +10,8 @@ Keputusan utama:
 - tidak akan dibuat migration bridge untuk styling lama
 - Angular-specific CSS variables harus dihilangkan dari source of truth library
 - model theming baru mengikuti semantic token system ala shadcn
+- styling harus Tailwind-first: gunakan utility class Tailwind di template kapan pun memungkinkan
+- direct CSS hanya dipakai untuk token layer, selector layout, utility lintas komponen, dan adapter framework seperti Angular Material
 - Angular tetap dipakai untuk state orchestration dan behavior, tetapi bukan lagi sumber nama token visual
 
 ## Hasil Akhir Yang Ingin Dicapai
@@ -25,6 +27,15 @@ Setelah refactor selesai, library harus memiliki karakter berikut:
 - penambahan color preset, appearance preset, atau layout preset baru dapat dilakukan tanpa refactor besar
 
 ## Keputusan Arsitektur
+
+### 0. Tailwind-First Styling Rule
+
+Rule utama untuk authoring style ke depan:
+
+- layout, spacing, sizing, typography, dan interaction state di template harus memakai utility class Tailwind lebih dulu
+- direct CSS hanya boleh dipakai bila Tailwind tidak cukup jelas atau tidak cukup kuat untuk kasus tersebut
+- direct CSS wajib terkonsentrasi pada token layer, variant preset, layout selectors, reusable utility class, atau adapter internal
+- tidak boleh membuat styling component-level baru di CSS bila hasil yang sama bisa dicapai dengan utility class Tailwind yang jelas dan maintainable
 
 ### 1. Source Of Truth Baru
 
@@ -129,11 +140,12 @@ Refactor ini tidak bertujuan untuk mempertahankan style lama.
 
 1. Hapus kontrak lama, jangan tambahkan lapisan transisi.
 2. Putuskan kontrak akhir lebih dulu, baru implementasi.
-3. Jangan membawa istilah Angular ke dalam token model baru.
-4. Gunakan semantic tokens sebagai API styling.
-5. Jangan menambah fitur appearance baru sebelum kontrak dasarnya stabil.
-6. Hindari raw visual values di luar token layer.
-7. Dokumentasi hanya menjelaskan nilai yang benar-benar sudah diimplementasikan.
+3. Gunakan utility class Tailwind sebagai default authoring path di template.
+4. Jangan membawa istilah Angular ke dalam token model baru.
+5. Gunakan semantic tokens sebagai API styling.
+6. Jangan menambah fitur appearance baru sebelum kontrak dasarnya stabil.
+7. Hindari raw visual values di luar token layer.
+8. Dokumentasi hanya menjelaskan nilai yang benar-benar sudah diimplementasikan.
 
 ## Kontrak Token Final Yang Diusulkan
 
@@ -475,6 +487,253 @@ Exit criteria:
 
 - docs selaras dengan implementasi
 - kontrak publik baru sudah terlindungi oleh test
+
+## Backlog Implementasi Per Phase
+
+Bagian ini adalah turunan eksekusi langsung dari fase di atas. Karena kompatibilitas lama diabaikan, backlog ini memakai pendekatan rewrite, bukan adaptasi.
+
+### Phase 1 Backlog: Finalize Semantic Token Contract
+
+Tujuan batch ini adalah menghasilkan kontrak token final sebelum file kode disentuh secara luas.
+
+File target:
+
+- `projects/library/refactoring-plan.md`
+- `projects/library/theme/README.md`
+- `projects/library/theme/shadn-ui-theming.md`
+
+Pekerjaan:
+
+- finalkan daftar token semantik inti yang wajib ada di `:root` dan `.dark`
+- finalkan extension tokens minimum untuk shell, appearance, dan layout
+- finalkan kontrak runtime `.dark` dan `data-*`
+- finalkan daftar utility yang akan diekspos lewat `@theme inline`
+- finalkan naming policy untuk preset warna, preset appearance, dan layout state
+
+Definition of done:
+
+- tidak ada lagi nama token berbasis Angular di plan dan docs target
+- token contract cukup lengkap untuk mulai implementasi stylesheet baru
+
+### Phase 2 Backlog: Replace Style Architecture
+
+Tujuan batch ini adalah mengganti total struktur style lama dengan struktur modular baru.
+
+File lama yang akan dipensiunkan:
+
+- `projects/library/theme/styles/_base.css`
+- `projects/library/theme/styles/_colors.css`
+- `projects/library/theme/styles/_schemes.css`
+- `projects/library/theme/styles/_appearances.css`
+- `projects/library/theme/styles/_layout.css`
+
+File atau folder baru yang harus dibuat:
+
+- `projects/library/theme/styles/tokens/`
+- `projects/library/theme/styles/presets/colors/`
+- `projects/library/theme/styles/presets/appearances/`
+- `projects/library/theme/styles/modes/`
+- `projects/library/theme/styles/layout/`
+- `projects/library/theme/styles/utilities/`
+- `projects/library/theme/styles/index.css`
+
+Pekerjaan:
+
+- buat foundation token layer
+- buat semantic token layer
+- buat radius scale layer ala shadcn
+- buat preset warna berdasarkan semantic mapping, bukan Angular token mapping
+- buat preset appearance berdasarkan semantic mapping, bukan Angular token mapping
+- pindahkan seluruh raw visual values ke token dan preset layer
+- rewrite `styles/index.css` agar hanya mengimpor arsitektur baru
+
+Definition of done:
+
+- seluruh authored style utama sudah berasal dari struktur folder baru
+- file style lama tidak lagi menjadi referensi aktif
+
+### Phase 3 Backlog: Replace Runtime Theme Contract
+
+Tujuan batch ini adalah menyelaraskan runtime state Angular ke kontrak root baru.
+
+File target:
+
+- `projects/library/theme/service/src/theme.types.ts`
+- `projects/library/theme/service/src/theme.provider.ts`
+- `projects/library/theme/service/src/theme.token.ts`
+- `projects/library/theme/service/src/theme.service.ts`
+- `projects/library/theme/directive/src/theme-host.directive.ts`
+
+Pekerjaan:
+
+- tetapkan ulang enum dan config type bila perlu agar sesuai kontrak baru
+- rewrite `ThemeService` agar mengelola `.dark` dan `data-*`
+- buat penyelesaian mode `system` yang reaktif terhadap perubahan OS
+- tambahkan storage versioning untuk state theme baru
+- rewrite `ThemeHostDirective` agar menerapkan class dan attribute baru, bukan kontrak lama
+
+Definition of done:
+
+- service dan directive tidak lagi menempelkan atribut runtime lama
+- runtime root state sepenuhnya memakai `.dark` dan `data-*`
+
+### Phase 4 Backlog: Rebuild Components And Layouts
+
+Tujuan batch ini adalah membuat komponen dan layout bekerja di atas kontrak styling baru.
+
+File target komponen:
+
+- `projects/library/theme/component/src/appearance-switcher.ts`
+- `projects/library/theme/component/src/color-picker.ts`
+- `projects/library/theme/component/src/layout-container-switcher.ts`
+- `projects/library/theme/component/src/layout-mode-switcher.ts`
+- `projects/library/theme/component/src/scheme-switcher.ts`
+- `projects/library/theme/component/src/theme-icon.directive.ts`
+
+File target layout:
+
+- `projects/library/theme/layout/src/elements.directive.ts`
+- `projects/library/theme/layout/src/horizontal.ts`
+- `projects/library/theme/layout/src/vertical.ts`
+
+Pekerjaan:
+
+- rewrite komponen kontrol agar membaca state baru dan tidak bergantung pada styling lama
+- hilangkan authored dependency ke Angular CSS variable naming di component-local styles
+- rewrite shell layout agar memakai semantic tokens dan utility contract baru
+- evaluasi ulang apakah `elements.directive.ts` tetap dibutuhkan atau bisa disederhanakan
+
+Definition of done:
+
+- controls dan layout shell hanya mengonsumsi semantic tokens dan runtime contract baru
+
+### Phase 5 Backlog: Rebuild Material Integration
+
+Tujuan batch ini adalah memindahkan Angular Material ke adapter internal murni.
+
+File lama yang akan ditulis ulang:
+
+- `projects/library/theme/styles/overrides/index.css`
+- seluruh file di `projects/library/theme/styles/overrides/material-ui/`
+
+Target struktur baru:
+
+- `projects/library/theme/styles/adapters/material-ui/`
+
+Pekerjaan:
+
+- pindahkan override Material ke adapter folder baru
+- rewrite seluruh override agar mengonsumsi semantic tokens library
+- hapus authored dependency ke `--mat-sys-*`, `--mat-*`, dan `--mdc-*` sebagai kontrak visual utama
+- dokumentasikan bahwa adapter ini internal dan bukan public source of truth
+
+Definition of done:
+
+- Angular Material hanya menjadi adapter consumer terhadap token library
+- kontrak styling utama library sepenuhnya netral dari Angular naming
+
+### Phase 6 Backlog: Tests And Documentation
+
+Tujuan batch ini adalah menutup refactor dengan kontrak publik yang terdokumentasi dan terlindungi.
+
+File dokumentasi target:
+
+- `projects/library/README.md`
+- `projects/library/theme/README.md`
+- `projects/library/theme/shadn-ui-theming.md`
+
+File test yang harus diperbarui atau ditambahkan:
+
+- `projects/library/entrypoints.spec.ts`
+- `projects/library/theme/service/src/theme.service.spec.ts`
+- `projects/library/theme/directive/src/theme-host.directive.spec.ts`
+- `projects/library/theme/component/src/appearance-switcher.spec.ts`
+- `projects/library/theme/component/src/color-picker.spec.ts`
+- `projects/library/theme/component/src/layout-container-switcher.spec.ts`
+- `projects/library/theme/component/src/layout-mode-switcher.spec.ts`
+- `projects/library/theme/component/src/scheme-switcher.spec.ts`
+- `projects/library/theme/layout/src/horizontal.spec.ts`
+- `projects/library/theme/layout/src/vertical.spec.ts`
+
+Pekerjaan:
+
+- rewrite README root library agar mengikuti kontrak baru
+- rewrite README theme agar menjelaskan token contract baru, bukan kontrak lama
+- gunakan `shadn-ui-theming.md` sebagai referensi internal dan sesuaikan dokumentasi library dengan pola tersebut
+- tambah test consumer-facing untuk service, directive, controls, dan layout shell
+- pastikan smoke test entry points tetap menjaga kontrak public API
+
+Definition of done:
+
+- dokumentasi menjelaskan kontrak baru secara konsisten
+- test sudah melindungi perilaku utama dan public contract
+
+## Backlog Implementasi Per File
+
+Bagian ini merangkum tindakan yang paling mungkin dilakukan terhadap file yang sudah ada sekarang.
+
+### Rewrite Total
+
+File berikut diasumsikan akan ditulis ulang penuh:
+
+- `projects/library/theme/service/src/theme.types.ts`
+- `projects/library/theme/service/src/theme.provider.ts`
+- `projects/library/theme/service/src/theme.service.ts`
+- `projects/library/theme/directive/src/theme-host.directive.ts`
+- `projects/library/theme/component/src/appearance-switcher.ts`
+- `projects/library/theme/component/src/color-picker.ts`
+- `projects/library/theme/component/src/layout-container-switcher.ts`
+- `projects/library/theme/component/src/layout-mode-switcher.ts`
+- `projects/library/theme/component/src/scheme-switcher.ts`
+- `projects/library/theme/layout/src/horizontal.ts`
+- `projects/library/theme/layout/src/vertical.ts`
+- `projects/library/theme/styles/index.css`
+- `projects/library/theme/styles/overrides/index.css`
+- `projects/library/theme/README.md`
+- `projects/library/README.md`
+
+### Evaluasi Ulang Keberadaan File
+
+File berikut harus diputuskan tetap dipakai, dipindah, atau dihapus:
+
+- `projects/library/theme/layout/src/elements.directive.ts`
+- `projects/library/theme/component/src/theme-icon.directive.ts`
+- `projects/library/theme/service/src/theme.token.ts`
+
+### Dipensiunkan Setelah Struktur Baru Siap
+
+File berikut tidak perlu dipertahankan setelah struktur baru aktif:
+
+- `projects/library/theme/styles/_base.css`
+- `projects/library/theme/styles/_colors.css`
+- `projects/library/theme/styles/_schemes.css`
+- `projects/library/theme/styles/_appearances.css`
+- `projects/library/theme/styles/_layout.css`
+- seluruh override lama di `projects/library/theme/styles/overrides/material-ui/`
+
+### Ditambahkan Sebagai Bagian Dari Kontrak Baru
+
+File atau folder berikut diharapkan dibuat:
+
+- `projects/library/theme/styles/tokens/`
+- `projects/library/theme/styles/presets/colors/`
+- `projects/library/theme/styles/presets/appearances/`
+- `projects/library/theme/styles/modes/`
+- `projects/library/theme/styles/layout/`
+- `projects/library/theme/styles/utilities/`
+- `projects/library/theme/styles/adapters/material-ui/`
+- file test baru untuk service, directive, controls, dan layout
+
+## Urutan Eksekusi Yang Disarankan
+
+Supaya implementasi tidak berantakan, eksekusi sebaiknya dilakukan dengan urutan berikut:
+
+1. finalisasi semantic token contract dan runtime contract
+2. bangun struktur stylesheet baru dan hentikan referensi ke style lama
+3. refactor service dan directive ke root state baru
+4. refactor controls dan layout shell ke token contract baru
+5. bangun adapter internal untuk Angular Material
+6. tutup dengan tests dan dokumentasi akhir
 
 ## Area Yang Harus Dihapus Atau Ditulis Ulang
 

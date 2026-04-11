@@ -1,0 +1,11 @@
+[data-theme-appearance='glass'] {
+  --shell-surface: color-mix(in oklab, var(--card) 84%, transparent);
+  --shell-foreground: var(--card-foreground);
+  --shell-border: color-mix(in oklab, var(--border) 82%, white 18%);
+  --shell-shadow: var(--shadow-md);
+  --shell-backdrop: var(--backdrop-glass);
+  --surface-elevated: color-mix(in oklab, var(--popover) 90%, transparent);
+  --surface-elevated-foreground: var(--popover-foreground);
+  --surface-elevated-border: color-mix(in oklab, var(--border) 80%, white 20%);
+  --surface-elevated-shadow: var(--shadow-lg);
+}

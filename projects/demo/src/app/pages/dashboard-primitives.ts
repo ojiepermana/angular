@@ -22,34 +22,28 @@ export interface DashboardMetricCardData {
   readonly positive: boolean;
 }
 
-const DASHBOARD_PANEL_CLASSES = `appearance-shell relative overflow-hidden rounded-(--sales-panel-radius) border border-(--appearance-border) bg-[linear-gradient(180deg,color-mix(in_oklch,var(--appearance-surface)_97%,var(--sales-blue)_3%)_0%,color-mix(in_oklch,var(--appearance-surface)_99%,transparent)_100%)] shadow-[0_26px_64px_-56px_color-mix(in_srgb,var(--sales-blue)_28%,transparent)] after:pointer-events-none after:absolute after:inset-0 after:rounded-(--sales-panel-radius) after:shadow-[inset_0_1px_0_color-mix(in_srgb,white_38%,transparent)] after:content-['']`;
-const DASHBOARD_SURFACE_CLASSES =
-  'appearance-shell rounded-(--sales-surface-radius) border border-(--appearance-border) bg-[color-mix(in_oklch,var(--appearance-surface)_98%,var(--sales-blue)_2%)] shadow-none';
+const DASHBOARD_PANEL_CLASSES = 'demo-dashboard-panel-shell';
+const DASHBOARD_SURFACE_CLASSES = 'demo-dashboard-surface-shell';
 const DASHBOARD_EYEBROW_CLASSES =
-  'text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_55%,transparent)]';
-const DASHBOARD_HERO_TITLE_CLASSES =
-  'text-[color-mix(in_oklch,var(--mat-sys-primary)_84%,var(--mat-sys-on-background))]';
+  'demo-dashboard-eyebrow text-[0.72rem] font-semibold uppercase tracking-[0.28em]';
+const DASHBOARD_HERO_TITLE_CLASSES = 'demo-dashboard-hero-title';
+const DASHBOARD_SECTION_TITLE_BASE_CLASSES = 'demo-dashboard-section-title';
 const DASHBOARD_SECTION_TITLE_ROLE_CLASSES: Readonly<Record<DashboardSchemeRole, string>> = {
-  primary: 'text-[color-mix(in_oklch,var(--mat-sys-primary)_72%,var(--mat-sys-on-background))]',
-  secondary: 'text-[color-mix(in_oklch,var(--mat-sys-secondary)_78%,var(--mat-sys-on-background))]',
-  tertiary: 'text-[color-mix(in_oklch,var(--mat-sys-tertiary)_82%,var(--mat-sys-on-background))]',
+  primary: 'demo-dashboard-section-title--primary',
+  secondary: 'demo-dashboard-section-title--secondary',
+  tertiary: 'demo-dashboard-section-title--tertiary',
 };
-const DASHBOARD_LARGE_VALUE_CLASSES =
-  'text-[color-mix(in_oklch,var(--sales-blue)_78%,var(--mat-sys-on-background))]';
-const DASHBOARD_DATA_LIST_CLASSES = 'list-none p-0 [&>li+li]:border-t [&>li+li]:border-border';
-const DASHBOARD_DATA_ROW_CLASSES = 'py-[0.95rem]';
+const DASHBOARD_LARGE_VALUE_CLASSES = 'demo-dashboard-large-value';
+const DASHBOARD_DATA_LIST_CLASSES = 'demo-dashboard-data-list';
+const DASHBOARD_DATA_ROW_CLASSES = 'demo-dashboard-data-row';
 const DASHBOARD_TOGGLE_BUTTON_CLASSES =
-  'focus-ring min-h-11 rounded-(--sales-control-radius) border border-(--appearance-border) bg-[color-mix(in_oklch,var(--appearance-surface)_98%,var(--sales-blue)_2%)] px-4 py-2 text-sm font-medium text-foreground transition-[transform,background-color,border-color,color,box-shadow] duration-180 hover:-translate-y-px hover:border-[color-mix(in_srgb,var(--sales-blue)_28%,transparent)] hover:shadow-[0_12px_26px_-24px_color-mix(in_srgb,var(--sales-blue)_32%,transparent)]';
-const DASHBOARD_TOGGLE_BUTTON_ACTIVE_CLASSES = `${DASHBOARD_TOGGLE_BUTTON_CLASSES} border-transparent bg-foreground text-background shadow-[0_16px_30px_-26px_color-mix(in_srgb,var(--mat-sys-on-background)_44%,transparent)]`;
-const DASHBOARD_METRIC_CARD_CLASSES =
-  'block border-border border-t px-[1.2rem] py-[1.1rem] first:border-t-0 md:nth-[-n+2]:border-t-0 md:nth-[2n]:border-l xl:not-first:border-l xl:border-t-0';
-const DASHBOARD_POSITIVE_DELTA_CLASSES =
-  'text-[color-mix(in_srgb,var(--sales-emerald)_82%,var(--mat-sys-on-background))]';
-const DASHBOARD_NEGATIVE_DELTA_CLASSES =
-  'text-[color-mix(in_srgb,var(--mat-sys-error)_82%,var(--mat-sys-on-background))]';
-const DASHBOARD_PROGRESS_TRACK_CLASSES =
-  'block mt-3 h-[0.55rem] overflow-hidden rounded-full bg-[color-mix(in_oklch,var(--mat-sys-background)_93%,var(--sales-blue)_7%)]';
-const DASHBOARD_PROGRESS_FILL_CLASSES = 'block h-full rounded-full bg-(--fill-tone)';
+  'focus-ring demo-dashboard-toggle-button min-h-11 px-4 py-2 text-sm font-medium transition-[transform,background-color,border-color,color,box-shadow] duration-180 hover:-translate-y-px';
+const DASHBOARD_TOGGLE_BUTTON_ACTIVE_CLASSES = `${DASHBOARD_TOGGLE_BUTTON_CLASSES} demo-dashboard-toggle-button--active`;
+const DASHBOARD_METRIC_CARD_CLASSES = 'demo-dashboard-metric-card';
+const DASHBOARD_POSITIVE_DELTA_CLASSES = 'demo-dashboard-delta-positive';
+const DASHBOARD_NEGATIVE_DELTA_CLASSES = 'demo-dashboard-delta-negative';
+const DASHBOARD_PROGRESS_TRACK_CLASSES = 'demo-dashboard-progress-track';
+const DASHBOARD_PROGRESS_FILL_CLASSES = 'demo-dashboard-progress-fill';
 
 @Directive({
   selector: '[dashboardPanel]',
@@ -93,7 +87,8 @@ export class DashboardSectionTitleDirective {
   readonly dashboardSectionTitle = input<DashboardSchemeRole>('primary');
 
   protected readonly titleClass = computed(
-    () => DASHBOARD_SECTION_TITLE_ROLE_CLASSES[this.dashboardSectionTitle()],
+    () =>
+      `${DASHBOARD_SECTION_TITLE_BASE_CLASSES} ${DASHBOARD_SECTION_TITLE_ROLE_CLASSES[this.dashboardSectionTitle()]}`,
   );
 }
 
@@ -164,9 +159,7 @@ export class DashboardToggleGroupComponent {
     role: 'article',
   },
   template: `
-    <p
-      class="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_54%,transparent)]"
-    >
+    <p class="demo-dashboard-quiet-text text-[0.72rem] font-medium uppercase tracking-[0.22em]">
       {{ metric().label }}
     </p>
     <p dashboardLargeValue class="mt-3 tabular-nums text-[1.9rem] font-semibold tracking-[-0.04em]">
@@ -179,9 +172,7 @@ export class DashboardToggleGroupComponent {
       >
         {{ metric().delta }}
       </p>
-      <p
-        class="max-w-[22ch] text-right text-xs leading-5 text-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)]"
-      >
+      <p class="demo-dashboard-subtle-text max-w-[22ch] text-right text-xs leading-5">
         {{ metric().note }}
       </p>
     </div>
@@ -206,7 +197,7 @@ export class DashboardMetricCardComponent {
       <span
         class="${DASHBOARD_PROGRESS_FILL_CLASSES}"
         [style.width.%]="value()"
-        [style.--fill-tone]="tone()"
+        [style.--demo-dashboard-fill-tone]="tone()"
       ></span>
     </div>
   `,

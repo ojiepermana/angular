@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   AppearanceSwitcherComponent,
   LayoutContainerSwitcherComponent,
   SchemeSwitcherComponent,
 } from '@ojiepermana/angular/theme/component';
+import { ThemeService } from '@ojiepermana/angular/theme/service';
 import { LayoutHorizontalComponent } from '@ojiepermana/angular/theme/layout';
 
 @Component({
@@ -57,8 +58,14 @@ import { LayoutHorizontalComponent } from '@ojiepermana/angular/theme/layout';
   `,
 })
 export class DemoHorizontalShellComponent {
+  private readonly theme = inject(ThemeService);
+
   protected readonly links = [
     { path: '/vertical', label: 'Vertical' },
     { path: '/horizontal', label: 'Horizontal' },
   ];
+
+  constructor() {
+    this.theme.setLayoutMode('horizontal');
+  }
 }

@@ -1,14 +1,14 @@
 # Theme Library
 
-Reusable theme state, layout shells, theme controls, and shared CSS tokens for `@ojiepermana/angular`.
+Reusable theme state, layout shells, theme controls, and shared styling tokens for `@ojiepermana/angular`.
 
 ## Entry Points
 
-The theme package is organized by domain-specific secondary entry points.
+The theme package is intentionally split by responsibility.
 
-- `@ojiepermana/angular/theme` is intentionally empty and acts only as a namespace marker.
-- `@ojiepermana/angular/theme/service` exports `ThemeService`, `provideNgTheme`, `NG_THEME_CONFIG`, and the theme types.
-- `@ojiepermana/angular/theme/component` exports the built-in theme controls and `ThemeLucideConfigDirective`.
+- `@ojiepermana/angular/theme` is an empty namespace marker.
+- `@ojiepermana/angular/theme/service` exports theme state, providers, tokens, and theme types.
+- `@ojiepermana/angular/theme/component` exports the built-in controls and `ThemeLucideConfigDirective`.
 - `@ojiepermana/angular/theme/directive` exports `ThemeHostDirective`.
 - `@ojiepermana/angular/theme/layout` exports `LayoutHorizontalComponent` and `LayoutVerticalComponent`.
 - `@ojiepermana/angular/theme/styles/index.css` exports the shared stylesheet bundle.
@@ -16,27 +16,30 @@ The theme package is organized by domain-specific secondary entry points.
 Do not import theme APIs from `@ojiepermana/angular` root.
 Do not import runtime APIs from `@ojiepermana/angular/theme` root.
 
-## Requirements
+## Styling Contract
 
-This library currently targets the following peer dependencies:
+The current theme system is built around semantic tokens and a Tailwind-first authoring model.
 
-- `@angular/common` `^21.2.0`
-- `@angular/core` `^21.2.0`
-- `@angular/material` `^21.0.0`
-- `@angular/cdk` `^21.0.0`
-- `@lucide/angular` `>=1.0.0`
-- `tailwindcss` `>=4.0.0`
+- Semantic tokens are the source of truth for colors, surfaces, borders, radius, and focus state.
+- `.dark` controls resolved dark mode.
+- `data-*` attributes control the active scheme, color preset, appearance preset, layout mode, and layout container mode.
+- Tailwind utility classes should be the default for template authoring.
+- Direct CSS is reserved for token layers, layout selectors, reusable cross-template utilities, dashboard primitives, and the internal Angular Material adapter layer.
+
+The stylesheet bundle also exposes semantic tokens through `@theme inline`, so utilities such as `bg-background`, `text-foreground`, and `border-border` can be mapped from the shared theme variables.
+
+Legacy files under `styles/_*.css` and `styles/overrides/` are still present in the repository for migration reference, but they are not imported by `styles/index.css` anymore.
 
 ## Quick Start
 
-Import the theme stylesheet bundle once in the consuming application:
+Import the shared stylesheet bundle once in the consuming application:
 
 ```css
 @import 'tailwindcss';
 @import '@ojiepermana/angular/theme/styles/index.css';
 ```
 
-Provide the theme configuration during application bootstrap:
+Provide the theme configuration during bootstrap:
 
 ```ts
 import { ApplicationConfig } from '@angular/core';
@@ -49,14 +52,18 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideNgTheme({
+      defaultScheme: 'system',
+      defaultColor: 'brand',
+      defaultAppearance: 'flat',
       defaultLayoutMode: 'vertical',
       defaultLayoutContainer: 'boxed',
+      colors: ['brand', 'green', 'orange'],
     }),
   ],
 };
 ```
 
-Use one of the layout shells and the built-in controls in your shell component:
+Use a layout shell and the built-in controls in an application shell:
 
 ```ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -80,10 +87,13 @@ import { LayoutVerticalComponent } from '@ojiepermana/angular/theme/layout';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <vertical>
-      <nav navigation>
-        <appearance-switcher />
-        <layout-container-switcher />
-        <scheme-switcher />
+      <nav navigation class="flex flex-col gap-4 p-4">
+        <div class="flex items-center gap-2">
+          <appearance-switcher />
+          <layout-container-switcher />
+          <scheme-switcher />
+        </div>
+
         <color-picker />
       </nav>
     </vertical>
@@ -92,21 +102,24 @@ import { LayoutVerticalComponent } from '@ojiepermana/angular/theme/layout';
 export class AppShellComponent {}
 ```
 
-## Public API
-
-### Service Entry Point
+## Service API
 
 Import from `@ojiepermana/angular/theme/service`.
+
+### Exports
 
 - `ThemeService`
 - `provideNgTheme(config?: Partial<NgThemeConfig>)`
 - `NG_THEME_CONFIG`
 - `ThemeScheme`
 - `ThemeColor`
+- `ThemeColorOption`
 - `ThemeAppearance`
 - `LayoutMode`
 - `LayoutContainer`
 - `NgThemeConfig`
+
+### ThemeService State
 
 `ThemeService` exposes signal-based state for:
 
@@ -116,136 +129,87 @@ Import from `@ojiepermana/angular/theme/service`.
 - `layoutMode`
 - `layoutContainer`
 - `resolvedScheme`
+- `colorOptions`
 
-It also exposes setters for every axis plus `toggleScheme()`.
+It also exposes setters for each axis plus `toggleScheme()`, which cycles `light -> dark -> system -> light`.
 
-In the browser, the service persists values to `localStorage` with the default prefix `ng-theme` and mirrors the active state to `document.documentElement` using these attributes:
+Persistence uses the pattern `storageKey:storageVersion:axis`, with the default key prefix `ng-theme:v2:*`.
 
-- `theme-schemes`
-- `theme-colors`
-- `theme-appearances`
-- `layout-mode`
-- `layout-container`
+## Runtime Contract
 
-### Runtime Theme Attributes
+The stylesheet bundle reads the following runtime contract from the root element.
 
-These five attributes are the runtime contract between `ThemeService` and the stylesheet system.
+| Selector                | Purpose                  | Values                                                      | Notes                                                                |
+| ----------------------- | ------------------------ | ----------------------------------------------------------- | -------------------------------------------------------------------- |
+| `.dark`                 | Resolved dark mode state | present or absent                                           | Applied from `ThemeService.resolvedScheme()`.                        |
+| `data-theme-scheme`     | User preference source   | `light`, `dark`, `system`                                   | `system` follows the current OS preference.                          |
+| `data-theme-color`      | Active color preset      | `brand`, `blue`, `green`, `red`, `cyan`, `purple`, `orange` | Restrict the built-in picker with `NgThemeConfig.colors`.            |
+| `data-theme-appearance` | Active surface preset    | `flat`, `glass`                                             | Controls shell surfaces, elevated surfaces, and backdrops.           |
+| `data-layout-mode`      | Navigation chrome state  | `vertical`, `horizontal`, `empty`                           | `empty` is a programmatic content-only mode that hides shell chrome. |
+| `data-layout-container` | Shell placement mode     | `full`, `boxed`                                             | `boxed` constrains shell width and adds outer padding.               |
 
-| Attribute           | Purpose                                                     | Current Values                                              | Behavior                                                                                                                                                                                                   |
-| ------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `theme-schemes`     | Controls light and dark mode selection.                     | `light`, `dark`, `system`                                   | The default value is `system`, so the active scheme follows the current OS preference. When set to `light` or `dark`, the theme explicitly overrides the OS setting.                                       |
-| `theme-colors`      | Controls the main color family used by the theme.           | `brand`, `blue`, `green`, `red`, `cyan`, `purple`, `orange` | This axis feeds the shared theme palette and Angular Material system tokens such as primary, secondary, and tertiary colors.                                                                               |
-| `theme-appearances` | Controls the visual treatment of the interface.             | `flat`, `glass`                                             | This axis changes shared appearance variables and can affect the UI down to component level, including shells and Material-based elements such as cards, tables, buttons, and other overridden components. |
-| `layout-mode`       | Controls how navigation is presented in the main shell.     | `vertical`, `horizontal`, `empty`                           | Use `vertical` for sidebar navigation and `horizontal` for top navigation. `empty` is available for views without a navigation shell.                                                                      |
-| `layout-container`  | Controls how the main layout is placed inside the viewport. | `full`, `boxed`                                             | `full` stretches the shell to the browser edges. `boxed` constrains the shell and adds symmetric outer spacing so the layout reads as a centered container.                                                |
+When `ThemeHostDirective` is attached to a custom container, the same runtime contract is mirrored onto that host.
 
-`ThemeService.resolvedScheme` exposes the effective light or dark result after the `system` value is resolved against the user's OS preference.
-
-### Component Entry Point
+## Component API
 
 Import from `@ojiepermana/angular/theme/component`.
 
-| Export                             | Selector                                       | Behavior                                                                                                        |
-| ---------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `AppearanceSwitcherComponent`      | `<appearance-switcher />`                      | Toggles `flat` and `glass` appearance modes.                                                                    |
-| `ColorPickerComponent`             | `<color-picker />`                             | Renders the built-in theme palette buttons for `brand`, `blue`, `green`, `red`, `cyan`, `purple`, and `orange`. |
-| `LayoutContainerSwitcherComponent` | `<layout-container-switcher />`                | Toggles the layout container between `full` and `boxed`.                                                        |
-| `LayoutModeSwitcherComponent`      | `<layout-mode-switcher />`                     | Opens a menu for `vertical`, `horizontal`, and `empty` layout modes.                                            |
-| `SchemeSwitcherComponent`          | `<scheme-switcher />`                          | Calls `ThemeService.toggleScheme()` and reflects the current scheme icon.                                       |
-| `ThemeLucideConfigDirective`       | `hostDirectives: [ThemeLucideConfigDirective]` | Provides Lucide config with `absoluteStrokeWidth: true` and `strokeWidth: 1.35`.                                |
+| Export                             | Selector                                       | Behavior                                                                                                                                                            |
+| ---------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AppearanceSwitcherComponent`      | `<appearance-switcher />`                      | Toggles between `flat` and `glass`.                                                                                                                                 |
+| `ColorPickerComponent`             | `<color-picker />`                             | Renders only the color presets exposed by `ThemeService.colorOptions()`.                                                                                            |
+| `LayoutContainerSwitcherComponent` | `<layout-container-switcher />`                | Toggles between `full` and `boxed`.                                                                                                                                 |
+| `LayoutModeSwitcherComponent`      | `<layout-mode-switcher />`                     | Opens a menu for the supported shell layouts: `vertical` and `horizontal`. If layout state is set to `empty` elsewhere, the button reflects that as `Content Only`. |
+| `SchemeSwitcherComponent`          | `<scheme-switcher />`                          | Opens a menu for `light`, `dark`, and `system`.                                                                                                                     |
+| `ThemeLucideConfigDirective`       | `hostDirectives: [ThemeLucideConfigDirective]` | Standardizes Lucide icons with `absoluteStrokeWidth: true` and `strokeWidth: 1.35`.                                                                                 |
 
-### Directive Entry Point
+## Layouts And Directive
 
-Import from `@ojiepermana/angular/theme/directive`.
-
-- `ThemeHostDirective` mirrors the current theme attributes onto any host element with `ngtThemeHost`.
-
-Example:
+Import `ThemeHostDirective` from `@ojiepermana/angular/theme/directive`.
 
 ```html
-<section ngtThemeHost class="appearance-shell">Preview content</section>
+<section ngtThemeHost class="appearance-shell rounded-3xl p-6">Preview content</section>
 ```
 
-### Layout Entry Point
+Import layout shells from `@ojiepermana/angular/theme/layout`.
 
-Import from `@ojiepermana/angular/theme/layout`.
+| Export                      | Selector       | Content Slots                                            | Notes                                                                                                              |
+| --------------------------- | -------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `LayoutHorizontalComponent` | `<horizontal>` | `[headerBrand]`, `[headerNavigation]`, `[headerActions]` | Sets `data-layout-mode="horizontal"` on the shell host and renders routes inside its internal `<router-outlet />`. |
+| `LayoutVerticalComponent`   | `<vertical>`   | `[navigation]`                                           | Sets `data-layout-mode="vertical"` on the shell host and renders routes inside its internal `<router-outlet />`.   |
 
-| Export                      | Selector       | Content Slots                                            | Notes                                                                                                |
-| --------------------------- | -------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `LayoutHorizontalComponent` | `<horizontal>` | `[headerBrand]`, `[headerNavigation]`, `[headerActions]` | Applies `layout-mode="horizontal"` and renders child routes inside its internal `<router-outlet />`. |
-| `LayoutVerticalComponent`   | `<vertical>`   | `[navigation]`                                           | Applies `layout-mode="vertical"` and renders child routes inside its internal `<router-outlet />`.   |
+`LayoutMode` still includes `empty` for content-only screens. There is no dedicated empty layout component; instead, the runtime contract hides shell chrome when the active mode is set to `empty`.
 
-`LayoutMode` also supports `empty`, but there is currently no dedicated empty shell component in this package.
+## Stylesheet Architecture
 
-## Theme Configuration
+The bundle imported by `@ojiepermana/angular/theme/styles/index.css` is organized as follows:
 
-`NgThemeConfig` defines the initial state for the theme service.
+1. `styles/tokens/foundation.css`
+2. `styles/tokens/semantic.css`
+3. `styles/modes/dark.css`
+4. `styles/presets/colors/*`
+5. `styles/presets/appearances/*`
+6. `styles/layout/index.css`
+7. `styles/utilities/index.css`
+8. `styles/_demo-dashboard.css`
+9. `styles/adapters/material-ui/index.css`
 
-| Option                   | Default    | Supported Values / Notes                                                                                                                |
-| ------------------------ | ---------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `defaultScheme`          | `system`   | `light`, `dark`, `system`. The default follows the active OS theme until the user explicitly chooses a fixed mode.                      |
-| `defaultColor`           | `brand`    | `brand`, `blue`, `green`, `red`, `cyan`, `purple`, `orange`. This selects the primary color family used across the theme system.        |
-| `defaultAppearance`      | `flat`     | `flat`, `glass`. This controls the visual surface style that is propagated through shared appearance variables and component overrides. |
-| `defaultLayoutMode`      | `vertical` | `vertical`, `horizontal`, `empty`. This controls whether navigation is rendered as a sidebar, a top bar, or omitted.                    |
-| `defaultLayoutContainer` | `full`     | `full`, `boxed`. `full` reaches the viewport edges, while `boxed` applies a centered container with outer spacing.                      |
-| `storageKey`             | `ng-theme` | Prefix used for persisted values in `localStorage`                                                                                      |
-| `colors`                 | optional   | Present in the exported config type. The packaged `ColorPickerComponent` currently renders the fixed built-in palette list above.       |
+Responsibilities:
 
-## Styling Model
-
-The stylesheet bundle in `styles/index.css` imports files in this order:
-
-1. `_base.css`
-2. `_colors.css`
-3. `_schemes.css`
-4. `_appearances.css`
-5. `_layout.css`
-6. `overrides/index.css`
-
-The override aggregator in `styles/overrides/index.css` then forwards to the grouped override bundles under `styles/overrides/`. The current grouped bundle is `styles/overrides/material-ui/index.css`.
-
-Those layers provide the following responsibilities:
-
-- `_base.css` maps the theme palette into Angular Material system tokens, defines shared utility classes, and sets baseline host display rules for `<horizontal>` and `<vertical>`.
-- `_colors.css` defines the supported palette values for the `theme-colors` attribute.
-- `_schemes.css` controls `color-scheme` for `light`, `dark`, and `system`.
-- `_appearances.css` maps `flat` and `glass` into shared `--appearance-*` variables.
-- `_layout.css` defines the layout shell variables and the structure for horizontal, vertical, full, and boxed layouts.
-- `overrides/index.css` is the override aggregator for grouped stylesheet bundles.
-- `overrides/material-ui/index.css` loads the Angular Material override bundle.
-
-The `material-ui` override bundle currently includes overrides for:
-
-- badge
-- button
-- card
-- checkbox
-- chips
-- datepicker
-- dialog
-- expansion
-- form-field
-- input
-- list
-- menu
-- paginator
-- progress
-- radio
-- select
-- sidenav
-- slide-toggle
-- snackbar
-- stepper
-- table
-- tabs
-- toolbar
-- tooltip
-- tree
+- `tokens/foundation.css` defines shared radius, shadow, layout, and theme exposure through `@theme inline`.
+- `tokens/semantic.css` defines the light-mode semantic token contract.
+- `modes/dark.css` overrides semantic tokens for dark mode.
+- `presets/colors/*` defines color presets through `data-theme-color`.
+- `presets/appearances/*` defines flat and glass surface presets through `data-theme-appearance`.
+- `layout/index.css` defines the shell structure and the `full`, `boxed`, and `empty` layout behaviors.
+- `utilities/index.css` contains low-level shared utilities such as `appearance-shell`, `focus-ring`, and compatibility aliases.
+- `_demo-dashboard.css` contains demo-only dashboard primitives that still consume the shared semantic tokens.
+- `adapters/material-ui/index.css` maps semantic tokens into Angular Material internals and applies adapter-level overrides.
 
 ## Authoring Notes
 
 - Keep imports domain-based and use the narrowest public entry point available.
-- Keep shared theme primitives in `styles/_*.css` and grouped override bundles under `styles/overrides/*/`.
-- Angular Material override files currently live in `styles/overrides/material-ui/*.css`.
-- Use `@lucide/angular` for library icons. The built-in controls already standardize icon configuration through `ThemeLucideConfigDirective`.
-- Component source filenames in this library omit the `.component` suffix, for example `appearance-switcher.ts`, `horizontal.ts`, and `vertical.ts`.
+- In templates, prefer Tailwind utility classes for layout, spacing, typography, and interactive states.
+- Use direct CSS only when the style belongs in a token layer, shared selector rule, reusable utility, or framework adapter.
+- Library icons must use `@lucide/angular`, and every Lucide icon should keep `absoluteStrokeWidth` enabled.
+- Component source filenames in this library omit the `.component` suffix.

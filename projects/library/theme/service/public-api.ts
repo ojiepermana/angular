@@ -4,6 +4,7 @@ export { NG_THEME_CONFIG } from './src/theme.token';
 export type {
   ThemeScheme,
   ThemeColor,
+  ThemeColorOption,
   ThemeAppearance,
   LayoutMode,
   LayoutContainer,

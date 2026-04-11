@@ -1,0 +1,89 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-block-size: 100%;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+.appearance-shell {
+  background: var(--shell-surface);
+  color: var(--shell-foreground);
+  border: 1px solid var(--shell-border);
+  box-shadow: var(--shell-shadow);
+  backdrop-filter: var(--shell-backdrop);
+  -webkit-backdrop-filter: var(--shell-backdrop);
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.ngt-icon-button {
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease,
+    transform 120ms ease;
+}
+
+.ngt-icon-button.mat-mdc-icon-button .lucide {
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+}
+
+/* Compatibility aliases for consumers that have not yet mapped theme tokens into Tailwind. */
+.bg-background {
+  background-color: var(--background);
+}
+
+.bg-foreground {
+  background-color: var(--foreground);
+}
+
+.text-background {
+  color: var(--background);
+}
+
+.text-foreground {
+  color: var(--foreground);
+}
+
+.text-foreground\/50 {
+  color: color-mix(in oklab, var(--foreground) 50%, transparent);
+}
+
+.text-foreground\/60 {
+  color: color-mix(in oklab, var(--foreground) 60%, transparent);
+}
+
+.text-foreground\/65 {
+  color: color-mix(in oklab, var(--foreground) 65%, transparent);
+}
+
+.text-foreground\/70 {
+  color: color-mix(in oklab, var(--foreground) 70%, transparent);
+}
+
+.text-foreground\/75 {
+  color: color-mix(in oklab, var(--foreground) 75%, transparent);
+}
+
+.border-border {
+  border-color: var(--border);
+}

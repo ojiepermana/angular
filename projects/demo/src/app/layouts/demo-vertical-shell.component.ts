@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   AppearanceSwitcherComponent,
@@ -6,6 +6,7 @@ import {
   LayoutContainerSwitcherComponent,
   SchemeSwitcherComponent,
 } from '@ojiepermana/angular/theme/component';
+import { ThemeService } from '@ojiepermana/angular/theme/service';
 import { LayoutVerticalComponent } from '@ojiepermana/angular/theme/layout';
 
 @Component({
@@ -69,8 +70,14 @@ import { LayoutVerticalComponent } from '@ojiepermana/angular/theme/layout';
   `,
 })
 export class DemoVerticalShellComponent {
+  private readonly theme = inject(ThemeService);
+
   protected readonly links = [
     { path: '/vertical', label: 'Vertical layout' },
     { path: '/horizontal', label: 'Horizontal layout' },
   ];
+
+  constructor() {
+    this.theme.setLayoutMode('vertical');
+  }
 }

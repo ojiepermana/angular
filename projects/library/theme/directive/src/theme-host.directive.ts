@@ -4,11 +4,13 @@ import { ThemeService } from '@ojiepermana/angular/theme/service';
 @Directive({
   selector: '[ngtThemeHost]',
   host: {
-    '[attr.theme-schemes]': 'theme.scheme()',
-    '[attr.theme-colors]': 'theme.color()',
-    '[attr.theme-appearances]': 'theme.appearance()',
-    '[attr.layout-mode]': 'theme.layoutMode()',
-    '[attr.layout-container]': 'theme.layoutContainer()',
+    '[class.dark]': 'theme.resolvedScheme() === "dark"',
+    '[style.color-scheme]': 'theme.resolvedScheme()',
+    '[attr.data-theme-scheme]': 'theme.scheme()',
+    '[attr.data-theme-color]': 'theme.color()',
+    '[attr.data-theme-appearance]': 'theme.appearance()',
+    '[attr.data-layout-mode]': 'theme.layoutMode()',
+    '[attr.data-layout-container]': 'theme.layoutContainer()',
   },
 })
 export class ThemeHostDirective {

@@ -184,19 +184,27 @@ const REGION_OPTIONS: readonly RegionOption[] = [
 
 const CHANNEL_LABELS = ['Direct', 'Partner', 'Expansion', 'Self-serve'] as const;
 const CHANNEL_TONES = [
-  'var(--sales-blue)',
-  'var(--sales-indigo)',
-  'var(--sales-emerald)',
-  'var(--sales-amber)',
+  'var(--demo-dashboard-accent)',
+  'var(--demo-dashboard-secondary)',
+  'var(--demo-dashboard-success)',
+  'var(--demo-dashboard-warning)',
 ] as const;
 
 const FUNNEL_LABELS = ['Qualified', 'Proposal', 'Negotiation', 'Commit'] as const;
 const FUNNEL_TONES = [
-  'var(--sales-blue)',
-  'var(--sales-cyan)',
-  'var(--sales-indigo)',
-  'var(--sales-emerald)',
+  'var(--demo-dashboard-accent)',
+  'var(--demo-dashboard-support)',
+  'var(--demo-dashboard-secondary)',
+  'var(--demo-dashboard-success)',
 ] as const;
+
+function isTimeframeKey(value: string): value is TimeframeKey {
+  return value === 'month' || value === 'quarter' || value === 'ytd';
+}
+
+function isRegionKey(value: string): value is RegionKey {
+  return value === 'global' || value === 'americas' || value === 'emea' || value === 'apac';
+}
 
 const BASE_TIMEFRAME_DATA: Readonly<Record<TimeframeKey, TimeframeBase>> = {
   month: {
@@ -338,23 +346,29 @@ const REGION_TEAM_BOARD: Readonly<Record<RegionKey, readonly TeamPerformanceBase
       attainment: 118,
       revenue: 2_420_000,
       delta: 16,
-      tone: 'var(--sales-blue)',
+      tone: 'var(--demo-dashboard-accent)',
     },
     {
       label: 'Mid-market',
       attainment: 104,
       revenue: 1_460_000,
       delta: 9,
-      tone: 'var(--sales-indigo)',
+      tone: 'var(--demo-dashboard-secondary)',
     },
     {
       label: 'Expansion',
       attainment: 112,
       revenue: 1_180_000,
       delta: 13,
-      tone: 'var(--sales-emerald)',
+      tone: 'var(--demo-dashboard-success)',
     },
-    { label: 'Partner', attainment: 97, revenue: 880_000, delta: 6, tone: 'var(--sales-amber)' },
+    {
+      label: 'Partner',
+      attainment: 97,
+      revenue: 880_000,
+      delta: 6,
+      tone: 'var(--demo-dashboard-warning)',
+    },
   ],
   americas: [
     {
@@ -362,47 +376,89 @@ const REGION_TEAM_BOARD: Readonly<Record<RegionKey, readonly TeamPerformanceBase
       attainment: 121,
       revenue: 1_180_000,
       delta: 18,
-      tone: 'var(--sales-blue)',
+      tone: 'var(--demo-dashboard-accent)',
     },
-    { label: 'Central', attainment: 101, revenue: 840_000, delta: 8, tone: 'var(--sales-indigo)' },
+    {
+      label: 'Central',
+      attainment: 101,
+      revenue: 840_000,
+      delta: 8,
+      tone: 'var(--demo-dashboard-secondary)',
+    },
     {
       label: 'East Coast',
       attainment: 109,
       revenue: 960_000,
       delta: 11,
-      tone: 'var(--sales-emerald)',
+      tone: 'var(--demo-dashboard-success)',
     },
-    { label: 'LATAM', attainment: 92, revenue: 410_000, delta: 7, tone: 'var(--sales-amber)' },
+    {
+      label: 'LATAM',
+      attainment: 92,
+      revenue: 410_000,
+      delta: 7,
+      tone: 'var(--demo-dashboard-warning)',
+    },
   ],
   emea: [
-    { label: 'UKI', attainment: 106, revenue: 760_000, delta: 10, tone: 'var(--sales-blue)' },
-    { label: 'DACH', attainment: 98, revenue: 690_000, delta: 6, tone: 'var(--sales-indigo)' },
+    {
+      label: 'UKI',
+      attainment: 106,
+      revenue: 760_000,
+      delta: 10,
+      tone: 'var(--demo-dashboard-accent)',
+    },
+    {
+      label: 'DACH',
+      attainment: 98,
+      revenue: 690_000,
+      delta: 6,
+      tone: 'var(--demo-dashboard-secondary)',
+    },
     {
       label: 'France & Benelux',
       attainment: 94,
       revenue: 520_000,
       delta: 5,
-      tone: 'var(--sales-emerald)',
+      tone: 'var(--demo-dashboard-success)',
     },
     {
       label: 'Middle East',
       attainment: 88,
       revenue: 360_000,
       delta: 4,
-      tone: 'var(--sales-amber)',
+      tone: 'var(--demo-dashboard-warning)',
     },
   ],
   apac: [
-    { label: 'ANZ', attainment: 116, revenue: 640_000, delta: 19, tone: 'var(--sales-blue)' },
+    {
+      label: 'ANZ',
+      attainment: 116,
+      revenue: 640_000,
+      delta: 19,
+      tone: 'var(--demo-dashboard-accent)',
+    },
     {
       label: 'Singapore',
       attainment: 108,
       revenue: 520_000,
       delta: 15,
-      tone: 'var(--sales-indigo)',
+      tone: 'var(--demo-dashboard-secondary)',
     },
-    { label: 'Japan', attainment: 97, revenue: 480_000, delta: 9, tone: 'var(--sales-emerald)' },
-    { label: 'India', attainment: 111, revenue: 450_000, delta: 21, tone: 'var(--sales-amber)' },
+    {
+      label: 'Japan',
+      attainment: 97,
+      revenue: 480_000,
+      delta: 9,
+      tone: 'var(--demo-dashboard-success)',
+    },
+    {
+      label: 'India',
+      attainment: 111,
+      revenue: 450_000,
+      delta: 21,
+      tone: 'var(--demo-dashboard-warning)',
+    },
   ],
 };
 
@@ -765,19 +821,19 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
       label: 'Forecast confidence',
       value: `${forecastConfidence}%`,
       note: 'Manager inspection and stage hygiene improved this week.',
-      tone: 'var(--sales-blue)',
+      tone: 'var(--demo-dashboard-accent)',
     },
     {
       label: 'New logo revenue',
       value: formatCompactCurrency(newLogoRevenue),
       note: 'Fresh business contribution across greenfield accounts.',
-      tone: 'var(--sales-emerald)',
+      tone: 'var(--demo-dashboard-success)',
     },
     {
       label: 'Renewal health',
       value: `${renewalRate}%`,
       note: 'Early renewal plays are protecting margin and expansion capacity.',
-      tone: 'var(--sales-amber)',
+      tone: 'var(--demo-dashboard-warning)',
     },
   ];
 
@@ -820,9 +876,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
     @let current = snapshot();
     @let chart = trendChart();
 
-    <section
-      class="min-h-full px-5 py-6 sm:px-8 sm:py-8 [--sales-blue:var(--mat-sys-primary)] [--sales-indigo:color-mix(in_srgb,var(--mat-sys-secondary)_82%,var(--mat-sys-primary))] [--sales-cyan:color-mix(in_srgb,var(--mat-sys-tertiary)_72%,var(--mat-sys-background))] [--sales-emerald:var(--mat-sys-tertiary)] [--sales-amber:color-mix(in_oklch,var(--mat-sys-secondary)_72%,var(--mat-sys-primary))] [--sales-panel-radius:max(var(--layout-shell-radius),0.125rem)] [--sales-surface-radius:max(var(--layout-shell-radius),0.125rem)] [--sales-control-radius:max(var(--layout-shell-radius),0.125rem)] [--sales-badge-radius:0.125rem] [--sales-pill-radius:999px] [background:radial-gradient(circle_at_top_center,color-mix(in_oklch,var(--mat-sys-primary)_10%,transparent)_0%,transparent_40%),linear-gradient(180deg,color-mix(in_oklch,var(--mat-sys-background)_98%,var(--mat-sys-secondary)_2%)_0%,transparent_100%)]"
-    >
+    <section class="demo-dashboard-theme min-h-full px-5 py-6 sm:px-8 sm:py-8">
       <div class="mx-auto flex w-full flex-col gap-5">
         <header
           dashboardPanel
@@ -831,32 +885,24 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
           <div class="flex flex-col gap-5">
             <div class="flex flex-wrap items-center gap-3">
               <span
-                class="inline-flex items-center gap-[0.55rem] rounded-full border border-[color-mix(in_srgb,var(--sales-blue)_18%,transparent)] bg-[color-mix(in_oklch,var(--sales-blue)_10%,transparent)] px-[0.8rem] py-[0.45rem] text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[color-mix(in_srgb,var(--sales-blue)_72%,var(--mat-sys-on-background))] before:size-2 before:rounded-full before:bg-(--sales-blue) before:content-[''] before:animate-pulse motion-reduce:before:animate-none"
+                class="demo-dashboard-live-badge inline-flex items-center gap-[0.55rem] px-[0.8rem] py-[0.45rem] text-[0.72rem] font-semibold uppercase tracking-[0.18em]"
               >
                 Live forecast sync
               </span>
-              <span
-                class="text-xs font-medium uppercase tracking-[0.2em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_62%,transparent)]"
-              >
+              <span class="demo-dashboard-meta-text text-xs font-medium uppercase tracking-[0.2em]">
                 {{ current.rangeLabel }}
               </span>
             </div>
 
             <div class="max-w-[64ch]">
-              <p
-                class="text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_55%,transparent)]"
-              >
-                Sales Command Center
-              </p>
+              <p dashboardEyebrow>Sales Command Center</p>
               <h1
                 dashboardHeroTitle
                 class="mt-3 max-w-[16ch] text-[2.1rem] font-semibold leading-[1.03] tracking-[-0.04em] sm:text-[2.8rem]"
               >
                 Revenue health without the dashboard noise.
               </h1>
-              <p
-                class="mt-4 max-w-[58ch] text-[0.98rem] leading-7 text-[color-mix(in_srgb,var(--mat-sys-on-background)_78%,transparent)]"
-              >
+              <p class="demo-dashboard-body-text mt-4 max-w-[58ch] text-[0.98rem] leading-7">
                 {{ current.summary }}
               </p>
             </div>
@@ -886,9 +932,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
               <h2 dashboardSectionTitle="secondary" class="mt-2 text-lg font-semibold leading-7">
                 {{ current.focus }}
               </h2>
-              <p
-                class="mt-2 text-sm leading-6 text-[color-mix(in_srgb,var(--mat-sys-on-background)_74%,transparent)]"
-              >
+              <p class="demo-dashboard-supporting-text mt-2 text-sm leading-6">
                 {{ current.focusDetail }}
               </p>
             </section>
@@ -903,9 +947,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                 Quarter pacing and operating signals
               </h2>
             </div>
-            <p
-              class="max-w-[48ch] text-sm leading-6 text-[color-mix(in_srgb,var(--mat-sys-on-background)_70%,transparent)]"
-            >
+            <p class="demo-dashboard-muted-text max-w-[48ch] text-sm leading-6">
               The headline numbers stay in one shared strip so the top of the page reads faster and
               feels less fragmented.
             </p>
@@ -931,15 +973,15 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                 </h2>
               </div>
               <div
-                class="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.18em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_62%,transparent)]"
+                class="demo-dashboard-meta-text flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.18em]"
               >
                 <span class="inline-flex items-center gap-2">
-                  <span class="size-2 rounded-full bg-(--sales-blue)"></span>
+                  <span class="size-2 rounded-full bg-(--demo-dashboard-accent)"></span>
                   Closed won
                 </span>
                 <span class="inline-flex items-center gap-2">
                   <span
-                    class="h-px w-6 border-t border-dashed border-[color-mix(in_srgb,var(--mat-sys-on-background)_30%,transparent)]"
+                    class="demo-dashboard-chart-target-key h-px w-6 border-t border-dashed"
                   ></span>
                   Target
                 </span>
@@ -948,7 +990,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
 
             <div
               dashboardSurface
-              class="mt-5 overflow-hidden bg-[linear-gradient(180deg,color-mix(in_oklch,var(--sales-blue)_7%,transparent)_0%,transparent_100%),color-mix(in_oklch,var(--appearance-surface)_98%,transparent)] p-4 sm:p-5"
+              class="demo-dashboard-chart-surface mt-5 overflow-hidden p-4 sm:p-5"
             >
               <svg
                 viewBox="0 0 720 280"
@@ -958,14 +1000,14 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                 @for (tick of chart.ticks; track tick.label) {
                   <g>
                     <line
-                      class="stroke-[color-mix(in_srgb,var(--mat-sys-outline-variant)_60%,transparent)] [stroke-dasharray:4_10]"
+                      class="demo-dashboard-chart-grid [stroke-dasharray:4_10]"
                       x1="30"
                       [attr.y1]="tick.y"
                       x2="700"
                       [attr.y2]="tick.y"
                     />
                     <text
-                      class="fill-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)] text-[11px] tracking-[0.02em]"
+                      class="demo-dashboard-chart-label text-[11px] tracking-[0.02em]"
                       x="0"
                       [attr.y]="tick.y + 4"
                     >
@@ -974,29 +1016,26 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                   </g>
                 }
 
+                <path class="demo-dashboard-chart-area" [attr.d]="chart.areaPath" />
                 <path
-                  class="fill-[color-mix(in_oklch,var(--sales-blue)_16%,transparent)]"
-                  [attr.d]="chart.areaPath"
-                />
-                <path
-                  class="fill-none stroke-[color-mix(in_srgb,var(--mat-sys-on-background)_34%,transparent)] [stroke-dasharray:8_8] [stroke-linecap:round] stroke-2"
+                  class="demo-dashboard-chart-target fill-none [stroke-dasharray:8_8] [stroke-linecap:round] stroke-2"
                   [attr.d]="chart.targetPath"
                 />
                 <path
-                  class="fill-none stroke-(--sales-blue) [stroke-linecap:round] [stroke-linejoin:round] stroke-3"
+                  class="demo-dashboard-chart-line fill-none [stroke-linecap:round] [stroke-linejoin:round] stroke-3"
                   [attr.d]="chart.revenuePath"
                 />
 
                 @for (point of chart.points; track point.label) {
                   <g>
                     <circle
-                      class="fill-(--sales-blue) stroke-[color-mix(in_srgb,white_80%,transparent)] stroke-2"
+                      class="demo-dashboard-chart-point stroke-2"
                       [attr.cx]="point.x"
                       [attr.cy]="point.y"
                       r="5"
                     />
                     <text
-                      class="fill-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)] text-[11px] tracking-[0.02em]"
+                      class="demo-dashboard-chart-label text-[11px] tracking-[0.02em]"
                       [attr.x]="point.x - 16"
                       [attr.y]="point.y - 12"
                     >
@@ -1007,7 +1046,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
 
                 @for (label of chart.labels; track label.label) {
                   <text
-                    class="fill-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)] text-[11px] tracking-[0.02em]"
+                    class="demo-dashboard-chart-label text-[11px] tracking-[0.02em]"
                     [attr.x]="label.x - 14"
                     y="270"
                   >
@@ -1027,9 +1066,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
               >
                 {{ current.regionLabel }}
               </h2>
-              <p
-                class="mt-3 text-sm leading-6 text-[color-mix(in_srgb,var(--mat-sys-on-background)_74%,transparent)]"
-              >
+              <p class="demo-dashboard-supporting-text mt-3 text-sm leading-6">
                 Focus on the operating levers that are moving fastest inside the selected territory.
               </p>
             </div>
@@ -1040,13 +1077,11 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                   <div class="flex items-start justify-between gap-4">
                     <div>
                       <p
-                        class="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_54%,transparent)]"
+                        class="demo-dashboard-quiet-text text-[0.72rem] font-medium uppercase tracking-[0.22em]"
                       >
                         {{ signalCard.label }}
                       </p>
-                      <p
-                        class="mt-2 text-sm leading-6 text-[color-mix(in_srgb,var(--mat-sys-on-background)_72%,transparent)]"
-                      >
+                      <p class="demo-dashboard-supporting-text mt-2 text-sm leading-6">
                         {{ signalCard.note }}
                       </p>
                     </div>
@@ -1078,15 +1113,13 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
             <div class="mt-5 pt-0">
               <div>
                 <p class="text-sm font-semibold text-foreground">Channel mix</p>
-                <p
-                  class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_68%,transparent)]"
-                >
+                <p class="demo-dashboard-muted-text mt-1 text-sm">
                   Where closed revenue is landing right now.
                 </p>
               </div>
 
               <div
-                class="mt-4 flex gap-[0.35rem] rounded-full bg-[color-mix(in_oklch,var(--mat-sys-background)_95%,var(--sales-blue)_5%)] p-[0.35rem]"
+                class="demo-dashboard-channel-track mt-4 flex gap-[0.35rem] rounded-full p-[0.35rem]"
               >
                 @for (channel of current.channels; track channel.label) {
                   <span
@@ -1106,18 +1139,14 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                     >
                       <div>
                         <p class="font-medium text-foreground">{{ channel.label }}</p>
-                        <p
-                          class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)]"
-                        >
+                        <p class="demo-dashboard-subtle-text mt-1 text-sm">
                           {{ channel.amount }}
                         </p>
                       </div>
                       <p class="tabular-nums text-sm font-semibold text-foreground">
                         {{ channel.shareLabel }}
                       </p>
-                      <p
-                        class="text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_64%,transparent)]"
-                      >
+                      <p class="demo-dashboard-soft-text text-sm">
                         {{ channel.momentum }}
                       </p>
                     </div>
@@ -1129,9 +1158,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
             <div class="mt-6 border-t border-border pt-6">
               <div>
                 <p class="text-sm font-semibold text-foreground">Funnel velocity</p>
-                <p
-                  class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_68%,transparent)]"
-                >
+                <p class="demo-dashboard-muted-text mt-1 text-sm">
                   Compression and momentum by late-stage pipeline band.
                 </p>
               </div>
@@ -1144,18 +1171,14 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                     >
                       <div>
                         <p class="font-medium text-foreground">{{ stage.label }}</p>
-                        <p
-                          class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)]"
-                        >
+                        <p class="demo-dashboard-subtle-text mt-1 text-sm">
                           {{ stage.deals }} deals
                         </p>
                       </div>
                       <p class="tabular-nums text-sm font-semibold text-foreground">
                         {{ stage.value }}
                       </p>
-                      <p
-                        class="text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_64%,transparent)]"
-                      >
+                      <p class="demo-dashboard-soft-text text-sm">
                         {{ stage.velocity }}
                       </p>
                     </div>
@@ -1180,9 +1203,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
             <div class="mt-5 pt-0">
               <div>
                 <p class="text-sm font-semibold text-foreground">Quota scorecard</p>
-                <p
-                  class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_68%,transparent)]"
-                >
+                <p class="demo-dashboard-muted-text mt-1 text-sm">
                   Contribution by team and attainment against target.
                 </p>
               </div>
@@ -1195,18 +1216,14 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                     >
                       <div>
                         <p class="font-medium text-foreground">{{ rep.label }}</p>
-                        <p
-                          class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)]"
-                        >
+                        <p class="demo-dashboard-subtle-text mt-1 text-sm">
                           {{ rep.revenue }}
                         </p>
                       </div>
                       <p class="tabular-nums text-sm font-semibold text-foreground">
                         {{ rep.attainmentLabel }}
                       </p>
-                      <p
-                        class="text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_64%,transparent)]"
-                      >
+                      <p class="demo-dashboard-soft-text text-sm">
                         {{ rep.delta }}
                       </p>
                     </div>
@@ -1222,9 +1239,7 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
             <div class="mt-6 border-t border-border pt-6">
               <div>
                 <p class="text-sm font-semibold text-foreground">Active deals</p>
-                <p
-                  class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_68%,transparent)]"
-                >
+                <p class="demo-dashboard-muted-text mt-1 text-sm">
                   Large opportunities that still need executive attention.
                 </p>
               </div>
@@ -1239,14 +1254,12 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                             {{ deal.account }}
                           </h3>
                           <span
-                            class="inline-flex items-center rounded-(--sales-badge-radius) border border-(--appearance-border) px-[0.55rem] py-[0.28rem] text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--mat-sys-on-background)_68%,transparent)]"
+                            class="demo-dashboard-stage-chip inline-flex items-center px-[0.55rem] py-[0.28rem] text-[0.68rem] font-semibold uppercase tracking-[0.14em]"
                           >
                             {{ deal.stage }}
                           </span>
                         </div>
-                        <p
-                          class="mt-2 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_66%,transparent)]"
-                        >
+                        <p class="demo-dashboard-subtle-text mt-2 text-sm">
                           Owner {{ deal.owner }} · Expected {{ deal.window }}
                         </p>
                       </div>
@@ -1254,14 +1267,15 @@ function createSalesSnapshot(timeframe: TimeframeKey, region: RegionKey): SalesS
                         <p dashboardLargeValue class="tabular-nums text-base font-semibold">
                           {{ deal.value }}
                         </p>
-                        <p
-                          class="mt-1 text-sm text-[color-mix(in_srgb,var(--mat-sys-on-background)_64%,transparent)]"
-                        >
+                        <p class="demo-dashboard-soft-text mt-1 text-sm">
                           {{ deal.confidence }}% confidence
                         </p>
                       </div>
                     </div>
-                    <app-dashboard-progress [value]="deal.confidence" tone="var(--sales-blue)" />
+                    <app-dashboard-progress
+                      [value]="deal.confidence"
+                      tone="var(--demo-dashboard-accent)"
+                    />
                   </li>
                 }
               </ul>
@@ -1285,10 +1299,14 @@ export class DemoDashboardPageComponent {
   protected readonly trendChart = computed(() => createTrendChartModel(this.snapshot().trend));
 
   protected selectTimeframe(timeframe: string): void {
-    this.selectedTimeframe.set(timeframe as TimeframeKey);
+    if (isTimeframeKey(timeframe)) {
+      this.selectedTimeframe.set(timeframe);
+    }
   }
 
   protected selectRegion(region: string): void {
-    this.selectedRegion.set(region as RegionKey);
+    if (isRegionKey(region)) {
+      this.selectedRegion.set(region);
+    }
   }
 }

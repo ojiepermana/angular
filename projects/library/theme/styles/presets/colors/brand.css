@@ -1,0 +1,5 @@
+:root,
+[data-theme-color='brand'] {
+  --theme-primary: oklch(0.59 0.18 257.5);
+  --theme-on-primary: oklch(0.985 0 0);
+}

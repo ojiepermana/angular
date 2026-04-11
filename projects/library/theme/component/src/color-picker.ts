@@ -1,27 +1,34 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
-import { ThemeColor, ThemeService } from '@ojiepermana/angular/theme/service';
+import { ThemeService } from '@ojiepermana/angular/theme/service';
 
 @Component({
   selector: 'color-picker',
   imports: [MatTooltip],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
+    .color-picker-button {
+      border: 1px solid transparent;
+      background: transparent;
+    }
+
     .color-picker-button-selected {
-      box-shadow: 0 0 0 2px var(--mat-sys-primary);
+      border-color: color-mix(in oklab, var(--ring) 42%, var(--border));
+      background: color-mix(in oklab, var(--accent) 60%, transparent);
+      box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ring) 26%, transparent);
     }
 
     .color-picker-swatch {
-      background: var(--scheme-primary);
-      border-color: color-mix(in srgb, var(--scheme-on-primary) 16%, transparent);
+      background: var(--theme-primary);
+      border-color: color-mix(in oklab, var(--theme-primary) 42%, white 58%);
     }
   `,
   template: `
     <div class="flex items-center gap-1" role="group" aria-label="Theme colors">
-      @for (c of colors; track c.value) {
+      @for (c of colors(); track c.value) {
         <button
           type="button"
-          class="focus-ring inline-flex size-11 items-center justify-center rounded-full transition-transform"
+          class="color-picker-button focus-ring inline-flex size-11 items-center justify-center rounded-full p-1.5 transition-transform duration-150 hover:-translate-y-px"
           [class.color-picker-button-selected]="theme.color() === c.value"
           [attr.aria-label]="
             theme.color() === c.value
@@ -34,7 +41,7 @@ import { ThemeColor, ThemeService } from '@ojiepermana/angular/theme/service';
         >
           <span
             class="color-picker-swatch size-7 rounded-full border"
-            [attr.theme-colors]="c.value"
+            [attr.data-theme-color]="c.value"
             aria-hidden="true"
           ></span>
         </button>
@@ -45,13 +52,5 @@ import { ThemeColor, ThemeService } from '@ojiepermana/angular/theme/service';
 export class ColorPickerComponent {
   protected readonly theme = inject(ThemeService);
 
-  protected readonly colors: { value: ThemeColor; label: string }[] = [
-    { value: 'brand', label: 'Brand' },
-    { value: 'blue', label: 'Blue' },
-    { value: 'green', label: 'Green' },
-    { value: 'red', label: 'Red' },
-    { value: 'cyan', label: 'Cyan' },
-    { value: 'purple', label: 'Purple' },
-    { value: 'orange', label: 'Orange' },
-  ];
+  protected readonly colors = this.theme.colorOptions;
 }
