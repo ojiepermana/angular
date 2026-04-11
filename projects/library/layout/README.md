@@ -7,9 +7,8 @@ Runtime layout state, shell components, layout controls, and shell selectors for
 Import the public API from:
 
 - `@ojiepermana/angular/layout`
-- `@ojiepermana/angular/layout/styles/index.css`
 
-For the combined theme and layout stylesheet bundle, use `@ojiepermana/angular/styles/index.css`.
+For styles in consumer applications, use `@ojiepermana/angular/styles/index.css`.
 
 ## What This Library Owns
 
@@ -57,7 +56,7 @@ Import from `@ojiepermana/angular/layout`.
 
 ## Styles
 
-The layout stylesheet entry is `projects/library/layout/styles/index.css` inside this workspace and `@ojiepermana/angular/layout/styles/index.css` for package consumers.
+The layout stylesheet source is `projects/library/layout/styles/index.css` inside this workspace.
 
 It owns the `data-layout-*` selectors and the `horizontal` and `vertical` shell selectors.
 

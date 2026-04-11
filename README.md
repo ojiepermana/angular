@@ -20,7 +20,7 @@ The root TypeScript path aliases in `tsconfig.json` still point directly at the 
 - `@ojiepermana/angular/theme/component` -> `projects/library/theme/component/public-api.ts`
 - `@ojiepermana/angular/theme/service` -> `projects/library/theme/service/public-api.ts`
 
-If you add a consuming application later, register `projects/library/styles/index.css` for the combined theme and layout bundle, or `projects/library/theme/styles/index.css` when you only need theme tokens and theme control styling.
+If you add a consuming application later, register `projects/library/styles/index.css` for the combined theme and layout bundle.
 
 ## Code scaffolding
 

@@ -15,7 +15,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Treat Angular Material as the behavior layer and the library theme as the visual source of truth.
 - In application code, prefer Tailwind CSS utility classes in templates for layout, spacing, typography, sizing, and interaction states.
 - In library code, choose styling by scope: shared or global styling belongs in `.css` files, while small local cases may use inline class or style bindings, or local component styles, when that is clearer and more maintainable.
-- Public library APIs must be imported from domain-based secondary entry points: `@ojiepermana/angular/theme/service`, `@ojiepermana/angular/theme/component`, `@ojiepermana/angular/theme/directive`, and `@ojiepermana/angular/layout`. Import the aggregate styles from `@ojiepermana/angular/styles/index.css`, or import theme-only styles from `@ojiepermana/angular/theme/styles/index.css`. Do not import these APIs from the root package.
+- Public library APIs must be imported from domain-based secondary entry points: `@ojiepermana/angular/theme/service`, `@ojiepermana/angular/theme/component`, `@ojiepermana/angular/theme/directive`, and `@ojiepermana/angular/layout`. Import styles from the aggregate bundle `@ojiepermana/angular/styles/index.css`. Do not import these APIs from the root package.
 - In this library, component source filenames must omit the `.component` suffix. Use names like `appearance-switcher.ts`, `horizontal.ts`, and `vertical.ts`.
 - Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
 - Use `NgOptimizedImage` for all static images.

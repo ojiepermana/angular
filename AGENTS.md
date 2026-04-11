@@ -19,7 +19,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Dark mode must be controlled by global theme variables, not inline Tailwind `dark:` utilities or component-local dark-mode classes.
 - Put shared theme primitives in `projects/library/theme/styles/_*.css` and Angular Material overrides in `projects/library/theme/styles/overrides/*.css`.
 - Prefer Angular Material or MDC tokens, CSS custom properties, and supported selectors before using deep overrides.
-- Public library APIs must be imported from domain-based secondary entry points: `@ojiepermana/angular/theme/service`, `@ojiepermana/angular/theme/component`, `@ojiepermana/angular/theme/directive`, and `@ojiepermana/angular/layout`. Import the aggregate styles from `@ojiepermana/angular/styles/index.css`, or import theme-only styles from `@ojiepermana/angular/theme/styles/index.css`. Do not import these APIs from the root package.
+- Public library APIs must be imported from domain-based secondary entry points: `@ojiepermana/angular/theme/service`, `@ojiepermana/angular/theme/component`, `@ojiepermana/angular/theme/directive`, and `@ojiepermana/angular/layout`. Import styles from the aggregate bundle `@ojiepermana/angular/styles/index.css`. Do not import these APIs from the root package.
 - In this library, component source filenames must omit the `.component` suffix. Use names like `appearance-switcher.ts`, `horizontal.ts`, and `vertical.ts`.
 - In this library, all icons must use `@lucide/angular`; do not use Material icons or other icon sets.
 - In this library, every Lucide icon must set `absoluteStrokeWidth`.

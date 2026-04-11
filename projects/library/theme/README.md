@@ -13,9 +13,9 @@ Import from the secondary entry points instead:
 - `@ojiepermana/angular/theme/service`
 - `@ojiepermana/angular/theme/component`
 - `@ojiepermana/angular/theme/directive`
-- `@ojiepermana/angular/theme/styles/index.css`
 
 Use `@ojiepermana/angular/layout` for layout state, layout controls, layout host mirroring, and shell components.
+Use `@ojiepermana/angular/styles/index.css` for styles in consumer applications.
 
 ## What This Library Owns
 
@@ -110,7 +110,7 @@ Import from `@ojiepermana/angular/layout`.
 
 ## Active Stylesheet Bundles
 
-The theme stylesheet entry remains `projects/library/theme/styles/index.css` inside this workspace and `@ojiepermana/angular/theme/styles/index.css` for package consumers.
+The theme stylesheet source remains `projects/library/theme/styles/index.css` inside this workspace.
 
 It imports the current structure in this order:
 
@@ -123,9 +123,9 @@ It imports the current structure in this order:
 - `utilities/index.css`
 - `adapters/material-ui/index.css`
 
-Layout selectors now live in `projects/library/layout/styles/index.css` inside this workspace and `@ojiepermana/angular/layout/styles/index.css` for package consumers.
+Layout selectors now live in `projects/library/layout/styles/index.css` inside this workspace.
 
-For applications that want the full library styling surface, use the aggregate bundle at `projects/library/styles/index.css` in this workspace or `@ojiepermana/angular/styles/index.css` from the published package. The aggregate bundle imports theme first, then layout.
+For applications that consume the published package, use the aggregate bundle at `projects/library/styles/index.css` in this workspace or `@ojiepermana/angular/styles/index.css` from the published package. The aggregate bundle imports theme first, then layout.
 
 Preset coverage currently includes:
 
@@ -177,8 +177,6 @@ For a package consumer, use the published aggregate bundle instead:
 @import '@ojiepermana/angular/styles/index.css';
 @import 'tailwindcss';
 ```
-
-If a consumer only needs theme tokens and theme controls, it can import `@ojiepermana/angular/theme/styles/index.css` directly.
 
 ### 3. Compose a Shell and Controls
 
