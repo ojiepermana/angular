@@ -26,7 +26,7 @@
               }
             ],
             "styles": [
-              "projects/demo/src/styles.scss"
+              "projects/demo/src/styles.css"
             ]
           },
           "configurations": {
