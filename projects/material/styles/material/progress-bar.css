@@ -1,0 +1,7 @@
+/**
+ * Progress bar overrides
+ */
+
+.mat-mdc-progress-bar {
+  @apply rounded-[4px];
+}

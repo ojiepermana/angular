@@ -1,0 +1,7 @@
+/**
+ * Checkbox overrides
+ */
+
+.mat-mdc-checkbox .mdc-checkbox {
+  @apply rounded-[2px];
+}

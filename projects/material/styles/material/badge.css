@@ -1,0 +1,7 @@
+/**
+ * Badge overrides
+ */
+
+.mat-badge-content {
+  @apply rounded-[4px] text-[10px] font-light;
+}

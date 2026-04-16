@@ -1,0 +1,7 @@
+/**
+ * Button toggle overrides
+ */
+
+.mat-button-toggle-appearance-standard {
+  @apply rounded-[4px];
+}

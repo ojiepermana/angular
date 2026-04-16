@@ -1,0 +1,7 @@
+/**
+ * Slide toggle overrides
+ */
+
+.mat-mdc-slide-toggle {
+  @apply text-base;
+}

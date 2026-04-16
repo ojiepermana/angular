@@ -1,0 +1,7 @@
+/**
+ * Chips overrides
+ */
+
+.mat-mdc-chip {
+  @apply rounded-[4px];
+}

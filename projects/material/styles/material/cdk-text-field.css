@@ -1,0 +1,8 @@
+/**
+ * CDK Text field overrides
+ * Autofill styling
+ */
+
+.cdk-text-field-autofilled {
+  @apply bg-transparent;
+}

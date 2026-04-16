@@ -1,0 +1,16 @@
+/**
+ * Material UI — Styles Entry Point (CSS only)
+ *
+ * Import ini untuk mendapatkan semua component CSS overrides.
+ * Untuk theming dengan palette, gunakan Sass:
+ *
+ *   @use 'material/styles/material/theme';
+ *
+ * Atau custom palette:
+ *
+ *   @use '@angular/material' as mat;
+ *   @use 'material/styles/material/palettes' as palettes;
+ *   html { @include palettes.theme($palette: mat.$violet-palette); }
+ */
+
+@import './material/index.css';

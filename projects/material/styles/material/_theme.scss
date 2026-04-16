@@ -1,0 +1,48 @@
+/// Material UI — Base Theme
+/// Ini adalah entry-point utama untuk tema.
+/// Consumer yang mau theme out-of-the-box cukup @use file ini.
+///
+/// ```scss
+/// // Di global styles consumer:
+/// @use 'material/styles/material/theme';
+/// ```
+///
+/// Atau jika ingin custom palette:
+/// ```scss
+/// @use '@angular/material' as mat;
+/// @use 'material/styles/material/palettes' as palettes;
+///
+/// html {
+///   @include palettes.theme($palette: mat.$violet-palette);
+/// }
+/// ```
+
+@use '@angular/material' as mat;
+@use './palettes' as palettes;
+
+// ============================================================================
+// Default Theme Application
+// ============================================================================
+html {
+  // Default: azure palette, light-dark auto, density 0
+  @include palettes.theme();
+
+  // Strong focus indicators for accessibility (WCAG AA)
+  @include mat.strong-focus-indicators();
+}
+
+// ============================================================================
+// Surface defaults
+// ============================================================================
+body {
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  margin: 0;
+}
+
+// ============================================================================
+// System utility classes
+// ============================================================================
+html {
+  @include mat.system-classes();
+}

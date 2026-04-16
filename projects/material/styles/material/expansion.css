@@ -1,0 +1,7 @@
+/**
+ * Expansion panel overrides
+ */
+
+.mat-expansion-panel {
+  @apply rounded-[4px];
+}

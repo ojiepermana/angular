@@ -1,0 +1,7 @@
+/**
+ * Paginator overrides
+ */
+
+.mat-mdc-paginator {
+  @apply text-sm;
+}

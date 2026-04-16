@@ -1,0 +1,7 @@
+/**
+ * Autocomplete overrides
+ */
+
+.mat-mdc-autocomplete-panel {
+  @apply rounded-[4px];
+}

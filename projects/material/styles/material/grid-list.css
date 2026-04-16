@@ -1,0 +1,7 @@
+/**
+ * Grid list overrides
+ */
+
+.mat-grid-list {
+  @apply gap-4;
+}

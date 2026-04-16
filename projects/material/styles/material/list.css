@@ -1,0 +1,7 @@
+/**
+ * List overrides
+ */
+
+.mat-mdc-list-item {
+  @apply text-base;
+}

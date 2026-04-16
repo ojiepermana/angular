@@ -1,0 +1,185 @@
+/// Material UI — Color Palettes
+/// Menyediakan 12 prebuilt palette dari Angular Material yang bisa dipilih consumer.
+///
+/// Cara pakai di consumer app:
+/// ```scss
+/// @use '@angular/material' as mat;
+/// @use 'material/styles/material/palettes' as palettes;
+///
+/// // Default (azure)
+/// html {
+///   @include palettes.theme();
+/// }
+///
+/// // Ganti ke violet
+/// html {
+///   @include palettes.theme($palette: mat.$violet-palette);
+/// }
+///
+/// // Ganti ke rose dengan tertiary orange
+/// html {
+///   @include palettes.theme(
+///     $palette: mat.$rose-palette,
+///     $tertiary: mat.$orange-palette,
+///   );
+/// }
+/// ```
+
+@use '@angular/material' as mat;
+
+// ============================================================================
+// Available Palettes (re-exported for consumer convenience)
+// ============================================================================
+// mat.$red-palette
+// mat.$green-palette
+// mat.$blue-palette
+// mat.$yellow-palette
+// mat.$cyan-palette
+// mat.$magenta-palette
+// mat.$orange-palette
+// mat.$chartreuse-palette
+// mat.$spring-green-palette
+// mat.$azure-palette
+// mat.$violet-palette
+// mat.$rose-palette
+
+// ============================================================================
+// Default Configuration
+// ============================================================================
+$default-palette: mat.$azure-palette;
+$default-density: 0;
+$default-brand-family: 'sohne-var', 'SF Pro Display', system-ui, sans-serif;
+$default-plain-family: 'sohne-var', 'SF Pro Display', system-ui, sans-serif;
+$default-bold-weight: 400;
+$default-medium-weight: 400;
+$default-regular-weight: 300;
+
+// ============================================================================
+// Theme Mixin — Single Palette
+// ============================================================================
+/// Generates a full Material theme with a single color palette.
+/// Supports light-dark via `color-scheme: light dark`.
+///
+/// @param {Map} $palette — One of Angular Material's prebuilt palettes.
+/// @param {Number} $density — Density scale (0 to -5).
+@mixin theme($palette: $default-palette, $density: $default-density) {
+  color-scheme: light dark;
+
+  @include mat.theme(
+    (
+      color: $palette,
+      typography: (
+        brand-family: $default-brand-family,
+        plain-family: $default-plain-family,
+        bold-weight: $default-bold-weight,
+        medium-weight: $default-medium-weight,
+        regular-weight: $default-regular-weight,
+      ),
+      density: $density,
+    )
+  );
+}
+
+// ============================================================================
+// Theme Mixin — Color Map (primary + tertiary)
+// ============================================================================
+/// Generates a Material theme with separate primary and tertiary palettes.
+///
+/// @param {Map} $palette — Primary palette.
+/// @param {Map} $tertiary — Tertiary (accent) palette.
+/// @param {String} $theme-type — 'color-scheme' | 'light' | 'dark'.
+/// @param {Number} $density — Density scale (0 to -5).
+@mixin theme-with-tertiary(
+  $palette: $default-palette,
+  $tertiary: mat.$violet-palette,
+  $theme-type: color-scheme,
+  $density: $default-density
+) {
+  @if $theme-type == color-scheme {
+    color-scheme: light dark;
+  }
+
+  @include mat.theme(
+    (
+      color: (
+        primary: $palette,
+        tertiary: $tertiary,
+        theme-type: $theme-type,
+      ),
+      typography: (
+        brand-family: $default-brand-family,
+        plain-family: $default-plain-family,
+        bold-weight: $default-bold-weight,
+        medium-weight: $default-medium-weight,
+        regular-weight: $default-regular-weight,
+      ),
+      density: $density,
+    )
+  );
+}
+
+// ============================================================================
+// Light-only & Dark-only Mixins
+// ============================================================================
+/// Generates only light theme values.
+@mixin theme-light($palette: $default-palette, $density: $default-density) {
+  color-scheme: light;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: $palette,
+        theme-type: light,
+      ),
+      typography: (
+        brand-family: $default-brand-family,
+        plain-family: $default-plain-family,
+        bold-weight: $default-bold-weight,
+        medium-weight: $default-medium-weight,
+        regular-weight: $default-regular-weight,
+      ),
+      density: $density,
+    )
+  );
+}
+
+/// Generates only dark theme values.
+@mixin theme-dark($palette: $default-palette, $density: $default-density) {
+  color-scheme: dark;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: $palette,
+        theme-type: dark,
+      ),
+      typography: (
+        brand-family: $default-brand-family,
+        plain-family: $default-plain-family,
+        bold-weight: $default-bold-weight,
+        medium-weight: $default-medium-weight,
+        regular-weight: $default-regular-weight,
+      ),
+      density: $density,
+    )
+  );
+}
+
+// ============================================================================
+// Context Theme Mixin
+// ============================================================================
+/// Apply a different palette to a specific CSS selector/context.
+/// Useful for sections that need a distinct color scheme.
+///
+/// ```scss
+/// .danger-zone {
+///   @include palettes.context-theme(mat.$red-palette);
+/// }
+/// ```
+@mixin context-theme($palette) {
+  @include mat.theme(
+    (
+      color: $palette,
+    )
+  );
+}

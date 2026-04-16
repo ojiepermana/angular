@@ -1,0 +1,7 @@
+/**
+ * Tree overrides
+ */
+
+.mat-tree-node {
+  @apply text-sm;
+}

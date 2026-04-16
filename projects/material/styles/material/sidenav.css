@@ -1,0 +1,7 @@
+/**
+ * Sidenav overrides
+ */
+
+.mat-sidenav {
+  @apply border-r border-solid;
+}

@@ -1,0 +1,52 @@
+/**
+ * Material UI Override - Barrel Import
+ * Import file ini untuk mendapatkan semua override Angular Material & CDK.
+ */
+
+/* === Tier 1: Core === */
+@import './button.css';
+@import './card.css';
+@import './form-field.css';
+@import './input.css';
+@import './toolbar.css';
+@import './icon.css';
+@import './dialog.css';
+@import './snack-bar.css';
+
+/* === Tier 2: Navigation & Data === */
+@import './tabs.css';
+@import './sidenav.css';
+@import './menu.css';
+@import './table.css';
+@import './paginator.css';
+@import './sort.css';
+@import './list.css';
+@import './select.css';
+
+/* === Tier 3: Forms & Input === */
+@import './checkbox.css';
+@import './radio.css';
+@import './slide-toggle.css';
+@import './slider.css';
+@import './datepicker.css';
+@import './timepicker.css';
+@import './autocomplete.css';
+@import './chips.css';
+
+/* === Tier 4: Feedback & Misc === */
+@import './badge.css';
+@import './tooltip.css';
+@import './progress-bar.css';
+@import './progress-spinner.css';
+@import './expansion.css';
+@import './stepper.css';
+@import './bottom-sheet.css';
+@import './divider.css';
+@import './grid-list.css';
+@import './tree.css';
+@import './button-toggle.css';
+
+/* === CDK === */
+@import './cdk-overlay.css';
+@import './cdk-a11y.css';
+@import './cdk-text-field.css';

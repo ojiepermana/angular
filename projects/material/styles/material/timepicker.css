@@ -1,0 +1,7 @@
+/**
+ * Timepicker overrides
+ */
+
+.mat-timepicker-panel {
+  @apply rounded-[4px];
+}

@@ -1,0 +1,8 @@
+/**
+ * CDK A11y overrides
+ * Focus indicator styling
+ */
+
+.cdk-focused .cdk-keyboard-focused {
+  @apply outline-2 outline-offset-2;
+}

@@ -1,0 +1,26 @@
+/**
+ * Button overrides
+ * Variants: basic, raised (primary), stroked (outlined), flat, icon, FAB, mini-FAB
+ */
+
+/* Primary / Raised */
+.mat-mdc-raised-button,
+.mat-mdc-unelevated-button {
+  @apply rounded-[4px] text-base font-normal tracking-normal;
+}
+
+/* Outlined / Stroked */
+.mat-mdc-outlined-button {
+  @apply rounded-[4px] text-base font-normal tracking-normal border border-solid;
+}
+
+/* Icon button */
+.mat-mdc-icon-button {
+  @apply rounded-[4px];
+}
+
+/* FAB */
+.mat-mdc-fab,
+.mat-mdc-mini-fab {
+  @apply rounded-[6px];
+}

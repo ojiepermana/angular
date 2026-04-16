@@ -1,0 +1,7 @@
+/**
+ * Menu overrides
+ */
+
+.mat-mdc-menu-panel {
+  @apply rounded-[4px];
+}

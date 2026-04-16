@@ -1,0 +1,15 @@
+/**
+ * Table overrides
+ */
+
+.mat-mdc-table {
+  @apply w-full;
+}
+
+.mat-mdc-header-cell {
+  @apply text-sm font-normal;
+}
+
+.mat-mdc-cell {
+  @apply text-sm;
+}
