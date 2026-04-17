@@ -32,25 +32,16 @@ import type {
         <div class="flex-1"></div>
       }
       @case ('group') {
-        <div class="mt-4 first:mt-0" role="group" [attr.aria-labelledby]="headingId()">
+        <div class="mt-4 py-3 first:mt-0" role="group" [attr.aria-labelledby]="headingId()">
           @if (!compact()) {
             <div class="px-3 pb-1">
               <div
                 [id]="headingId()"
                 [class]="
-                  cn(
-                    'text-xs font-semibold uppercase tracking-wider text-muted-foreground',
-                    item().classes?.title
-                  )
-                "
-              >
+                  cn('text-xs font-semibold uppercase tracking-wider text-muted-foreground', item().classes?.title)
+                ">
                 {{ item().title }}
               </div>
-              @if (groupItem().subtitle) {
-                <div [class]="cn('text-xs text-muted-foreground/80', item().classes?.subtitle)">
-                  {{ groupItem().subtitle }}
-                </div>
-              }
             </div>
           }
           <div class="flex flex-col gap-0.5">
@@ -78,13 +69,9 @@ import type {
           [matTooltip]="compact() ? (collapsableItem().title ?? '') : ''"
           matTooltipPosition="right"
           [matTooltipDisabled]="!compact()"
-          (click)="toggleGroup()"
-        >
+          (click)="toggleGroup()">
           @if (collapsableItem().icon) {
-            <ui-nav-icon
-              [name]="collapsableItem().icon!"
-              [class]="cn('text-xl', item().classes?.icon)"
-            />
+            <ui-nav-icon [name]="collapsableItem().icon!" [class]="cn('text-xl', item().classes?.icon)" />
           }
           @if (!compact()) {
             <span [class]="cn('flex-1 truncate text-left', item().classes?.title)">
@@ -95,16 +82,11 @@ import type {
             }
             <ui-nav-icon
               [name]="'chevron_right'"
-              [class]="cn('text-base transition-transform duration-200', open && 'rotate-90')"
-            />
+              [class]="cn('text-base transition-transform duration-200', open && 'rotate-90')" />
           }
         </button>
         @if (!compact() && open) {
-          <div
-            [id]="id + '-panel'"
-            role="region"
-            class="ml-3 mt-0.5 flex flex-col gap-0.5 border-l border-border pl-3"
-          >
+          <div [id]="id + '-panel'" role="region" class="ml-3 mt-0.5 flex flex-col gap-0.5 border-l border-border pl-3">
             @for (child of collapsableItem().children; track child.id) {
               <ui-nav-item [item]="child" [level]="level() + 1" [compact]="false" />
             }
@@ -113,11 +95,9 @@ import type {
       }
       @case ('mega') {
         <!-- Mega direndahkan ke group saat berada di sidebar vertical. -->
-        <div class="mt-4 first:mt-0" role="group">
+        <div class="mt-4 py-3 first:mt-0" role="group">
           @if (!compact()) {
-            <div
-              class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-            >
+            <div class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {{ item().title }}
             </div>
           }
@@ -145,8 +125,7 @@ import type {
           [target]="asideItem().target ?? undefined"
           [matTooltip]="compact() ? (asideItem().title ?? '') : ''"
           matTooltipPosition="right"
-          [matTooltipDisabled]="!compact()"
-        >
+          [matTooltipDisabled]="!compact()">
           @if (asideItem().icon) {
             <ui-nav-icon [name]="asideItem().icon!" class="text-xl" />
           }
@@ -168,8 +147,7 @@ import type {
             routerLinkActive="bg-accent text-accent-foreground"
             #rla="routerLinkActive"
             [routerLinkActiveOptions]="
-              basicItem().isActiveMatchOptions ??
-              (basicItem().exactMatch ? exactMatch : inexactMatch)
+              basicItem().isActiveMatchOptions ?? (basicItem().exactMatch ? exactMatch : inexactMatch)
             "
             [attr.aria-current]="rla.isActive ? 'page' : null"
             [attr.aria-disabled]="basicItem().disabled || null"
@@ -182,18 +160,12 @@ import type {
             [fragment]="basicItem().fragment ?? undefined"
             [preserveFragment]="basicItem().preserveFragment ?? false"
             [target]="basicItem().target ?? undefined"
-            (click)="runAction()"
-          >
+            (click)="runAction()">
             @if (basicItem().icon) {
-              <ui-nav-icon
-                [name]="basicItem().icon!"
-                [class]="cn('text-xl', item().classes?.icon)"
-              />
+              <ui-nav-icon [name]="basicItem().icon!" [class]="cn('text-xl', item().classes?.icon)" />
             }
             @if (!compact()) {
-              <span [class]="cn('flex-1 truncate', item().classes?.title)">{{
-                basicItem().title
-              }}</span>
+              <span [class]="cn('flex-1 truncate', item().classes?.title)">{{ basicItem().title }}</span>
               @if (basicItem().badge; as badge) {
                 <span [class]="badge.classes ?? 'ml-auto text-xs'">{{ badge.title }}</span>
               }
@@ -212,8 +184,7 @@ import type {
             rel="noopener noreferrer"
             [matTooltip]="compact() ? (basicItem().title ?? '') : ''"
             matTooltipPosition="right"
-            [matTooltipDisabled]="!compact()"
-          >
+            [matTooltipDisabled]="!compact()">
             @if (basicItem().icon) {
               <ui-nav-icon [name]="basicItem().icon!" class="text-xl" />
             }
@@ -234,8 +205,7 @@ import type {
             [matTooltip]="compact() ? (basicItem().title ?? '') : ''"
             matTooltipPosition="right"
             [matTooltipDisabled]="!compact()"
-            (click)="runAction()"
-          >
+            (click)="runAction()">
             @if (basicItem().icon) {
               <ui-nav-icon [name]="basicItem().icon!" class="text-xl" />
             }

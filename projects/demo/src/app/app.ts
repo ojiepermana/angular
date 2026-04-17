@@ -1,12 +1,24 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavigationService } from '@ojiepermana/material/navigation';
+
+import { DemoNavigationData } from './navigation.data';
 
 @Component({
   selector: 'app-root',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css',
+  host: { class: 'block h-dvh' },
+  template: `<router-outlet />`,
 })
 export class App {
-  protected readonly title = signal('demo');
+  private readonly nav = inject(NavigationService);
+
+  constructor() {
+    this.nav.registerItems(DemoNavigationData);
+    effect(() => {
+      // no-op; keeps ChangeDetection aware of nav state updates.
+      this.nav.activeUrl();
+    });
+  }
 }
