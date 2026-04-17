@@ -41,7 +41,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerTrend="Chrome remains the leading acquisition source"
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="browserConfig" chartId="pie-default">
+          <ui-chart-container [config]="browserConfig" chartId="pie-default" aspect="aspect-square">
             <ui-pie-chart [data]="browserData" nameKey="browser" valueKey="visitors" [seriesKeys]="browserSeriesKeys" />
           </ui-chart-container>
         </demo-chart-card>
@@ -53,7 +53,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerTrend="Cleaner rings for denser categories"
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="browserConfig" chartId="pie-separator">
+          <ui-chart-container [config]="browserConfig" chartId="pie-separator" aspect="aspect-square">
             <ui-pie-chart
               [data]="browserData"
               nameKey="browser"
@@ -71,7 +71,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerTrend="Largest slices carry labels directly"
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="browserConfig" chartId="pie-label">
+          <ui-chart-container [config]="browserConfig" chartId="pie-label" aspect="aspect-square">
             <ui-pie-chart
               [data]="browserData"
               nameKey="browser"
@@ -88,7 +88,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerTrend="Active slices can carry more visual weight"
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="browserConfig" chartId="pie-custom-label">
+          <ui-chart-container [config]="browserConfig" chartId="pie-custom-label" aspect="aspect-square">
             <ui-pie-chart
               [data]="browserData"
               nameKey="browser"
@@ -107,7 +107,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerTrend="Readable shares without crowding the arcs"
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="browserConfig" chartId="pie-label-list">
+          <ui-chart-container [config]="browserConfig" chartId="pie-label-list" aspect="aspect-square">
             <ui-pie-chart
               [data]="browserData"
               nameKey="browser"
@@ -137,7 +137,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerTrend="Legend layout works better for compact pies"
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="browserConfig" chartId="pie-legend">
+          <ui-chart-container [config]="browserConfig" chartId="pie-legend" aspect="aspect-square">
             <ui-pie-chart [data]="browserData" nameKey="browser" valueKey="visitors" [seriesKeys]="browserSeriesKeys" />
             <ui-chart-legend />
           </ui-chart-container>
@@ -150,7 +150,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerTrend="Inner radius improves scanability for labels and center content"
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="browserConfig" chartId="pie-donut">
+          <ui-chart-container [config]="browserConfig" chartId="pie-donut" aspect="aspect-square">
             <ui-pie-chart
               [data]="browserData"
               nameKey="browser"
@@ -167,7 +167,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerTrend="Pulling a slice forward works well for emphasis"
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="browserConfig" chartId="pie-donut-active">
+          <ui-chart-container [config]="browserConfig" chartId="pie-donut-active" aspect="aspect-square">
             <ui-pie-chart
               [data]="browserData"
               nameKey="browser"
@@ -186,7 +186,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerTrend="Center copy can turn the donut into a compact KPI tile"
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="browserConfig" chartId="pie-donut-text">
+          <ui-chart-container [config]="browserConfig" chartId="pie-donut-text" aspect="aspect-square">
             <ui-pie-chart
               [data]="browserData"
               nameKey="browser"
@@ -210,7 +210,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerTrend="Stacked radial rings are a good fit for comparative proportions"
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[19rem]">
-          <ui-chart-container [config]="browserConfig" chartId="pie-stacked">
+          <ui-chart-container [config]="browserConfig" chartId="pie-stacked" aspect="aspect-square">
             <ui-radial-chart
               [data]="browserData"
               nameKey="browser"

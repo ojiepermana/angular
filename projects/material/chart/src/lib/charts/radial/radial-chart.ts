@@ -6,6 +6,8 @@ import { computeRadialLayout, type RadialBarRect } from './radial-layout';
 const DEFAULT_MARGIN: ChartMargin = { top: 8, right: 8, bottom: 8, left: 8 };
 const defaultRadialValueFormatter = (value: number): string => `${value}`;
 
+export type RadialValueLabelFormatter = (value: number, name: string) => string;
+
 export interface RadialBarClickEvent {
   readonly seriesKey: string;
   readonly name: string;
@@ -75,7 +77,7 @@ export class RadialChart {
   readonly maxValue = input<number | undefined>(undefined);
   readonly showTrack = input<boolean>(true);
   readonly showValueLabels = input<boolean>(false);
-  readonly valueLabelFormat = input<(value: number) => string>(defaultRadialValueFormatter);
+  readonly valueLabelFormat = input<RadialValueLabelFormatter>(defaultRadialValueFormatter);
 
   readonly barClick = output<RadialBarClickEvent>();
 
@@ -115,7 +117,7 @@ export class RadialChart {
   }
 
   protected formatValueLabel(b: RadialBarRect): string {
-    return this.valueLabelFormat()(b.value);
+    return this.valueLabelFormat()(b.value, b.name);
   }
 
   protected barLabelX(b: RadialBarRect): number {

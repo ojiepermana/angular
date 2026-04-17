@@ -9,7 +9,14 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
 @Component({
   selector: 'demo-radar-chart-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ChartContainer, ChartDemoCardComponent, ChartLegend, ChartPageBadgesComponent, PageShellComponent, RadarChart],
+  imports: [
+    ChartContainer,
+    ChartDemoCardComponent,
+    ChartLegend,
+    ChartPageBadgesComponent,
+    PageShellComponent,
+    RadarChart,
+  ],
   template: `
     <demo-page-shell
       title="Radar Charts"
@@ -24,7 +31,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerTrend="Desktop stays ahead across most months"
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
-          <ui-chart-container [config]="visitorConfig" chartId="radar-default">
+          <ui-chart-container [config]="visitorConfig" chartId="radar-default" aspect="aspect-square">
             <ui-radar-chart [data]="radarMonthData" axisKey="month" />
           </ui-chart-container>
         </demo-chart-card>
@@ -36,7 +43,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerTrend="Point markers help track individual month changes"
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
-          <ui-chart-container [config]="visitorConfig" chartId="radar-dots">
+          <ui-chart-container [config]="visitorConfig" chartId="radar-dots" aspect="aspect-square">
             <ui-radar-chart [data]="radarMonthData" axisKey="month" curve="cardinal" [dotRadius]="4" />
           </ui-chart-container>
         </demo-chart-card>
@@ -48,7 +55,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerTrend="Removing fills reduces overlap on dense comparisons"
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
-          <ui-chart-container [config]="visitorConfig" chartId="radar-lines-only">
+          <ui-chart-container [config]="visitorConfig" chartId="radar-lines-only" aspect="aspect-square">
             <ui-radar-chart [data]="radarMonthData" axisKey="month" [linesOnly]="true" [showDots]="false" />
           </ui-chart-container>
         </demo-chart-card>
@@ -60,7 +67,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerTrend="External labels keep the chart itself quieter"
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
-          <ui-chart-container [config]="visitorConfig" chartId="radar-custom-label">
+          <ui-chart-container [config]="visitorConfig" chartId="radar-custom-label" aspect="aspect-square">
             <ui-radar-chart [data]="radarMonthData" axisKey="month" [showLabels]="false" [showDots]="false" />
           </ui-chart-container>
 
@@ -83,7 +90,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerTrend="Legend placement mirrors the shadcn comparison card"
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
-          <ui-chart-container [config]="visitorConfig" chartId="radar-multiple">
+          <ui-chart-container [config]="visitorConfig" chartId="radar-multiple" aspect="aspect-square">
             <ui-radar-chart [data]="radarMonthData" axisKey="month" />
             <ui-chart-legend />
           </ui-chart-container>
@@ -96,7 +103,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerTrend="Polygon guides reinforce the angular geometry"
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
-          <ui-chart-container [config]="visitorConfig" chartId="radar-grid-custom">
+          <ui-chart-container [config]="visitorConfig" chartId="radar-grid-custom" aspect="aspect-square">
             <ui-radar-chart [data]="radarMonthData" axisKey="month" grid="polygon" curve="cardinal" />
           </ui-chart-container>
         </demo-chart-card>
@@ -108,7 +115,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerTrend="Minimal styling lets the series shapes lead"
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
-          <ui-chart-container [config]="visitorConfig" chartId="radar-grid-none">
+          <ui-chart-container [config]="visitorConfig" chartId="radar-grid-none" aspect="aspect-square">
             <ui-radar-chart [data]="radarMonthData" axisKey="month" grid="none" />
           </ui-chart-container>
         </demo-chart-card>
@@ -120,7 +127,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerTrend="Circular guides create a softer visual rhythm"
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
-          <ui-chart-container [config]="visitorConfig" chartId="radar-grid-circle">
+          <ui-chart-container [config]="visitorConfig" chartId="radar-grid-circle" aspect="aspect-square">
             <ui-radar-chart [data]="radarMonthData" axisKey="month" grid="circle" [showAxes]="false" />
           </ui-chart-container>
         </demo-chart-card>
@@ -132,7 +139,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerTrend="Filled circles help depth perception without overpowering the series"
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
-          <ui-chart-container [config]="visitorConfig" chartId="radar-grid-circle-fill">
+          <ui-chart-container [config]="visitorConfig" chartId="radar-grid-circle-fill" aspect="aspect-square">
             <ui-radar-chart [data]="radarMonthData" axisKey="month" grid="circle" [gridFilled]="true" />
           </ui-chart-container>
         </demo-chart-card>
@@ -144,7 +151,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerTrend="Filled polygon bands create a stronger sense of scale"
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
-          <ui-chart-container [config]="visitorConfig" chartId="radar-grid-fill">
+          <ui-chart-container [config]="visitorConfig" chartId="radar-grid-fill" aspect="aspect-square">
             <ui-radar-chart
               [data]="radarMonthData"
               axisKey="month"

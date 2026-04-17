@@ -39,7 +39,7 @@ let chartIdCounter = 0;
   imports: [ChartStyle],
   host: {
     '[attr.data-chart]': 'ctx.id()',
-    class: 'relative flex aspect-video justify-center text-xs',
+    '[class]': 'hostClass()',
   },
   template: `
     <ui-chart-style />
@@ -55,6 +55,14 @@ export class ChartContainer {
 
   /** Series configuration. Required for color / label resolution. */
   readonly config = input.required<ChartConfig>();
+
+  /**
+   * Tailwind aspect-ratio utility for the container. Defaults to `aspect-video`
+   * for cartesian charts; override with `aspect-square` for radial / pie layouts.
+   */
+  readonly aspect = input<string>('aspect-video');
+
+  protected readonly hostClass = computed(() => `relative flex ${this.aspect()} justify-center text-xs`);
 
   /**
    * Optional explicit id override. When omitted, a stable auto-id is

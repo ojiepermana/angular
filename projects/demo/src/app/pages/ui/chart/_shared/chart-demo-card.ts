@@ -68,6 +68,6 @@ export class ChartDemoCardComponent {
   readonly footerMeta = input<string>('');
   readonly chartClassName = input<string>('aspect-[5/3] w-full');
   readonly panelClassName = input<string>(
-    'rounded-[1.35rem] border border-border/60 bg-linear-to-br from-background to-muted/25 p-3',
+    'flex items-center justify-center rounded-[1.35rem] border border-border/60 bg-linear-to-br from-background to-muted/25 p-3',
   );
 }

@@ -5,97 +5,116 @@ import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
 import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import {
-  RADIAL_MULTI_DATA,
-  RADIAL_PROGRESS_CONFIG,
-  RADIAL_SINGLE_DATA,
+  BROWSER_CONFIG,
+  BROWSER_DATA,
+  RADIAL_SHAPE_DATA,
+  RADIAL_SHAPE_MAX,
   RADIAL_STACKED_DATA,
   RADIAL_STACKED_TOTAL,
+  RADIAL_TEXT_DATA,
+  RADIAL_TEXT_MAX,
+  VISITOR_CONFIG,
 } from '../_shared/chart-datasets';
 
 @Component({
   selector: 'demo-radial-chart-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ChartContainer, ChartDemoCardComponent, ChartPageBadgesComponent, PageShellComponent, RadialCenter, RadialChart],
+  imports: [
+    ChartContainer,
+    ChartDemoCardComponent,
+    ChartPageBadgesComponent,
+    PageShellComponent,
+    RadialCenter,
+    RadialChart,
+  ],
   template: `
     <demo-page-shell
       title="Radial Charts"
-      description="Radial progress compositions modeled after the shadcn gallery, including labels, center text, shaped partial arcs, and stacked tracks.">
+      description="Radial compositions modeled after the shadcn gallery: per-browser concentric rings, inline labels, grid tracks, center copy, shaped partial arcs, and stacked desktop/mobile totals.">
       <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
           title="Radial Chart"
-          description="Progress toward the current desktop target"
+          description="January - June 2024"
           badge="Default"
-          footerTrend="Desktop progress is pacing ahead of forecast"
-          footerMeta="Showing completion against a 200 visitor target"
+          footerTrend="Trending up by 5.2% this month"
+          footerMeta="Showing total visitors for the last 6 months"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="radialConfig" chartId="radial-default">
+          <ui-chart-container [config]="browserConfig" chartId="radial-default" aspect="aspect-square">
             <ui-radial-chart
-              [data]="radialSingleData"
-              nameKey="stream"
-              valueKey="value"
-              [seriesKeys]="desktopSeries"
-              [maxValue]="radialSingleMax" />
+              [data]="browserData"
+              nameKey="browser"
+              valueKey="visitors"
+              [seriesKeys]="browserSeries"
+              [maxValue]="browserMax"
+              [showTrack]="false"
+              [cornerRadius]="4" />
           </ui-chart-container>
         </demo-chart-card>
 
         <demo-chart-card
           title="Radial Chart - Label"
-          description="Progress toward the current desktop target"
-          badge="Labels"
-          footerTrend="End labels make progress readable at a glance"
-          footerMeta="Showing completion against a 200 visitor target"
+          description="January - June 2024"
+          badge="Label"
+          footerTrend="Trending up by 5.2% this month"
+          footerMeta="Showing total visitors for the last 6 months"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="radialConfig" chartId="radial-label">
+          <ui-chart-container [config]="browserConfig" chartId="radial-label" aspect="aspect-square">
             <ui-radial-chart
-              [data]="radialSingleData"
-              nameKey="stream"
-              valueKey="value"
-              [seriesKeys]="desktopSeries"
-              [maxValue]="radialSingleMax"
+              [data]="browserData"
+              nameKey="browser"
+              valueKey="visitors"
+              [seriesKeys]="browserSeries"
+              [maxValue]="browserMax"
+              [showTrack]="false"
+              [cornerRadius]="4"
               [showValueLabels]="true"
-              [valueLabelFormat]="percentageFormatter" />
+              [valueLabelFormat]="browserLabelFormatter" />
           </ui-chart-container>
         </demo-chart-card>
 
         <demo-chart-card
           title="Radial Chart - Grid"
-          description="Progress toward the current desktop target"
+          description="January - June 2024"
           badge="Grid"
-          footerTrend="Track rings create a clear before-versus-after baseline"
-          footerMeta="Showing completion against a 200 visitor target"
+          footerTrend="Trending up by 5.2% this month"
+          footerMeta="Showing total visitors for the last 6 months"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="radialConfig" chartId="radial-grid">
+          <ui-chart-container [config]="browserConfig" chartId="radial-grid" aspect="aspect-square">
             <ui-radial-chart
-              [data]="radialSingleData"
-              nameKey="stream"
-              valueKey="value"
-              [seriesKeys]="desktopSeries"
-              [maxValue]="radialSingleMax"
-              [cornerRadius]="18"
-              [trackPadding]="10" />
+              [data]="browserData"
+              nameKey="browser"
+              valueKey="visitors"
+              [seriesKeys]="browserSeries"
+              [maxValue]="browserMax"
+              [cornerRadius]="4"
+              [trackPadding]="2" />
           </ui-chart-container>
         </demo-chart-card>
 
         <demo-chart-card
           title="Radial Chart - Text"
-          description="Progress toward the current desktop target"
-          badge="Center text"
-          footerTrend="Center copy turns the ring into a compact KPI tile"
-          footerMeta="Showing completion against a 200 visitor target"
+          description="January - June 2024"
+          badge="Text"
+          footerTrend="Trending up by 5.2% this month"
+          footerMeta="Showing total visitors for the last 6 months"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="radialConfig" chartId="radial-text">
+          <ui-chart-container [config]="browserConfig" chartId="radial-text" aspect="aspect-square">
             <ui-radial-chart
-              [data]="radialSingleData"
-              nameKey="stream"
-              valueKey="value"
-              [seriesKeys]="desktopSeries"
-              [maxValue]="radialSingleMax">
+              [data]="radialTextData"
+              nameKey="browser"
+              valueKey="visitors"
+              [seriesKeys]="radialTextSeries"
+              [maxValue]="radialTextMax"
+              [cornerRadius]="12"
+              [trackPadding]="0">
               <ui-radial-center>
                 <div class="text-center">
-                  <div class="text-4xl font-semibold tracking-tight text-foreground">63%</div>
-                  <div class="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">Desktop goal</div>
+                  <div class="text-4xl font-semibold tracking-tight text-foreground tabular-nums">
+                    {{ radialTextValue }}
+                  </div>
+                  <div class="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">Visitors</div>
                 </div>
               </ui-radial-center>
             </ui-radial-chart>
@@ -104,28 +123,28 @@ import {
 
         <demo-chart-card
           title="Radial Chart - Shape"
-          description="Four concentric tracks in a partial-arc layout"
+          description="January - June 2024"
           badge="Shape"
-          footerTrend="Partial arcs create a stronger dashboard feel"
-          footerMeta="Showing relative progress across four streams"
-          chartClassName="mx-auto aspect-square max-w-[18rem]"
-          panelClassName="rounded-[1.35rem] border border-border/60 bg-linear-to-br from-[hsl(var(--chart-1))/0.08] via-background to-[hsl(var(--chart-2))/0.08] p-3">
-          <ui-chart-container [config]="radialConfig" chartId="radial-shape">
+          footerTrend="Trending up by 5.2% this month"
+          footerMeta="Showing total visitors for the last 6 months"
+          chartClassName="mx-auto aspect-square max-w-[18rem]">
+          <ui-chart-container [config]="browserConfig" chartId="radial-shape" aspect="aspect-square">
             <ui-radial-chart
-              [data]="radialMultiData"
-              nameKey="stream"
-              valueKey="value"
-              [seriesKeys]="radialMultiSeries"
+              [data]="radialShapeData"
+              nameKey="browser"
+              valueKey="visitors"
+              [seriesKeys]="radialShapeSeries"
               [maxValue]="radialShapeMax"
               [startAngle]="shapeStartAngle"
               [endAngle]="shapeEndAngle"
-              [cornerRadius]="14"
-              [trackPadding]="10">
+              [cornerRadius]="16"
+              [trackPadding]="0">
               <ui-radial-center>
-                <div
-                  class="rounded-full border border-border/70 bg-background/80 px-4 py-2 text-center shadow-sm backdrop-blur-sm">
-                  <div class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Signal</div>
-                  <div class="mt-1 text-xl font-semibold text-foreground">Stable</div>
+                <div class="text-center">
+                  <div class="text-4xl font-semibold tracking-tight text-foreground tabular-nums">
+                    {{ radialShapeValue }}
+                  </div>
+                  <div class="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">Visitors</div>
                 </div>
               </ui-radial-center>
             </ui-radial-chart>
@@ -134,24 +153,26 @@ import {
 
         <demo-chart-card
           title="Radial Chart - Stacked"
-          description="Two primary traffic streams in concentric rings"
+          description="January - June 2024"
           badge="Stacked"
-          footerTrend="Desktop substantially outpaces mobile in the current window"
-          footerMeta="Showing relative progress against a 1500 visitor target"
+          footerTrend="Trending up by 5.2% this month"
+          footerMeta="Showing total visitors for the last 6 months"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
-          <ui-chart-container [config]="radialConfig" chartId="radial-stacked">
+          <ui-chart-container [config]="visitorConfig" chartId="radial-stacked" aspect="aspect-square">
             <ui-radial-chart
               [data]="radialStackedData"
               nameKey="stream"
               valueKey="value"
               [seriesKeys]="radialStackedSeries"
               [maxValue]="radialStackedMax"
-              [cornerRadius]="14"
-              [trackPadding]="12">
+              [cornerRadius]="6"
+              [trackPadding]="4">
               <ui-radial-center>
                 <div class="text-center">
-                  <div class="text-3xl font-semibold tracking-tight text-foreground">{{ radialStackedTotal }}</div>
-                  <div class="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">Combined visitors</div>
+                  <div class="text-3xl font-semibold tracking-tight text-foreground tabular-nums">
+                    {{ radialStackedTotal }}
+                  </div>
+                  <div class="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">Visitors</div>
                 </div>
               </ui-radial-center>
             </ui-radial-chart>
@@ -162,19 +183,31 @@ import {
   `,
 })
 export class RadialChartPageComponent {
-  protected readonly radialConfig = RADIAL_PROGRESS_CONFIG;
-  protected readonly radialSingleData = RADIAL_SINGLE_DATA;
-  protected readonly radialMultiData = RADIAL_MULTI_DATA;
+  protected readonly browserConfig = BROWSER_CONFIG;
+  protected readonly visitorConfig = VISITOR_CONFIG;
+  protected readonly browserData = BROWSER_DATA;
+  protected readonly browserSeries = BROWSER_DATA.map((item) => item.browser);
+  protected readonly browserMax = Math.max(...BROWSER_DATA.map((item) => item.visitors));
+
+  protected readonly radialTextData = RADIAL_TEXT_DATA;
+  protected readonly radialTextSeries = RADIAL_TEXT_DATA.map((item) => item.browser);
+  protected readonly radialTextMax = RADIAL_TEXT_MAX;
+  protected readonly radialTextValue = RADIAL_TEXT_DATA[0].visitors.toLocaleString('en-US');
+
+  protected readonly radialShapeData = RADIAL_SHAPE_DATA;
+  protected readonly radialShapeSeries = RADIAL_SHAPE_DATA.map((item) => item.browser);
+  protected readonly radialShapeMax = RADIAL_SHAPE_MAX;
+  protected readonly radialShapeValue = RADIAL_SHAPE_DATA[0].visitors.toLocaleString('en-US');
+
   protected readonly radialStackedData = RADIAL_STACKED_DATA;
-  protected readonly desktopSeries = ['desktop'];
-  protected readonly radialMultiSeries = RADIAL_MULTI_DATA.map((item) => item.stream);
   protected readonly radialStackedSeries = RADIAL_STACKED_DATA.map((item) => item.stream);
-  protected readonly radialSingleMax = 200;
-  protected readonly radialShapeMax = 160;
-  protected readonly radialStackedMax = 1500;
-  protected readonly radialStackedTotal = RADIAL_STACKED_TOTAL;
-  protected readonly percentageFormatter = (value: number) => `${Math.round((value / this.radialSingleMax) * 100)}%`;
+  protected readonly radialStackedMax = Math.max(...RADIAL_STACKED_DATA.map((item) => item.value)) * 1.1;
+  protected readonly radialStackedTotal = RADIAL_STACKED_TOTAL.toLocaleString('en-US');
+
   protected readonly shapeStartAngle = (-5 * Math.PI) / 6;
   protected readonly shapeEndAngle = (5 * Math.PI) / 6;
-  protected readonly pageBadges = ['6 variants', 'Full + partial arcs', 'Center overlays'] as const;
+  protected readonly pageBadges = ['6 variants', 'Per-browser rings', 'Text + shape + stacked'] as const;
+
+  protected readonly browserLabelFormatter = (_value: number, name: string): string =>
+    BROWSER_CONFIG[name]?.label ?? name;
 }

@@ -133,6 +133,12 @@ export const SCATTER_BASIC_DATA = [
 
 export const BROWSER_TOTAL_VISITORS = BROWSER_DATA.reduce((sum, item) => sum + item.visitors, 0);
 
+/** Single-datum radial datasets modeled after shadcn's Text/Shape variants. */
+export const RADIAL_TEXT_DATA = [{ browser: 'safari', visitors: 200 }] as const;
+export const RADIAL_TEXT_MAX = 400;
+export const RADIAL_SHAPE_DATA = [{ browser: 'safari', visitors: 1260 }] as const;
+export const RADIAL_SHAPE_MAX = 1400;
+
 export const INTERACTIVE_DESKTOP_TOTAL = INTERACTIVE_VISITOR_DATA.reduce((sum, item) => sum + item.desktop, 0);
 export const INTERACTIVE_MOBILE_TOTAL = INTERACTIVE_VISITOR_DATA.reduce((sum, item) => sum + item.mobile, 0);
 
