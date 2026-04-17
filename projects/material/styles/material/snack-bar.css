@@ -1,7 +1,0 @@
-/**
- * Snack bar overrides
- */
-
-.mat-mdc-snack-bar-container .mdc-snackbar__surface {
-  @apply rounded-[4px];
-}

@@ -1,7 +1,0 @@
-/**
- * Bottom sheet overrides
- */
-
-.mat-bottom-sheet-container {
-  @apply rounded-t-[8px];
-}

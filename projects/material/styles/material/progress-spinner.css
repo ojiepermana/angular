@@ -1,7 +1,0 @@
-/**
- * Progress spinner overrides
- */
-
-.mat-mdc-progress-spinner {
-  /* spinner uses SVG, override via tokens only */
-}

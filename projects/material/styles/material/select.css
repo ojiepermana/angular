@@ -1,7 +1,0 @@
-/**
- * Select overrides
- */
-
-.mat-mdc-select-panel {
-  @apply rounded-[4px];
-}

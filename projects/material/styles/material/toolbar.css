@@ -1,7 +1,0 @@
-/**
- * Toolbar overrides
- */
-
-.mat-toolbar {
-  @apply rounded-none;
-}

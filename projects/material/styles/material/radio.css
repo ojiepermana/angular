@@ -1,7 +1,0 @@
-/**
- * Radio overrides
- */
-
-.mat-mdc-radio-button {
-  @apply text-base;
-}

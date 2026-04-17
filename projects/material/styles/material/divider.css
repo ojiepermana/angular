@@ -1,7 +1,0 @@
-/**
- * Divider overrides
- */
-
-.mat-divider {
-  @apply border-0 border-b border-solid;
-}

@@ -1,7 +1,0 @@
-/**
- * Datepicker overrides
- */
-
-.mat-datepicker-content {
-  @apply rounded-[6px];
-}

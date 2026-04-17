@@ -1,7 +1,0 @@
-/**
- * Dialog overrides
- */
-
-.mat-mdc-dialog-container .mdc-dialog__surface {
-  @apply rounded-[8px];
-}

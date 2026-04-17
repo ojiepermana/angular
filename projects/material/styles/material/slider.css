@@ -1,7 +1,0 @@
-/**
- * Slider overrides
- */
-
-.mat-mdc-slider {
-  @apply w-full;
-}

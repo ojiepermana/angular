@@ -1,7 +1,0 @@
-/**
- * Input overrides
- */
-
-.mat-mdc-input-element {
-  @apply text-base leading-relaxed;
-}

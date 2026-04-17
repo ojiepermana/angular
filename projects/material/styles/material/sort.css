@@ -1,7 +1,0 @@
-/**
- * Sort header overrides
- */
-
-.mat-sort-header-button {
-  @apply text-sm font-normal;
-}

@@ -1,8 +1,0 @@
-/**
- * Tabs overrides
- */
-
-.mat-mdc-tab-group,
-.mat-mdc-tab-nav-bar {
-  @apply border-b border-solid;
-}

@@ -1,8 +1,0 @@
-/**
- * Stepper overrides
- */
-
-.mat-stepper-horizontal,
-.mat-stepper-vertical {
-  @apply text-base;
-}

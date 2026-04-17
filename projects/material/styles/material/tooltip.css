@@ -1,7 +1,0 @@
-/**
- * Tooltip overrides
- */
-
-.mat-mdc-tooltip .mdc-tooltip__surface {
-  @apply rounded-[4px] text-xs;
-}
