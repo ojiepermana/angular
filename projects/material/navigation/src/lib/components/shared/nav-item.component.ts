@@ -37,7 +37,12 @@ import type {
             <div class="px-3 pb-1">
               <div
                 [id]="headingId()"
-                [class]="cn('text-xs font-semibold uppercase tracking-wider text-muted-foreground', item().classes?.title)"
+                [class]="
+                  cn(
+                    'text-xs font-semibold uppercase tracking-wider text-muted-foreground',
+                    item().classes?.title
+                  )
+                "
               >
                 {{ item().title }}
               </div>
@@ -60,7 +65,13 @@ import type {
         @let open = isGroupOpen();
         <button
           type="button"
-          [class]="cn('group/ni flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring', isTrailActive() && 'bg-accent/50', item().classes?.wrapper)"
+          [class]="
+            cn(
+              'group/ni flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              isTrailActive() && 'bg-accent/50',
+              item().classes?.wrapper
+            )
+          "
           [attr.aria-expanded]="open"
           [attr.aria-controls]="id + '-panel'"
           [disabled]="collapsableItem().disabled || null"
@@ -119,7 +130,12 @@ import type {
       }
       @case ('aside') {
         <a
-          [class]="cn('flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring', item().classes?.wrapper)"
+          [class]="
+            cn(
+              'flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              item().classes?.wrapper
+            )
+          "
           routerLinkActive="bg-accent text-accent-foreground"
           #rla="routerLinkActive"
           [attr.aria-current]="rla.isActive ? 'page' : null"
@@ -143,7 +159,12 @@ import type {
         <!-- basic -->
         @if (basicItem().link && !basicItem().externalLink) {
           <a
-            [class]="cn('flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50', item().classes?.wrapper)"
+            [class]="
+              cn(
+                'flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50',
+                item().classes?.wrapper
+              )
+            "
             routerLinkActive="bg-accent text-accent-foreground"
             #rla="routerLinkActive"
             [routerLinkActiveOptions]="
@@ -180,7 +201,12 @@ import type {
           </a>
         } @else if (basicItem().link && basicItem().externalLink) {
           <a
-            [class]="cn('flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring', item().classes?.wrapper)"
+            [class]="
+              cn(
+                'flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                item().classes?.wrapper
+              )
+            "
             [attr.href]="basicItem().link"
             [attr.target]="basicItem().target ?? '_blank'"
             rel="noopener noreferrer"
@@ -198,7 +224,12 @@ import type {
         } @else {
           <button
             type="button"
-            [class]="cn('flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50', item().classes?.wrapper)"
+            [class]="
+              cn(
+                'flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+                item().classes?.wrapper
+              )
+            "
             [disabled]="basicItem().disabled || null"
             [matTooltip]="compact() ? (basicItem().title ?? '') : ''"
             matTooltipPosition="right"
