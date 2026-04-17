@@ -12,6 +12,8 @@
     "shadcn/src/**/*.d.ts",
     "shadcn/src/**/*.spec.ts",
     "layout/**/*.spec.ts",
-    "navigation/**/*.spec.ts"
+    "navigation/**/*.spec.ts",
+    "chart/src/**/*.d.ts",
+    "chart/src/**/*.spec.ts"
   ]
 }

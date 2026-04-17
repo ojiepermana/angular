@@ -12,7 +12,8 @@
       "@ojiepermana/material/theme": ["./projects/material/theme/public-api.ts"],
       "@ojiepermana/material/navigation": ["./projects/material/navigation/public-api.ts"],
       "@ojiepermana/material/shadcn": ["./projects/material/shadcn/public-api.ts"],
-      "@ojiepermana/material/layout": ["./projects/material/layout/public-api.ts"]
+      "@ojiepermana/material/layout": ["./projects/material/layout/public-api.ts"],
+      "@ojiepermana/material/chart": ["./projects/material/chart/public-api.ts"]
     },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

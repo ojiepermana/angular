@@ -6,6 +6,7 @@
  *   - `@ojiepermana/material/shadcn`     — shadcn/ui primitives on top of Material M3
  *   - `@ojiepermana/material/layout`     — layout primitives (WIP)
  *   - `@ojiepermana/material/navigation` — navigation primitives (WIP)
+ *   - `@ojiepermana/material/chart`      — chart primitives (WIP)
  *
  * Consumers should import from the subpaths directly.
  */

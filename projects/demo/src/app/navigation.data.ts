@@ -70,6 +70,17 @@ export const DemoNavigationData: NavigationItem[] = [
         icon: 'deployed_code',
         children: [
           {
+            id: 'component-charts',
+            title: 'Charts',
+            type: 'basic',
+            icon: 'monitoring',
+            link: '/ui/chart',
+            badge: {
+              title: 'New',
+              classes: 'ml-2 px-2 py-0.5 rounded-full text-xs bg-emerald-500 text-white',
+            },
+          },
+          {
             id: 'shadcn-accordion',
             title: 'Accordion',
             type: 'basic',

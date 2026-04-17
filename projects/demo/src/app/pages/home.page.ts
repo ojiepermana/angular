@@ -11,7 +11,15 @@ import { PageShellComponent } from '../core/page-shell/page-shell';
     <demo-page-shell
       title="@ojiepermana/material"
       description="Design tokens, layouts, navigation, and shadcn-styled components for Angular — all theme-aware via a shared token system.">
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <a
+          class="group rounded-lg border border-border bg-card p-5 transition-colors hover:border-foreground/40"
+          [routerLink]="'/v/ui/chart'">
+          <h3 class="text-sm font-semibold text-foreground">Charts</h3>
+          <p class="mt-1 text-xs text-muted-foreground">
+            Cartesian and polar chart primitives with scoped themes, legends, and tooltips.
+          </p>
+        </a>
         <a
           class="group rounded-lg border border-border bg-card p-5 transition-colors hover:border-foreground/40"
           [routerLink]="'/v/ui/shadcn/button'">

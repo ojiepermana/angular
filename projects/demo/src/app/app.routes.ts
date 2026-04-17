@@ -17,6 +17,10 @@ const shellChildren: Routes = [
   { path: 'docs', redirectTo: 'docs/introduction', pathMatch: 'full' },
   { path: 'docs/:slug', component: GenericPlaceholderPageComponent },
   { path: 'lucide-icons', component: GenericPlaceholderPageComponent },
+  {
+    path: 'ui/chart',
+    loadChildren: () => import('./pages/ui/chart/chart.routes').then((m) => m.chartRoutes),
+  },
   // Material + CDK placeholders — generic shell shows title from nav trail.
   { path: 'ui/material/:slug', component: GenericPlaceholderPageComponent },
   { path: 'ui/cdk/:slug', component: GenericPlaceholderPageComponent },
