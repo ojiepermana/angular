@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { ChartContext } from '../../core/chart-context';
 import type { ChartDatum, ChartMargin } from '../../core/cartesian-context';
-import { computeRadarLayout, type RadarCurve } from './radar-layout';
+import { computeRadarLayout, type RadarCurve, type RadarGrid } from './radar-layout';
 
 const DEFAULT_MARGIN: ChartMargin = { top: 24, right: 24, bottom: 24, left: 24 };
 
@@ -18,37 +18,49 @@ const DEFAULT_MARGIN: ChartMargin = { top: 24, right: 24, bottom: 24, left: 24 }
       [attr.aria-label]="ariaSummary()">
       <svg:g [attr.transform]="innerTransform()">
         <svg:g class="chart-radar" [attr.transform]="'translate(' + layout().centerX + ',' + layout().centerY + ')'">
-          <!-- Level rings -->
-          @for (lvl of layout().levels; track $index) {
-            <svg:circle
-              class="chart-radar-level fill-none stroke-border"
-              stroke-dasharray="2 2"
-              cx="0"
-              cy="0"
-              [attr.r]="(($index + 1) * layout().radius) / layout().levels.length" />
-          }
-          <!-- Axes -->
-          @for (axis of layout().axes; track axis.name) {
-            <svg:line class="chart-radar-axis stroke-border" x1="0" y1="0" [attr.x2]="axis.x" [attr.y2]="axis.y" />
-            @if (showLabels()) {
-              <svg:text
-                class="chart-radar-axis-label fill-muted-foreground text-[10px]"
-                text-anchor="middle"
-                dominant-baseline="middle"
-                [attr.x]="axis.x * 1.12"
-                [attr.y]="axis.y * 1.12">
-                {{ axis.name }}
-              </svg:text>
+          @if (layout().grid !== 'none') {
+            @for (level of layout().levels; track level.value; let levelIndex = $index) {
+              @if (layout().grid === 'circle') {
+                <svg:circle
+                  class="chart-radar-level stroke-border"
+                  [attr.fill]="gridFill()"
+                  [attr.fill-opacity]="gridFillOpacity(levelIndex)"
+                  stroke-dasharray="2 2"
+                  cx="0"
+                  cy="0"
+                  [attr.r]="level.radius" />
+              } @else {
+                <svg:path
+                  class="chart-radar-level stroke-border"
+                  [attr.d]="level.path"
+                  [attr.fill]="gridFill()"
+                  [attr.fill-opacity]="gridFillOpacity(levelIndex)"
+                  stroke-dasharray="2 2" />
+              }
             }
           }
-          <!-- Series -->
+          @if (showAxes()) {
+            @for (axis of layout().axes; track axis.name) {
+              <svg:line class="chart-radar-axis stroke-border" x1="0" y1="0" [attr.x2]="axis.x" [attr.y2]="axis.y" />
+              @if (showLabels()) {
+                <svg:text
+                  class="chart-radar-axis-label fill-muted-foreground text-[10px]"
+                  text-anchor="middle"
+                  dominant-baseline="middle"
+                  [attr.x]="axis.x * 1.12"
+                  [attr.y]="axis.y * 1.12">
+                  {{ axis.name }}
+                </svg:text>
+              }
+            }
+          }
           @for (s of layout().series; track s.seriesKey) {
             <svg:path
               class="chart-radar-series"
               [attr.d]="s.path"
               [attr.stroke]="s.color"
-              [attr.fill]="s.color"
-              [attr.fill-opacity]="fillOpacity()"
+              [attr.fill]="linesOnly() ? 'none' : s.color"
+              [attr.fill-opacity]="linesOnly() ? null : fillOpacity()"
               [attr.stroke-width]="strokeWidth()"
               stroke-linejoin="round" />
             @if (showDots()) {
@@ -73,7 +85,6 @@ export class RadarChart {
   private readonly root = inject(ChartContext);
 
   readonly data = input.required<readonly ChartDatum[]>();
-  /** Field on each datum used as the axis label (one axis per row). */
   readonly axisKey = input.required<string>();
   readonly margin = input<ChartMargin>(DEFAULT_MARGIN);
   readonly curve = input<RadarCurve>('linear');
@@ -84,6 +95,10 @@ export class RadarChart {
   readonly showLabels = input<boolean>(true);
   readonly showDots = input<boolean>(true);
   readonly dotRadius = input<number>(3);
+  readonly grid = input<RadarGrid>('circle');
+  readonly gridFilled = input<boolean>(false);
+  readonly showAxes = input<boolean>(true);
+  readonly linesOnly = input<boolean>(false);
 
   protected readonly innerWidth = computed(() =>
     Math.max(0, this.root.dimensions().width - this.margin().left - this.margin().right),
@@ -102,6 +117,7 @@ export class RadarChart {
       maxValue: this.maxValue(),
       levels: this.levels(),
       curve: this.curve(),
+      grid: this.grid(),
     }),
   );
 
@@ -116,4 +132,12 @@ export class RadarChart {
     const keys = this.root.visibleSeriesKeys();
     return `Radar chart, ${this.data().length} axes, ${keys.length} series.`;
   });
+
+  protected gridFill(): string {
+    return this.gridFilled() ? 'hsl(var(--muted))' : 'none';
+  }
+
+  protected gridFillOpacity(levelIndex: number): number | null {
+    return this.gridFilled() ? Math.max(0.06, 0.18 - levelIndex * 0.02) : null;
+  }
 }

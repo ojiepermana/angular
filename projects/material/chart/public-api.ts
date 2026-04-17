@@ -21,6 +21,8 @@ export * from './src/lib/primitives/chart-pointer-tracker';
 export * from './src/lib/primitives/chart-tooltip';
 export * from './src/lib/primitives/chart-legend';
 export * from './src/lib/primitives/chart-zoom-controls';
+export * from './src/lib/primitives/pie-center';
+export * from './src/lib/primitives/radial-center';
 
 // Charts
 export * from './src/lib/charts/bar';

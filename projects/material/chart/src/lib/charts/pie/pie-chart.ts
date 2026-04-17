@@ -13,15 +13,6 @@ export interface PieSliceClickEvent {
   readonly datum: ChartDatum;
 }
 
-/**
- * Pie / Donut chart — composable within `<ui-chart-container>`.
- *
- * Each row of `data` is a single slice. Colors are resolved from the
- * container's `config`: either by the row's `nameKey` value (default) or
- * by an explicit `seriesKeys` array.
- *
- * Set `innerRadius > 0` for a donut.
- */
 @Component({
   selector: 'ui-pie-chart',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,6 +31,7 @@ export interface PieSliceClickEvent {
               class="chart-slice cursor-pointer transition-opacity hover:opacity-80"
               [attr.d]="s.arcPath"
               [attr.fill]="s.color"
+              [attr.transform]="sliceTransform(s)"
               [attr.aria-label]="sliceAriaLabel(s)"
               tabindex="0"
               (click)="emitClick(s)"
@@ -52,16 +44,18 @@ export interface PieSliceClickEvent {
                 class="chart-slice-label fill-foreground text-[10px]"
                 text-anchor="middle"
                 dominant-baseline="middle"
-                [attr.x]="s.centroid[0]"
-                [attr.y]="s.centroid[1]">
+                [attr.x]="s.centroid[0] + s.translateX"
+                [attr.y]="s.centroid[1] + s.translateY">
                 {{ s.value }}
               </svg:text>
             }
           }
         </svg:g>
-        <ng-content />
       </svg:g>
     </svg:svg>
+    <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+      <ng-content select="ui-pie-center" />
+    </div>
     <ng-content select="ui-chart-tooltip" />
     <ng-content select="ui-chart-legend" />
   `,
@@ -70,11 +64,8 @@ export class PieChart {
   private readonly root = inject(ChartContext);
 
   readonly data = input.required<readonly ChartDatum[]>();
-  /** Field on each datum whose value is the slice's numeric magnitude. */
   readonly valueKey = input.required<string>();
-  /** Field on each datum whose value is the slice's label. */
   readonly nameKey = input.required<string>();
-  /** Optional explicit series-key list (same length as data) for coloring. */
   readonly seriesKeys = input<readonly string[] | undefined>(undefined);
   readonly margin = input<ChartMargin>(DEFAULT_MARGIN);
   readonly innerRadius = input<number>(0);
@@ -83,6 +74,8 @@ export class PieChart {
   readonly startAngle = input<number>(-Math.PI / 2);
   readonly endAngle = input<number>((3 * Math.PI) / 2);
   readonly showLabels = input<boolean>(false);
+  readonly activeIndex = input<number | undefined>(undefined);
+  readonly activeOffset = input<number>(12);
 
   readonly sliceClick = output<PieSliceClickEvent>();
 
@@ -106,6 +99,8 @@ export class PieChart {
       cornerRadius: this.cornerRadius(),
       startAngle: this.startAngle(),
       endAngle: this.endAngle(),
+      activeIndex: this.activeIndex(),
+      activeOffset: this.activeOffset(),
     }),
   );
 
@@ -115,11 +110,14 @@ export class PieChart {
   });
 
   protected readonly innerTransform = computed(() => `translate(${this.margin().left},${this.margin().top})`);
-
   protected readonly ariaSummary = computed(() => `Pie chart, ${this.data().length} slices.`);
 
   protected sliceAriaLabel(s: PieSliceRect): string {
     return `${s.name}: ${s.value}`;
+  }
+
+  protected sliceTransform(s: PieSliceRect): string | null {
+    return s.translateX || s.translateY ? `translate(${s.translateX}, ${s.translateY})` : null;
   }
 
   protected emitClick(s: PieSliceRect): void {

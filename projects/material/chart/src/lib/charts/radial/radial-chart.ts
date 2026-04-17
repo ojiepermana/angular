@@ -4,6 +4,7 @@ import type { ChartDatum, ChartMargin } from '../../core/cartesian-context';
 import { computeRadialLayout, type RadialBarRect } from './radial-layout';
 
 const DEFAULT_MARGIN: ChartMargin = { top: 8, right: 8, bottom: 8, left: 8 };
+const defaultRadialValueFormatter = (value: number): string => `${value}`;
 
 export interface RadialBarClickEvent {
   readonly seriesKey: string;
@@ -13,10 +14,6 @@ export interface RadialBarClickEvent {
   readonly datum: ChartDatum;
 }
 
-/**
- * Radial bar chart — one concentric arc per datum, sweep proportional to
- * value / maxValue.
- */
 @Component({
   selector: 'ui-radial-chart',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,11 +40,23 @@ export interface RadialBarClickEvent {
               (click)="emitClick(b)"
               (keydown.enter)="emitClick(b)"
               (keydown.space)="emitClick(b); $event.preventDefault()" />
+            @if (showValueLabels()) {
+              <svg:text
+                class="chart-radial-value pointer-events-none fill-muted-foreground text-[10px]"
+                [attr.x]="barLabelX(b)"
+                [attr.y]="barLabelY(b)"
+                [attr.text-anchor]="barLabelAnchor(b)"
+                dominant-baseline="middle">
+                {{ formatValueLabel(b) }}
+              </svg:text>
+            }
           }
         </svg:g>
-        <ng-content />
       </svg:g>
     </svg:svg>
+    <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+      <ng-content select="ui-radial-center" />
+    </div>
     <ng-content select="ui-chart-legend" />
   `,
 })
@@ -65,6 +74,8 @@ export class RadialChart {
   readonly endAngle = input<number>((3 * Math.PI) / 2);
   readonly maxValue = input<number | undefined>(undefined);
   readonly showTrack = input<boolean>(true);
+  readonly showValueLabels = input<boolean>(false);
+  readonly valueLabelFormat = input<(value: number) => string>(defaultRadialValueFormatter);
 
   readonly barClick = output<RadialBarClickEvent>();
 
@@ -97,11 +108,28 @@ export class RadialChart {
   });
 
   protected readonly innerTransform = computed(() => `translate(${this.margin().left},${this.margin().top})`);
-
   protected readonly ariaSummary = computed(() => `Radial bar chart, ${this.data().length} tracks.`);
 
   protected barAriaLabel(b: RadialBarRect): string {
     return `${b.name}: ${b.value}`;
+  }
+
+  protected formatValueLabel(b: RadialBarRect): string {
+    return this.valueLabelFormat()(b.value);
+  }
+
+  protected barLabelX(b: RadialBarRect): number {
+    const radius = (b.innerRadius + b.outerRadius) / 2 + 10;
+    return Math.sin(b.endAngle) * radius;
+  }
+
+  protected barLabelY(b: RadialBarRect): number {
+    const radius = (b.innerRadius + b.outerRadius) / 2 + 10;
+    return -Math.cos(b.endAngle) * radius;
+  }
+
+  protected barLabelAnchor(b: RadialBarRect): 'start' | 'end' {
+    return this.barLabelX(b) >= 0 ? 'start' : 'end';
   }
 
   protected emitClick(b: RadialBarRect): void {

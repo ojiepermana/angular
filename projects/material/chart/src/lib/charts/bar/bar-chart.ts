@@ -11,6 +11,7 @@ import { ChartPointerTracker } from '../../primitives/chart-pointer-tracker';
 import { elementClientCenter } from '../../core/pointer-util';
 
 const DEFAULT_MARGIN: ChartMargin = { top: 8, right: 8, bottom: 24, left: 40 };
+const defaultBarValueFormatter = (value: number): string => `${value}`;
 
 /** Event emitted when a user clicks a bar. */
 export interface BarClickEvent {
@@ -27,18 +28,6 @@ export interface BarClickEvent {
  * Layout variants (via inputs):
  * - `orientation`: `'vertical'` (default) or `'horizontal'`
  * - `variant`:     `'grouped'`  (default) or `'stacked'`
- *
- * Colors are driven by the surrounding `<ui-chart-container>`'s `config`:
- * each series key resolves to `var(--color-<key>)`.
- *
- * Axes, grids, tooltips, and legends are projected as children, e.g.:
- * ```html
- * <ui-bar-chart [data]="data" xKey="month">
- *   <svg:g ui-chart-grid></svg:g>
- *   <svg:g ui-chart-axis-x></svg:g>
- *   <svg:g ui-chart-axis-y></svg:g>
- * </ui-bar-chart>
- * ```
  */
 @Component({
   selector: 'ui-bar-chart',
@@ -67,6 +56,9 @@ export interface BarClickEvent {
               [attr.rx]="cornerRadius()"
               [attr.ry]="cornerRadius()"
               [attr.fill]="bar.color"
+              [attr.opacity]="barOpacity(bar)"
+              [attr.stroke]="bar.active ? 'hsl(var(--foreground))' : null"
+              [attr.stroke-width]="bar.active ? 1.5 : null"
               [attr.aria-label]="barAriaLabel(bar)"
               tabindex="0"
               (focus)="setActivePoint($event, bar)"
@@ -74,6 +66,16 @@ export interface BarClickEvent {
               (click)="emitClick(bar)"
               (keydown.enter)="emitClick(bar)"
               (keydown.space)="emitClick(bar); $event.preventDefault()" />
+            @if (showValueLabels() && bar.height > 0 && bar.width > 0) {
+              <svg:text
+                class="chart-bar-value pointer-events-none fill-muted-foreground text-[10px]"
+                [attr.x]="barLabelX(bar)"
+                [attr.y]="barLabelY(bar)"
+                [attr.text-anchor]="barLabelAnchor(bar)"
+                dominant-baseline="middle">
+                {{ formatValueLabel(bar) }}
+              </svg:text>
+            }
           }
         </svg:g>
         <ng-content select="svg\\:g[ui-chart-axis-x]" />
@@ -90,34 +92,21 @@ export class BarChart {
   private readonly root = inject(ChartContext);
   private readonly cart = inject(CartesianContext);
 
-  /** Array of data rows. Each row has the `xKey` field + one field per series. */
   readonly data = input.required<readonly ChartDatum[]>();
-
-  /** Key on each datum used as the categorical axis value. */
   readonly xKey = input.required<string>();
-
-  /** Render orientation. Defaults to vertical bars. */
   readonly orientation = input<ChartOrientation>('vertical');
-
-  /** Grouped (side-by-side) or stacked bars. */
   readonly variant = input<BarVariant>('grouped');
-
-  /** Chart margins in pixels. */
   readonly margin = input<ChartMargin>(DEFAULT_MARGIN);
-
-  /** Padding between category bands (0–1, relative to band width). */
   readonly bandPadding = input<number>(0.2);
-
-  /** Padding between grouped bars within the same category (0–1). */
   readonly groupPadding = input<number>(0.05);
-
-  /** Corner radius for bars. */
   readonly cornerRadius = input<number>(4);
+  readonly colorKey = input<string | undefined>(undefined);
+  readonly activeKey = input<string | undefined>(undefined);
+  readonly activeValue = input<string | number | undefined>(undefined);
+  readonly showValueLabels = input<boolean>(false);
+  readonly valueLabelFormat = input<(value: number) => string>(defaultBarValueFormatter);
 
-  /** Emitted when a bar is clicked or activated via keyboard. */
   readonly barClick = output<BarClickEvent>();
-
-  // ---- derived geometry ----
 
   protected readonly innerWidth = computed(() =>
     Math.max(0, this.root.dimensions().width - this.margin().left - this.margin().right),
@@ -138,6 +127,9 @@ export class BarChart {
       innerHeight: this.innerHeight(),
       bandPadding: this.bandPadding(),
       groupPadding: this.groupPadding(),
+      colorKey: this.colorKey(),
+      activeKey: this.activeKey(),
+      activeValue: this.activeValue(),
     }),
   );
 
@@ -157,7 +149,6 @@ export class BarChart {
   });
 
   constructor() {
-    // Publish scales + dimensions to the CartesianContext so axes/grid render.
     effect(() => {
       const layout = this.layout();
       this.cart.orientation.set(this.orientation());
@@ -192,6 +183,38 @@ export class BarChart {
 
   protected clearActivePoint(): void {
     this.root.activePoint.set(null);
+  }
+
+  protected barOpacity(bar: BarRect): number {
+    return this.activeKey() && this.activeValue() !== undefined ? (bar.active ? 1 : 0.42) : 1;
+  }
+
+  protected formatValueLabel(bar: BarRect): string {
+    return this.valueLabelFormat()(bar.value);
+  }
+
+  protected barLabelX(bar: BarRect): number {
+    if (this.orientation() === 'vertical') {
+      return bar.x + bar.width / 2;
+    }
+
+    return bar.value >= 0 ? bar.x + bar.width + 6 : bar.x - 6;
+  }
+
+  protected barLabelY(bar: BarRect): number {
+    if (this.orientation() === 'vertical') {
+      return bar.value >= 0 ? bar.y - 8 : bar.y + bar.height + 10;
+    }
+
+    return bar.y + bar.height / 2;
+  }
+
+  protected barLabelAnchor(bar: BarRect): 'middle' | 'start' | 'end' {
+    if (this.orientation() === 'vertical') {
+      return 'middle';
+    }
+
+    return bar.value >= 0 ? 'start' : 'end';
   }
 
   protected barAriaLabel(bar: BarRect): string {

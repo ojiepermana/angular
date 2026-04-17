@@ -111,6 +111,7 @@ export class AreaChart {
   readonly xKey = input.required<string>();
   readonly orientation = input<ChartOrientation>('vertical');
   readonly stacked = input<boolean>(false);
+  readonly expanded = input<boolean>(false);
   readonly gradient = input<boolean>(true);
   readonly curve = input<LineCurve>('monotone');
   readonly margin = input<ChartMargin>(DEFAULT_MARGIN);
@@ -141,6 +142,7 @@ export class AreaChart {
       innerHeight: this.innerHeight(),
       curve: this.curve(),
       stacked: this.stacked(),
+      expanded: this.expanded(),
     }),
   );
 

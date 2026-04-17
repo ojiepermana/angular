@@ -1,5 +1,5 @@
 import { scaleBand, scaleLinear } from 'd3-scale';
-import { max as d3max } from 'd3-array';
+import { max as d3max, min as d3min } from 'd3-array';
 import { stack as d3stack, type Series, type SeriesPoint } from 'd3-shape';
 import type { ChartDatum, ChartOrientation } from '../../core/cartesian-context';
 import { seriesColorVar } from '../../core/chart-config';
@@ -19,6 +19,7 @@ export interface BarRect {
   readonly width: number;
   readonly height: number;
   readonly color: string;
+  readonly active: boolean;
 }
 
 /** Inputs required to compute bar-chart geometry. */
@@ -32,6 +33,9 @@ export interface BarLayoutInput {
   readonly innerHeight: number;
   readonly bandPadding: number;
   readonly groupPadding: number;
+  readonly colorKey?: string;
+  readonly activeKey?: string;
+  readonly activeValue?: string | number;
 }
 
 /** Computed layout: bars + scales. */
@@ -55,9 +59,58 @@ function readNumber(datum: ChartDatum, key: string): number {
   return 0;
 }
 
+function resolveBarColor(datum: ChartDatum, seriesKey: string, colorKey?: string): string {
+  if (!colorKey) {
+    return seriesColorVar(seriesKey);
+  }
+
+  const raw = datum[colorKey];
+  if (typeof raw !== 'string' || raw.length === 0) {
+    return seriesColorVar(seriesKey);
+  }
+
+  if (
+    raw.startsWith('var(') ||
+    raw.startsWith('#') ||
+    raw.startsWith('rgb') ||
+    raw.startsWith('hsl') ||
+    raw.includes('(')
+  ) {
+    return raw;
+  }
+
+  return seriesColorVar(raw);
+}
+
+function isActiveBar(datum: ChartDatum, activeKey?: string, activeValue?: string | number): boolean {
+  if (!activeKey || activeValue === undefined) {
+    return false;
+  }
+
+  const value = datum[activeKey];
+  if (typeof value === 'number' && typeof activeValue === 'number') {
+    return value === activeValue;
+  }
+
+  return String(value ?? '') === String(activeValue);
+}
+
 /** Build all bar rectangles for the given config. */
 export function computeBarLayout(input: BarLayoutInput): BarLayoutResult {
-  const { data, xKey, seriesKeys, variant, orientation, innerWidth, innerHeight, bandPadding, groupPadding } = input;
+  const {
+    data,
+    xKey,
+    seriesKeys,
+    variant,
+    orientation,
+    innerWidth,
+    innerHeight,
+    bandPadding,
+    groupPadding,
+    colorKey,
+    activeKey,
+    activeValue,
+  } = input;
 
   const categories = data.map((d) => String(d[xKey] ?? ''));
   const isVertical = orientation === 'vertical';
@@ -80,6 +133,9 @@ export function computeBarLayout(input: BarLayoutInput): BarLayoutResult {
       categoryScale,
       valueScale,
       categories,
+      colorKey,
+      activeKey,
+      activeValue,
     });
   }
 
@@ -94,6 +150,9 @@ export function computeBarLayout(input: BarLayoutInput): BarLayoutResult {
     valueScale,
     groupPadding,
     categories,
+    colorKey,
+    activeKey,
+    activeValue,
   });
 }
 
@@ -110,12 +169,14 @@ interface GroupedInput {
   valueScale: ReturnType<typeof scaleLinear<number, number>>;
   groupPadding: number;
   categories: readonly string[];
+  colorKey?: string;
+  activeKey?: string;
+  activeValue?: string | number;
 }
 
 function groupedLayout(input: GroupedInput): BarLayoutResult {
   const {
     data,
-    xKey,
     seriesKeys,
     orientation,
     innerWidth,
@@ -124,15 +185,23 @@ function groupedLayout(input: GroupedInput): BarLayoutResult {
     valueScale,
     groupPadding,
     categories,
+    colorKey,
+    activeKey,
+    activeValue,
   } = input;
 
   const isVertical = orientation === 'vertical';
+  const minValue = d3min(data, (d) => d3min(seriesKeys, (k) => readNumber(d, k)) ?? 0) ?? 0;
   const maxValue = d3max(data, (d) => d3max(seriesKeys, (k) => readNumber(d, k)) ?? 0) ?? 0;
+  const domainMin = Math.min(0, minValue);
+  const domainMax = Math.max(0, maxValue, domainMin === 0 ? 1 : 0);
 
   valueScale
-    .domain([0, maxValue === 0 ? 1 : maxValue])
+    .domain([domainMin, domainMax])
     .nice()
     .range(isVertical ? [innerHeight, 0] : [0, innerWidth]);
+
+  const baseline = valueScale(0);
 
   const subScale = scaleBand<string>()
     .domain(seriesKeys as string[])
@@ -146,7 +215,9 @@ function groupedLayout(input: GroupedInput): BarLayoutResult {
     seriesKeys.forEach((seriesKey) => {
       const value = readNumber(datum, seriesKey);
       const sub = subScale(seriesKey) ?? 0;
-      const color = seriesColorVar(seriesKey);
+      const scaledValue = valueScale(value);
+      const color = resolveBarColor(datum, seriesKey, colorKey);
+      const active = isActiveBar(datum, activeKey, activeValue);
 
       const rect: BarRect = isVertical
         ? {
@@ -156,10 +227,11 @@ function groupedLayout(input: GroupedInput): BarLayoutResult {
             category,
             value,
             x: bandStart + sub,
-            y: valueScale(value),
+            y: Math.min(scaledValue, baseline),
             width: subScale.bandwidth(),
-            height: innerHeight - valueScale(value),
+            height: Math.abs(baseline - scaledValue),
             color,
+            active,
           }
         : {
             key: `${datumIndex}-${seriesKey}`,
@@ -167,11 +239,12 @@ function groupedLayout(input: GroupedInput): BarLayoutResult {
             datumIndex,
             category,
             value,
-            x: 0,
+            x: Math.min(scaledValue, baseline),
             y: bandStart + sub,
-            width: valueScale(value),
+            width: Math.abs(baseline - scaledValue),
             height: subScale.bandwidth(),
             color,
+            active,
           };
       bars.push(rect);
     });
@@ -192,10 +265,25 @@ interface StackedInput {
   categoryScale: ReturnType<typeof scaleBand<string>>;
   valueScale: ReturnType<typeof scaleLinear<number, number>>;
   categories: readonly string[];
+  colorKey?: string;
+  activeKey?: string;
+  activeValue?: string | number;
 }
 
 function stackedLayout(input: StackedInput): BarLayoutResult {
-  const { data, seriesKeys, orientation, innerWidth, innerHeight, categoryScale, valueScale, categories } = input;
+  const {
+    data,
+    seriesKeys,
+    orientation,
+    innerWidth,
+    innerHeight,
+    categoryScale,
+    valueScale,
+    categories,
+    colorKey,
+    activeKey,
+    activeValue,
+  } = input;
 
   const isVertical = orientation === 'vertical';
   const normalized = data.map((d) => {
@@ -219,12 +307,13 @@ function stackedLayout(input: StackedInput): BarLayoutResult {
   const bars: BarRect[] = [];
   series.forEach((layer) => {
     const seriesKey = layer.key;
-    const color = seriesColorVar(seriesKey);
     layer.forEach((point: SeriesPoint<Record<string, number>>, datumIndex: number) => {
       const [lower, upper] = point;
       const value = upper - lower;
       const category = categories[datumIndex];
       const bandStart = categoryScale(category) ?? 0;
+      const color = resolveBarColor(data[datumIndex], seriesKey, colorKey);
+      const active = isActiveBar(data[datumIndex], activeKey, activeValue);
 
       const rect: BarRect = isVertical
         ? {
@@ -238,6 +327,7 @@ function stackedLayout(input: StackedInput): BarLayoutResult {
             width: categoryScale.bandwidth(),
             height: valueScale(lower) - valueScale(upper),
             color,
+            active,
           }
         : {
             key: `${datumIndex}-${seriesKey}`,
@@ -250,6 +340,7 @@ function stackedLayout(input: StackedInput): BarLayoutResult {
             width: valueScale(upper) - valueScale(lower),
             height: categoryScale.bandwidth(),
             color,
+            active,
           };
       bars.push(rect);
     });

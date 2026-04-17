@@ -4,6 +4,7 @@ import {
   line as d3line,
   area as d3area,
   stack as d3stack,
+  stackOffsetExpand,
   curveMonotoneX,
   curveLinear,
   curveStep,
@@ -155,6 +156,7 @@ export function computeLineLayout(input: CartesianBase): LineLayoutResult {
 
 export interface AreaLayoutInput extends CartesianBase {
   readonly stacked: boolean;
+  readonly expanded?: boolean;
 }
 
 /** Compute area-chart geometry (single or stacked). */
@@ -228,7 +230,7 @@ function computeSingleArea(input: AreaLayoutInput): AreaLayoutResult {
 }
 
 function computeStackedArea(input: AreaLayoutInput): AreaLayoutResult {
-  const { data, seriesKeys, orientation, innerWidth, innerHeight, xKey, curve } = input;
+  const { data, seriesKeys, orientation, innerWidth, innerHeight, xKey, curve, expanded } = input;
   const isVertical = orientation === 'vertical';
   const categories = data.map((d) => String(d[xKey] ?? ''));
 
@@ -243,13 +245,20 @@ function computeStackedArea(input: AreaLayoutInput): AreaLayoutResult {
     return out;
   });
 
-  const stackSeries = d3stack<Record<string, number>, string>().keys(seriesKeys as string[])(normalized);
+  const stackGenerator = d3stack<Record<string, number>, string>().keys(seriesKeys as string[]);
+  if (expanded) {
+    stackGenerator.offset(stackOffsetExpand);
+  }
+  const stackSeries = stackGenerator(normalized);
 
-  const maxTotal = d3max(stackSeries[stackSeries.length - 1] ?? [], (p) => p[1]) ?? 0;
+  const maxTotal = expanded ? 1 : (d3max(stackSeries[stackSeries.length - 1] ?? [], (p) => p[1]) ?? 0);
   const valueScale = scaleLinear<number, number>()
     .domain([0, maxTotal === 0 ? 1 : maxTotal])
-    .nice()
     .range(isVertical ? [innerHeight, 0] : [0, innerWidth]);
+
+  if (!expanded) {
+    valueScale.nice();
+  }
 
   const allPoints: LinePoint[] = [];
   const series: LineSeriesPath[] = stackSeries.map((layer) => {

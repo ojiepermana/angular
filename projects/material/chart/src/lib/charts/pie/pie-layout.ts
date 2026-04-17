@@ -26,6 +26,8 @@ export interface PieLayoutInput {
   readonly startAngle: number;
   /** Ending angle in radians (default 3π/2). */
   readonly endAngle: number;
+  readonly activeIndex?: number;
+  readonly activeOffset?: number;
 }
 
 export interface PieSliceRect {
@@ -38,6 +40,8 @@ export interface PieSliceRect {
   readonly centroid: readonly [number, number];
   readonly startAngle: number;
   readonly endAngle: number;
+  readonly translateX: number;
+  readonly translateY: number;
 }
 
 export interface PieLayout {
@@ -60,6 +64,8 @@ export function computePieLayout(input: PieLayoutInput): PieLayout {
     cornerRadius,
     startAngle,
     endAngle,
+    activeIndex,
+    activeOffset = 12,
   } = input;
 
   const outerRadius = Math.max(0, Math.min(innerWidth, innerHeight) / 2);
@@ -86,6 +92,9 @@ export function computePieLayout(input: PieLayoutInput): PieLayout {
   const slices: PieSliceRect[] = arcs.map((a, i) => {
     const d = a.data;
     const key = seriesKeys?.[i] ?? String(d[nameKey] ?? i);
+    const centroid = arcGen.centroid(a) as [number, number];
+    const magnitude = Math.hypot(centroid[0], centroid[1]) || 1;
+    const isActive = i === activeIndex;
     return {
       seriesKey: key,
       name: String(d[nameKey] ?? key),
@@ -93,9 +102,11 @@ export function computePieLayout(input: PieLayoutInput): PieLayout {
       datumIndex: i,
       color: seriesColorVar(key),
       arcPath: arcGen(a) ?? '',
-      centroid: arcGen.centroid(a) as [number, number],
+      centroid,
       startAngle: a.startAngle,
       endAngle: a.endAngle,
+      translateX: isActive ? (centroid[0] / magnitude) * activeOffset : 0,
+      translateY: isActive ? (centroid[1] / magnitude) * activeOffset : 0,
     };
   });
 

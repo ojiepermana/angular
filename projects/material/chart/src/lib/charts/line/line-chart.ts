@@ -14,6 +14,7 @@ import { elementClientCenter } from '../../core/pointer-util';
 import { sliceByIndexRange } from '../../core/viewport';
 
 const DEFAULT_MARGIN: ChartMargin = { top: 8, right: 8, bottom: 24, left: 40 };
+const defaultLineValueFormatter = (value: number): string => `${value}`;
 
 /** Emitted when a data point is activated (click or keyboard). */
 export interface LinePointClickEvent {
@@ -24,15 +25,6 @@ export interface LinePointClickEvent {
   readonly datum: ChartDatum;
 }
 
-/**
- * Line chart — composable within `<ui-chart-container>`.
- *
- * Multi-series: any numeric field on `data[i]` whose key matches a
- * `ChartConfig` entry becomes a series.
- *
- * Colors are driven by the surrounding container: each series is stroked
- * with `var(--color-<seriesKey>)`.
- */
 @Component({
   selector: 'ui-line-chart',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,7 +58,9 @@ export interface LinePointClickEvent {
                   [attr.cx]="p.x"
                   [attr.cy]="p.y"
                   [attr.r]="dotRadius()"
-                  [attr.fill]="s.color"
+                  [attr.fill]="dotFill(p, s.color)"
+                  [attr.stroke]="dotStrokeColor()"
+                  [attr.stroke-width]="dotStrokeWidth() || null"
                   [attr.aria-label]="pointAriaLabel(p)"
                   tabindex="0"
                   (focus)="setActivePoint($event, p)"
@@ -74,6 +68,16 @@ export interface LinePointClickEvent {
                   (click)="emitClick(p)"
                   (keydown.enter)="emitClick(p)"
                   (keydown.space)="emitClick(p); $event.preventDefault()" />
+                @if (showValueLabels()) {
+                  <svg:text
+                    class="chart-line-value pointer-events-none fill-muted-foreground text-[10px]"
+                    [attr.x]="labelX(p)"
+                    [attr.y]="labelY(p)"
+                    [attr.text-anchor]="labelAnchor()"
+                    dominant-baseline="middle">
+                    {{ formatValueLabel(p) }}
+                  </svg:text>
+                }
               }
             }
           }
@@ -102,6 +106,11 @@ export class LineChart {
   readonly strokeWidth = input<number>(2);
   readonly showDots = input<boolean>(true);
   readonly dotRadius = input<number>(3);
+  readonly dotColorKey = input<string | undefined>(undefined);
+  readonly dotStrokeColor = input<string | undefined>(undefined);
+  readonly dotStrokeWidth = input<number>(0);
+  readonly showValueLabels = input<boolean>(false);
+  readonly valueLabelFormat = input<(value: number) => string>(defaultLineValueFormatter);
 
   readonly pointClick = output<LinePointClickEvent>();
 
@@ -113,7 +122,6 @@ export class LineChart {
   );
 
   protected readonly visibleStartIndex = computed(() => this.viewport.zoomRange()?.startIndex ?? 0);
-
   protected readonly visibleData = computed(() => sliceByIndexRange(this.data(), this.viewport.zoomRange()));
 
   protected readonly layout = computed(() =>
@@ -176,6 +184,47 @@ export class LineChart {
 
   protected clearActivePoint(): void {
     this.root.activePoint.set(null);
+  }
+
+  protected dotFill(point: LinePoint, fallbackColor: string): string {
+    const colorKey = this.dotColorKey();
+    if (!colorKey) {
+      return fallbackColor;
+    }
+
+    const datum = this.visibleData()[point.datumIndex];
+    const raw = datum?.[colorKey];
+    if (typeof raw !== 'string' || raw.length === 0) {
+      return fallbackColor;
+    }
+
+    if (
+      raw.startsWith('var(') ||
+      raw.startsWith('#') ||
+      raw.startsWith('rgb') ||
+      raw.startsWith('hsl') ||
+      raw.includes('(')
+    ) {
+      return raw;
+    }
+
+    return `var(--color-${raw.replace(/[^a-zA-Z0-9_-]/g, '_')})`;
+  }
+
+  protected formatValueLabel(point: LinePoint): string {
+    return this.valueLabelFormat()(point.value);
+  }
+
+  protected labelX(point: LinePoint): number {
+    return this.orientation() === 'vertical' ? point.x : point.x + this.dotRadius() + 6;
+  }
+
+  protected labelY(point: LinePoint): number {
+    return this.orientation() === 'vertical' ? point.y - this.dotRadius() - 8 : point.y;
+  }
+
+  protected labelAnchor(): 'middle' | 'start' {
+    return this.orientation() === 'vertical' ? 'middle' : 'start';
   }
 
   protected pointAriaLabel(p: LinePoint): string {

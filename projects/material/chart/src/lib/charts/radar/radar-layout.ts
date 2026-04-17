@@ -4,6 +4,7 @@ import type { ChartDatum } from '../../core/cartesian-context';
 import { seriesColorVar } from '../../core/chart-config';
 
 export type RadarCurve = 'linear' | 'cardinal';
+export type RadarGrid = 'polygon' | 'circle' | 'none';
 
 export interface RadarLayoutInput {
   readonly data: readonly ChartDatum[];
@@ -14,6 +15,7 @@ export interface RadarLayoutInput {
   readonly maxValue?: number;
   readonly levels: number;
   readonly curve: RadarCurve;
+  readonly grid: RadarGrid;
 }
 
 export interface RadarAxisInfo {
@@ -30,24 +32,31 @@ export interface RadarSeries {
   readonly points: readonly { readonly x: number; readonly y: number; readonly value: number; readonly axis: string }[];
 }
 
+export interface RadarLevel {
+  readonly value: number;
+  readonly radius: number;
+  readonly path: string;
+}
+
 export interface RadarLayout {
   readonly centerX: number;
   readonly centerY: number;
   readonly radius: number;
   readonly axes: readonly RadarAxisInfo[];
-  readonly levels: readonly number[];
+  readonly levels: readonly RadarLevel[];
   readonly maxValue: number;
   readonly series: readonly RadarSeries[];
+  readonly grid: RadarGrid;
 }
 
 export function computeRadarLayout(input: RadarLayoutInput): RadarLayout {
-  const { data, axisKey, seriesKeys, innerWidth, innerHeight, levels, curve } = input;
+  const { data, axisKey, seriesKeys, innerWidth, innerHeight, levels, curve, grid } = input;
   const radius = Math.max(0, Math.min(innerWidth, innerHeight) / 2);
   const centerX = innerWidth / 2;
   const centerY = innerHeight / 2;
 
   if (data.length === 0 || seriesKeys.length === 0 || radius === 0) {
-    return { centerX, centerY, radius, axes: [], levels: [], maxValue: 0, series: [] };
+    return { centerX, centerY, radius, axes: [], levels: [], maxValue: 0, series: [], grid };
   }
 
   const maxValue = input.maxValue ?? d3max(data, (d) => d3max(seriesKeys, (k) => Number(d[k] ?? 0)) ?? 0) ?? 1;
@@ -56,42 +65,65 @@ export function computeRadarLayout(input: RadarLayoutInput): RadarLayout {
   const angleFor = (i: number) => i * angleStep - Math.PI / 2;
 
   const axes: RadarAxisInfo[] = data.map((d, i) => {
-    const a = angleFor(i);
+    const angle = angleFor(i);
     return {
       name: String(d[axisKey] ?? i),
-      angle: a,
-      x: Math.cos(a) * radius,
-      y: Math.sin(a) * radius,
+      angle,
+      x: Math.cos(angle) * radius,
+      y: Math.sin(angle) * radius,
     };
   });
 
-  const levelValues = Array.from({ length: levels }, (_, i) => ((i + 1) / levels) * maxValue);
+  const levelValues: RadarLevel[] = Array.from({ length: levels }, (_, index) => {
+    const value = ((index + 1) / levels) * maxValue;
+    const levelRadius = ((index + 1) / levels) * radius;
+    return {
+      value,
+      radius: levelRadius,
+      path: polygonPath(
+        axes.map((axis) => ({
+          x: Math.cos(axis.angle) * levelRadius,
+          y: Math.sin(axis.angle) * levelRadius,
+        })),
+      ),
+    };
+  });
 
   const curveFactory = curve === 'cardinal' ? curveCardinalClosed : curveLinearClosed;
   const radial = lineRadial<{ angle: number; value: number }>()
-    .angle((p) => p.angle + Math.PI / 2)
-    .radius((p) => (p.value / maxValue) * radius)
+    .angle((point) => point.angle + Math.PI / 2)
+    .radius((point) => (point.value / maxValue) * radius)
     .curve(curveFactory);
 
-  const series: RadarSeries[] = seriesKeys.map((k) => {
-    const points = data.map((d, i) => {
-      const value = Number(d[k] ?? 0);
-      const a = angleFor(i);
-      const r = (value / maxValue) * radius;
+  const series: RadarSeries[] = seriesKeys.map((seriesKey) => {
+    const points = data.map((datum, index) => {
+      const value = Number(datum[seriesKey] ?? 0);
+      const angle = angleFor(index);
+      const pointRadius = (value / maxValue) * radius;
       return {
-        axis: String(d[axisKey] ?? i),
+        axis: String(datum[axisKey] ?? index),
         value,
-        x: Math.cos(a) * r,
-        y: Math.sin(a) * r,
+        x: Math.cos(angle) * pointRadius,
+        y: Math.sin(angle) * pointRadius,
       };
     });
     return {
-      seriesKey: k,
-      color: seriesColorVar(k),
-      path: radial(data.map((d, i) => ({ angle: angleFor(i), value: Number(d[k] ?? 0) }))) ?? '',
+      seriesKey,
+      color: seriesColorVar(seriesKey),
+      path:
+        radial(data.map((datum, index) => ({ angle: angleFor(index), value: Number(datum[seriesKey] ?? 0) }))) ?? '',
       points,
     };
   });
 
-  return { centerX, centerY, radius, axes, levels: levelValues, maxValue, series };
+  return { centerX, centerY, radius, axes, levels: levelValues, maxValue, series, grid };
+}
+
+function polygonPath(points: readonly { readonly x: number; readonly y: number }[]): string {
+  if (points.length === 0) {
+    return '';
+  }
+
+  const [first, ...rest] = points;
+  return `M ${first.x} ${first.y} ${rest.map((point) => `L ${point.x} ${point.y}`).join(' ')} Z`;
 }

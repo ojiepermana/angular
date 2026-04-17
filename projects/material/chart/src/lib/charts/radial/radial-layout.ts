@@ -30,6 +30,7 @@ export interface RadialBarRect {
   readonly backgroundPath: string;
   readonly innerRadius: number;
   readonly outerRadius: number;
+  readonly endAngle: number;
 }
 
 export interface RadialLayout {
@@ -73,6 +74,7 @@ export function computeRadialLayout(input: RadialLayoutInput): RadialLayout {
     const value = Number(d[valueKey] ?? 0);
     const pct = maxValue === 0 ? 0 : value / maxValue;
     const sweep = (endAngle - startAngle) * pct;
+    const valueEndAngle = startAngle + sweep;
     const key = seriesKeys?.[i] ?? String(d[nameKey] ?? i);
 
     const arcGen = d3arc<unknown>().innerRadius(inner).outerRadius(outer).cornerRadius(cornerRadius);
@@ -83,10 +85,11 @@ export function computeRadialLayout(input: RadialLayoutInput): RadialLayout {
       value,
       datumIndex: i,
       color: seriesColorVar(key),
-      arcPath: arcGen.startAngle(startAngle).endAngle(startAngle + sweep)(null) ?? '',
+      arcPath: arcGen.startAngle(startAngle).endAngle(valueEndAngle)(null) ?? '',
       backgroundPath: arcGen.startAngle(startAngle).endAngle(endAngle)(null) ?? '',
       innerRadius: inner,
       outerRadius: outer,
+      endAngle: valueEndAngle,
     };
   });
 
