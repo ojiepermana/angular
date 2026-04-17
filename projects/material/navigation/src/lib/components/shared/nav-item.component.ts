@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatTooltip } from '@angular/material/tooltip';
 import { UiNavIconComponent } from './nav-icon.component';
 import { NavigationService } from '../../core/services/navigation.service';
+import { cn } from '../../core/utils/cn.util';
 import type {
   NavigationAsideItem,
   NavigationBasicItem,
@@ -22,7 +22,7 @@ import type {
 @Component({
   selector: 'ui-nav-item',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgClass, RouterLink, RouterLinkActive, MatTooltip, UiNavIconComponent],
+  imports: [RouterLink, RouterLinkActive, MatTooltip, UiNavIconComponent],
   template: `
     @switch (type()) {
       @case ('divider') {
@@ -37,13 +37,12 @@ import type {
             <div class="px-3 pb-1">
               <div
                 [id]="headingId()"
-                class="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-                [ngClass]="item().classes?.title"
+                [class]="cn('text-xs font-semibold uppercase tracking-wider text-muted-foreground', item().classes?.title)"
               >
                 {{ item().title }}
               </div>
               @if (groupItem().subtitle) {
-                <div class="text-xs text-muted-foreground/80" [ngClass]="item().classes?.subtitle">
+                <div [class]="cn('text-xs text-muted-foreground/80', item().classes?.subtitle)">
                   {{ groupItem().subtitle }}
                 </div>
               }
@@ -61,12 +60,10 @@ import type {
         @let open = isGroupOpen();
         <button
           type="button"
-          class="group/ni flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          [class.bg-accent/50]="isTrailActive()"
+          [class]="cn('group/ni flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring', isTrailActive() && 'bg-accent/50', item().classes?.wrapper)"
           [attr.aria-expanded]="open"
           [attr.aria-controls]="id + '-panel'"
           [disabled]="collapsableItem().disabled || null"
-          [ngClass]="item().classes?.wrapper"
           [matTooltip]="compact() ? (collapsableItem().title ?? '') : ''"
           matTooltipPosition="right"
           [matTooltipDisabled]="!compact()"
@@ -75,12 +72,11 @@ import type {
           @if (collapsableItem().icon) {
             <ui-nav-icon
               [name]="collapsableItem().icon!"
-              class="text-xl"
-              [ngClass]="item().classes?.icon"
+              [class]="cn('text-xl', item().classes?.icon)"
             />
           }
           @if (!compact()) {
-            <span class="flex-1 truncate text-left" [ngClass]="item().classes?.title">
+            <span [class]="cn('flex-1 truncate text-left', item().classes?.title)">
               {{ collapsableItem().title }}
             </span>
             @if (collapsableItem().badge; as badge) {
@@ -88,8 +84,7 @@ import type {
             }
             <ui-nav-icon
               [name]="'chevron_right'"
-              class="text-base transition-transform duration-200"
-              [class.rotate-90]="open"
+              [class]="cn('text-base transition-transform duration-200', open && 'rotate-90')"
             />
           }
         </button>
@@ -124,7 +119,7 @@ import type {
       }
       @case ('aside') {
         <a
-          class="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          [class]="cn('flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring', item().classes?.wrapper)"
           routerLinkActive="bg-accent text-accent-foreground"
           #rla="routerLinkActive"
           [attr.aria-current]="rla.isActive ? 'page' : null"
@@ -132,7 +127,6 @@ import type {
           [queryParams]="asideItem().queryParams"
           [fragment]="asideItem().fragment ?? undefined"
           [target]="asideItem().target ?? undefined"
-          [ngClass]="item().classes?.wrapper"
           [matTooltip]="compact() ? (asideItem().title ?? '') : ''"
           matTooltipPosition="right"
           [matTooltipDisabled]="!compact()"
@@ -149,7 +143,7 @@ import type {
         <!-- basic -->
         @if (basicItem().link && !basicItem().externalLink) {
           <a
-            class="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50"
+            [class]="cn('flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50', item().classes?.wrapper)"
             routerLinkActive="bg-accent text-accent-foreground"
             #rla="routerLinkActive"
             [routerLinkActiveOptions]="
@@ -167,18 +161,16 @@ import type {
             [fragment]="basicItem().fragment ?? undefined"
             [preserveFragment]="basicItem().preserveFragment ?? false"
             [target]="basicItem().target ?? undefined"
-            [ngClass]="item().classes?.wrapper"
             (click)="runAction()"
           >
             @if (basicItem().icon) {
               <ui-nav-icon
                 [name]="basicItem().icon!"
-                class="text-xl"
-                [ngClass]="item().classes?.icon"
+                [class]="cn('text-xl', item().classes?.icon)"
               />
             }
             @if (!compact()) {
-              <span class="flex-1 truncate" [ngClass]="item().classes?.title">{{
+              <span [class]="cn('flex-1 truncate', item().classes?.title)">{{
                 basicItem().title
               }}</span>
               @if (basicItem().badge; as badge) {
@@ -188,14 +180,13 @@ import type {
           </a>
         } @else if (basicItem().link && basicItem().externalLink) {
           <a
-            class="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            [class]="cn('flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring', item().classes?.wrapper)"
             [attr.href]="basicItem().link"
             [attr.target]="basicItem().target ?? '_blank'"
             rel="noopener noreferrer"
             [matTooltip]="compact() ? (basicItem().title ?? '') : ''"
             matTooltipPosition="right"
             [matTooltipDisabled]="!compact()"
-            [ngClass]="item().classes?.wrapper"
           >
             @if (basicItem().icon) {
               <ui-nav-icon [name]="basicItem().icon!" class="text-xl" />
@@ -207,12 +198,11 @@ import type {
         } @else {
           <button
             type="button"
-            class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+            [class]="cn('flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50', item().classes?.wrapper)"
             [disabled]="basicItem().disabled || null"
             [matTooltip]="compact() ? (basicItem().title ?? '') : ''"
             matTooltipPosition="right"
             [matTooltipDisabled]="!compact()"
-            [ngClass]="item().classes?.wrapper"
             (click)="runAction()"
           >
             @if (basicItem().icon) {
@@ -229,6 +219,7 @@ import type {
 })
 export class UiNavItemComponent {
   private readonly nav = inject(NavigationService);
+  protected readonly cn = cn;
 
   readonly item = input.required<NavigationItem>();
   readonly level = input<number>(0);

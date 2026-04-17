@@ -52,6 +52,7 @@ import type {
     '(mouseenter)': 'onHoverEnter()',
     '(mouseleave)': 'onHoverLeave()',
     '(focusin)': 'onHoverEnter()',
+    '(click)': 'onHostClick($event)',
   },
   template: `
     <div [class]="innerClasses()">
@@ -180,6 +181,16 @@ export class SidebarComponent {
 
   protected onHoverLeave(): void {
     if (this.appearance() === 'thin') this.hovered.set(false);
+  }
+
+  /** Touch fallback: tap pada strip thin (ketika belum expanded) untuk expand. */
+  protected onHostClick(event: MouseEvent): void {
+    if (this.appearance() !== 'thin' || this.isMobile()) return;
+    if (this.hovered()) return;
+    const target = event.target as HTMLElement | null;
+    // Biarkan klik pada control interaktif terus propagate (tidak intercept).
+    if (target && target.closest('a,button,[role="menuitem"]')) return;
+    this.hovered.set(true);
   }
 
   private openDrawer(): void {

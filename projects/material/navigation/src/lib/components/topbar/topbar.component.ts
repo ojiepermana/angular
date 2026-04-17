@@ -54,6 +54,17 @@ interface ActiveOverlay {
   },
   template: `
     <div class="flex h-14 w-full items-center gap-1 px-3">
+      @if (showHamburger()) {
+        <button
+          type="button"
+          class="mr-1 inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+          [attr.aria-label]="hamburgerLabel()"
+          [attr.aria-expanded]="nav.mobileOpen()"
+          (click)="nav.toggleMobile()"
+        >
+          <ui-nav-icon name="menu" class="text-xl" />
+        </button>
+      }
       <ng-content select="[ui-topbar-start]" />
       <ul
         class="flex flex-1 items-center gap-1"
@@ -137,6 +148,7 @@ interface ActiveOverlay {
       <div
         role="menu"
         class="min-w-56 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md"
+        (keydown)="onPanelKeydown($event)"
       >
         @for (child of item.children; track child.id) {
           <ui-nav-item [item]="child" />
@@ -149,6 +161,7 @@ interface ActiveOverlay {
       <div
         role="menu"
         class="w-screen max-w-[min(90vw,72rem)] rounded-md border border-border bg-popover p-6 text-popover-foreground shadow-lg"
+        (keydown)="onPanelKeydown($event)"
       >
         <div class="grid gap-6" [ngClass]="megaColsClass(item.columns)">
           @for (col of item.children; track col.id) {
@@ -171,7 +184,7 @@ interface ActiveOverlay {
   `,
 })
 export class TopbarComponent {
-  private readonly nav = inject(NavigationService);
+  protected readonly nav = inject(NavigationService);
   private readonly overlay = inject(Overlay);
   private readonly vcr = inject(ViewContainerRef);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -183,6 +196,9 @@ export class TopbarComponent {
   readonly class = input<string>('');
   /** Auto-register `items` ke `NavigationService` agar `activeTrail` bekerja. */
   readonly autoRegister = input<boolean>(true);
+  /** Tampilkan hamburger di `< md` yang men-toggle mobile drawer sidebar. */
+  readonly showHamburger = input<boolean>(true);
+  readonly hamburgerLabel = input<string>('Open navigation');
 
   protected readonly openId = signal<string | null>(null);
   private active: ActiveOverlay | null = null;
@@ -332,16 +348,23 @@ export class TopbarComponent {
     this.openId.set(null);
   }
 
-  /** Menubar keyboard navigation: ArrowLeft/Right antar trigger, Home/End. */
+  /** Menubar keyboard navigation: ArrowLeft/Right antar trigger, Home/End, ArrowDown fokus panel. */
   protected onMenubarKeydown(event: KeyboardEvent): void {
     const key = event.key;
-    if (key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Home' && key !== 'End') return;
     const root = this.host.nativeElement;
-    const triggers = Array.from(root.querySelectorAll<HTMLElement>('[role="menuitem"]')).filter(
-      (el) => !el.hasAttribute('disabled'),
-    );
+    const triggers = Array.from(
+      root.querySelectorAll<HTMLElement>('ul[role="menubar"] [role="menuitem"]'),
+    ).filter((el) => !el.hasAttribute('disabled'));
     if (triggers.length === 0) return;
     const currentIndex = triggers.indexOf(document.activeElement as HTMLElement);
+
+    if (key === 'ArrowDown' && currentIndex !== -1) {
+      event.preventDefault();
+      // Jika open, fokus item pertama panel; jika belum, focus tetap (panel akan dibuka via click/mouseenter).
+      queueMicrotask(() => this.focusFirstInPanel());
+      return;
+    }
+    if (key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Home' && key !== 'End') return;
     let nextIndex = currentIndex;
     if (key === 'ArrowRight') nextIndex = (currentIndex + 1 + triggers.length) % triggers.length;
     else if (key === 'ArrowLeft')
@@ -352,5 +375,48 @@ export class TopbarComponent {
       event.preventDefault();
       triggers[nextIndex].focus();
     }
+  }
+
+  /** Arrow-key navigation dalam dropdown/mega panel. */
+  protected onPanelKeydown(event: KeyboardEvent): void {
+    const key = event.key;
+    if (
+      key !== 'ArrowDown' &&
+      key !== 'ArrowUp' &&
+      key !== 'ArrowLeft' &&
+      key !== 'ArrowRight' &&
+      key !== 'Home' &&
+      key !== 'End'
+    )
+      return;
+    const panel = this.active?.ref.overlayElement;
+    if (!panel) return;
+    const items = this.collectPanelFocusables(panel);
+    if (items.length === 0) return;
+    const currentIndex = items.indexOf(document.activeElement as HTMLElement);
+    let nextIndex = currentIndex;
+    if (key === 'ArrowDown' || key === 'ArrowRight')
+      nextIndex = (currentIndex + 1 + items.length) % items.length;
+    else if (key === 'ArrowUp' || key === 'ArrowLeft')
+      nextIndex = (currentIndex - 1 + items.length) % items.length;
+    else if (key === 'Home') nextIndex = 0;
+    else if (key === 'End') nextIndex = items.length - 1;
+    if (nextIndex !== currentIndex && items[nextIndex]) {
+      event.preventDefault();
+      items[nextIndex].focus();
+    }
+  }
+
+  private collectPanelFocusables(root: HTMLElement): HTMLElement[] {
+    return Array.from(
+      root.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'),
+    ).filter((el) => el.offsetParent !== null || el.getClientRects().length > 0);
+  }
+
+  private focusFirstInPanel(): void {
+    const panel = this.active?.ref.overlayElement;
+    if (!panel) return;
+    const items = this.collectPanelFocusables(panel);
+    items[0]?.focus();
   }
 }
