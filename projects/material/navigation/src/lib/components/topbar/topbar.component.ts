@@ -6,6 +6,7 @@ import {
   TemplateRef,
   ViewContainerRef,
   computed,
+  effect,
   inject,
   input,
   signal,
@@ -50,12 +51,15 @@ interface ActiveOverlay {
     '[attr.aria-label]': 'ariaLabel()',
     '[class]': 'hostClasses()',
     '[attr.data-appearance]': 'appearance()',
-    '(keydown.escape)': 'closeAll()',
   },
   template: `
     <div class="flex h-14 w-full items-center gap-1 px-3">
       <ng-content select="[ui-topbar-start]" />
-      <ul class="flex flex-1 items-center gap-1" role="menubar">
+      <ul
+        class="flex flex-1 items-center gap-1"
+        role="menubar"
+        (keydown)="onMenubarKeydown($event)"
+      >
         @for (item of items(); track item.id) {
           <li role="none" class="relative">
             @switch (item.type) {
@@ -177,12 +181,21 @@ export class TopbarComponent {
   readonly appearance = input<TopbarAppearance>('default');
   readonly ariaLabel = input<string>('Primary');
   readonly class = input<string>('');
+  /** Auto-register `items` ke `NavigationService` agar `activeTrail` bekerja. */
+  readonly autoRegister = input<boolean>(true);
 
   protected readonly openId = signal<string | null>(null);
   private active: ActiveOverlay | null = null;
 
   private readonly dropdownTpl = viewChild.required<TemplateRef<unknown>>('dropdownTpl');
   private readonly megaTpl = viewChild.required<TemplateRef<unknown>>('megaTpl');
+
+  constructor() {
+    effect(() => {
+      if (this.autoRegister()) this.nav.registerItems(this.items());
+    });
+    this.destroyRef.onDestroy(() => this.closeAll());
+  }
 
   protected readonly hostClasses = computed(() => {
     return [
@@ -247,26 +260,46 @@ export class TopbarComponent {
     tpl: TemplateRef<unknown>,
     fullWidth: boolean,
   ): void {
-    const strategy = fullWidth
-      ? this.overlay
-          .position()
-          .global()
-          .centerHorizontally()
-          .top(`${trigger.getBoundingClientRect().bottom + 4}px`)
-      : this.overlay
-          .position()
-          .flexibleConnectedTo(trigger)
-          .withPositions([
-            { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 4 },
-            {
-              originX: 'start',
-              originY: 'top',
-              overlayX: 'start',
-              overlayY: 'bottom',
-              offsetY: -4,
-            },
-          ])
-          .withPush(true);
+    const strategy = this.overlay
+      .position()
+      .flexibleConnectedTo(trigger)
+      .withFlexibleDimensions(false)
+      .withPush(false)
+      .withPositions(
+        fullWidth
+          ? [
+              {
+                originX: 'center',
+                originY: 'bottom',
+                overlayX: 'center',
+                overlayY: 'top',
+                offsetY: 4,
+              },
+              {
+                originX: 'center',
+                originY: 'top',
+                overlayX: 'center',
+                overlayY: 'bottom',
+                offsetY: -4,
+              },
+            ]
+          : [
+              {
+                originX: 'start',
+                originY: 'bottom',
+                overlayX: 'start',
+                overlayY: 'top',
+                offsetY: 4,
+              },
+              {
+                originX: 'start',
+                originY: 'top',
+                overlayX: 'start',
+                overlayY: 'bottom',
+                offsetY: -4,
+              },
+            ],
+      );
 
     const ref = this.overlay.create({
       positionStrategy: strategy,
@@ -274,6 +307,8 @@ export class TopbarComponent {
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
       panelClass: fullWidth ? ['ui-mega-panel'] : ['ui-dropdown-panel'],
+      width: fullWidth ? '100vw' : undefined,
+      maxWidth: fullWidth ? '100vw' : undefined,
     });
 
     const portal = new TemplatePortal(tpl, this.vcr, { $implicit: item });
@@ -295,5 +330,27 @@ export class TopbarComponent {
       this.active = null;
     }
     this.openId.set(null);
+  }
+
+  /** Menubar keyboard navigation: ArrowLeft/Right antar trigger, Home/End. */
+  protected onMenubarKeydown(event: KeyboardEvent): void {
+    const key = event.key;
+    if (key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Home' && key !== 'End') return;
+    const root = this.host.nativeElement;
+    const triggers = Array.from(root.querySelectorAll<HTMLElement>('[role="menuitem"]')).filter(
+      (el) => !el.hasAttribute('disabled'),
+    );
+    if (triggers.length === 0) return;
+    const currentIndex = triggers.indexOf(document.activeElement as HTMLElement);
+    let nextIndex = currentIndex;
+    if (key === 'ArrowRight') nextIndex = (currentIndex + 1 + triggers.length) % triggers.length;
+    else if (key === 'ArrowLeft')
+      nextIndex = (currentIndex - 1 + triggers.length) % triggers.length;
+    else if (key === 'Home') nextIndex = 0;
+    else if (key === 'End') nextIndex = triggers.length - 1;
+    if (nextIndex !== currentIndex && triggers[nextIndex]) {
+      event.preventDefault();
+      triggers[nextIndex].focus();
+    }
   }
 }

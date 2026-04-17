@@ -7,7 +7,11 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
-      "material": ["./dist/material"]
+      "material": ["./dist/material"],
+      "@ojiepermana/material": ["./projects/material/public-api.ts"],
+      "@ojiepermana/material/navigation": ["./projects/material/navigation/public-api.ts"],
+      "@ojiepermana/material/shadcn": ["./projects/material/shadcn/public-api.ts"],
+      "@ojiepermana/material/layout": ["./projects/material/layout/public-api.ts"]
     },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

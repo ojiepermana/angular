@@ -38,16 +38,17 @@ export class NavigationService {
     const walk = (list: readonly NavigationItem[], ancestors: string[]): boolean => {
       let matched = false;
       for (const item of list) {
-        const id = item.id ?? '';
+        const id = item.id;
         const link = 'link' in item ? item.link : undefined;
         let selfMatch = false;
         if (link) {
           selfMatch = url === link || url.startsWith(link + '/') || url.startsWith(link + '?');
         }
         const children = 'children' in item ? (item.children ?? []) : [];
-        const childMatch = children.length > 0 && walk(children, [...ancestors, id]);
+        const nextAncestors = id ? [...ancestors, id] : ancestors;
+        const childMatch = children.length > 0 && walk(children, nextAncestors);
         if (selfMatch || childMatch) {
-          trail.add(id);
+          if (id) trail.add(id);
           for (const a of ancestors) trail.add(a);
           matched = true;
         }

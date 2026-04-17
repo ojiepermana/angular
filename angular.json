@@ -91,7 +91,11 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/material/tsconfig.spec.json"
+            "tsConfig": "projects/material/tsconfig.spec.json",
+            "include": [
+              "**/*.spec.ts",
+              "../../navigation/src/**/*.spec.ts"
+            ]
           }
         }
       }

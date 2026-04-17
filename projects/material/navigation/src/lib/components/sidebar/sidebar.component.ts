@@ -23,7 +23,6 @@ import { NavigationService } from '../../core/services/navigation.service';
 import type {
   NavigationItem,
   SidebarAppearance,
-  SidebarMode,
   SidebarPosition,
 } from '../../core/types/navigation.type';
 
@@ -100,12 +99,13 @@ export class SidebarComponent {
   readonly items = input<NavigationItem[]>([]);
   readonly appearance = input<SidebarAppearance>('default');
   readonly position = input<SidebarPosition>('left');
-  readonly mode = input<SidebarMode>('side');
   readonly ariaLabel = input<string>('Primary');
   readonly header = input<boolean>(true);
   readonly class = input<string>('');
   /** Auto switch ke CDK overlay drawer saat viewport `< md`. */
   readonly autoMobile = input<boolean>(true);
+  /** Auto-register `items` ke `NavigationService` agar `activeTrail` bekerja. */
+  readonly autoRegister = input<boolean>(true);
 
   private readonly hovered = signal<boolean>(false);
 
@@ -128,8 +128,9 @@ export class SidebarComponent {
   );
 
   constructor() {
+    // Auto-register items ke service untuk active trail.
     effect(() => {
-      this.nav.setCollapsed(this.appearance() === 'thin' && !this.isMobile());
+      if (this.autoRegister()) this.nav.registerItems(this.items());
     });
 
     // Kelola overlay drawer berdasarkan mobileOpen + isMobile.
@@ -158,15 +159,17 @@ export class SidebarComponent {
   });
 
   protected readonly innerClasses = computed(() => {
-    const base = ['flex h-full w-full flex-col', 'transition-[width] duration-200 ease-out'];
-    if (this.appearance() === 'thin' && this.hovered()) {
+    const overlayActive = this.appearance() === 'thin' && this.hovered();
+    const base = ['flex h-full flex-col transition-[width] duration-200 ease-out'];
+    if (overlayActive) {
       base.push(
-        'absolute inset-y-0 z-30 bg-background shadow-xl',
-        '[width:17.5rem]',
+        'absolute inset-y-0 z-30 bg-background shadow-xl [width:17.5rem]',
         this.position() === 'right'
           ? 'right-0 border-l border-border'
           : 'left-0 border-r border-border',
       );
+    } else {
+      base.push('w-full');
     }
     return base.join(' ');
   });
