@@ -1,0 +1,29 @@
+/**
+ * @ojiepermana/material/theme — root stylesheet.
+ *
+ * Usage — import once in the consumer app, **before** Tailwind:
+ *
+ *   @import '@ojiepermana/material/theme/styles';
+ *   @import 'tailwindcss';
+ *   @import '@ojiepermana/material/theme/tailwind/theme.css';
+ *
+ * Includes cascade layers, shared base tokens (radius, chart, sidebar), all
+ * shadcn palettes (neutral, zinc, slate, stone, gray) switchable via
+ * `[data-theme="..."]`, and an Angular Material M3 bridge so `mat-*`
+ * components inherit shadcn tokens by default.
+ */
+@import './_layers.css';
+
+/* Shared tokens (radius, chart, sidebar) — loaded before palettes so palette
+   files can still override any of them if needed. */
+@import './_base.css';
+
+/* Palettes — neutral is the default (`:root`); others activate via [data-theme]. */
+@import './_palette-neutral.css';
+@import './_palette-zinc.css';
+@import './_palette-slate.css';
+@import './_palette-stone.css';
+@import './_palette-gray.css';
+
+/* Angular Material M3 bridge. */
+@import './_material-bridge.css';

@@ -4,9 +4,6 @@
 
 // Core
 export * from './src/lib/core/cn/cn.util';
-export * from './src/lib/core/theme/theme.tokens';
-export * from './src/lib/core/theme/theme.service';
-export * from './src/lib/core/theme/theme.provider';
 
 // Components (alphabetical)
 export * from './src/lib/components/accordion';

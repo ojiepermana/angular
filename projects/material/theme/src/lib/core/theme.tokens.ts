@@ -4,7 +4,7 @@ export type ColorScheme = 'light' | 'dark' | 'system';
 
 export type ThemeName = 'neutral' | 'zinc' | 'slate' | 'stone' | 'gray';
 
-export interface NgShadcnConfig {
+export interface MaterialThemeConfig {
   /** Base color palette. Defaults to `neutral`. */
   readonly defaultTheme?: ThemeName;
   /** Initial color scheme. Defaults to `system`. */
@@ -13,10 +13,12 @@ export interface NgShadcnConfig {
   readonly storageKey?: string | null;
 }
 
-export const NG_SHADCN_CONFIG = new InjectionToken<NgShadcnConfig>('NG_SHADCN_CONFIG');
+export const MATERIAL_THEME_CONFIG = new InjectionToken<MaterialThemeConfig>(
+  'MATERIAL_THEME_CONFIG',
+);
 
-export const DEFAULT_NG_SHADCN_CONFIG: Required<NgShadcnConfig> = {
+export const DEFAULT_MATERIAL_THEME_CONFIG: Required<MaterialThemeConfig> = {
   defaultTheme: 'neutral',
   defaultScheme: 'system',
-  storageKey: 'ng-shadcn.scheme',
+  storageKey: 'ojp-material.scheme',
 };

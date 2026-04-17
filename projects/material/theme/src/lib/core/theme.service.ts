@@ -1,37 +1,31 @@
 import { DOCUMENT } from '@angular/common';
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
-import {
-  DEFAULT_NG_SHADCN_CONFIG,
-  NG_SHADCN_CONFIG,
-  type ColorScheme,
-  type ThemeName,
-} from './theme.tokens';
+import { DestroyRef, Injectable, computed, effect, inject, signal } from '@angular/core';
+import { DEFAULT_MATERIAL_THEME_CONFIG, MATERIAL_THEME_CONFIG, type ColorScheme, type ThemeName } from './theme.tokens';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly config = {
-    ...DEFAULT_NG_SHADCN_CONFIG,
-    ...(inject(NG_SHADCN_CONFIG, { optional: true }) ?? {}),
+    ...DEFAULT_MATERIAL_THEME_CONFIG,
+    ...(inject(MATERIAL_THEME_CONFIG, { optional: true }) ?? {}),
   };
 
-  private readonly _scheme = signal<ColorScheme>(
-    this.readPersistedScheme() ?? this.config.defaultScheme,
-  );
+  private readonly _scheme = signal<ColorScheme>(this.readPersistedScheme() ?? this.config.defaultScheme);
   private readonly _theme = signal<ThemeName>(this.config.defaultTheme);
+  private readonly _systemPrefersDark = signal<boolean>(this.prefersDark());
 
   readonly scheme = this._scheme.asReadonly();
   readonly theme = this._theme.asReadonly();
 
   readonly isDark = computed(() => {
     const s = this._scheme();
-    if (s === 'system') {
-      return this.prefersDark();
-    }
-    return s === 'dark';
+    return s === 'system' ? this._systemPrefersDark() : s === 'dark';
   });
 
   constructor() {
+    this.watchSystemScheme();
+
     effect(() => {
       const root = this.document.documentElement;
       root.dataset['theme'] = this._theme();
@@ -55,6 +49,17 @@ export class ThemeService {
   private prefersDark(): boolean {
     const mql = this.document.defaultView?.matchMedia?.('(prefers-color-scheme: dark)');
     return !!mql?.matches;
+  }
+
+  private watchSystemScheme(): void {
+    const mql = this.document.defaultView?.matchMedia?.('(prefers-color-scheme: dark)');
+    if (!mql) return;
+
+    const listener = (event: MediaQueryListEvent): void => {
+      this._systemPrefersDark.set(event.matches);
+    };
+    mql.addEventListener('change', listener);
+    this.destroyRef.onDestroy(() => mql.removeEventListener('change', listener));
   }
 
   private readPersistedScheme(): ColorScheme | null {

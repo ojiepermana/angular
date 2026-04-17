@@ -1,7 +1,19 @@
 {
-  "printWidth": 100,
   "singleQuote": true,
+  "trailingComma": "all",
+  "bracketSameLine": true,
+  "printWidth": 120,
+  "tabWidth": 2,
+  "semi": true,
+  "proseWrap": "preserve",
   "overrides": [
+    {
+      "files": "*.md",
+      "options": {
+        "proseWrap": "preserve",
+        "printWidth": 120
+      }
+    },
     {
       "files": "*.html",
       "options": {

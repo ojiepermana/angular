@@ -6,9 +6,14 @@
   },
   "assets": [
     {
-      "input": "shadcn/src/lib/styles",
+      "input": "theme/src/lib/styles",
       "glob": "**/*.css",
-      "output": "shadcn/styles"
+      "output": "theme/styles"
+    },
+    {
+      "input": "theme/tailwind",
+      "glob": "**/*",
+      "output": "theme/tailwind"
     }
   ]
 }
