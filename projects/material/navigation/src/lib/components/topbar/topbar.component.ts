@@ -25,6 +25,7 @@ import { NavigationService } from '../../core/services/navigation.service';
 import type {
   NavigationBasicItem,
   NavigationCollapsableItem,
+  NavigationGroupItem,
   NavigationItem,
   NavigationMegaItem,
   TopbarAppearance,
@@ -60,17 +61,12 @@ interface ActiveOverlay {
           class="mr-1 inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
           [attr.aria-label]="hamburgerLabel()"
           [attr.aria-expanded]="nav.mobileOpen()"
-          (click)="nav.toggleMobile()"
-        >
+          (click)="nav.toggleMobile()">
           <ui-nav-icon name="menu" class="text-xl" />
         </button>
       }
       <ng-content select="[ui-topbar-start]" />
-      <ul
-        class="flex flex-1 items-center gap-1"
-        role="menubar"
-        (keydown)="onMenubarKeydown($event)"
-      >
+      <ul class="flex flex-1 items-center gap-1" role="menubar" (keydown)="onMenubarKeydown($event)">
         @for (item of items(); track item.id) {
           <li role="none" class="relative">
             @switch (item.type) {
@@ -83,8 +79,7 @@ interface ActiveOverlay {
                   routerLinkActive
                   #rla="routerLinkActive"
                   [attr.aria-current]="rla.isActive ? 'page' : null"
-                  [target]="basic.target ?? undefined"
-                >
+                  [target]="basic.target ?? undefined">
                   @if (basic.icon) {
                     <ui-nav-icon [name]="basic.icon" class="text-lg" />
                   }
@@ -101,12 +96,29 @@ interface ActiveOverlay {
                   [attr.aria-expanded]="openId() === col.id"
                   [attr.aria-haspopup]="'menu'"
                   (click)="toggleDropdown(trigger, item)"
-                  (mouseenter)="openDropdown(trigger, item)"
-                >
+                  (mouseenter)="openDropdown(trigger, item)">
                   @if (col.icon) {
                     <ui-nav-icon [name]="col.icon" class="text-lg" />
                   }
                   <span>{{ col.title }}</span>
+                  <ui-nav-icon name="expand_more" class="text-base" />
+                </button>
+              }
+              @case ('group') {
+                @let group = asGroup(item);
+                <button
+                  #trigger
+                  type="button"
+                  role="menuitem"
+                  class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  [attr.aria-expanded]="openId() === group.id"
+                  [attr.aria-haspopup]="'menu'"
+                  (click)="toggleDropdown(trigger, item)"
+                  (mouseenter)="openDropdown(trigger, item)">
+                  @if (group.icon) {
+                    <ui-nav-icon [name]="group.icon" class="text-lg" />
+                  }
+                  <span>{{ group.title }}</span>
                   <ui-nav-icon name="expand_more" class="text-base" />
                 </button>
               }
@@ -120,8 +132,7 @@ interface ActiveOverlay {
                   [attr.aria-expanded]="openId() === mega.id"
                   [attr.aria-haspopup]="'menu'"
                   (click)="toggleMega(trigger, item)"
-                  (mouseenter)="openMega(trigger, item)"
-                >
+                  (mouseenter)="openMega(trigger, item)">
                   @if (mega.icon) {
                     <ui-nav-icon [name]="mega.icon" class="text-lg" />
                   }
@@ -130,9 +141,7 @@ interface ActiveOverlay {
                 </button>
               }
               @default {
-                <span
-                  class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-                >
+                <span class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   {{ item.title }}
                 </span>
               }
@@ -148,8 +157,7 @@ interface ActiveOverlay {
       <div
         role="menu"
         class="min-w-56 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md"
-        (keydown)="onPanelKeydown($event)"
-      >
+        (keydown)="onPanelKeydown($event)">
         @for (child of item.children; track child.id) {
           <ui-nav-item [item]="child" />
         }
@@ -161,14 +169,11 @@ interface ActiveOverlay {
       <div
         role="menu"
         class="w-screen max-w-[min(90vw,72rem)] rounded-md border border-border bg-popover p-6 text-popover-foreground shadow-lg"
-        (keydown)="onPanelKeydown($event)"
-      >
+        (keydown)="onPanelKeydown($event)">
         <div class="grid gap-6" [ngClass]="megaColsClass(item.columns)">
           @for (col of item.children; track col.id) {
             <div>
-              <div
-                class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-              >
+              <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 {{ col.title }}
               </div>
               <div class="flex flex-col gap-0.5">
@@ -226,6 +231,9 @@ export class TopbarComponent {
   protected asCollapsable(i: NavigationItem): NavigationCollapsableItem {
     return i as NavigationCollapsableItem;
   }
+  protected asGroup(i: NavigationItem): NavigationGroupItem {
+    return i as NavigationGroupItem;
+  }
   protected asMega(i: NavigationItem): NavigationMegaItem {
     return i as NavigationMegaItem;
   }
@@ -270,12 +278,7 @@ export class TopbarComponent {
     this.attach(trigger, item, this.megaTpl(), /*fullWidth*/ true);
   }
 
-  private attach(
-    trigger: HTMLElement,
-    item: NavigationItem,
-    tpl: TemplateRef<unknown>,
-    fullWidth: boolean,
-  ): void {
+  private attach(trigger: HTMLElement, item: NavigationItem, tpl: TemplateRef<unknown>, fullWidth: boolean): void {
     const strategy = this.overlay
       .position()
       .flexibleConnectedTo(trigger)
@@ -352,9 +355,9 @@ export class TopbarComponent {
   protected onMenubarKeydown(event: KeyboardEvent): void {
     const key = event.key;
     const root = this.host.nativeElement;
-    const triggers = Array.from(
-      root.querySelectorAll<HTMLElement>('ul[role="menubar"] [role="menuitem"]'),
-    ).filter((el) => !el.hasAttribute('disabled'));
+    const triggers = Array.from(root.querySelectorAll<HTMLElement>('ul[role="menubar"] [role="menuitem"]')).filter(
+      (el) => !el.hasAttribute('disabled'),
+    );
     if (triggers.length === 0) return;
     const currentIndex = triggers.indexOf(document.activeElement as HTMLElement);
 
@@ -367,8 +370,7 @@ export class TopbarComponent {
     if (key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Home' && key !== 'End') return;
     let nextIndex = currentIndex;
     if (key === 'ArrowRight') nextIndex = (currentIndex + 1 + triggers.length) % triggers.length;
-    else if (key === 'ArrowLeft')
-      nextIndex = (currentIndex - 1 + triggers.length) % triggers.length;
+    else if (key === 'ArrowLeft') nextIndex = (currentIndex - 1 + triggers.length) % triggers.length;
     else if (key === 'Home') nextIndex = 0;
     else if (key === 'End') nextIndex = triggers.length - 1;
     if (nextIndex !== currentIndex && triggers[nextIndex]) {
@@ -395,10 +397,8 @@ export class TopbarComponent {
     if (items.length === 0) return;
     const currentIndex = items.indexOf(document.activeElement as HTMLElement);
     let nextIndex = currentIndex;
-    if (key === 'ArrowDown' || key === 'ArrowRight')
-      nextIndex = (currentIndex + 1 + items.length) % items.length;
-    else if (key === 'ArrowUp' || key === 'ArrowLeft')
-      nextIndex = (currentIndex - 1 + items.length) % items.length;
+    if (key === 'ArrowDown' || key === 'ArrowRight') nextIndex = (currentIndex + 1 + items.length) % items.length;
+    else if (key === 'ArrowUp' || key === 'ArrowLeft') nextIndex = (currentIndex - 1 + items.length) % items.length;
     else if (key === 'Home') nextIndex = 0;
     else if (key === 'End') nextIndex = items.length - 1;
     if (nextIndex !== currentIndex && items[nextIndex]) {
@@ -409,9 +409,7 @@ export class TopbarComponent {
 
   private collectPanelFocusables(root: HTMLElement): HTMLElement[] {
     return Array.from(
-      root.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      ),
+      root.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'),
     ).filter((el) => el.offsetParent !== null || el.getClientRects().length > 0);
   }
 

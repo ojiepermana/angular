@@ -201,7 +201,7 @@ const SCATTER_DATA = [
         </div>
 
         <div class="grid gap-6 xl:grid-cols-2">
-          <article class="rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
+          <article id="bar" class="scroll-mt-24 rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
             <header class="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h3 class="text-lg font-semibold text-foreground">Revenue Pulse</h3>
@@ -229,7 +229,7 @@ const SCATTER_DATA = [
             </div>
           </article>
 
-          <article class="rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
+          <article id="line" class="scroll-mt-24 rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
             <header class="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h3 class="text-lg font-semibold text-foreground">Latency Descent</h3>
@@ -257,7 +257,7 @@ const SCATTER_DATA = [
             </div>
           </article>
 
-          <article class="rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
+          <article id="area" class="scroll-mt-24 rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
             <header class="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h3 class="text-lg font-semibold text-foreground">Contribution Canopy</h3>
@@ -327,7 +327,7 @@ const SCATTER_DATA = [
         </div>
 
         <div class="grid gap-6 xl:grid-cols-3">
-          <article class="rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
+          <article id="pie" class="scroll-mt-24 rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
             <header class="flex items-start justify-between gap-3">
               <div>
                 <h3 class="text-lg font-semibold text-foreground">Traffic Share</h3>
@@ -365,7 +365,7 @@ const SCATTER_DATA = [
             </div>
           </article>
 
-          <article class="rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
+          <article id="radar" class="scroll-mt-24 rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
             <header class="flex items-start justify-between gap-3">
               <div>
                 <h3 class="text-lg font-semibold text-foreground">Team Signal Radar</h3>
@@ -387,7 +387,7 @@ const SCATTER_DATA = [
             </div>
           </article>
 
-          <article class="rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
+          <article id="radial" class="scroll-mt-24 rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
             <header class="flex items-start justify-between gap-3">
               <div>
                 <h3 class="text-lg font-semibold text-foreground">Capacity Rings</h3>
@@ -430,7 +430,7 @@ const SCATTER_DATA = [
           </p>
         </div>
 
-        <article class="rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
+        <article id="scatter" class="scroll-mt-24 rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-sm">
           <div class="grid gap-5 lg:grid-cols-[1fr_16rem]">
             <div class="rounded-[1.35rem] border border-border/60 bg-linear-to-br from-background to-muted/25 p-3">
               <ui-chart-container [config]="scatterConfig" chartId="demo-chart-scatter">

@@ -17,6 +17,12 @@ const items: NavigationItem[] = [
     ],
   },
   {
+    id: 'library',
+    type: 'group',
+    title: 'Library',
+    children: [{ id: 'c', type: 'basic', title: 'C', link: '/c' }],
+  },
+  {
     id: 'solutions',
     type: 'mega',
     title: 'Solutions',
@@ -57,7 +63,7 @@ describe('TopbarComponent', () => {
     const menubar = el.querySelector('[role="menubar"]');
     expect(menubar).toBeTruthy();
     const items = el.querySelectorAll('[role="menuitem"]');
-    expect(items.length).toBe(3);
+    expect(items.length).toBe(4);
   });
 
   it('opens dropdown overlay on collapsable click', async () => {
@@ -77,12 +83,26 @@ describe('TopbarComponent', () => {
     const fixture = setup();
     const el: HTMLElement = fixture.nativeElement;
     const triggers = el.querySelectorAll('button[role="menuitem"]');
-    const megaTrigger = triggers[1] as HTMLButtonElement;
+    const megaTrigger = triggers[2] as HTMLButtonElement;
     megaTrigger.click();
     fixture.detectChanges();
     await fixture.whenStable();
     expect(megaTrigger.getAttribute('aria-expanded')).toBe('true');
     const panel = document.querySelector('.ui-mega-panel');
     expect(panel).toBeTruthy();
+  });
+
+  it('opens dropdown overlay on group click', async () => {
+    const fixture = setup();
+    const el: HTMLElement = fixture.nativeElement;
+    const triggers = el.querySelectorAll('button[role="menuitem"]');
+    const groupTrigger = triggers[1] as HTMLButtonElement;
+    groupTrigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(groupTrigger.getAttribute('aria-expanded')).toBe('true');
+    const panel = document.querySelector('.ui-dropdown-panel');
+    expect(panel).toBeTruthy();
+    expect(panel?.textContent).toContain('C');
   });
 });
