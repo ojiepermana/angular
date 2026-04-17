@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ContentChildren,
+  DestroyRef,
   Directive,
   ElementRef,
   QueryList,
@@ -240,12 +241,9 @@ export class CommandItemComponent {
     ),
   );
 
-  ngOnInit(): void {
+  constructor() {
     this.ctx.registerItem(this);
-  }
-
-  ngOnDestroy(): void {
-    this.ctx.unregisterItem(this);
+    inject(DestroyRef).onDestroy(() => this.ctx.unregisterItem(this));
   }
 
   focus(): void {

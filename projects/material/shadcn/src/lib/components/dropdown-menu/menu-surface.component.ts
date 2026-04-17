@@ -1,4 +1,4 @@
-import { FocusKeyManager } from '@angular/cdk/a11y';
+import { FocusKeyManager, FocusableOption } from '@angular/cdk/a11y';
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
@@ -53,7 +53,11 @@ export class MenuSurfaceComponent implements AfterContentInit {
   );
 
   ngAfterContentInit(): void {
-    this.keyManager = new FocusKeyManager(this.items as QueryList<any>).withWrap().withTypeAhead();
+    this.keyManager = new FocusKeyManager<MenuItemComponent & FocusableOption>(
+      this.items as unknown as QueryList<MenuItemComponent & FocusableOption>,
+    )
+      .withWrap()
+      .withTypeAhead();
     // Focus the first enabled item when the menu opens.
     queueMicrotask(() => this.keyManager?.setFirstItemActive());
   }

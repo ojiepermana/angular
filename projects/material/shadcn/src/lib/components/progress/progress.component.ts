@@ -38,7 +38,7 @@ import { cn } from '../../core/cn/cn.util';
       }
       @media (prefers-reduced-motion: reduce) {
         :host[data-state='indeterminate'] .ui-progress-indicator {
-          animation-duration: 3s;
+          animation: none;
         }
       }
     `,

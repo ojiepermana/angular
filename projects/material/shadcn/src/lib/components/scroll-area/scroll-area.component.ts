@@ -41,6 +41,16 @@ import { cn } from '../../core/cn/cn.util';
         background: hsl(var(--muted-foreground));
         background-clip: padding-box;
       }
+      @media (forced-colors: active) {
+        .ui-scroll-area-viewport {
+          scrollbar-width: auto;
+          scrollbar-color: auto;
+        }
+        .ui-scroll-area-viewport::-webkit-scrollbar-thumb {
+          background: CanvasText;
+          border-color: transparent;
+        }
+      }
     `,
   ],
 })
