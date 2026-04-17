@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   ChartContainer,
   ChartLegend,
+  ChartTooltip,
   PieCenter,
   PieChart,
   RadialCenter,
@@ -21,6 +22,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
     ChartDemoCardComponent,
     ChartLegend,
     ChartPageBadgesComponent,
+    ChartTooltip,
     PageShellComponent,
     PieCenter,
     PieChart,
@@ -42,7 +44,9 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           footerMeta="Showing total visitors by browser"
           chartClassName="mx-auto aspect-square max-w-[18rem]">
           <ui-chart-container [config]="browserConfig" chartId="pie-default" aspect="aspect-square">
-            <ui-pie-chart [data]="browserData" nameKey="browser" valueKey="visitors" [seriesKeys]="browserSeriesKeys" />
+            <ui-pie-chart [data]="browserData" nameKey="browser" valueKey="visitors" [seriesKeys]="browserSeriesKeys">
+              <ui-chart-tooltip [data]="browserData" xKey="browser" valueKey="visitors" indicator="dot" />
+            </ui-pie-chart>
           </ui-chart-container>
         </demo-chart-card>
 

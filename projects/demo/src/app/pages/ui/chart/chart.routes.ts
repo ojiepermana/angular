@@ -37,4 +37,9 @@ export const chartRoutes: Routes = [
     title: 'Scatter Charts',
     loadComponent: () => import('./scatter/scatter.page').then((m) => m.ScatterChartPageComponent),
   },
+  {
+    path: 'tooltip',
+    title: 'Tooltip Charts',
+    loadComponent: () => import('./tooltip/tooltip.page').then((m) => m.TooltipChartPageComponent),
+  },
 ];

@@ -36,7 +36,12 @@ export interface PieSliceClickEvent {
               tabindex="0"
               (click)="emitClick(s)"
               (keydown.enter)="emitClick(s)"
-              (keydown.space)="emitClick(s); $event.preventDefault()" />
+              (keydown.space)="emitClick(s); $event.preventDefault()"
+              (pointerenter)="setActive($event, s)"
+              (pointermove)="setActive($event, s)"
+              (pointerleave)="clearActive()"
+              (focus)="setActive($event, s)"
+              (blur)="clearActive()" />
           }
           @if (showLabels()) {
             @for (s of layout().slices; track s.seriesKey) {
@@ -128,5 +133,23 @@ export class PieChart {
       datumIndex: s.datumIndex,
       datum: this.data()[s.datumIndex],
     });
+  }
+
+  protected setActive(event: PointerEvent | FocusEvent, s: PieSliceRect): void {
+    const clientX =
+      event instanceof PointerEvent ? event.clientX : (event.target as Element).getBoundingClientRect().left;
+    const clientY =
+      event instanceof PointerEvent ? event.clientY : (event.target as Element).getBoundingClientRect().top;
+    this.root.activePoint.set({
+      index: s.datumIndex,
+      datumIndex: s.datumIndex,
+      seriesKey: s.seriesKey,
+      clientX,
+      clientY,
+    });
+  }
+
+  protected clearActive(): void {
+    this.root.activePoint.set(null);
   }
 }

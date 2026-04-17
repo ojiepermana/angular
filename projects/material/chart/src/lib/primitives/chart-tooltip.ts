@@ -3,12 +3,13 @@ import {
   Component,
   ElementRef,
   TemplateRef,
+  type Type,
   computed,
   contentChild,
   inject,
   input,
 } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
+import { NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import { ChartContext } from '../core/chart-context';
 import type { ChartDatum } from '../core/cartesian-context';
 import { seriesColorVar } from '../core/chart-config';
@@ -19,6 +20,7 @@ export interface ChartTooltipRow {
   readonly label: string;
   readonly value: unknown;
   readonly color: string;
+  readonly icon?: Type<unknown>;
 }
 
 /** Payload available to a user-supplied tooltip template. */
@@ -27,6 +29,15 @@ export interface ChartTooltipPayload {
   readonly datum: ChartDatum;
   readonly rows: readonly ChartTooltipRow[];
 }
+
+/** Indicator rendered beside each tooltip row. */
+export type ChartTooltipIndicator = 'dot' | 'line' | 'dashed' | 'none';
+
+/** Signature for the per-row value formatter (string output). */
+export type ChartTooltipValueFormatter = (value: unknown, row: ChartTooltipRow, payload: ChartTooltipPayload) => string;
+
+/** Signature for the tooltip header (label) formatter. */
+export type ChartTooltipLabelFormatter = (label: string, payload: ChartTooltipPayload) => string;
 
 /** Locate the chart container DOM in order to position the tooltip. */
 function containerRect(el: HTMLElement): DOMRect | null {
@@ -42,25 +53,20 @@ function containerRect(el: HTMLElement): DOMRect | null {
  * Tooltip overlay — renders the default tooltip card (or a user-supplied
  * template) anchored to the currently active data point.
  *
- * Place as a child of a cartesian chart:
- * ```html
- * <ui-bar-chart ...>
- *   <svg:svg uiChartPointerTracker>...</svg>
- *   <ui-chart-tooltip />
- * </ui-bar-chart>
- * ```
- *
- * Customize via projected template:
- * ```html
- * <ui-chart-tooltip>
- *   <ng-template let-payload>...{{payload.category}}...</ng-template>
- * </ui-chart-tooltip>
- * ```
+ * Shadcn-compatible knobs:
+ * - `indicator="line"` / `"none"` / `"dashed"` — swap the row glyph
+ * - `hideLabel` — drop the header row
+ * - `label="Activities"` — override the header text
+ * - `labelKey="activities"` — resolve the header from `config[labelKey].label`
+ * - `labelFormatter` — transform the header (e.g. ISO date → long date)
+ * - `formatter` — format per-row values (e.g. `"380 kcal"`)
+ * - `valueKey` — for pie/radial/radar, read row value from a single field
+ * - Icons are picked up automatically from `config[key].icon`.
  */
 @Component({
   selector: 'ui-chart-tooltip',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, NgComponentOutlet],
   host: {
     class: 'pointer-events-none absolute inset-0 z-10',
     '[attr.aria-hidden]': '!visible()',
@@ -69,21 +75,45 @@ function containerRect(el: HTMLElement): DOMRect | null {
     @if (payload(); as p) {
       <div
         role="tooltip"
-        class="pointer-events-none absolute min-w-32 max-w-72 -translate-x-1/2 -translate-y-full rounded-md border border-border bg-popover px-3 py-2 text-xs text-popover-foreground shadow-md"
+        class="pointer-events-none absolute grid min-w-32 max-w-72 -translate-x-1/2 -translate-y-full gap-1.5 rounded-lg border border-border/60 bg-background px-3 py-1.5 text-xs shadow-md"
         [style.left.px]="position().x"
         [style.top.px]="position().y">
         @if (customTpl(); as tpl) {
           <ng-container *ngTemplateOutlet="tpl; context: { $implicit: p }" />
         } @else {
-          <div class="mb-1 font-medium">{{ p.category }}</div>
-          <ul class="flex flex-col gap-1">
+          @if (!hideLabel() && headerText(p); as header) {
+            <div class="font-medium">{{ header }}</div>
+          }
+          <ul class="grid gap-1.5">
             @for (row of p.rows; track row.seriesKey) {
-              <li class="flex items-center justify-between gap-4">
-                <span class="flex items-center gap-2">
-                  <span class="inline-block h-2 w-2 rounded-sm" [style.background]="row.color"></span>
+              <li class="flex w-full flex-wrap items-stretch gap-2">
+                <span class="flex flex-1 items-center gap-1.5">
+                  @switch (indicator()) {
+                    @case ('dot') {
+                      <span
+                        class="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                        [style.background]="row.color"
+                        [style.borderColor]="row.color"></span>
+                    }
+                    @case ('line') {
+                      <span class="h-full min-h-4 w-1 shrink-0 rounded-sm" [style.background]="row.color"></span>
+                    }
+                    @case ('dashed') {
+                      <span
+                        class="h-0 w-3 shrink-0 self-center border-t-2 border-dashed"
+                        [style.borderColor]="row.color"></span>
+                    }
+                  }
+                  @if (row.icon; as icon) {
+                    <span class="mr-1 inline-flex items-center text-muted-foreground">
+                      <ng-container *ngComponentOutlet="icon" />
+                    </span>
+                  }
                   <span class="text-muted-foreground">{{ row.label }}</span>
                 </span>
-                <span class="font-mono tabular-nums">{{ row.value }}</span>
+                <span class="font-mono font-medium tabular-nums text-foreground">
+                  {{ formatRow(row, p) }}
+                </span>
               </li>
             }
           </ul>
@@ -102,10 +132,35 @@ function containerRect(el: HTMLElement): DOMRect | null {
 export class ChartTooltip {
   private readonly root = inject(ChartContext);
   private readonly host = inject(ElementRef<HTMLElement>);
+
   /** Data key on each datum whose value is the category label (x-axis). */
   readonly xKey = input<string | null>(null);
   /** Data source (optional — if omitted tooltip reads from chart data via activePoint.datumIndex). */
   readonly data = input<readonly ChartDatum[] | null>(null);
+  /**
+   * Optional key for per-datum value lookup (pie / radial / radar datasets
+   * store values on a single field like `visitors` instead of one field per
+   * series). When set and `activePoint.seriesKey` is active, the tooltip row
+   * reads `datum[valueKey]` for its value.
+   */
+  readonly valueKey = input<string | null>(null);
+
+  /** Indicator variant next to each row. Default `'dot'`. */
+  readonly indicator = input<ChartTooltipIndicator>('dot');
+  /** Hide the header label entirely. */
+  readonly hideLabel = input<boolean>(false);
+  /** Override the header label with a fixed string. Takes precedence over `labelKey`. */
+  readonly label = input<string | null>(null);
+  /**
+   * Resolve the header label from `config[labelKey].label`. Useful when the
+   * header should come from a config entry rather than the datum itself
+   * (shadcn's "Custom label" variant).
+   */
+  readonly labelKey = input<string | null>(null);
+  /** Transform the final header string (e.g. ISO date → long date). */
+  readonly labelFormatter = input<ChartTooltipLabelFormatter | null>(null);
+  /** Format each row's value (return string — HTML is not interpreted). */
+  readonly formatter = input<ChartTooltipValueFormatter | null>(null);
 
   readonly customTpl = contentChild(TemplateRef<{ $implicit: ChartTooltipPayload }>);
 
@@ -123,14 +178,45 @@ export class ChartTooltip {
     const xKey = this.xKey();
     const category = xKey && xKey in datum ? String(datum[xKey]) : String(active.index);
 
-    const tooltipRows: ChartTooltipRow[] = visibleKeys.map((k) => ({
-      seriesKey: k,
-      label: cfg[k]?.label ?? k,
-      value: datum[k],
-      color: seriesColorVar(k),
-    }));
+    // When the active point targets a single series (pie/radial/radar hover),
+    // collapse the tooltip to just that row.
+    const activeSeriesKey = active.seriesKey && visibleKeys.includes(active.seriesKey) ? active.seriesKey : null;
+    const keys = activeSeriesKey ? [activeSeriesKey] : visibleKeys;
+    const valueKey = this.valueKey();
+
+    const tooltipRows: ChartTooltipRow[] = keys.map((k) => {
+      // For single-slice hover on pie/radial/radar the value lives on a
+      // shared `valueKey` field, not on a per-series column.
+      const rawValue = valueKey != null && activeSeriesKey === k ? datum[valueKey] : datum[k];
+      return {
+        seriesKey: k,
+        label: cfg[k]?.label ?? k,
+        value: rawValue,
+        color: seriesColorVar(k),
+        icon: cfg[k]?.icon,
+      };
+    });
     return { category, datum, rows: tooltipRows };
   });
+
+  /** Resolve the header string honoring `label`, `labelKey`, then `labelFormatter`. */
+  protected headerText(p: ChartTooltipPayload): string | null {
+    if (this.hideLabel()) return null;
+    const override = this.label();
+    const labelKey = this.labelKey();
+    const cfg = this.root.config();
+    const fromKey = labelKey ? (cfg[labelKey]?.label ?? labelKey) : null;
+    const raw = override ?? fromKey ?? p.category;
+    const fmt = this.labelFormatter();
+    return fmt ? fmt(raw, p) : raw;
+  }
+
+  /** Apply per-row value formatter (or stringify). */
+  protected formatRow(row: ChartTooltipRow, p: ChartTooltipPayload): string {
+    const fmt = this.formatter();
+    if (fmt) return fmt(row.value, row, p);
+    return row.value == null ? '' : String(row.value);
+  }
 
   protected readonly position = computed(() => {
     const active = this.root.activePoint();

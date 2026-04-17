@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ChartContainer, ChartLegend, RadarChart } from '@ojiepermana/material/chart';
+import { ChartContainer, ChartLegend, ChartTooltip, RadarChart } from '@ojiepermana/material/chart';
 
 import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
@@ -14,6 +14,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
     ChartDemoCardComponent,
     ChartLegend,
     ChartPageBadgesComponent,
+    ChartTooltip,
     PageShellComponent,
     RadarChart,
   ],
@@ -32,7 +33,9 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           footerMeta="Showing monthly visitors by device"
           chartClassName="mx-auto aspect-square max-w-[20rem]">
           <ui-chart-container [config]="visitorConfig" chartId="radar-default" aspect="aspect-square">
-            <ui-radar-chart [data]="radarMonthData" axisKey="month" />
+            <ui-radar-chart [data]="radarMonthData" axisKey="month">
+              <ui-chart-tooltip [data]="radarMonthData" xKey="month" indicator="dot" />
+            </ui-radar-chart>
           </ui-chart-container>
         </demo-chart-card>
 

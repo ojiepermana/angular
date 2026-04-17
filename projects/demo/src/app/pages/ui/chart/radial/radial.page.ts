@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ChartContainer, RadialCenter, RadialChart } from '@ojiepermana/material/chart';
+import { ChartContainer, ChartTooltip, RadialCenter, RadialChart } from '@ojiepermana/material/chart';
 
 import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
@@ -23,6 +23,7 @@ import {
     ChartContainer,
     ChartDemoCardComponent,
     ChartPageBadgesComponent,
+    ChartTooltip,
     PageShellComponent,
     RadialCenter,
     RadialChart,
@@ -49,7 +50,9 @@ import {
               [seriesKeys]="browserSeries"
               [maxValue]="browserMax"
               [showTrack]="false"
-              [cornerRadius]="4" />
+              [cornerRadius]="4">
+              <ui-chart-tooltip [data]="browserData" xKey="browser" valueKey="visitors" indicator="dot" />
+            </ui-radial-chart>
           </ui-chart-container>
         </demo-chart-card>
 

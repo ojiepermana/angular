@@ -41,7 +41,12 @@ export interface RadialBarClickEvent {
               tabindex="0"
               (click)="emitClick(b)"
               (keydown.enter)="emitClick(b)"
-              (keydown.space)="emitClick(b); $event.preventDefault()" />
+              (keydown.space)="emitClick(b); $event.preventDefault()"
+              (pointerenter)="setActive($event, b)"
+              (pointermove)="setActive($event, b)"
+              (pointerleave)="clearActive()"
+              (focus)="setActive($event, b)"
+              (blur)="clearActive()" />
             @if (showValueLabels()) {
               <svg:text
                 class="chart-radial-value pointer-events-none fill-muted-foreground text-[10px]"
@@ -59,6 +64,7 @@ export interface RadialBarClickEvent {
     <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
       <ng-content select="ui-radial-center" />
     </div>
+    <ng-content select="ui-chart-tooltip" />
     <ng-content select="ui-chart-legend" />
   `,
 })
@@ -142,5 +148,23 @@ export class RadialChart {
       datumIndex: b.datumIndex,
       datum: this.data()[b.datumIndex],
     });
+  }
+
+  protected setActive(event: PointerEvent | FocusEvent, b: RadialBarRect): void {
+    const clientX =
+      event instanceof PointerEvent ? event.clientX : (event.target as Element).getBoundingClientRect().left;
+    const clientY =
+      event instanceof PointerEvent ? event.clientY : (event.target as Element).getBoundingClientRect().top;
+    this.root.activePoint.set({
+      index: b.datumIndex,
+      datumIndex: b.datumIndex,
+      seriesKey: b.seriesKey,
+      clientX,
+      clientY,
+    });
+  }
+
+  protected clearActive(): void {
+    this.root.activePoint.set(null);
   }
 }

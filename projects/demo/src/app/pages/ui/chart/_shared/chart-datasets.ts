@@ -143,3 +143,25 @@ export const INTERACTIVE_DESKTOP_TOTAL = INTERACTIVE_VISITOR_DATA.reduce((sum, i
 export const INTERACTIVE_MOBILE_TOTAL = INTERACTIVE_VISITOR_DATA.reduce((sum, item) => sum + item.mobile, 0);
 
 export const RADIAL_STACKED_TOTAL = RADIAL_STACKED_DATA.reduce((sum, item) => sum + item.value, 0);
+
+/** Dataset shared by the Tooltip gallery — Mon-Sat running/swimming kcal. */
+export const EXERCISE_CONFIG: ChartConfig = {
+  running: { label: 'Running', color: 'hsl(var(--chart-1))' },
+  swimming: { label: 'Swimming', color: 'hsl(var(--chart-2))' },
+};
+
+export const EXERCISE_DATA = [
+  { day: 'Mon', date: '2024-07-15', running: 450, swimming: 300 },
+  { day: 'Tue', date: '2024-07-16', running: 380, swimming: 420 },
+  { day: 'Wed', date: '2024-07-17', running: 520, swimming: 120 },
+  { day: 'Thu', date: '2024-07-18', running: 140, swimming: 550 },
+  { day: 'Fri', date: '2024-07-19', running: 600, swimming: 350 },
+  { day: 'Sat', date: '2024-07-20', running: 480, swimming: 400 },
+] as const;
+
+/** Optional "Activities" umbrella label consumed by the Custom Label tooltip variant. */
+export const EXERCISE_CONFIG_WITH_UMBRELLA: ChartConfig = {
+  activities: { label: 'Activities' },
+  running: { label: 'Running', color: 'hsl(var(--chart-1))' },
+  swimming: { label: 'Swimming', color: 'hsl(var(--chart-2))' },
+};

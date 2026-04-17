@@ -64,13 +64,20 @@ const DEFAULT_MARGIN: ChartMargin = { top: 24, right: 24, bottom: 24, left: 24 }
               [attr.stroke-width]="strokeWidth()"
               stroke-linejoin="round" />
             @if (showDots()) {
-              @for (p of s.points; track p.axis) {
+              @for (p of s.points; track p.axis; let i = $index) {
                 <svg:circle
-                  class="chart-radar-dot"
+                  class="chart-radar-dot cursor-pointer"
                   [attr.cx]="p.x"
                   [attr.cy]="p.y"
                   [attr.r]="dotRadius()"
-                  [attr.fill]="s.color" />
+                  [attr.fill]="s.color"
+                  tabindex="0"
+                  [attr.aria-label]="dotAriaLabel(s.seriesKey, p)"
+                  (pointerenter)="setActive($event, s.seriesKey, i)"
+                  (pointermove)="setActive($event, s.seriesKey, i)"
+                  (pointerleave)="clearActive()"
+                  (focus)="setActive($event, s.seriesKey, i)"
+                  (blur)="clearActive()" />
               }
             }
           }
@@ -78,6 +85,7 @@ const DEFAULT_MARGIN: ChartMargin = { top: 24, right: 24, bottom: 24, left: 24 }
         <ng-content />
       </svg:g>
     </svg:svg>
+    <ng-content select="ui-chart-tooltip" />
     <ng-content select="ui-chart-legend" />
   `,
 })
@@ -139,5 +147,22 @@ export class RadarChart {
 
   protected gridFillOpacity(levelIndex: number): number | null {
     return this.gridFilled() ? Math.max(0.06, 0.18 - levelIndex * 0.02) : null;
+  }
+
+  protected dotAriaLabel(seriesKey: string, p: { axis: string; value: number }): string {
+    const label = this.root.config()[seriesKey]?.label ?? seriesKey;
+    return `${label} at ${p.axis}: ${p.value}`;
+  }
+
+  protected setActive(event: PointerEvent | FocusEvent, seriesKey: string, index: number): void {
+    const clientX =
+      event instanceof PointerEvent ? event.clientX : (event.target as Element).getBoundingClientRect().left;
+    const clientY =
+      event instanceof PointerEvent ? event.clientY : (event.target as Element).getBoundingClientRect().top;
+    this.root.activePoint.set({ index, datumIndex: index, seriesKey, clientX, clientY });
+  }
+
+  protected clearActive(): void {
+    this.root.activePoint.set(null);
   }
 }

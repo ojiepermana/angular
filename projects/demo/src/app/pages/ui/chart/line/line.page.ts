@@ -74,6 +74,7 @@ import {
               <svg:g ui-chart-grid></svg:g>
               <svg:g ui-chart-axis-x></svg:g>
               <svg:g ui-chart-axis-y></svg:g>
+              <ui-chart-tooltip [data]="monthlyVisitorData" xKey="month" />
             </ui-line-chart>
           </ui-chart-container>
         </demo-chart-card>
@@ -89,6 +90,7 @@ import {
               <svg:g ui-chart-grid></svg:g>
               <svg:g ui-chart-axis-x></svg:g>
               <svg:g ui-chart-axis-y></svg:g>
+              <ui-chart-tooltip [data]="monthlyVisitorData" xKey="month" />
             </ui-line-chart>
           </ui-chart-container>
         </demo-chart-card>
@@ -104,6 +106,7 @@ import {
               <svg:g ui-chart-grid></svg:g>
               <svg:g ui-chart-axis-x></svg:g>
               <svg:g ui-chart-axis-y></svg:g>
+              <ui-chart-tooltip [data]="monthlyVisitorData" xKey="month" />
             </ui-line-chart>
             <ui-chart-legend />
           </ui-chart-container>
@@ -120,6 +123,7 @@ import {
               <svg:g ui-chart-grid></svg:g>
               <svg:g ui-chart-axis-x></svg:g>
               <svg:g ui-chart-axis-y></svg:g>
+              <ui-chart-tooltip [data]="monthlyVisitorData" xKey="month" />
             </ui-line-chart>
           </ui-chart-container>
         </demo-chart-card>
@@ -140,6 +144,7 @@ import {
               <svg:g ui-chart-grid></svg:g>
               <svg:g ui-chart-axis-x></svg:g>
               <svg:g ui-chart-axis-y></svg:g>
+              <ui-chart-tooltip [data]="monthlyVisitorData" xKey="month" />
             </ui-line-chart>
           </ui-chart-container>
         </demo-chart-card>
@@ -155,6 +160,7 @@ import {
               <svg:g ui-chart-grid></svg:g>
               <svg:g ui-chart-axis-x></svg:g>
               <svg:g ui-chart-axis-y></svg:g>
+              <ui-chart-tooltip [data]="singleVisitorData" xKey="month" />
             </ui-line-chart>
           </ui-chart-container>
         </demo-chart-card>
@@ -170,6 +176,7 @@ import {
               <svg:g ui-chart-grid></svg:g>
               <svg:g ui-chart-axis-x></svg:g>
               <svg:g ui-chart-axis-y></svg:g>
+              <ui-chart-tooltip [data]="singleVisitorData" xKey="month" />
             </ui-line-chart>
           </ui-chart-container>
         </demo-chart-card>
@@ -189,6 +196,7 @@ import {
               <svg:g ui-chart-grid></svg:g>
               <svg:g ui-chart-axis-x></svg:g>
               <svg:g ui-chart-axis-y></svg:g>
+              <ui-chart-tooltip [data]="singleVisitorData" xKey="month" />
             </ui-line-chart>
           </ui-chart-container>
         </demo-chart-card>
