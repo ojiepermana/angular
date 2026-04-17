@@ -3,5 +3,12 @@
   "dest": "../../dist/material",
   "lib": {
     "entryFile": "public-api.ts"
-  }
+  },
+  "assets": [
+    {
+      "input": "shadcn/src/lib/styles",
+      "glob": "**/*.css",
+      "output": "shadcn/styles"
+    }
+  ]
 }

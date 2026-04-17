@@ -73,8 +73,8 @@
     "material": {
       "projectType": "library",
       "root": "projects/material",
-      "sourceRoot": "projects/material/src",
-      "prefix": "lib",
+      "sourceRoot": "projects/material/shadcn/src",
+      "prefix": "ui",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",

@@ -1,0 +1,59 @@
+:host {
+  display: block;
+}
+
+:host ::ng-deep .mat-mdc-radio-button {
+  --mdc-radio-state-layer-size: 1rem;
+  --mdc-radio-selected-icon-color: hsl(var(--primary));
+  --mdc-radio-selected-focus-icon-color: hsl(var(--primary));
+  --mdc-radio-selected-hover-icon-color: hsl(var(--primary));
+  --mdc-radio-selected-pressed-icon-color: hsl(var(--primary));
+  --mdc-radio-unselected-icon-color: hsl(var(--input));
+  --mdc-radio-unselected-focus-icon-color: hsl(var(--input));
+  --mdc-radio-unselected-hover-icon-color: hsl(var(--input));
+  --mdc-radio-unselected-pressed-icon-color: hsl(var(--input));
+  --mat-radio-ripple-color: transparent;
+  --mat-radio-checked-ripple-color: transparent;
+}
+
+:host ::ng-deep .mat-mdc-radio-button .mdc-radio__background::before,
+:host ::ng-deep .mat-mdc-radio-button .mat-mdc-radio-ripple,
+:host ::ng-deep .mat-mdc-radio-button .mat-mdc-focus-indicator,
+:host ::ng-deep .mat-mdc-radio-button .mat-ripple {
+  display: none;
+}
+
+:host ::ng-deep .mat-mdc-radio-button .mat-mdc-radio-touch-target {
+  display: none;
+}
+
+:host ::ng-deep .mat-mdc-radio-button .mdc-radio {
+  padding: 0;
+  margin: 0;
+  flex: 0 0 1rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+:host ::ng-deep .mat-mdc-radio-button .mdc-radio__native-control {
+  width: 1rem;
+  height: 1rem;
+  top: 0;
+  left: 0;
+}
+
+:host ::ng-deep .mat-mdc-radio-button .mdc-radio__background {
+  width: 1rem;
+  height: 1rem;
+}
+
+:host ::ng-deep .mat-mdc-radio-button .mdc-form-field {
+  gap: 0.5rem;
+  color: hsl(var(--foreground));
+  font-size: 0.875rem;
+}
+
+:host ::ng-deep .mat-mdc-radio-button .mdc-label {
+  padding: 0;
+  cursor: pointer;
+}

@@ -1,0 +1,56 @@
+:host {
+  display: inline-flex;
+}
+
+:host ::ng-deep .mat-mdc-slide-toggle {
+  --mdc-switch-track-width: 2rem;
+  --mdc-switch-track-height: 1.15rem;
+  --mdc-switch-track-shape: 9999px;
+  --mdc-switch-handle-shape: 9999px;
+  --mdc-switch-handle-width: 0.875rem;
+  --mdc-switch-handle-height: 0.875rem;
+  --mdc-switch-state-layer-size: 0;
+
+  --mdc-switch-selected-track-color: hsl(var(--primary));
+  --mdc-switch-selected-focus-track-color: hsl(var(--primary));
+  --mdc-switch-selected-hover-track-color: hsl(var(--primary));
+  --mdc-switch-selected-pressed-track-color: hsl(var(--primary));
+
+  --mdc-switch-unselected-track-color: hsl(var(--input));
+  --mdc-switch-unselected-focus-track-color: hsl(var(--input));
+  --mdc-switch-unselected-hover-track-color: hsl(var(--input));
+  --mdc-switch-unselected-pressed-track-color: hsl(var(--input));
+
+  --mdc-switch-selected-handle-color: hsl(var(--primary-foreground));
+  --mdc-switch-selected-focus-handle-color: hsl(var(--primary-foreground));
+  --mdc-switch-selected-hover-handle-color: hsl(var(--primary-foreground));
+  --mdc-switch-selected-pressed-handle-color: hsl(var(--primary-foreground));
+  --mdc-switch-unselected-handle-color: hsl(var(--background));
+  --mdc-switch-unselected-focus-handle-color: hsl(var(--background));
+  --mdc-switch-unselected-hover-handle-color: hsl(var(--background));
+  --mdc-switch-unselected-pressed-handle-color: hsl(var(--background));
+
+  --mdc-switch-selected-icon-color: transparent;
+  --mdc-switch-unselected-icon-color: transparent;
+}
+
+:host ::ng-deep .mat-mdc-slide-toggle .mdc-switch__ripple,
+:host ::ng-deep .mat-mdc-slide-toggle .mat-mdc-slide-toggle-ripple,
+:host ::ng-deep .mat-mdc-slide-toggle .mat-mdc-focus-indicator {
+  display: none;
+}
+
+:host ::ng-deep .mat-mdc-slide-toggle .mdc-switch__icons {
+  display: none;
+}
+
+:host ::ng-deep .mat-mdc-slide-toggle .mdc-form-field {
+  gap: 0.5rem;
+  color: hsl(var(--foreground));
+  font-size: 0.875rem;
+}
+
+:host ::ng-deep .mat-mdc-slide-toggle .mdc-label {
+  padding: 0;
+  cursor: pointer;
+}

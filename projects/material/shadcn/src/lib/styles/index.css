@@ -1,0 +1,11 @@
+/**
+ * ng-shadcn root stylesheet.
+ *
+ * Usage — import once in the consumer app, **before** Tailwind:
+ *
+ *   @import '@ojiepermana/material/shadcn/styles';
+ *   @import 'tailwindcss';
+ */
+@import './_layers.css';
+@import './_tokens.css';
+@import './_material-bridge.css';

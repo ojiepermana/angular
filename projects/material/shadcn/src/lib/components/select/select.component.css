@@ -1,0 +1,68 @@
+/* ui-select — shadcn trigger skin around mat-form-field + mat-select. */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Kill Material's floating label + underline scaffolding — we want a flat
+ * shadcn-style trigger. We still honor tokens from the bridge layer. */
+:host ::ng-deep .mat-mdc-form-field {
+  --mat-form-field-container-height: 2.25rem; /* 36px (h-9) */
+  --mat-form-field-container-vertical-padding: 0;
+  --mat-form-field-filled-with-label-container-padding-top: 0;
+  --mat-form-field-filled-with-label-container-padding-bottom: 0;
+  --mdc-outlined-text-field-container-shape: calc(var(--radius) - 0.125rem);
+  --mdc-outlined-text-field-outline-color: hsl(var(--input));
+  --mdc-outlined-text-field-hover-outline-color: hsl(var(--input));
+  --mdc-outlined-text-field-focus-outline-color: hsl(var(--ring));
+  --mdc-outlined-text-field-input-text-color: hsl(var(--foreground));
+  --mdc-outlined-text-field-label-text-color: hsl(var(--muted-foreground));
+  --mdc-outlined-text-field-hover-label-text-color: hsl(var(--muted-foreground));
+  --mdc-outlined-text-field-focus-label-text-color: hsl(var(--muted-foreground));
+  --mdc-outlined-text-field-disabled-outline-color: hsl(var(--input) / 0.5);
+  --mdc-outlined-text-field-disabled-input-text-color: hsl(var(--muted-foreground));
+  width: 100%;
+}
+
+:host ::ng-deep .mat-mdc-text-field-wrapper {
+  background: transparent;
+  padding: 0 0.75rem;
+}
+
+:host ::ng-deep .mat-mdc-form-field-infix {
+  min-height: 2.25rem;
+  padding: 0.5rem 0;
+  width: auto;
+}
+
+:host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+/* Hide floating label — ui-label is used externally instead. */
+:host ::ng-deep .mdc-floating-label,
+:host ::ng-deep .mat-mdc-floating-label,
+:host ::ng-deep .mdc-notched-outline__notch .mdc-floating-label {
+  display: none;
+}
+
+:host ::ng-deep .mdc-notched-outline__notch {
+  padding: 0;
+  border-left: none;
+  border-right: none;
+}
+
+:host ::ng-deep .mat-mdc-select-value {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: hsl(var(--foreground));
+}
+
+:host ::ng-deep .mat-mdc-select-placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+:host ::ng-deep .mat-mdc-select-arrow {
+  color: hsl(var(--muted-foreground));
+}

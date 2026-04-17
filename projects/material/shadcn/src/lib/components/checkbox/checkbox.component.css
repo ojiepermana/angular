@@ -1,0 +1,66 @@
+/* Neutralize Material Design Components defaults for Checkbox. */
+:host {
+  display: inline-flex;
+}
+
+:host ::ng-deep .mat-mdc-checkbox {
+  /* Shrink state-layer to shadcn hit area */
+  --mdc-checkbox-state-layer-size: 1rem;
+  --mdc-checkbox-selected-icon-color: hsl(var(--primary));
+  --mdc-checkbox-selected-focus-icon-color: hsl(var(--primary));
+  --mdc-checkbox-selected-hover-icon-color: hsl(var(--primary));
+  --mdc-checkbox-selected-pressed-icon-color: hsl(var(--primary));
+  --mdc-checkbox-unselected-icon-color: hsl(var(--input));
+  --mdc-checkbox-unselected-focus-icon-color: hsl(var(--input));
+  --mdc-checkbox-unselected-hover-icon-color: hsl(var(--input));
+  --mdc-checkbox-selected-checkmark-color: hsl(var(--primary-foreground));
+  --mdc-checkbox-selected-focus-state-layer-color: transparent;
+  --mdc-checkbox-selected-hover-state-layer-color: transparent;
+  --mdc-checkbox-selected-pressed-state-layer-color: transparent;
+  --mdc-checkbox-unselected-focus-state-layer-color: transparent;
+  --mdc-checkbox-unselected-hover-state-layer-color: transparent;
+  --mdc-checkbox-unselected-pressed-state-layer-color: transparent;
+  --mdc-checkbox-state-layer-size: 1rem;
+}
+
+/* Remove ripple + touch-target that blow up the 16px box */
+:host ::ng-deep .mat-mdc-checkbox .mdc-checkbox__ripple,
+:host ::ng-deep .mat-mdc-checkbox .mat-mdc-checkbox-ripple,
+:host ::ng-deep .mat-mdc-checkbox .mat-mdc-focus-indicator {
+  display: none;
+}
+
+:host ::ng-deep .mat-mdc-checkbox .mat-mdc-checkbox-touch-target {
+  display: none;
+}
+
+/* Collapse MDC padding so the control sits flush */
+:host ::ng-deep .mat-mdc-checkbox .mdc-checkbox {
+  padding: 0;
+  margin: 0;
+  flex: 0 0 1rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+:host ::ng-deep .mat-mdc-checkbox .mdc-checkbox__background {
+  top: 0;
+  left: 0;
+  width: 1rem;
+  height: 1rem;
+  border-radius: calc(var(--radius) - 0.375rem);
+  border-width: 1px;
+}
+
+:host ::ng-deep .mat-mdc-checkbox .mdc-form-field {
+  gap: 0.5rem;
+  color: hsl(var(--foreground));
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+:host ::ng-deep .mat-mdc-checkbox .mdc-label {
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}

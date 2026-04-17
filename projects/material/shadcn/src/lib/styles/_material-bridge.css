@@ -1,0 +1,264 @@
+/**
+ * Bridges shadcn tokens into Angular Material M3 system + MDC tokens.
+ * Everything lives in the `tokens` layer so it overrides Material's own
+ * `mat-mdc` layer without needing `!important`.
+ */
+@layer tokens {
+  :root {
+    /* ───────── Color system ───────── */
+    --mat-sys-primary: hsl(var(--primary));
+    --mat-sys-on-primary: hsl(var(--primary-foreground));
+    --mat-sys-primary-container: hsl(var(--primary));
+    --mat-sys-on-primary-container: hsl(var(--primary-foreground));
+
+    --mat-sys-secondary: hsl(var(--secondary));
+    --mat-sys-on-secondary: hsl(var(--secondary-foreground));
+    --mat-sys-secondary-container: hsl(var(--secondary));
+    --mat-sys-on-secondary-container: hsl(var(--secondary-foreground));
+
+    --mat-sys-tertiary: hsl(var(--accent));
+    --mat-sys-on-tertiary: hsl(var(--accent-foreground));
+
+    --mat-sys-error: hsl(var(--destructive));
+    --mat-sys-on-error: hsl(var(--destructive-foreground));
+    --mat-sys-error-container: hsl(var(--destructive));
+    --mat-sys-on-error-container: hsl(var(--destructive-foreground));
+
+    --mat-sys-background: hsl(var(--background));
+    --mat-sys-on-background: hsl(var(--foreground));
+    --mat-sys-surface: hsl(var(--background));
+    --mat-sys-surface-dim: hsl(var(--background));
+    --mat-sys-surface-bright: hsl(var(--background));
+    --mat-sys-surface-container-lowest: hsl(var(--background));
+    --mat-sys-surface-container-low: hsl(var(--muted));
+    --mat-sys-surface-container: hsl(var(--muted));
+    --mat-sys-surface-container-high: hsl(var(--muted));
+    --mat-sys-surface-container-highest: hsl(var(--muted));
+    --mat-sys-on-surface: hsl(var(--foreground));
+    --mat-sys-on-surface-variant: hsl(var(--muted-foreground));
+
+    --mat-sys-outline: hsl(var(--border));
+    --mat-sys-outline-variant: hsl(var(--border));
+
+    --mat-sys-inverse-surface: hsl(var(--foreground));
+    --mat-sys-inverse-on-surface: hsl(var(--background));
+    --mat-sys-inverse-primary: hsl(var(--primary-foreground));
+
+    --mat-sys-scrim: hsl(0 0% 0%);
+    --mat-sys-shadow: hsl(0 0% 0%);
+
+    /* ───────── Shape (map to single --radius) ───────── */
+    --mat-sys-corner-none: 0;
+    --mat-sys-corner-extra-small: calc(var(--radius) - 0.25rem);
+    --mat-sys-corner-extra-small-top: calc(var(--radius) - 0.25rem) calc(var(--radius) - 0.25rem) 0
+      0;
+    --mat-sys-corner-small: calc(var(--radius) - 0.25rem);
+    --mat-sys-corner-medium: calc(var(--radius) - 0.125rem);
+    --mat-sys-corner-large: var(--radius);
+    --mat-sys-corner-large-top: var(--radius) var(--radius) 0 0;
+    --mat-sys-corner-extra-large: calc(var(--radius) + 0.25rem);
+    --mat-sys-corner-extra-large-top: calc(var(--radius) + 0.25rem) calc(var(--radius) + 0.25rem) 0
+      0;
+    --mat-sys-corner-full: 9999px;
+
+    /* ───────── Motion ───────── */
+    --mat-sys-motion-duration-short1: 50ms;
+    --mat-sys-motion-duration-short2: 100ms;
+    --mat-sys-motion-duration-short3: 150ms;
+    --mat-sys-motion-duration-short4: 150ms;
+    --mat-sys-motion-duration-medium1: 200ms;
+    --mat-sys-motion-duration-medium2: 250ms;
+    --mat-sys-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --mat-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+    /* ───────── Elevation — flatten M3 drama ───────── */
+    --mat-sys-level0: none;
+    --mat-sys-level1: none;
+    --mat-sys-level2: none;
+    --mat-sys-level3: none;
+    --mat-sys-level4: none;
+    --mat-sys-level5: none;
+  }
+}
+
+/**
+ * Overlay (CDK portal) panel styles — must be global since panels render
+ * outside component trees.
+ */
+@layer components {
+  .ui-overlay-panel {
+    background: hsl(var(--popover));
+    color: hsl(var(--popover-foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: calc(var(--radius) - 0.125rem);
+    box-shadow:
+      0 4px 6px -1px hsl(0 0% 0% / 0.08),
+      0 2px 4px -2px hsl(0 0% 0% / 0.08);
+    padding: 0.25rem;
+  }
+
+  /* ───────── Select panel ───────── */
+  .ui-select-panel.mat-mdc-select-panel {
+    padding: 0.25rem;
+    background: hsl(var(--popover));
+    color: hsl(var(--popover-foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: calc(var(--radius) - 0.125rem);
+    box-shadow:
+      0 10px 15px -3px hsl(0 0% 0% / 0.1),
+      0 4px 6px -4px hsl(0 0% 0% / 0.1);
+  }
+
+  .ui-select-panel .mat-mdc-option {
+    min-height: 2rem;
+    padding: 0.375rem 0.5rem 0.375rem 2rem;
+    border-radius: calc(var(--radius) - 0.25rem);
+    font-size: 0.875rem;
+    color: hsl(var(--popover-foreground));
+  }
+
+  .ui-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled):not(.mat-mdc-option-active),
+  .ui-select-panel .mat-mdc-option.mat-mdc-option-active:not(.mdc-list-item--disabled),
+  .ui-select-panel .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+
+  .ui-select-panel .mat-mdc-option .mdc-list-item__primary-text {
+    color: inherit;
+    font-size: 0.875rem;
+  }
+
+  .ui-select-panel .mat-mdc-option .mat-pseudo-checkbox {
+    display: none;
+  }
+
+  .ui-select-panel .mat-mdc-option.mdc-list-item--disabled {
+    opacity: 0.5;
+  }
+
+  /* ───────── Tooltip panel ───────── */
+  .ui-tooltip-panel {
+    --mdc-plain-tooltip-container-color: hsl(var(--primary));
+    --mdc-plain-tooltip-supporting-text-color: hsl(var(--primary-foreground));
+    --mdc-plain-tooltip-supporting-text-font: inherit;
+    --mdc-plain-tooltip-supporting-text-size: 0.75rem;
+    --mdc-plain-tooltip-supporting-text-weight: 500;
+    --mdc-plain-tooltip-container-shape: calc(var(--radius) - 0.25rem);
+  }
+
+  .ui-tooltip-panel .mdc-tooltip__surface {
+    padding: 0.25rem 0.625rem;
+    line-height: 1rem;
+  }
+
+  /* ───────── Popover panel (CDK overlay) ───────── */
+  .ui-popover-panel {
+    background: hsl(var(--popover));
+    color: hsl(var(--popover-foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: calc(var(--radius) - 0.125rem);
+    padding: 1rem;
+    box-shadow:
+      0 10px 15px -3px hsl(0 0% 0% / 0.1),
+      0 4px 6px -4px hsl(0 0% 0% / 0.1);
+    outline: none;
+    animation: ui-popover-in 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes ui-popover-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-popover-panel {
+      animation: none;
+    }
+  }
+
+  /* ───────── Dialog / Sheet backdrop ───────── */
+  .ui-dialog-backdrop {
+    background: hsl(0 0% 0% / 0.5);
+    backdrop-filter: blur(2px);
+    animation: ui-fade-in 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes ui-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* ───────── Menu panel ───────── */
+  .ui-menu-panel {
+    outline: none;
+    animation: ui-popover-in 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ───────── Combobox panel ───────── */
+  .ui-combobox-panel {
+    animation: ui-popover-in 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ───────── Datepicker panel ───────── */
+  .ui-datepicker-panel .mat-mdc-menu-panel,
+  .ui-datepicker-panel .mat-datepicker-content {
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  /* ───────── Toast panel ───────── */
+  .ui-toast-panel .mdc-snackbar__surface {
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    padding: 0.75rem 1rem;
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+  .ui-toast-panel .mdc-snackbar__label {
+    color: hsl(var(--foreground));
+    white-space: pre-line;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  .ui-toast-destructive .mdc-snackbar__surface {
+    background: hsl(var(--destructive));
+    color: hsl(var(--destructive-foreground));
+    border-color: hsl(var(--destructive));
+  }
+  .ui-toast-destructive .mdc-snackbar__label,
+  .ui-toast-destructive .mat-mdc-snack-bar-action {
+    color: hsl(var(--destructive-foreground));
+  }
+  .ui-toast-success .mdc-snackbar__surface {
+    background: hsl(142 71% 45%);
+    color: hsl(0 0% 100%);
+    border-color: hsl(142 71% 45%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-dialog-backdrop,
+    .ui-menu-panel,
+    .ui-combobox-panel {
+      animation: none;
+    }
+  }
+}

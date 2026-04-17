@@ -28,7 +28,7 @@ We are building a component library that **looks and feels like shadcn/ui** but 
 | ---------------- | -------------------------------- | --------------- |
 | Framework        | Angular                          | >= 20.0.0       |
 | Material         | @angular/material + @angular/cdk | >= 20.0.0 (M3)  |
-| Styling          | Tailwind CSS                     | >= 4.0.0        |
+| Styling          | Tailwind CSS                     | >= 4.2.0        |
 | Variants         | class-variance-authority         | >= 0.7.0        |
 | Class merge      | clsx + tailwind-merge            | latest          |
 | Packaging        | ng-packagr                       | matches Angular |
@@ -120,7 +120,7 @@ import { cn } from '../../core/cn/cn.util';
 import { badgeVariants, type BadgeVariant } from './badge.variants';
 
 @Component({
-  selector: 'sc-badge, span[sc-badge]',
+  selector: 'ui-badge, span[ui-badge]',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -155,7 +155,7 @@ import { MatCheckboxModule, MatCheckboxChange } from '@angular/material/checkbox
 import { cn } from '../../core/cn/cn.util';
 
 @Component({
-  selector: 'sc-checkbox',
+  selector: 'ui-checkbox',
   standalone: true,
   imports: [MatCheckboxModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -189,7 +189,7 @@ export class CheckboxComponent implements ControlValueAccessor {
   checked = signal<boolean>(false);
   disabled = signal<boolean>(false);
 
-  classes = computed(() => cn('sc-checkbox', this.class()));
+  classes = computed(() => cn('ui-checkbox', this.class()));
 
   private onChange: (v: boolean) => void = () => {};
   private onTouched: () => void = () => {};
@@ -240,7 +240,7 @@ Form controls MUST additionally:
 
 **Naming conventions:**
 
-- Selector: `sc-[name]` + attribute selector `[sc-name]` when applicable
+- Selector: `ui-[name]` + attribute selector `[ui-name]` when applicable
 - Component class: `[Name]Component` (no `Sc` prefix in class name)
 - Variants file: `[name].variants.ts`
 - CVA function: `[name]Variants`
@@ -435,7 +435,7 @@ Dialog, Select, Menu, Tooltip, Autocomplete render OUTSIDE the component tree vi
 ```typescript
 // Component
 template: `
-  <mat-select panelClass="sc-select-panel" ...>
+  <mat-select panelClass="ui-select-panel" ...>
     <ng-content />
   </mat-select>
 `;
@@ -444,7 +444,7 @@ template: `
 ```css
 /* styles/_material-bridge.css */
 @layer components {
-  .sc-select-panel.mat-mdc-select-panel {
+  .ui-select-panel.mat-mdc-select-panel {
     padding: 0.25rem;
     background: hsl(var(--popover));
     border: 1px solid hsl(var(--border));
@@ -452,7 +452,7 @@ template: `
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   }
 
-  .sc-select-panel .mat-mdc-option {
+  .ui-select-panel .mat-mdc-option {
     min-height: 2rem;
     padding: 0.375rem 0.5rem;
     border-radius: calc(var(--radius) - 4px);
@@ -460,8 +460,8 @@ template: `
     color: hsl(var(--popover-foreground));
   }
 
-  .sc-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled),
-  .sc-select-panel .mat-mdc-option.mat-mdc-option-active {
+  .ui-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled),
+  .ui-select-panel .mat-mdc-option.mat-mdc-option-active {
     background: hsl(var(--accent));
     color: hsl(var(--accent-foreground));
   }
@@ -629,9 +629,9 @@ import { ButtonComponent } from 'ng-shadcn';
 ## Usage
 
 ```html
-<sc-button variant="default" size="default">Click me</sc-button>
-<sc-button variant="outline" size="sm">Small outline</sc-button>
-<button sc-button variant="ghost">Native button</button>
+<ui-button variant="default" size="default">Click me</ui-button>
+<ui-button variant="outline" size="sm">Small outline</ui-button>
+<button ui-button variant="ghost">Native button</button>
 ```
 
 ## Props
@@ -653,7 +653,7 @@ import { ButtonComponent } from 'ng-shadcn';
 ## When NOT to use
 
 - For navigation between pages, use a styled anchor instead.
-- For icon-only toggles that maintain state, use `<sc-toggle>`.
+- For icon-only toggles that maintain state, use `<ui-toggle>`.
 ````
 
 ---
@@ -765,7 +765,7 @@ Copy this into every PR:
 - [ ] Uses `signal()` / `computed()` for state
 - [ ] CVA variants in separate file
 - [ ] `class` input present and merged via `cn()`
-- [ ] Selector follows `sc-[name]` convention
+- [ ] Selector follows `ui-[name]` convention
 - [ ] Material neutralization applied (ripple, touch target, elevation)
 - [ ] Cascade layers respected (no `!important` unless justified)
 - [ ] Overlay styling (if any) in global `@layer components`
