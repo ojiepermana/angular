@@ -11,10 +11,13 @@ import {
 
 import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
+import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import {
   DEFAULT_META,
   DEFAULT_TREND,
+  INTERACTIVE_DESKTOP_TOTAL,
   INTERACTIVE_META,
+  INTERACTIVE_MOBILE_TOTAL,
   INTERACTIVE_VISITOR_DATA,
   MONTHLY_VISITOR_DATA,
   NEGATIVE_BAR_DATA,
@@ -34,6 +37,7 @@ import {
     ChartDemoCardComponent,
     ChartGrid,
     ChartLegend,
+    ChartPageBadgesComponent,
     ChartTooltip,
     PageShellComponent,
   ],
@@ -41,20 +45,7 @@ import {
     <demo-page-shell
       title="Bar Charts"
       description="Bar layouts modeled after the shadcn chart gallery: grouped, stacked, horizontal, active, mixed-color, and label-heavy variants.">
-      <div demo-page-actions class="flex flex-wrap gap-2">
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          10 variants
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Grouped + stacked
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Negative + active states
-        </span>
-      </div>
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -252,6 +243,7 @@ export class BarChartPageComponent {
   protected readonly defaultMeta = DEFAULT_META;
   protected readonly interactiveMeta = INTERACTIVE_META;
   protected readonly compactFormatter = (value: number) => `${value}k`;
-  protected readonly interactiveDesktopTotal = INTERACTIVE_VISITOR_DATA.reduce((sum, item) => sum + item.desktop, 0);
-  protected readonly interactiveMobileTotal = INTERACTIVE_VISITOR_DATA.reduce((sum, item) => sum + item.mobile, 0);
+  protected readonly interactiveDesktopTotal = INTERACTIVE_DESKTOP_TOTAL;
+  protected readonly interactiveMobileTotal = INTERACTIVE_MOBILE_TOTAL;
+  protected readonly pageBadges = ['10 variants', 'Grouped + stacked', 'Negative + active states'] as const;
 }

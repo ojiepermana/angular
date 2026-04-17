@@ -132,3 +132,8 @@ export const SCATTER_BASIC_DATA = [
 ] as const;
 
 export const BROWSER_TOTAL_VISITORS = BROWSER_DATA.reduce((sum, item) => sum + item.visitors, 0);
+
+export const INTERACTIVE_DESKTOP_TOTAL = INTERACTIVE_VISITOR_DATA.reduce((sum, item) => sum + item.desktop, 0);
+export const INTERACTIVE_MOBILE_TOTAL = INTERACTIVE_VISITOR_DATA.reduce((sum, item) => sum + item.mobile, 0);
+
+export const RADIAL_STACKED_TOTAL = RADIAL_STACKED_DATA.reduce((sum, item) => sum + item.value, 0);

@@ -13,10 +13,13 @@ import {
 
 import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
+import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import {
   DEFAULT_META,
   DEFAULT_TREND,
+  INTERACTIVE_DESKTOP_TOTAL,
   INTERACTIVE_META,
+  INTERACTIVE_MOBILE_TOTAL,
   INTERACTIVE_VISITOR_DATA,
   MONTHLY_VISITOR_DATA,
   SINGLE_VISITOR_CONFIG,
@@ -36,6 +39,7 @@ import {
     ChartDemoCardComponent,
     ChartGrid,
     ChartLegend,
+    ChartPageBadgesComponent,
     ChartTooltip,
     ChartZoomControls,
     PageShellComponent,
@@ -44,20 +48,7 @@ import {
     <demo-page-shell
       title="Area Charts"
       description="Area charts that match the shadcn demos: curve modes, stacked totals, normalized stacks, gradient fills, and an interactive zoomable panel.">
-      <div demo-page-actions class="flex flex-wrap gap-2">
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          10 variants
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Stacked + 100%
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Gradient + zoom
-        </span>
-      </div>
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -272,6 +263,7 @@ export class AreaChartPageComponent {
   protected readonly defaultMeta = DEFAULT_META;
   protected readonly interactiveMeta = INTERACTIVE_META;
   protected readonly shareTrend = 'Desktop share stays ahead even in lower-volume months';
-  protected readonly interactiveDesktopTotal = INTERACTIVE_VISITOR_DATA.reduce((sum, item) => sum + item.desktop, 0);
-  protected readonly interactiveMobileTotal = INTERACTIVE_VISITOR_DATA.reduce((sum, item) => sum + item.mobile, 0);
+  protected readonly interactiveDesktopTotal = INTERACTIVE_DESKTOP_TOTAL;
+  protected readonly interactiveMobileTotal = INTERACTIVE_MOBILE_TOTAL;
+  protected readonly pageBadges = ['10 variants', 'Stacked + 100%', 'Gradient + zoom'] as const;
 }

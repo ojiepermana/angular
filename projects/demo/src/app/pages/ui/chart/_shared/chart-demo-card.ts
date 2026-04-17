@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import {
   CardComponent,
   CardContentComponent,
@@ -39,8 +39,8 @@ import {
       </ui-card-header>
 
       <ui-card-content class="p-5">
-        <div [class]="panelClass()">
-          <div [class]="chartClass()">
+        <div [class]="panelClassName()">
+          <div [class]="chartClassName()">
             <ng-content />
           </div>
         </div>
@@ -70,7 +70,4 @@ export class ChartDemoCardComponent {
   readonly panelClassName = input<string>(
     'rounded-[1.35rem] border border-border/60 bg-linear-to-br from-background to-muted/25 p-3',
   );
-
-  protected readonly chartClass = computed(() => this.chartClassName());
-  protected readonly panelClass = computed(() => this.panelClassName());
 }

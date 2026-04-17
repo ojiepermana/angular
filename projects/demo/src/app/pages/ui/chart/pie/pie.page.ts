@@ -10,6 +10,7 @@ import {
 
 import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
+import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared/chart-datasets';
 
 @Component({
@@ -19,6 +20,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
     ChartContainer,
     ChartDemoCardComponent,
     ChartLegend,
+    ChartPageBadgesComponent,
     PageShellComponent,
     PieCenter,
     PieChart,
@@ -29,20 +31,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
     <demo-page-shell
       title="Pie Charts"
       description="Pie and donut compositions aligned with the shadcn gallery, including active slices, center copy, legends, and stacked radial rings.">
-      <div demo-page-actions class="flex flex-wrap gap-2">
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          10 variants
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Pie + donut
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Labels + center overlays
-        </span>
-      </div>
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -255,4 +244,5 @@ export class PieChartPageComponent {
     color: BROWSER_CONFIG[item.browser]?.color ?? 'hsl(var(--foreground))',
     share: `${Math.round((item.visitors / BROWSER_TOTAL_VISITORS) * 100)}%`,
   }));
+  protected readonly pageBadges = ['10 variants', 'Pie + donut', 'Labels + center overlays'] as const;
 }

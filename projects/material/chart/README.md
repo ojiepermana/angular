@@ -60,7 +60,7 @@ See [projects/material/chart/public-api.ts](projects/material/chart/public-api.t
 
 ## Demo
 
-The showcase page lives in [projects/demo/src/app/pages/ui/chart/chart.page.ts](projects/demo/src/app/pages/ui/chart/chart.page.ts) and is wired into the demo navigation under the UI section.
+The showcase is split into one page per chart family under [projects/demo/src/app/pages/ui/chart](projects/demo/src/app/pages/ui/chart) (`bar`, `line`, `area`, `pie`, `radar`, `radial`, `scatter`). Routes are registered in [chart.routes.ts](projects/demo/src/app/pages/ui/chart/chart.routes.ts) and linked from the demo navigation under the UI section. Shared scaffolding lives in [`_shared/`](projects/demo/src/app/pages/ui/chart/_shared).
 
 ## Verification
 

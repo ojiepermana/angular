@@ -3,35 +3,24 @@ import { ChartContainer, RadialCenter, RadialChart } from '@ojiepermana/material
 
 import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
+import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import {
   RADIAL_MULTI_DATA,
   RADIAL_PROGRESS_CONFIG,
   RADIAL_SINGLE_DATA,
   RADIAL_STACKED_DATA,
+  RADIAL_STACKED_TOTAL,
 } from '../_shared/chart-datasets';
 
 @Component({
   selector: 'demo-radial-chart-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ChartContainer, ChartDemoCardComponent, PageShellComponent, RadialCenter, RadialChart],
+  imports: [ChartContainer, ChartDemoCardComponent, ChartPageBadgesComponent, PageShellComponent, RadialCenter, RadialChart],
   template: `
     <demo-page-shell
       title="Radial Charts"
       description="Radial progress compositions modeled after the shadcn gallery, including labels, center text, shaped partial arcs, and stacked tracks.">
-      <div demo-page-actions class="flex flex-wrap gap-2">
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          6 variants
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Full + partial arcs
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Center overlays
-        </span>
-      </div>
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -183,8 +172,9 @@ export class RadialChartPageComponent {
   protected readonly radialSingleMax = 200;
   protected readonly radialShapeMax = 160;
   protected readonly radialStackedMax = 1500;
-  protected readonly radialStackedTotal = RADIAL_STACKED_DATA.reduce((sum, item) => sum + item.value, 0);
+  protected readonly radialStackedTotal = RADIAL_STACKED_TOTAL;
   protected readonly percentageFormatter = (value: number) => `${Math.round((value / this.radialSingleMax) * 100)}%`;
   protected readonly shapeStartAngle = (-5 * Math.PI) / 6;
   protected readonly shapeEndAngle = (5 * Math.PI) / 6;
+  protected readonly pageBadges = ['6 variants', 'Full + partial arcs', 'Center overlays'] as const;
 }

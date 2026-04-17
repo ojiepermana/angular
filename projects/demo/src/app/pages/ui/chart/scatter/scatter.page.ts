@@ -3,6 +3,7 @@ import { ChartBrush, ChartContainer, ChartLegend, ChartZoomControls, ScatterChar
 
 import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
+import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import { SCATTER_BASIC_CONFIG, SCATTER_BASIC_DATA, SCATTER_CONFIG, SCATTER_DATA } from '../_shared/chart-datasets';
 
 @Component({
@@ -13,6 +14,7 @@ import { SCATTER_BASIC_CONFIG, SCATTER_BASIC_DATA, SCATTER_CONFIG, SCATTER_DATA 
     ChartContainer,
     ChartDemoCardComponent,
     ChartLegend,
+    ChartPageBadgesComponent,
     ChartZoomControls,
     PageShellComponent,
     ScatterChart,
@@ -21,20 +23,7 @@ import { SCATTER_BASIC_CONFIG, SCATTER_BASIC_DATA, SCATTER_CONFIG, SCATTER_DATA 
     <demo-page-shell
       title="Scatter Charts"
       description="Four scatter variants chosen to fit the current primitive set: a minimal distribution plot, grouped points, bubble sizing, and a brush-and-zoom example.">
-      <div demo-page-actions class="flex flex-wrap gap-2">
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          4 variants
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Bubble sizing
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Brush + zoom
-        </span>
-      </div>
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -115,4 +104,5 @@ export class ScatterChartPageComponent {
   protected readonly scatterBasicConfig = SCATTER_BASIC_CONFIG;
   protected readonly scatterData = SCATTER_DATA;
   protected readonly scatterBasicData = SCATTER_BASIC_DATA;
+  protected readonly pageBadges = ['4 variants', 'Bubble sizing', 'Brush + zoom'] as const;
 }

@@ -3,30 +3,18 @@ import { ChartContainer, ChartLegend, RadarChart } from '@ojiepermana/material/c
 
 import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
+import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
 
 @Component({
   selector: 'demo-radar-chart-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ChartContainer, ChartDemoCardComponent, ChartLegend, PageShellComponent, RadarChart],
+  imports: [ChartContainer, ChartDemoCardComponent, ChartLegend, ChartPageBadgesComponent, PageShellComponent, RadarChart],
   template: `
     <demo-page-shell
       title="Radar Charts"
       description="Radar charts covering the shadcn-style variants: dots, lines-only views, polygon and circle grids, hidden axes, and filled backdrops.">
-      <div demo-page-actions class="flex flex-wrap gap-2">
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          10 variants
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Circle + polygon grids
-        </span>
-        <span
-          class="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Filled + lines-only
-        </span>
-      </div>
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -172,4 +160,5 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
 export class RadarChartPageComponent {
   protected readonly visitorConfig = VISITOR_CONFIG;
   protected readonly radarMonthData = RADAR_MONTH_DATA;
+  protected readonly pageBadges = ['10 variants', 'Circle + polygon grids', 'Filled + lines-only'] as const;
 }
