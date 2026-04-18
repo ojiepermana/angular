@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { NavigationService } from '@ojiepermana/angular/navigation';
 
 import { appConfig, layoutConfig, themeConfig } from './app.config';
@@ -60,5 +61,20 @@ describe('App', () => {
     fixture.detectChanges();
 
     expect(localStorage.getItem('layout-mode')).toBe(layoutConfig.mode);
+  });
+
+  it('should resolve the dashboard route under the pages shell', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const router = TestBed.inject(Router);
+    const navigated = await router.navigateByUrl('/dashboard');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(navigated).toBe(true);
+    expect(router.url).toBe('/dashboard');
+    expect(fixture.nativeElement.textContent).toContain('Dashboard content');
+    expect(fixture.nativeElement.textContent).toContain('Footer');
   });
 });

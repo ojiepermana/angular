@@ -54,106 +54,117 @@ interface ActiveOverlay {
     '[attr.data-appearance]': 'appearance()',
   },
   template: `
-    <div class="flex h-14 w-full items-center gap-1 px-3">
-      @if (showHamburger()) {
-        <button
-          type="button"
-          class="mr-1 inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
-          [attr.aria-label]="hamburgerLabel()"
-          [attr.aria-expanded]="nav.mobileOpen()"
-          (click)="nav.toggleMobile()">
-          <ui-nav-icon name="menu" [size]="18" />
-        </button>
-      }
-      <ng-content select="[ui-topbar-start]" />
-      <ul class="flex flex-1 items-center gap-1" role="menubar" (keydown)="onMenubarKeydown($event)">
-        @for (item of resolvedItems(); track item.id) {
-          <li role="none" class="relative">
-            @switch (item.type) {
-              @case ('basic') {
-                @let basic = asBasic(item);
-                <a
-                  role="menuitem"
-                  class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary"
-                  [routerLink]="basic.link"
-                  routerLinkActive
-                  #rla="routerLinkActive"
-                  [class.text-primary]="rla.isActive"
-                  [attr.aria-current]="rla.isActive ? 'page' : null"
-                  [target]="basic.target ?? undefined">
-                  @if (basic.icon) {
-                    <ui-nav-icon [name]="basic.icon" [size]="18" />
-                  }
-                  <span>{{ basic.title }}</span>
-                </a>
-              }
-              @case ('collapsable') {
-                @let col = asCollapsable(item);
-                <button
-                  #trigger
-                  type="button"
-                  role="menuitem"
-                  class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  [class.text-primary]="isItemActive(col.id)"
-                  [attr.aria-expanded]="openId() === col.id"
-                  [attr.aria-haspopup]="'menu'"
-                  (click)="toggleDropdown(trigger, item)"
-                  (mouseenter)="openDropdown(trigger, item)">
-                  @if (col.icon) {
-                    <ui-nav-icon [name]="col.icon" [size]="18" />
-                  }
-                  <span>{{ col.title }}</span>
-                  <ui-nav-icon name="expand_more" [size]="18" />
-                </button>
-              }
-              @case ('group') {
-                @let group = asGroup(item);
-                <button
-                  #trigger
-                  type="button"
-                  role="menuitem"
-                  class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  [class.text-primary]="isItemActive(group.id)"
-                  [attr.aria-expanded]="openId() === group.id"
-                  [attr.aria-haspopup]="'menu'"
-                  (click)="toggleDropdown(trigger, item)"
-                  (mouseenter)="openDropdown(trigger, item)">
-                  @if (group.icon) {
-                    <ui-nav-icon [name]="group.icon" [size]="18" />
-                  }
-                  <span>{{ group.title }}</span>
-                  <ui-nav-icon name="expand_more" [size]="18" />
-                </button>
-              }
-              @case ('mega') {
-                @let mega = asMega(item);
-                <button
-                  #trigger
-                  type="button"
-                  role="menuitem"
-                  class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  [class.text-primary]="isItemActive(mega.id)"
-                  [attr.aria-expanded]="openId() === mega.id"
-                  [attr.aria-haspopup]="'menu'"
-                  (click)="toggleMega(trigger, item)"
-                  (mouseenter)="openMega(trigger, item)">
-                  @if (mega.icon) {
-                    <ui-nav-icon [name]="mega.icon" [size]="18" />
-                  }
-                  <span>{{ mega.title }}</span>
-                  <ui-nav-icon name="expand_more" [size]="18" />
-                </button>
-              }
-              @default {
-                <span class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {{ item.title }}
-                </span>
-              }
-            }
-          </li>
+    <div class="flex h-14 w-full items-center gap-3 px-3">
+      <div data-ui-topbar-slot="start" class="flex shrink-0 items-center gap-2">
+        @if (showHamburger()) {
+          <button
+            type="button"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+            [attr.aria-label]="hamburgerLabel()"
+            [attr.aria-expanded]="nav.mobileOpen()"
+            (click)="nav.toggleMobile()">
+            <ui-nav-icon name="menu" [size]="18" />
+          </button>
         }
-      </ul>
-      <ng-content select="[ui-topbar-end]" />
+        <ng-content select="[ui-topbar-start]" />
+      </div>
+
+      <div data-ui-topbar-slot="nav" class="flex min-w-0 flex-1 items-center justify-center">
+        <ul
+          class="flex min-w-0 flex-1 items-center justify-center gap-1"
+          role="menubar"
+          (keydown)="onMenubarKeydown($event)">
+          @for (item of resolvedItems(); track item.id) {
+            <li role="none" class="relative">
+              @switch (item.type) {
+                @case ('basic') {
+                  @let basic = asBasic(item);
+                  <a
+                    role="menuitem"
+                    class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary"
+                    [routerLink]="basic.link"
+                    routerLinkActive
+                    #rla="routerLinkActive"
+                    [class.text-primary]="rla.isActive"
+                    [attr.aria-current]="rla.isActive ? 'page' : null"
+                    [target]="basic.target ?? undefined">
+                    @if (basic.icon) {
+                      <ui-nav-icon [name]="basic.icon" [size]="18" />
+                    }
+                    <span>{{ basic.title }}</span>
+                  </a>
+                }
+                @case ('collapsable') {
+                  @let col = asCollapsable(item);
+                  <button
+                    #trigger
+                    type="button"
+                    role="menuitem"
+                    class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    [class.text-primary]="isItemActive(col.id)"
+                    [attr.aria-expanded]="openId() === col.id"
+                    [attr.aria-haspopup]="'menu'"
+                    (click)="toggleDropdown(trigger, item)"
+                    (mouseenter)="openDropdown(trigger, item)">
+                    @if (col.icon) {
+                      <ui-nav-icon [name]="col.icon" [size]="18" />
+                    }
+                    <span>{{ col.title }}</span>
+                    <ui-nav-icon name="expand_more" [size]="18" />
+                  </button>
+                }
+                @case ('group') {
+                  @let group = asGroup(item);
+                  <button
+                    #trigger
+                    type="button"
+                    role="menuitem"
+                    class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    [class.text-primary]="isItemActive(group.id)"
+                    [attr.aria-expanded]="openId() === group.id"
+                    [attr.aria-haspopup]="'menu'"
+                    (click)="toggleDropdown(trigger, item)"
+                    (mouseenter)="openDropdown(trigger, item)">
+                    @if (group.icon) {
+                      <ui-nav-icon [name]="group.icon" [size]="18" />
+                    }
+                    <span>{{ group.title }}</span>
+                    <ui-nav-icon name="expand_more" [size]="18" />
+                  </button>
+                }
+                @case ('mega') {
+                  @let mega = asMega(item);
+                  <button
+                    #trigger
+                    type="button"
+                    role="menuitem"
+                    class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    [class.text-primary]="isItemActive(mega.id)"
+                    [attr.aria-expanded]="openId() === mega.id"
+                    [attr.aria-haspopup]="'menu'"
+                    (click)="toggleMega(trigger, item)"
+                    (mouseenter)="openMega(trigger, item)">
+                    @if (mega.icon) {
+                      <ui-nav-icon [name]="mega.icon" [size]="18" />
+                    }
+                    <span>{{ mega.title }}</span>
+                    <ui-nav-icon name="expand_more" [size]="18" />
+                  </button>
+                }
+                @default {
+                  <span class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    {{ item.title }}
+                  </span>
+                }
+              }
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div data-ui-topbar-slot="end" class="flex shrink-0 items-center justify-end gap-2">
+        <ng-content select="[ui-topbar-end]" />
+      </div>
     </div>
 
     <!-- Dropdown template -->

@@ -40,7 +40,12 @@ const items: NavigationItem[] = [
 
 @Component({
   imports: [TopbarComponent],
-  template: `<ui-topbar [items]="items" [appearance]="appearance" />`,
+  template: `
+    <ui-topbar [items]="items" [appearance]="appearance">
+      <a ui-topbar-start href="/brand">Brand</a>
+      <button ui-topbar-end type="button">Profile</button>
+    </ui-topbar>
+  `,
 })
 class Host {
   items = items;
@@ -64,6 +69,15 @@ describe('TopbarComponent', () => {
     expect(menubar).toBeTruthy();
     const items = el.querySelectorAll('[role="menuitem"]');
     expect(items.length).toBe(4);
+  });
+
+  it('renders brand and profile in dedicated topbar slots', () => {
+    const fixture = setup();
+    const el: HTMLElement = fixture.nativeElement;
+
+    expect(el.querySelector('[data-ui-topbar-slot="start"]')?.textContent).toContain('Brand');
+    expect(el.querySelector('[data-ui-topbar-slot="nav"] [role="menubar"]')).toBeTruthy();
+    expect(el.querySelector('[data-ui-topbar-slot="end"]')?.textContent).toContain('Profile');
   });
 
   it('opens dropdown overlay on collapsable click', async () => {

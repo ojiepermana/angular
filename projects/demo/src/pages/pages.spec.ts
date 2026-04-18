@@ -51,5 +51,7 @@ describe('Pages', () => {
 
     expect(horizontalFixture.nativeElement.querySelector('horizontal')).not.toBeNull();
     expect(horizontalFixture.nativeElement.querySelector('vertical')).toBeNull();
+    expect(horizontalFixture.nativeElement.textContent).toContain('Ojiepermana UI');
+    expect(horizontalFixture.nativeElement.textContent).toContain('Ojie Permana');
   });
 });
