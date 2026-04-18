@@ -3,26 +3,21 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { MATERIAL_LAYOUT_CONFIG } from '../core/layout.tokens';
-import { HorizontalLayoutComponent } from './horizontal.component';
+import { VerticalLayoutComponent } from './vertical.component';
 
 @Component({
-  imports: [HorizontalLayoutComponent],
-  template: `
-    <horizontal>
-      <a ui-layout-brand href="/">Brand</a>
-      <button ui-layout-profile type="button">Profile</button>
-    </horizontal>
-  `,
+  imports: [VerticalLayoutComponent],
+  template: `<vertical />`,
 })
 class HostComponent {}
 
-describe('HorizontalLayoutComponent', () => {
+describe('VerticalLayoutComponent', () => {
   beforeEach(() => {
     localStorage.removeItem('layout-mode');
     localStorage.removeItem('layout-width');
   });
 
-  it('projects brand and profile content into the topbar', () => {
+  it('constrains the main area when layout width is fixed', () => {
     TestBed.configureTestingModule({
       providers: [provideRouter([])],
     });
@@ -31,12 +26,9 @@ describe('HorizontalLayoutComponent', () => {
     fixture.detectChanges();
 
     const root = fixture.nativeElement as HTMLElement;
+    const host = root.querySelector('vertical');
+    const main = root.querySelector('main');
 
-    expect(root.querySelector('[data-ui-topbar-slot="start"]')?.textContent).toContain('Brand');
-    expect(root.querySelector('[data-ui-topbar-slot="nav"] [role="menubar"]')).toBeTruthy();
-    expect(root.querySelector('[data-ui-topbar-slot="end"]')?.textContent).toContain('Profile');
-
-    const host = root.querySelector('horizontal');
     expect(host?.getAttribute('data-layout-width')).toBe('fixed');
     expect(host?.classList.contains('h-dvh')).toBe(true);
     expect(host?.classList.contains('w-full')).toBe(true);
@@ -49,22 +41,19 @@ describe('HorizontalLayoutComponent', () => {
     expect(host?.classList.contains('mx-auto')).toBe(false);
     expect(host?.classList.contains('md:mx-auto')).toBe(false);
     expect(host?.classList.contains('lg:mx-auto')).toBe(true);
-    expect(host?.classList.contains('my-4')).toBe(false);
     expect(host?.classList.contains('md:my-6')).toBe(false);
     expect(host?.classList.contains('lg:my-8')).toBe(true);
-    expect(host?.classList.contains('max-w-7xl')).toBe(false);
-    expect(host?.classList.contains('md:max-w-7xl')).toBe(false);
-    expect(host?.classList.contains('lg:max-w-7xl')).toBe(true);
-    expect(host?.classList.contains('h-[calc(100dvh-2rem)]')).toBe(false);
-    expect(host?.classList.contains('md:h-[calc(100dvh-3rem)]')).toBe(false);
-    expect(host?.classList.contains('lg:h-[calc(100dvh-4rem)]')).toBe(true);
-    expect(host?.classList.contains('w-[calc(100%-2rem)]')).toBe(false);
     expect(host?.classList.contains('md:w-[calc(100%-3rem)]')).toBe(false);
     expect(host?.classList.contains('lg:w-[calc(100%-4rem)]')).toBe(true);
-    expect(host?.classList.contains('px-4')).toBe(false);
+    expect(main?.classList.contains('mx-auto')).toBe(false);
+    expect(main?.classList.contains('md:mx-auto')).toBe(false);
+    expect(main?.classList.contains('lg:mx-auto')).toBe(true);
+    expect(main?.classList.contains('max-w-7xl')).toBe(false);
+    expect(main?.classList.contains('md:max-w-7xl')).toBe(false);
+    expect(main?.classList.contains('lg:max-w-7xl')).toBe(true);
   });
 
-  it('keeps the horizontal shell full width when configured', () => {
+  it('keeps the main area fluid when configured for full width', () => {
     TestBed.configureTestingModule({
       providers: [provideRouter([]), { provide: MATERIAL_LAYOUT_CONFIG, useValue: { width: 'full' } }],
     });
@@ -72,7 +61,9 @@ describe('HorizontalLayoutComponent', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
 
-    const host = (fixture.nativeElement as HTMLElement).querySelector('horizontal');
+    const root = fixture.nativeElement as HTMLElement;
+    const host = root.querySelector('vertical');
+    const main = root.querySelector('main');
 
     expect(host?.getAttribute('data-layout-width')).toBe('full');
     expect(host?.classList.contains('border')).toBe(false);
@@ -81,16 +72,14 @@ describe('HorizontalLayoutComponent', () => {
     expect(host?.classList.contains('md:border-border')).toBe(false);
     expect(host?.classList.contains('lg:border')).toBe(false);
     expect(host?.classList.contains('lg:border-border')).toBe(false);
-    expect(host?.classList.contains('h-dvh')).toBe(true);
-    expect(host?.classList.contains('w-full')).toBe(true);
-    expect(host?.classList.contains('my-4')).toBe(false);
-    expect(host?.classList.contains('md:my-6')).toBe(false);
     expect(host?.classList.contains('mx-auto')).toBe(false);
     expect(host?.classList.contains('md:mx-auto')).toBe(false);
     expect(host?.classList.contains('lg:mx-auto')).toBe(false);
-    expect(host?.classList.contains('max-w-7xl')).toBe(false);
-    expect(host?.classList.contains('md:max-w-7xl')).toBe(false);
-    expect(host?.classList.contains('lg:max-w-7xl')).toBe(false);
-    expect(host?.classList.contains('px-4')).toBe(false);
+    expect(main?.classList.contains('mx-auto')).toBe(false);
+    expect(main?.classList.contains('md:mx-auto')).toBe(false);
+    expect(main?.classList.contains('lg:mx-auto')).toBe(false);
+    expect(main?.classList.contains('max-w-7xl')).toBe(false);
+    expect(main?.classList.contains('md:max-w-7xl')).toBe(false);
+    expect(main?.classList.contains('lg:max-w-7xl')).toBe(false);
   });
 });

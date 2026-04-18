@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TopbarComponent, type TopbarAppearance } from '@ojiepermana/angular/navigation';
+import { LayoutService } from '../core/layout.service';
 
 /**
  * Horizontal layout — topbar (h-12) + main (scrollable).
@@ -21,7 +22,8 @@ import { TopbarComponent, type TopbarAppearance } from '@ojiepermana/angular/nav
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, TopbarComponent],
   host: {
-    class: 'flex h-dvh w-full flex-col overflow-hidden bg-background text-foreground',
+    '[class]': 'hostClasses()',
+    '[attr.data-layout-width]': 'layoutWidth()',
   },
   template: `
     <ui-topbar
@@ -41,6 +43,26 @@ import { TopbarComponent, type TopbarAppearance } from '@ojiepermana/angular/nav
   `,
 })
 export class HorizontalLayoutComponent {
+  private readonly layout = inject(LayoutService);
+
   readonly topbarAppearance = input<TopbarAppearance>('default');
   readonly ariaLabel = input<string>('Primary');
+
+  protected readonly layoutWidth = this.layout.width;
+
+  protected readonly hostClasses = computed(() => {
+    const classes = ['flex', 'h-dvh', 'w-full', 'flex-col', 'overflow-hidden', 'bg-background', 'text-foreground'];
+    if (this.layoutWidth() === 'fixed') {
+      classes.push(
+        'lg:mx-auto',
+        'lg:my-8',
+        'lg:max-w-7xl',
+        'lg:h-[calc(100dvh-4rem)]',
+        'lg:w-[calc(100%-4rem)]',
+        'lg:border',
+        'lg:border-border',
+      );
+    }
+    return classes.join(' ');
+  });
 }

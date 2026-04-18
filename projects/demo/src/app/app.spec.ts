@@ -61,6 +61,7 @@ describe('App', () => {
     fixture.detectChanges();
 
     expect(localStorage.getItem('layout-mode')).toBe(layoutConfig.mode);
+    expect(localStorage.getItem('layout-width')).toBe('fixed');
   });
 
   it('should resolve the dashboard route under the pages shell', async () => {
