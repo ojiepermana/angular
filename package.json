@@ -6,6 +6,7 @@
     "build": "ng build angular",
     "watch": "ng build angular --watch --configuration development",
     "test": "ng test angular",
+    "test:theme": "ng run angular:test-theme --watch=false",
     "format": "prettier --write \"**/*.{ts,js,json,html,css,scss,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,json,html,css,scss,md}\""
   },

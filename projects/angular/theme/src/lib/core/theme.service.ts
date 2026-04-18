@@ -115,16 +115,13 @@ export class ThemeService {
 
   private resolveConfig(): ResolvedMaterialThemeConfig {
     const config = inject(MATERIAL_THEME_CONFIG, { optional: true }) ?? {};
+    const configuredMode = config.mode ?? config.defaultMode ?? config.defaultScheme;
+    const configuredColor = config.color ?? config.defaultColor ?? config.defaultTheme;
+    const configuredStyle = config.style ?? config.defaultStyle;
 
-    const defaultMode = isColorScheme(config.defaultMode ?? config.defaultScheme)
-      ? (config.defaultMode ?? config.defaultScheme)!
-      : DEFAULT_MATERIAL_THEME_CONFIG.defaultMode;
-    const defaultColor = isThemeColor(config.defaultColor ?? config.defaultTheme)
-      ? ((config.defaultColor ?? config.defaultTheme) as ThemeColor)
-      : DEFAULT_MATERIAL_THEME_CONFIG.defaultColor;
-    const defaultStyle = isThemeStyle(config.defaultStyle)
-      ? config.defaultStyle
-      : DEFAULT_MATERIAL_THEME_CONFIG.defaultStyle;
+    const defaultMode = isColorScheme(configuredMode) ? configuredMode : DEFAULT_MATERIAL_THEME_CONFIG.defaultMode;
+    const defaultColor = isThemeColor(configuredColor) ? configuredColor : DEFAULT_MATERIAL_THEME_CONFIG.defaultColor;
+    const defaultStyle = isThemeStyle(configuredStyle) ? configuredStyle : DEFAULT_MATERIAL_THEME_CONFIG.defaultStyle;
 
     return {
       defaultMode,

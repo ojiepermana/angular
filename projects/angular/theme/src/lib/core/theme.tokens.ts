@@ -24,10 +24,16 @@ export interface ThemeConfig {
 
 export interface MaterialThemeConfig {
   /** Initial mode preference. Supports `system` for first-visit OS detection. */
-  readonly defaultMode?: ColorScheme;
+  readonly mode?: ColorScheme;
   /** Initial brand color layer. */
-  readonly defaultColor?: ThemeColor;
+  readonly color?: ThemeColor;
   /** Initial style personality layer. */
+  readonly style?: ThemeStyle;
+  /** @deprecated Use `mode` instead. */
+  readonly defaultMode?: ColorScheme;
+  /** @deprecated Use `color` instead. */
+  readonly defaultColor?: ThemeColor;
+  /** @deprecated Use `style` instead. */
   readonly defaultStyle?: ThemeStyle;
   /** @deprecated Use `defaultMode` instead. */
   readonly defaultScheme?: ColorScheme;

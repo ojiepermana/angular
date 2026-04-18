@@ -3,19 +3,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
     "outDir": "../../out-tsc/spec",
+    "rootDir": "../..",
     "types": ["vitest/globals"]
   },
-  "include": [
-    "component/src/**/*.d.ts",
-    "component/src/**/*.spec.ts",
-    "theme/src/**/*.d.ts",
-    "theme/src/**/*.spec.ts",
-    "layout/src/**/*.d.ts",
-    "layout/src/**/*.spec.ts",
-    "navigation/src/**/*.d.ts",
-    "navigation/src/**/*.spec.ts",
-    "chart/src/**/*.d.ts",
-    "chart/src/**/*.spec.ts"
-  ]
+  "include": ["src/**/*.d.ts", "src/**/*.spec.ts"]
 }

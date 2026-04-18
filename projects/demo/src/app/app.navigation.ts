@@ -1,6 +1,6 @@
 import { NavigationItem } from '@ojiepermana/angular/navigation';
 
-export const DemoNavigationData: NavigationItem[] = [
+export const AppNavigation: NavigationItem[] = [
   {
     id: 'shadn-ui',
     title: 'Shadn UI',

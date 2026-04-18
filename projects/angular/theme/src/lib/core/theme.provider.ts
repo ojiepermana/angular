@@ -18,6 +18,7 @@ export interface MaterialThemeFeature {
  * By default only wires up the theme config token and `ThemeService`. Opt in
  * to Angular Material defaults (ripple / form-field) via
  * {@link withMaterialDefaults}.
+ * Supports shorthand `mode`, `color`, and `style` config keys.
  *
  * @example
  * export const appConfig: ApplicationConfig = {
@@ -25,12 +26,9 @@ export interface MaterialThemeFeature {
  *     provideAnimations(),
  *     provideMaterialTheme(
  *       {
- *         defaultMode: 'system',
- *         defaultColor: 'blue',
- *         defaultStyle: 'soft',
- *         modeStorageKey: 'theme-mode',
- *         colorStorageKey: 'theme-color',
- *         styleStorageKey: 'theme-style',
+ *         mode: 'system',
+ *         color: 'blue',
+ *         style: 'soft',
  *       },
  *       withMaterialDefaults(),
  *     ),

@@ -29,9 +29,9 @@ describe('ThemeService', () => {
         {
           provide: MATERIAL_THEME_CONFIG,
           useValue: {
-            defaultMode: 'light',
-            defaultColor: 'blue',
-            defaultStyle: 'default',
+            mode: 'light',
+            color: 'blue',
+            style: 'default',
             modeStorageKey: MODE_KEY,
             colorStorageKey: COLOR_KEY,
             styleStorageKey: STYLE_KEY,
@@ -105,5 +105,26 @@ describe('ThemeService', () => {
 
     expect(service.scheme()).toBe('system');
     expect(service.color()).toBe('green');
+  });
+
+  it('keeps legacy default config keys working for compatibility', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: MATERIAL_THEME_CONFIG,
+          useValue: {
+            defaultMode: 'dark',
+            defaultColor: 'green',
+            defaultStyle: 'soft',
+          },
+        },
+      ],
+    });
+
+    const service = TestBed.inject(ThemeService);
+
+    expect(service.scheme()).toBe('dark');
+    expect(service.color()).toBe('green');
+    expect(service.style()).toBe('soft');
   });
 });

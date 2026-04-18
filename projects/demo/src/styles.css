@@ -1,0 +1,22 @@
+/* @ojiepermana/angular theme tokens (mode, color, style, material bridge). */
+@import '../../angular/theme/src/lib/styles/index.css';
+
+/* Tailwind v4 runtime. */
+@import 'tailwindcss';
+
+/* Tailwind ↔ theme token mapping (bg-background, text-foreground, rounded-md, …). */
+@import '../../angular/theme/src/lib/styles/themes/taildwind.css';
+
+/* Base reset. */
+html,
+body {
+  @apply h-full antialiased;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
