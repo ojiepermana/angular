@@ -2,18 +2,26 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
 
+## Package manager
+
+Install dependencies from the workspace root with Bun:
+
+```bash
+bun install
+```
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
 ```bash
-ng generate component component-name
+bun run ng generate component component-name
 ```
 
 For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
 ```bash
-ng generate --help
+bun run ng --help
 ```
 
 ## Building
@@ -21,7 +29,7 @@ ng generate --help
 To build the library, run:
 
 ```bash
-ng build angular
+bun run build -- angular
 ```
 
 This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
@@ -36,9 +44,10 @@ Once the project is built, you can publish your library by following these steps
    cd dist/angular
    ```
 
-2. Run the `npm publish` command to publish your library to the npm registry:
+2. Run the `bun publish` command to publish your library to the npm registry:
+
    ```bash
-   npm publish
+   bun publish
    ```
 
 ## Running unit tests
@@ -46,7 +55,7 @@ Once the project is built, you can publish your library by following these steps
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
 ```bash
-ng test
+bun run test
 ```
 
 ## Running end-to-end tests
@@ -54,7 +63,7 @@ ng test
 For end-to-end (e2e) testing, run:
 
 ```bash
-ng e2e
+bun run ng e2e
 ```
 
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
