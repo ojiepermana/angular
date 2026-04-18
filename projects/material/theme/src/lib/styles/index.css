@@ -11,7 +11,7 @@
  * semantic tokens, and an Angular Material bridge so `mat-*` components
  * inherit the active theme automatically.
  */
-@import './_layers.css';
+@import './themes/_layers.css';
 
 /* Layer 1: mode variants. */
 @import './themes/mode/index.css';
@@ -23,10 +23,10 @@
 @import './themes/style/index.css';
 
 /* Shared semantic and library tokens. */
-@import './_tokens.css';
+@import './themes/_tokens.css';
 
 /* Angular Material M3 bridge. */
-@import './_material-overrides.css';
+@import './themes/_material-overrides.css';
 
 /* Global component-facing styles. */
-@import './_components.css';
+@import './themes/_components.css';
