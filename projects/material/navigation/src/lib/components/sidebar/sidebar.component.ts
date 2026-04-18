@@ -20,11 +20,7 @@ import { FocusTrap, FocusTrapFactory } from '@angular/cdk/a11y';
 import { filter, map } from 'rxjs/operators';
 import { UiNavItemComponent } from '../shared/nav-item.component';
 import { NavigationService } from '../../core/services/navigation.service';
-import type {
-  NavigationItem,
-  SidebarAppearance,
-  SidebarPosition,
-} from '../../core/types/navigation.type';
+import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../core/types/navigation.type';
 
 /**
  * Vertical navigation (sidebar) — shadcn-styled.
@@ -65,7 +61,7 @@ import type {
           <ng-content select="[ui-sidebar-header]" />
         </div>
       }
-      <nav class="flex-1 overflow-y-auto overflow-x-hidden p-2">
+      <nav class="flex-1 overflow-y-auto overflow-x-hidden">
         @for (item of items(); track item.id) {
           <ui-nav-item [item]="item" [compact]="isCompact()" />
         }
@@ -81,8 +77,7 @@ import type {
         aria-modal="true"
         [attr.aria-label]="ariaLabel()"
         class="flex h-full w-72 max-w-[85vw] flex-col bg-background text-foreground shadow-xl"
-        [ngClass]="position() === 'right' ? 'border-l border-border' : 'border-r border-border'"
-      >
+        [ngClass]="position() === 'right' ? 'border-l border-border' : 'border-r border-border'">
         <ng-container [ngTemplateOutlet]="body" />
       </div>
     </ng-template>
@@ -116,17 +111,14 @@ export class SidebarComponent {
   private previouslyFocused: HTMLElement | null = null;
 
   /** True saat viewport `< md` (767.98px). */
-  protected readonly isMobileMedia = toSignal(
-    this.bp.observe('(max-width: 767.98px)').pipe(map((s) => s.matches)),
-    { initialValue: false },
-  );
+  protected readonly isMobileMedia = toSignal(this.bp.observe('(max-width: 767.98px)').pipe(map((s) => s.matches)), {
+    initialValue: false,
+  });
 
   protected readonly isMobile = computed(() => this.autoMobile() && this.isMobileMedia());
 
   protected readonly isExpanded = computed(() => this.appearance() === 'default' || this.hovered());
-  protected readonly isCompact = computed(
-    () => !this.isMobile() && this.appearance() === 'thin' && !this.hovered(),
-  );
+  protected readonly isCompact = computed(() => !this.isMobile() && this.appearance() === 'thin' && !this.hovered());
 
   constructor() {
     // Auto-register items ke service untuk active trail.
@@ -146,10 +138,7 @@ export class SidebarComponent {
   }
 
   protected readonly hostClasses = computed(() => {
-    const base = [
-      'relative flex shrink-0 bg-background text-foreground',
-      'transition-[width] duration-200 ease-out',
-    ];
+    const base = ['relative flex shrink-0 bg-background text-foreground', 'transition-[width] duration-200 ease-out'];
     const appearance = this.appearance();
     if (appearance === 'thin') base.push('w-16');
     else base.push('[width:17.5rem]');
@@ -165,9 +154,7 @@ export class SidebarComponent {
     if (overlayActive) {
       base.push(
         'absolute inset-y-0 z-30 bg-background shadow-xl [width:17.5rem]',
-        this.position() === 'right'
-          ? 'right-0 border-l border-border'
-          : 'left-0 border-r border-border',
+        this.position() === 'right' ? 'right-0 border-l border-border' : 'left-0 border-r border-border',
       );
     } else {
       base.push('w-full');

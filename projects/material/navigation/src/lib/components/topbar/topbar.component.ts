@@ -62,7 +62,7 @@ interface ActiveOverlay {
           [attr.aria-label]="hamburgerLabel()"
           [attr.aria-expanded]="nav.mobileOpen()"
           (click)="nav.toggleMobile()">
-          <ui-nav-icon name="menu" class="text-xl" />
+          <ui-nav-icon name="menu" [size]="18" />
         </button>
       }
       <ng-content select="[ui-topbar-start]" />
@@ -74,14 +74,15 @@ interface ActiveOverlay {
                 @let basic = asBasic(item);
                 <a
                   role="menuitem"
-                  class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground"
+                  class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary"
                   [routerLink]="basic.link"
                   routerLinkActive
                   #rla="routerLinkActive"
+                  [class.text-primary]="rla.isActive"
                   [attr.aria-current]="rla.isActive ? 'page' : null"
                   [target]="basic.target ?? undefined">
                   @if (basic.icon) {
-                    <ui-nav-icon [name]="basic.icon" class="text-lg" />
+                    <ui-nav-icon [name]="basic.icon" [size]="18" />
                   }
                   <span>{{ basic.title }}</span>
                 </a>
@@ -93,15 +94,16 @@ interface ActiveOverlay {
                   type="button"
                   role="menuitem"
                   class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  [class.text-primary]="isItemActive(col.id)"
                   [attr.aria-expanded]="openId() === col.id"
                   [attr.aria-haspopup]="'menu'"
                   (click)="toggleDropdown(trigger, item)"
                   (mouseenter)="openDropdown(trigger, item)">
                   @if (col.icon) {
-                    <ui-nav-icon [name]="col.icon" class="text-lg" />
+                    <ui-nav-icon [name]="col.icon" [size]="18" />
                   }
                   <span>{{ col.title }}</span>
-                  <ui-nav-icon name="expand_more" class="text-base" />
+                  <ui-nav-icon name="expand_more" [size]="18" />
                 </button>
               }
               @case ('group') {
@@ -111,15 +113,16 @@ interface ActiveOverlay {
                   type="button"
                   role="menuitem"
                   class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  [class.text-primary]="isItemActive(group.id)"
                   [attr.aria-expanded]="openId() === group.id"
                   [attr.aria-haspopup]="'menu'"
                   (click)="toggleDropdown(trigger, item)"
                   (mouseenter)="openDropdown(trigger, item)">
                   @if (group.icon) {
-                    <ui-nav-icon [name]="group.icon" class="text-lg" />
+                    <ui-nav-icon [name]="group.icon" [size]="18" />
                   }
                   <span>{{ group.title }}</span>
-                  <ui-nav-icon name="expand_more" class="text-base" />
+                  <ui-nav-icon name="expand_more" [size]="18" />
                 </button>
               }
               @case ('mega') {
@@ -129,15 +132,16 @@ interface ActiveOverlay {
                   type="button"
                   role="menuitem"
                   class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  [class.text-primary]="isItemActive(mega.id)"
                   [attr.aria-expanded]="openId() === mega.id"
                   [attr.aria-haspopup]="'menu'"
                   (click)="toggleMega(trigger, item)"
                   (mouseenter)="openMega(trigger, item)">
                   @if (mega.icon) {
-                    <ui-nav-icon [name]="mega.icon" class="text-lg" />
+                    <ui-nav-icon [name]="mega.icon" [size]="18" />
                   }
                   <span>{{ mega.title }}</span>
-                  <ui-nav-icon name="expand_more" class="text-base" />
+                  <ui-nav-icon name="expand_more" [size]="18" />
                 </button>
               }
               @default {
@@ -236,6 +240,10 @@ export class TopbarComponent {
   }
   protected asMega(i: NavigationItem): NavigationMegaItem {
     return i as NavigationMegaItem;
+  }
+
+  protected isItemActive(id: string | undefined): boolean {
+    return this.nav.isActive(id);
   }
 
   protected megaColsClass(columns?: number): string {

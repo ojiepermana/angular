@@ -15,6 +15,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
+    '[style.font-size.px]': 'size()',
     'aria-hidden': 'true',
     translate: 'no',
   },
@@ -26,8 +27,7 @@ export class UiNavIconComponent {
   readonly size = input<number | null>(null);
 
   protected readonly classes = computed(() => {
-    const base =
-      'material-symbols-outlined inline-flex items-center justify-center leading-none select-none';
+    const base = 'material-symbols-outlined inline-flex items-center justify-center leading-none select-none';
     const extra = this.class();
     return extra ? `${base} ${extra}` : base;
   });

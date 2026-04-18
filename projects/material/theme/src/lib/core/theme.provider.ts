@@ -24,7 +24,12 @@ export interface MaterialThemeFeature {
  *   providers: [
  *     provideAnimations(),
  *     provideMaterialTheme(
- *       { defaultTheme: 'zinc', defaultScheme: 'system' },
+ *       {
+ *         defaultTheme: 'zinc',
+ *         defaultScheme: 'dark',
+ *         schemeStorageKey: 'theme-scheme',
+ *         themeStorageKey: 'theme-palette',
+ *       },
  *       withMaterialDefaults(),
  *     ),
  *   ],

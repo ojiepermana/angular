@@ -1,59 +1,47 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { LayoutService } from '@ojiepermana/material/layout';
 import { ButtonComponent } from '@ojiepermana/material/shadcn';
 
 /**
- * Demo-only toolbar — switch between `/v` (Vertical) and `/h` (Horizontal)
- * shell while preserving the rest of the URL.
+ * Demo-only toolbar — switch between vertical and horizontal shells while
+ * preserving the current canonical URL.
  */
 @Component({
   selector: 'demo-layout-switcher',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, ButtonComponent],
+  imports: [ButtonComponent],
   host: { class: 'inline-flex items-center gap-1' },
   template: `
-    <a
+    <button
       ui-button
       variant="ghost"
       size="sm"
-      [routerLink]="verticalHref()"
+      type="button"
       [attr.aria-pressed]="isVertical()"
       [class.bg-accent]="isVertical()"
-      [class.text-accent-foreground]="isVertical()">
+      [class.text-primary]="isVertical()"
+      (click)="setMode('vertical')">
       Vertical
-    </a>
-    <a
+    </button>
+    <button
       ui-button
       variant="ghost"
       size="sm"
-      [routerLink]="horizontalHref()"
+      type="button"
       [attr.aria-pressed]="!isVertical()"
       [class.bg-accent]="!isVertical()"
-      [class.text-accent-foreground]="!isVertical()">
+      [class.text-primary]="!isVertical()"
+      (click)="setMode('horizontal')">
       Horizontal
-    </a>
+    </button>
   `,
 })
 export class LayoutSwitcherComponent {
-  private readonly router = inject(Router);
+  private readonly layout = inject(LayoutService);
 
-  private readonly url = toSignal(this.router.events.pipe(), { initialValue: null });
+  protected readonly isVertical = computed(() => this.layout.mode() === 'vertical');
 
-  protected readonly isVertical = computed(() => {
-    // Recompute on every router event
-    this.url();
-    return this.router.url.startsWith('/v');
-  });
-
-  private readonly tail = computed(() => {
-    this.url();
-    const url = this.router.url;
-    if (url.startsWith('/v')) return url.slice(2) || '/';
-    if (url.startsWith('/h')) return url.slice(2) || '/';
-    return url;
-  });
-
-  protected readonly verticalHref = computed(() => '/v' + this.tail());
-  protected readonly horizontalHref = computed(() => '/h' + this.tail());
+  protected setMode(mode: 'vertical' | 'horizontal'): void {
+    this.layout.setMode(mode);
+  }
 }

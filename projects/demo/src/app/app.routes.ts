@@ -3,11 +3,10 @@ import type { Routes } from '@angular/router';
 import { HomePageComponent } from './pages/home.page';
 import { NotFoundPageComponent } from './pages/placeholders/not-found.page';
 import { GenericPlaceholderPageComponent } from './pages/placeholders/generic-placeholder.page';
-import { VerticalShellComponent } from './core/shells/vertical-shell';
-import { HorizontalShellComponent } from './core/shells/horizontal-shell';
+import { DemoShellComponent } from './core/shells/demo-shell';
 
 /**
- * Shared children for both `v` (Vertical) and `h` (Horizontal) shells.
+ * Shared children for the demo shell.
  * Placeholders cover every entry in `navigation.data.ts`; the shadcn subtree
  * is lazy-loaded from `pages/ui/shadcn/ui-shadcn.routes.ts`.
  */
@@ -35,13 +34,6 @@ const shellChildren: Routes = [
 ];
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'v', pathMatch: 'full' },
-  // Bare links in navigation default to the vertical shell.
-  { path: 'docs', redirectTo: 'v/docs' },
-  { path: 'lucide-icons', redirectTo: 'v/lucide-icons', pathMatch: 'full' },
-  { path: 'ui', redirectTo: 'v/ui' },
-  { path: 'feature', redirectTo: 'v/feature' },
-  { path: 'v', component: VerticalShellComponent, children: shellChildren },
-  { path: 'h', component: HorizontalShellComponent, children: shellChildren },
+  { path: '', component: DemoShellComponent, children: shellChildren },
   { path: '**', component: NotFoundPageComponent },
 ];

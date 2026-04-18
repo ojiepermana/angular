@@ -32,9 +32,10 @@ import type {
         <div class="flex-1"></div>
       }
       @case ('group') {
-        <div class="mt-4 py-3 first:mt-0" role="group" [attr.aria-labelledby]="headingId()">
+        <div class="p-3" role="group" [attr.aria-labelledby]="headingId()">
           @if (!compact()) {
-            <div class="px-3 pb-1">
+            <div
+              class="sticky top-0 z-10 bg-background py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <div
                 [id]="headingId()"
                 [class]="
@@ -59,7 +60,7 @@ import type {
           [class]="
             cn(
               'group/ni flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-              isTrailActive() && 'bg-accent/50',
+              isTrailActive() && 'text-primary',
               item().classes?.wrapper
             )
           "
@@ -71,7 +72,7 @@ import type {
           [matTooltipDisabled]="!compact()"
           (click)="toggleGroup()">
           @if (collapsableItem().icon) {
-            <ui-nav-icon [name]="collapsableItem().icon!" [class]="cn('text-xl', item().classes?.icon)" />
+            <ui-nav-icon [name]="collapsableItem().icon!" [size]="18" [class]="item().classes?.icon ?? ''" />
           }
           @if (!compact()) {
             <span [class]="cn('flex-1 truncate text-left', item().classes?.title)">
@@ -82,7 +83,8 @@ import type {
             }
             <ui-nav-icon
               [name]="'chevron_right'"
-              [class]="cn('text-base transition-transform duration-200', open && 'rotate-90')" />
+              [size]="18"
+              [class]="cn('transition-transform duration-200', open && 'rotate-90')" />
           }
         </button>
         @if (!compact() && open) {
@@ -97,7 +99,8 @@ import type {
         <!-- Mega direndahkan ke group saat berada di sidebar vertical. -->
         <div class="mt-4 py-3 first:mt-0" role="group">
           @if (!compact()) {
-            <div class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <div
+              class="sticky top-0 z-10 bg-background px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {{ item().title }}
             </div>
           }
@@ -112,11 +115,11 @@ import type {
         <a
           [class]="
             cn(
-              'flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary',
               item().classes?.wrapper
             )
           "
-          routerLinkActive="bg-accent text-accent-foreground"
+          routerLinkActive="text-primary"
           #rla="routerLinkActive"
           [attr.aria-current]="rla.isActive ? 'page' : null"
           [routerLink]="asideItem().link"
@@ -127,7 +130,7 @@ import type {
           matTooltipPosition="right"
           [matTooltipDisabled]="!compact()">
           @if (asideItem().icon) {
-            <ui-nav-icon [name]="asideItem().icon!" class="text-xl" />
+            <ui-nav-icon [name]="asideItem().icon!" [size]="18" />
           }
           @if (!compact()) {
             <span class="flex-1 truncate">{{ asideItem().title }}</span>
@@ -140,11 +143,11 @@ import type {
           <a
             [class]="
               cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50',
+                'flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary aria-disabled:pointer-events-none aria-disabled:opacity-50',
                 item().classes?.wrapper
               )
             "
-            routerLinkActive="bg-accent text-accent-foreground"
+            routerLinkActive="text-primary"
             #rla="routerLinkActive"
             [routerLinkActiveOptions]="
               basicItem().isActiveMatchOptions ?? (basicItem().exactMatch ? exactMatch : inexactMatch)
@@ -162,7 +165,7 @@ import type {
             [target]="basicItem().target ?? undefined"
             (click)="runAction()">
             @if (basicItem().icon) {
-              <ui-nav-icon [name]="basicItem().icon!" [class]="cn('text-xl', item().classes?.icon)" />
+              <ui-nav-icon [name]="basicItem().icon!" [size]="18" [class]="item().classes?.icon ?? ''" />
             }
             @if (!compact()) {
               <span [class]="cn('flex-1 truncate', item().classes?.title)">{{ basicItem().title }}</span>
@@ -186,7 +189,7 @@ import type {
             matTooltipPosition="right"
             [matTooltipDisabled]="!compact()">
             @if (basicItem().icon) {
-              <ui-nav-icon [name]="basicItem().icon!" class="text-xl" />
+              <ui-nav-icon [name]="basicItem().icon!" [size]="18" />
             }
             @if (!compact()) {
               <span class="flex-1 truncate">{{ basicItem().title }}</span>
@@ -207,7 +210,7 @@ import type {
             [matTooltipDisabled]="!compact()"
             (click)="runAction()">
             @if (basicItem().icon) {
-              <ui-nav-icon [name]="basicItem().icon!" class="text-xl" />
+              <ui-nav-icon [name]="basicItem().icon!" [size]="18" />
             }
             @if (!compact()) {
               <span class="flex-1 truncate">{{ basicItem().title }}</span>

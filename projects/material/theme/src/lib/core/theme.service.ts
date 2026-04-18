@@ -1,18 +1,23 @@
 import { DOCUMENT } from '@angular/common';
 import { DestroyRef, Injectable, computed, effect, inject, signal } from '@angular/core';
-import { DEFAULT_MATERIAL_THEME_CONFIG, MATERIAL_THEME_CONFIG, type ColorScheme, type ThemeName } from './theme.tokens';
+import {
+  COLOR_SCHEMES,
+  DEFAULT_MATERIAL_THEME_CONFIG,
+  MATERIAL_THEME_CONFIG,
+  THEME_NAMES,
+  type ColorScheme,
+  type ResolvedMaterialThemeConfig,
+  type ThemeName,
+} from './theme.tokens';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly config = {
-    ...DEFAULT_MATERIAL_THEME_CONFIG,
-    ...(inject(MATERIAL_THEME_CONFIG, { optional: true }) ?? {}),
-  };
+  private readonly config = this.resolveConfig();
 
   private readonly _scheme = signal<ColorScheme>(this.readPersistedScheme() ?? this.config.defaultScheme);
-  private readonly _theme = signal<ThemeName>(this.config.defaultTheme);
+  private readonly _theme = signal<ThemeName>(this.readPersistedTheme() ?? this.config.defaultTheme);
   private readonly _systemPrefersDark = signal<boolean>(this.prefersDark());
 
   readonly scheme = this._scheme.asReadonly();
@@ -31,6 +36,7 @@ export class ThemeService {
       root.dataset['theme'] = this._theme();
       root.classList.toggle('dark', this.isDark());
       this.persistScheme(this._scheme());
+      this.persistTheme(this._theme());
     });
   }
 
@@ -44,6 +50,16 @@ export class ThemeService {
 
   toggleScheme(): void {
     this._scheme.update((s) => (s === 'dark' ? 'light' : 'dark'));
+  }
+
+  private resolveConfig(): ResolvedMaterialThemeConfig {
+    const config = inject(MATERIAL_THEME_CONFIG, { optional: true }) ?? {};
+    return {
+      defaultTheme: config.defaultTheme ?? DEFAULT_MATERIAL_THEME_CONFIG.defaultTheme,
+      defaultScheme: config.defaultScheme ?? DEFAULT_MATERIAL_THEME_CONFIG.defaultScheme,
+      schemeStorageKey: config.schemeStorageKey ?? config.storageKey ?? DEFAULT_MATERIAL_THEME_CONFIG.schemeStorageKey,
+      themeStorageKey: config.themeStorageKey ?? DEFAULT_MATERIAL_THEME_CONFIG.themeStorageKey,
+    };
   }
 
   private prefersDark(): boolean {
@@ -63,21 +79,42 @@ export class ThemeService {
   }
 
   private readPersistedScheme(): ColorScheme | null {
-    const key = this.config.storageKey;
+    const key = this.config.schemeStorageKey;
     if (!key) return null;
     try {
-      const v = this.document.defaultView?.localStorage?.getItem(key);
-      return v === 'light' || v === 'dark' || v === 'system' ? v : null;
+      const value = this.document.defaultView?.localStorage?.getItem(key);
+      return COLOR_SCHEMES.some((scheme) => scheme === value) ? (value as ColorScheme) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private readPersistedTheme(): ThemeName | null {
+    const key = this.config.themeStorageKey;
+    if (!key) return null;
+    try {
+      const value = this.document.defaultView?.localStorage?.getItem(key);
+      return THEME_NAMES.some((theme) => theme === value) ? (value as ThemeName) : null;
     } catch {
       return null;
     }
   }
 
   private persistScheme(scheme: ColorScheme): void {
-    const key = this.config.storageKey;
+    const key = this.config.schemeStorageKey;
     if (!key) return;
     try {
       this.document.defaultView?.localStorage?.setItem(key, scheme);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  private persistTheme(theme: ThemeName): void {
+    const key = this.config.themeStorageKey;
+    if (!key) return;
+    try {
+      this.document.defaultView?.localStorage?.setItem(key, theme);
     } catch {
       /* ignore */
     }
