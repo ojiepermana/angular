@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LabelComponent, TextareaComponent } from '@ojiepermana/material/shadcn';
+import { LabelComponent, TextareaComponent } from '@ojiepermana/angular/component';
 
 import { PageShellComponent } from '../../../core/page-shell/page-shell';
 

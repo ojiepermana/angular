@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CheckboxComponent, LabelComponent } from '@ojiepermana/material/shadcn';
+import { CheckboxComponent, LabelComponent } from '@ojiepermana/angular/component';
 
 import { PageShellComponent } from '../../../core/page-shell/page-shell';
 

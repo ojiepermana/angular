@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ButtonComponent, TooltipDirective } from '@ojiepermana/material/shadcn';
+import { ButtonComponent, TooltipDirective } from '@ojiepermana/angular/component';
 
 import { PageShellComponent } from '../../../core/page-shell/page-shell';
 

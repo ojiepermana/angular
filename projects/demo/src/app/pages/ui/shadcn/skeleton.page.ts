@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { SkeletonComponent } from '@ojiepermana/material/shadcn';
+import { SkeletonComponent } from '@ojiepermana/angular/component';
 
 import { PageShellComponent } from '../../../core/page-shell/page-shell';
 

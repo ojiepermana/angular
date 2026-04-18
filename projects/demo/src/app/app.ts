@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavigationService } from '@ojiepermana/material/navigation';
-import { ThemeService } from '@ojiepermana/material/theme';
+import { NavigationService } from '@ojiepermana/angular/navigation';
+import { ThemeService } from '@ojiepermana/angular/theme';
 
 import { DemoNavigationData } from './navigation.data';
 

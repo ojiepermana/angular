@@ -1,0 +1,15 @@
+/**
+ * @ojiepermana/angular cascade layers.
+ *
+ * Order (low → high precedence):
+ *   reset      – normalize defaults
+ *   base       – foundational library styles
+ *   mat-mdc    – Angular Material auto-injects here
+ *   tokens     – shadcn CSS variables (must override mat-mdc)
+ *   components – component-specific overrides (overlay panelClass, etc.)
+ *   utilities  – Tailwind utility classes (always wins)
+ *
+ * Consumers MUST import this file at the very top of their global stylesheet
+ * so every rule authored later inherits the correct order.
+ */
+@layer reset, base, mat-mdc, tokens, components, utilities;

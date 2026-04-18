@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { InputComponent, LabelComponent } from '@ojiepermana/material/shadcn';
+import { InputComponent, LabelComponent } from '@ojiepermana/angular/component';
 
 import { PageShellComponent } from '../../../core/page-shell/page-shell';
 

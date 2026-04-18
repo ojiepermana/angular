@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { LayoutService } from '@ojiepermana/material/layout';
-import { ButtonComponent } from '@ojiepermana/material/shadcn';
+import { LayoutService } from '@ojiepermana/angular/layout';
+import { ButtonComponent } from '@ojiepermana/angular/component';
 
 /**
  * Demo-only toolbar — switch between vertical and horizontal shells while

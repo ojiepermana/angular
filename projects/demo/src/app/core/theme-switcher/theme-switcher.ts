@@ -7,8 +7,8 @@ import {
   type ThemeColor,
   type ThemeMode,
   type ThemeStyle,
-} from '@ojiepermana/material/theme';
-import { ButtonComponent } from '@ojiepermana/material/shadcn';
+} from '@ojiepermana/angular/theme';
+import { ButtonComponent } from '@ojiepermana/angular/component';
 
 const PANEL_ID = 'demo-theme-switcher-panel';
 

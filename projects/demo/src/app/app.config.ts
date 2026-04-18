@@ -2,8 +2,8 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { provideMaterialLayout } from '@ojiepermana/material/layout';
-import { provideMaterialTheme, withMaterialDefaults } from '@ojiepermana/material/theme';
+import { provideMaterialLayout } from '@ojiepermana/angular/layout';
+import { provideMaterialTheme, withMaterialDefaults } from '@ojiepermana/angular/theme';
 
 import { routes } from './app.routes';
 

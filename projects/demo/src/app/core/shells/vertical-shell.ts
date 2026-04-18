@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavigationService, SidebarComponent } from '@ojiepermana/material/navigation';
+import { NavigationService, SidebarComponent } from '@ojiepermana/angular/navigation';
 
 import { LayoutSwitcherComponent } from '../layout-switcher/layout-switcher';
 import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher';
@@ -17,7 +17,7 @@ import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher';
   template: `
     <ui-sidebar [items]="items()" appearance="default" position="left" ariaLabel="Primary" [autoRegister]="false">
       <div ui-sidebar-header class="flex w-full items-center justify-between gap-2">
-        <span class="text-sm font-semibold tracking-tight">@ojiepermana/material</span>
+        <span class="text-sm font-semibold tracking-tight">@ojiepermana/angular</span>
         <demo-layout-switcher />
       </div>
       <div ui-sidebar-footer class="flex items-center justify-between gap-2 px-2">

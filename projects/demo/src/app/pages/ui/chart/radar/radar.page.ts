@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ChartContainer, ChartLegend, ChartTooltip, RadarChart } from '@ojiepermana/material/chart';
+import { ChartContainer, ChartLegend, ChartTooltip, RadarChart } from '@ojiepermana/angular/chart';
 
 import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';

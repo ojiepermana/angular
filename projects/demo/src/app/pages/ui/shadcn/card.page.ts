@@ -7,7 +7,7 @@ import {
   CardHeaderComponent,
   CardTitleComponent,
   ButtonComponent,
-} from '@ojiepermana/material/shadcn';
+} from '@ojiepermana/angular/component';
 
 import { PageShellComponent } from '../../../core/page-shell/page-shell';
 

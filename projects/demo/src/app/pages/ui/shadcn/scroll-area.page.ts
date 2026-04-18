@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ScrollAreaComponent, SeparatorComponent } from '@ojiepermana/material/shadcn';
+import { ScrollAreaComponent, SeparatorComponent } from '@ojiepermana/angular/component';
 
 import { PageShellComponent } from '../../../core/page-shell/page-shell';
 

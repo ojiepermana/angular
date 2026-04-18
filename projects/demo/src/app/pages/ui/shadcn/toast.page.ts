@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ButtonComponent, ToastService } from '@ojiepermana/material/shadcn';
+import { ButtonComponent, ToastService } from '@ojiepermana/angular/component';
 
 import { PageShellComponent } from '../../../core/page-shell/page-shell';
 

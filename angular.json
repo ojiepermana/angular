@@ -25,7 +25,9 @@
                 "input": "projects/demo/public"
               }
             ],
-            "styles": ["projects/demo/src/styles.css"]
+            "styles": [
+              "projects/demo/src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -68,20 +70,20 @@
         }
       }
     },
-    "material": {
+    "angular": {
       "projectType": "library",
-      "root": "projects/material",
-      "sourceRoot": "projects/material/shadcn/src",
+      "root": "projects/angular",
+      "sourceRoot": "projects/angular/component/src",
       "prefix": "ui",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
-              "tsConfig": "projects/material/tsconfig.lib.prod.json"
+              "tsConfig": "projects/angular/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/material/tsconfig.lib.json"
+              "tsConfig": "projects/angular/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -89,7 +91,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/material/tsconfig.spec.json",
+            "tsConfig": "projects/angular/tsconfig.spec.json",
             "include": [
               "**/*.spec.ts",
               "../../theme/src/**/*.spec.ts",

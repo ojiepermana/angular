@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { ButtonComponent, ProgressComponent } from '@ojiepermana/material/shadcn';
+import { ButtonComponent, ProgressComponent } from '@ojiepermana/angular/component';
 
 import { PageShellComponent } from '../../../core/page-shell/page-shell';
 

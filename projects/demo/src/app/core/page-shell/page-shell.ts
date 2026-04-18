@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { NavigationService, type NavigationItem } from '@ojiepermana/material/navigation';
+import { NavigationService, type NavigationItem } from '@ojiepermana/angular/navigation';
 
 /**
  * Page wrapper (demo-only) — consistent padding, max-width, title, and

@@ -1,4 +1,4 @@
-import { NavigationItem } from '@ojiepermana/material/navigation';
+import { NavigationItem } from '@ojiepermana/angular/navigation';
 
 export const DemoNavigationData: NavigationItem[] = [
   {

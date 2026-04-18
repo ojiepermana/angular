@@ -1,4 +1,4 @@
-import type { ChartConfig } from '@ojiepermana/material/chart';
+import type { ChartConfig } from '@ojiepermana/angular/chart';
 
 export const DEFAULT_TREND = 'Trending up by 5.2% this month';
 export const DEFAULT_META = 'Showing total visitors for the last 6 months';

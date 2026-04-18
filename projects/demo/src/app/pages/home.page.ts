@@ -9,7 +9,7 @@ import { PageShellComponent } from '../core/page-shell/page-shell';
   imports: [PageShellComponent, RouterLink],
   template: `
     <demo-page-shell
-      title="@ojiepermana/material"
+      title="@ojiepermana/angular"
       description="Design tokens, layouts, navigation, and shadcn-styled components for Angular — all theme-aware via a shared token system.">
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <a

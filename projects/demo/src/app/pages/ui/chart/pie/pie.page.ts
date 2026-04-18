@@ -7,7 +7,7 @@ import {
   PieChart,
   RadialCenter,
   RadialChart,
-} from '@ojiepermana/material/chart';
+} from '@ojiepermana/angular/chart';
 
 import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';

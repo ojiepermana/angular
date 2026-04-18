@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AlertComponent, AlertDescriptionComponent, AlertTitleComponent } from '@ojiepermana/material/shadcn';
+import { AlertComponent, AlertDescriptionComponent, AlertTitleComponent } from '@ojiepermana/angular/component';
 
 import { PageShellComponent } from '../../../core/page-shell/page-shell';
 

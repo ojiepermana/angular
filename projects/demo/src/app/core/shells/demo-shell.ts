@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { LayoutService } from '@ojiepermana/material/layout';
+import { LayoutService } from '@ojiepermana/angular/layout';
 
 import { HorizontalShellComponent } from './horizontal-shell';
 import { VerticalShellComponent } from './vertical-shell';

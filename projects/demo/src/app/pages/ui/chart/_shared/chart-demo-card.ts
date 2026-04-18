@@ -6,7 +6,7 @@ import {
   CardFooterComponent,
   CardHeaderComponent,
   CardTitleComponent,
-} from '@ojiepermana/material/shadcn';
+} from '@ojiepermana/angular/component';
 
 @Component({
   selector: 'demo-chart-card',

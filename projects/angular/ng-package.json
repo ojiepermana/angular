@@ -1,0 +1,22 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/angular",
+  "lib": {
+    "entryFile": "public-api.ts"
+  },
+  "allowedNonPeerDependencies": [
+    "class-variance-authority",
+    "clsx",
+    "d3-array",
+    "d3-scale",
+    "d3-shape",
+    "tailwind-merge"
+  ],
+  "assets": [
+    {
+      "input": "theme/src/lib/styles",
+      "glob": "**/*.css",
+      "output": "theme/styles"
+    }
+  ]
+}

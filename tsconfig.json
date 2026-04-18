@@ -7,13 +7,13 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
-      "material": ["./dist/material"],
-      "@ojiepermana/material": ["./projects/material/public-api.ts"],
-      "@ojiepermana/material/theme": ["./projects/material/theme/public-api.ts"],
-      "@ojiepermana/material/navigation": ["./projects/material/navigation/public-api.ts"],
-      "@ojiepermana/material/shadcn": ["./projects/material/shadcn/public-api.ts"],
-      "@ojiepermana/material/layout": ["./projects/material/layout/public-api.ts"],
-      "@ojiepermana/material/chart": ["./projects/material/chart/public-api.ts"]
+      "angular": ["./dist/angular"],
+      "@ojiepermana/angular": ["./projects/angular/public-api.ts"],
+      "@ojiepermana/angular/theme": ["./projects/angular/theme/public-api.ts"],
+      "@ojiepermana/angular/navigation": ["./projects/angular/navigation/public-api.ts"],
+      "@ojiepermana/angular/component": ["./projects/angular/component/public-api.ts"],
+      "@ojiepermana/angular/layout": ["./projects/angular/layout/public-api.ts"],
+      "@ojiepermana/angular/chart": ["./projects/angular/chart/public-api.ts"]
     },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
@@ -39,10 +39,10 @@
       "path": "./projects/demo/tsconfig.spec.json"
     },
     {
-      "path": "./projects/material/tsconfig.lib.json"
+      "path": "./projects/angular/tsconfig.lib.json"
     },
     {
-      "path": "./projects/material/tsconfig.spec.json"
+      "path": "./projects/angular/tsconfig.spec.json"
     }
   ]
 }

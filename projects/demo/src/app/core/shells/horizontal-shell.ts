@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavigationService, TopbarComponent } from '@ojiepermana/material/navigation';
+import { NavigationService, TopbarComponent } from '@ojiepermana/angular/navigation';
 
 import { LayoutSwitcherComponent } from '../layout-switcher/layout-switcher';
 import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher';
@@ -21,7 +21,7 @@ import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher';
       appearance="default"
       ariaLabel="Primary"
       [autoRegister]="false">
-      <span ui-topbar-start class="mr-4 text-sm font-semibold tracking-tight">@ojiepermana/material</span>
+      <span ui-topbar-start class="mr-4 text-sm font-semibold tracking-tight">@ojiepermana/angular</span>
       <div ui-topbar-end class="flex items-center gap-2">
         <demo-layout-switcher />
         <demo-theme-switcher />
