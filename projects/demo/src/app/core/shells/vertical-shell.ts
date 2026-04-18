@@ -22,7 +22,7 @@ import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher';
       </div>
       <div ui-sidebar-footer class="flex items-center justify-between gap-2 px-2">
         <span class="text-xs text-muted-foreground">v0.0.1</span>
-        <demo-theme-switcher />
+        <demo-theme-switcher placement="top-start" />
       </div>
     </ui-sidebar>
     <main class="flex-1 overflow-hidden">

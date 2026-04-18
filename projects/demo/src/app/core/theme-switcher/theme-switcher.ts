@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import {
   COLORS,
   MODES,
@@ -11,6 +11,8 @@ import {
 import { ButtonComponent } from '@ojiepermana/material/shadcn';
 
 const PANEL_ID = 'demo-theme-switcher-panel';
+
+type ThemeSwitcherPlacement = 'bottom-end' | 'bottom-start' | 'top-end' | 'top-start';
 
 const COLOR_SWATCHES: Record<ThemeColor, string> = {
   blue: '217 91% 60%',
@@ -41,7 +43,7 @@ const COLOR_SWATCHES: Record<ThemeColor, string> = {
     @if (open()) {
       <div
         [id]="panelId"
-        class="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-[min(22rem,calc(100vw-2rem))] rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-lg"
+        [class]="panelClasses()"
         role="group"
         aria-label="Theme settings"
         tabindex="-1"
@@ -144,12 +146,22 @@ const COLOR_SWATCHES: Record<ThemeColor, string> = {
 export class ThemeSwitcherComponent {
   protected readonly theme = inject(ThemeService);
 
+  readonly placement = input<ThemeSwitcherPlacement>('bottom-end');
+
   protected readonly open = signal(false);
   protected readonly panelId = PANEL_ID;
   protected readonly modes = MODES;
   protected readonly colors = COLORS;
   protected readonly styles = STYLES;
   protected readonly summary = computed(() => `${this.theme.mode()} / ${this.theme.color()} / ${this.theme.style()}`);
+  protected readonly panelClasses = computed(() => {
+    const base =
+      'absolute z-50 w-[min(22rem,calc(100vw-2rem))] rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-lg';
+    const placement = this.placement();
+    const vertical = placement.startsWith('top') ? 'bottom-[calc(100%+0.5rem)]' : 'top-[calc(100%+0.5rem)]';
+    const horizontal = placement.endsWith('start') ? 'left-0' : 'right-0';
+    return `${base} ${vertical} ${horizontal}`;
+  });
 
   protected toggleOpen(): void {
     this.open.update((value) => !value);
