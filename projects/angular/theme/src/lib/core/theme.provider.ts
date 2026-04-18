@@ -1,6 +1,13 @@
-import { type EnvironmentProviders, type Provider, makeEnvironmentProviders } from '@angular/core';
+import {
+  inject,
+  type EnvironmentProviders,
+  type Provider,
+  makeEnvironmentProviders,
+  provideEnvironmentInitializer,
+} from '@angular/core';
 import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { ThemeService } from './theme.service';
 import { MATERIAL_THEME_CONFIG, type MaterialThemeConfig } from './theme.tokens';
 
 /**
@@ -15,7 +22,8 @@ export interface MaterialThemeFeature {
 /**
  * Bootstrap the shared theme for any `@ojiepermana/angular/*` entry point.
  *
- * By default only wires up the theme config token and `ThemeService`. Opt in
+ * By default wires up the theme config token and eagerly initializes `ThemeService`
+ * so root theme attributes are applied during bootstrap. Opt in
  * to Angular Material defaults (ripple / form-field) via
  * {@link withMaterialDefaults}.
  * Supports shorthand `mode`, `color`, and `style` config keys.
@@ -41,6 +49,9 @@ export function provideMaterialTheme(
 ): EnvironmentProviders {
   return makeEnvironmentProviders([
     { provide: MATERIAL_THEME_CONFIG, useValue: config },
+    provideEnvironmentInitializer(() => {
+      inject(ThemeService);
+    }),
     ...features.flatMap((f) => f.providers),
   ]);
 }

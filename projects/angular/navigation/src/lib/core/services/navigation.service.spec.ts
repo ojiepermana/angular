@@ -63,4 +63,24 @@ describe('NavigationService', () => {
     expect(trail.has('docs')).toBe(true);
     expect(trail.has('root')).toBe(true);
   });
+
+  it('registers items under named key without affecting main', () => {
+    service.registerItems(items);
+    service.registerItems('secondary', [{ id: 's1', type: 'basic', title: 'Sec', link: '/sec' }]);
+    expect(service.items().length).toBe(1); // main untouched
+    expect(service.getItems('secondary')().length).toBe(1);
+  });
+
+  it('builds active trail across all registries', () => {
+    service.registerItems('other', [{ id: 'page', type: 'basic', title: 'Page', link: '/page' }]);
+    service.activeUrl.set('/page');
+    expect(service.activeTrail().has('page')).toBe(true);
+  });
+
+  it('removeItems cleans up a named registry', () => {
+    service.registerItems('temp', [{ id: 't1', type: 'basic', title: 'Tmp', link: '/tmp' }]);
+    expect(service.getItems('temp')().length).toBe(1);
+    service.removeItems('temp');
+    expect(service.getItems('temp')().length).toBe(0);
+  });
 });

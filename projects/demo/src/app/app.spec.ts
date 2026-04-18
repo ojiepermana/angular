@@ -1,14 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { NavigationService } from '@ojiepermana/angular/navigation';
-import { ThemeService } from '@ojiepermana/angular/theme';
 
-import { appConfig, themeConfig } from './app.config';
+import { appConfig, layoutConfig, themeConfig } from './app.config';
 import { App } from './app';
 import { AppNavigation } from './app.navigation';
 
 describe('App', () => {
   beforeEach(async () => {
     localStorage.clear();
+    document.documentElement.classList.remove('dark');
+    delete document.documentElement.dataset['mode'];
+    delete document.documentElement.dataset['color'];
+    delete document.documentElement.dataset['style'];
+    delete document.documentElement.dataset['theme'];
 
     await TestBed.configureTestingModule({
       imports: [App],
@@ -18,6 +22,11 @@ describe('App', () => {
 
   afterEach(() => {
     localStorage.clear();
+    document.documentElement.classList.remove('dark');
+    delete document.documentElement.dataset['mode'];
+    delete document.documentElement.dataset['color'];
+    delete document.documentElement.dataset['style'];
+    delete document.documentElement.dataset['theme'];
   });
 
   it('should create the app', () => {
@@ -33,17 +42,23 @@ describe('App', () => {
     expect(navigation.items()).toEqual(AppNavigation);
   });
 
-  it('should apply configured theme defaults', () => {
+  it('should apply configured theme defaults on bootstrap', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
-    const theme = TestBed.inject(ThemeService);
-
-    expect(theme.scheme()).toBe(themeConfig.mode);
-    expect(theme.color()).toBe(themeConfig.color);
-    expect(theme.style()).toBe(themeConfig.style);
+    expect(document.documentElement.dataset['mode']).toBe(themeConfig.mode);
+    expect(document.documentElement.dataset['color']).toBe(themeConfig.color);
+    expect(document.documentElement.dataset['style']).toBe(themeConfig.style);
+    expect(document.documentElement.dataset['theme']).toBe(themeConfig.color);
     expect(localStorage.getItem('theme-mode')).toBe(themeConfig.mode);
     expect(localStorage.getItem('theme-color')).toBe(themeConfig.color);
     expect(localStorage.getItem('theme-style')).toBe(themeConfig.style);
+  });
+
+  it('should apply configured layout defaults on bootstrap', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    expect(localStorage.getItem('layout-mode')).toBe(layoutConfig.mode);
   });
 });

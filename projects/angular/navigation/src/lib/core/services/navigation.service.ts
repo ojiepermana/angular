@@ -5,19 +5,31 @@ import { filter } from 'rxjs/operators';
 import { DestroyRef } from '@angular/core';
 import type { NavigationItem } from '../types/navigation.type';
 
+/** Default registry key used when no id is specified. */
+export const DEFAULT_NAVIGATION_ID = 'main';
+
 /**
  * Signal-based global state untuk navigation (sidebar/topbar).
- * Providedn in root; komponen `ui-sidebar` / `ui-topbar` bisa membaca/menulis
- * state tanpa binding manual dari consumer.
+ *
+ * Items disimpan dalam registry ber-key. Key default adalah `'main'`.
+ * Komponen `ui-sidebar` / `ui-topbar` memilih registry via input `navigationId`.
  */
 @Injectable({ providedIn: 'root' })
 export class NavigationService {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
-  /** Items terdaftar (untuk lookup active trail). Optional; komponen juga bisa
-   *  pakai input lokal tanpa harus register ke service. */
-  readonly items = signal<NavigationItem[]>([]);
+  /** Internal version counter — incremented on every registry mutation. */
+  private readonly _version = signal(0);
+
+  /** Internal map of registered navigation trees. */
+  private readonly _registry = new Map<string, NavigationItem[]>();
+
+  /**
+   * Backward-compatible accessor — returns items for the default (`'main'`) key.
+   * Prefer `getItems(id)` when working with named registries.
+   */
+  readonly items = computed(() => this.getItems(DEFAULT_NAVIGATION_ID)());
 
   /** Sidebar collapsed (default ↔ thin) toggle untuk desktop. */
   readonly collapsed = signal<boolean>(false);
@@ -31,8 +43,9 @@ export class NavigationService {
   /** URL aktif terakhir. Update otomatis dari Router `NavigationEnd`. */
   readonly activeUrl = signal<string>(this.router.url);
 
-  /** Trail id item yang sedang match dengan URL aktif. */
+  /** Trail id item yang sedang match dengan URL aktif (across ALL registries). */
   readonly activeTrail = computed<ReadonlySet<string>>(() => {
+    this._version(); // track changes
     const url = this.activeUrl();
     const trail = new Set<string>();
     const walk = (list: readonly NavigationItem[], ancestors: string[]): boolean => {
@@ -55,7 +68,9 @@ export class NavigationService {
       }
       return matched;
     };
-    walk(this.items(), []);
+    for (const items of this._registry.values()) {
+      walk(items, []);
+    }
     return trail;
   });
 
@@ -68,9 +83,36 @@ export class NavigationService {
       .subscribe((e) => this.activeUrl.set(e.urlAfterRedirects));
   }
 
-  /** Register daftar items global (mis. dari app shell). */
-  registerItems(items: NavigationItem[]): void {
-    this.items.set(items);
+  /**
+   * Register items di registry.
+   *
+   * Overload:
+   * - `registerItems(items)` → key `'main'`
+   * - `registerItems(id, items)` → key spesifik
+   */
+  registerItems(items: NavigationItem[]): void;
+  registerItems(id: string, items: NavigationItem[]): void;
+  registerItems(idOrItems: string | NavigationItem[], maybeItems?: NavigationItem[]): void {
+    const [id, items] = typeof idOrItems === 'string' ? [idOrItems, maybeItems!] : [DEFAULT_NAVIGATION_ID, idOrItems];
+    this._registry.set(id, items);
+    this._version.update((v) => v + 1);
+  }
+
+  /** Remove a named registry entry. */
+  removeItems(id: string): void {
+    this._registry.delete(id);
+    this._version.update((v) => v + 1);
+  }
+
+  /**
+   * Computed yang mengembalikan items untuk key tertentu.
+   * Reactive terhadap perubahan registry.
+   */
+  getItems(id: string): () => readonly NavigationItem[] {
+    return computed(() => {
+      this._version(); // track changes
+      return this._registry.get(id) ?? [];
+    });
   }
 
   /** Toggle sidebar collapsed (default ↔ thin). */

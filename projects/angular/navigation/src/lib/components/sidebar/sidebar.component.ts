@@ -19,7 +19,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { FocusTrap, FocusTrapFactory } from '@angular/cdk/a11y';
 import { filter, map } from 'rxjs/operators';
 import { UiNavItemComponent } from '../shared/nav-item.component';
-import { NavigationService } from '../../core/services/navigation.service';
+import { NavigationService, DEFAULT_NAVIGATION_ID } from '../../core/services/navigation.service';
 import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../core/types/navigation.type';
 
 /**
@@ -62,7 +62,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
         </div>
       }
       <nav class="flex-1 overflow-y-auto overflow-x-hidden">
-        @for (item of items(); track item.id) {
+        @for (item of resolvedItems(); track item.id) {
           <ui-nav-item [item]="item" [compact]="isCompact()" />
         }
       </nav>
@@ -93,6 +93,8 @@ export class SidebarComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly items = input<NavigationItem[]>([]);
+  /** Registry key di `NavigationService`. Default `'main'`. */
+  readonly navigationId = input<string>(DEFAULT_NAVIGATION_ID);
   readonly appearance = input<SidebarAppearance>('default');
   readonly position = input<SidebarPosition>('left');
   readonly ariaLabel = input<string>('Primary');
@@ -102,6 +104,12 @@ export class SidebarComponent {
   readonly autoMobile = input<boolean>(true);
   /** Auto-register `items` ke `NavigationService` agar `activeTrail` bekerja. */
   readonly autoRegister = input<boolean>(true);
+
+  /** Resolved items: input jika disediakan, fallback ke registry NavigationService. */
+  protected readonly resolvedItems = computed(() => {
+    const explicit = this.items();
+    return explicit.length > 0 ? explicit : this.nav.getItems(this.navigationId())();
+  });
 
   private readonly hovered = signal<boolean>(false);
 
@@ -121,9 +129,10 @@ export class SidebarComponent {
   protected readonly isCompact = computed(() => !this.isMobile() && this.appearance() === 'thin' && !this.hovered());
 
   constructor() {
-    // Auto-register items ke service untuk active trail.
+    // Auto-register items ke service untuk active trail (hanya jika input non-kosong).
     effect(() => {
-      if (this.autoRegister()) this.nav.registerItems(this.items());
+      const explicit = this.items();
+      if (this.autoRegister() && explicit.length > 0) this.nav.registerItems(this.navigationId(), explicit);
     });
 
     // Kelola overlay drawer berdasarkan mobileOpen + isMobile.

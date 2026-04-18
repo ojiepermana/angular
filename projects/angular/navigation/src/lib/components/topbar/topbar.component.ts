@@ -21,7 +21,7 @@ import { merge } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { UiNavIconComponent } from '../shared/nav-icon.component';
 import { UiNavItemComponent } from '../shared/nav-item.component';
-import { NavigationService } from '../../core/services/navigation.service';
+import { NavigationService, DEFAULT_NAVIGATION_ID } from '../../core/services/navigation.service';
 import type {
   NavigationBasicItem,
   NavigationCollapsableItem,
@@ -67,7 +67,7 @@ interface ActiveOverlay {
       }
       <ng-content select="[ui-topbar-start]" />
       <ul class="flex flex-1 items-center gap-1" role="menubar" (keydown)="onMenubarKeydown($event)">
-        @for (item of items(); track item.id) {
+        @for (item of resolvedItems(); track item.id) {
           <li role="none" class="relative">
             @switch (item.type) {
               @case ('basic') {
@@ -200,6 +200,8 @@ export class TopbarComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly items = input<NavigationItem[]>([]);
+  /** Registry key di `NavigationService`. Default `'main'`. */
+  readonly navigationId = input<string>(DEFAULT_NAVIGATION_ID);
   readonly appearance = input<TopbarAppearance>('default');
   readonly ariaLabel = input<string>('Primary');
   readonly class = input<string>('');
@@ -209,6 +211,12 @@ export class TopbarComponent {
   readonly showHamburger = input<boolean>(true);
   readonly hamburgerLabel = input<string>('Open navigation');
 
+  /** Resolved items: input jika disediakan, fallback ke registry NavigationService. */
+  protected readonly resolvedItems = computed(() => {
+    const explicit = this.items();
+    return explicit.length > 0 ? explicit : this.nav.getItems(this.navigationId())();
+  });
+
   protected readonly openId = signal<string | null>(null);
   private active: ActiveOverlay | null = null;
 
@@ -217,7 +225,8 @@ export class TopbarComponent {
 
   constructor() {
     effect(() => {
-      if (this.autoRegister()) this.nav.registerItems(this.items());
+      const explicit = this.items();
+      if (this.autoRegister() && explicit.length > 0) this.nav.registerItems(this.navigationId(), explicit);
     });
     this.destroyRef.onDestroy(() => this.closeAll());
   }

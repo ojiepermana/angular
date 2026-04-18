@@ -13,7 +13,7 @@ describe('LayoutService', () => {
   it('reads the persisted layout mode on startup', () => {
     localStorage.setItem(STORAGE_KEY, 'horizontal');
     TestBed.configureTestingModule({
-      providers: [{ provide: MATERIAL_LAYOUT_CONFIG, useValue: { defaultMode: 'vertical', storageKey: STORAGE_KEY } }],
+      providers: [{ provide: MATERIAL_LAYOUT_CONFIG, useValue: { mode: 'vertical', storageKey: STORAGE_KEY } }],
     });
 
     const service = TestBed.inject(LayoutService);
@@ -23,13 +23,24 @@ describe('LayoutService', () => {
 
   it('persists layout mode changes', () => {
     TestBed.configureTestingModule({
-      providers: [{ provide: MATERIAL_LAYOUT_CONFIG, useValue: { defaultMode: 'vertical', storageKey: STORAGE_KEY } }],
+      providers: [{ provide: MATERIAL_LAYOUT_CONFIG, useValue: { mode: 'vertical', storageKey: STORAGE_KEY } }],
     });
 
     const service = TestBed.inject(LayoutService);
     service.setMode('horizontal');
+    TestBed.flushEffects();
 
     expect(service.mode()).toBe('horizontal');
     expect(localStorage.getItem(STORAGE_KEY)).toBe('horizontal');
+  });
+
+  it('keeps legacy defaultMode config working for compatibility', () => {
+    TestBed.configureTestingModule({
+      providers: [{ provide: MATERIAL_LAYOUT_CONFIG, useValue: { defaultMode: 'horizontal' } }],
+    });
+
+    const service = TestBed.inject(LayoutService);
+
+    expect(service.mode()).toBe('horizontal');
   });
 });

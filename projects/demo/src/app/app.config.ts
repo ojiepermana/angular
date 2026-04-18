@@ -4,14 +4,10 @@ import {
   provideBrowserGlobalErrorListeners,
   provideEnvironmentInitializer,
 } from '@angular/core';
+import { type MaterialLayoutConfig, provideMaterialLayout } from '@ojiepermana/angular/layout';
 import { provideRouter } from '@angular/router';
 import { NavigationService } from '@ojiepermana/angular/navigation';
-import {
-  type MaterialThemeConfig,
-  ThemeService,
-  provideMaterialTheme,
-  withMaterialDefaults,
-} from '@ojiepermana/angular/theme';
+import { type MaterialThemeConfig, provideMaterialTheme, withMaterialDefaults } from '@ojiepermana/angular/theme';
 
 import { AppNavigation } from './app.navigation';
 import { routes } from './app.routes';
@@ -22,13 +18,17 @@ export const themeConfig = {
   style: 'default',
 } satisfies MaterialThemeConfig;
 
+export const layoutConfig = {
+  mode: 'vertical',
+} satisfies MaterialLayoutConfig;
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    provideMaterialLayout(layoutConfig),
     provideMaterialTheme(themeConfig, withMaterialDefaults()),
     provideEnvironmentInitializer(() => {
-      void inject(ThemeService).snapshot();
       inject(NavigationService).registerItems(AppNavigation);
     }),
   ],

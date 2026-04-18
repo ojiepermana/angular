@@ -34,7 +34,7 @@ export class LayoutService {
   private resolveConfig(): ResolvedMaterialLayoutConfig {
     const config = inject(MATERIAL_LAYOUT_CONFIG, { optional: true }) ?? {};
     return {
-      defaultMode: config.defaultMode ?? DEFAULT_MATERIAL_LAYOUT_CONFIG.defaultMode,
+      defaultMode: config.mode ?? config.defaultMode ?? DEFAULT_MATERIAL_LAYOUT_CONFIG.defaultMode,
       storageKey: config.storageKey ?? DEFAULT_MATERIAL_LAYOUT_CONFIG.storageKey,
     };
   }

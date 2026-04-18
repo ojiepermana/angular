@@ -5,6 +5,9 @@ export const LAYOUT_MODES = ['vertical', 'horizontal'] as const;
 export type LayoutMode = (typeof LAYOUT_MODES)[number];
 
 export interface MaterialLayoutConfig {
+  /** Initial layout mode. */
+  readonly mode?: LayoutMode;
+  /** @deprecated Use `mode` instead. */
   /** Initial layout mode. Defaults to `vertical`. */
   readonly defaultMode?: LayoutMode;
   /** localStorage key used to persist the layout mode. Set to `null` to disable persistence. */
