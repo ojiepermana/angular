@@ -16,10 +16,12 @@ export const appConfig: ApplicationConfig = {
     provideMaterialLayout({ defaultMode: 'vertical', storageKey: 'layout-mode' }),
     provideMaterialTheme(
       {
-        defaultTheme: 'etos',
-        defaultScheme: 'light',
-        schemeStorageKey: 'theme-scheme',
-        themeStorageKey: 'theme-palette',
+        defaultMode: 'system',
+        defaultColor: 'blue',
+        defaultStyle: 'default',
+        modeStorageKey: 'theme-mode',
+        colorStorageKey: 'theme-color',
+        styleStorageKey: 'theme-style',
       },
       withMaterialDefaults(),
     ),

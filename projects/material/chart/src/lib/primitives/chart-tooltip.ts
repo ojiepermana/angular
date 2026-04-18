@@ -91,7 +91,7 @@ function containerRect(el: HTMLElement): DOMRect | null {
                   @switch (indicator()) {
                     @case ('dot') {
                       <span
-                        class="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                        class="h-2.5 w-2.5 shrink-0 rounded-sm"
                         [style.background]="row.color"
                         [style.borderColor]="row.color"></span>
                     }

@@ -1,7 +1,7 @@
 /*
  * Public API Surface of @ojiepermana/material/theme
  *
- * The single source of truth for design tokens, CSS variables, color schemes,
+ * The single source of truth for 3-layer design tokens, CSS variables,
  * and the `ThemeService` shared by every `@ojiepermana/material/*` subpath
  * (shadcn, layout, navigation, ...).
  *

@@ -1,0 +1,37 @@
+/**
+ * Global component-facing styles that should react to the active theme.
+ */
+@layer base {
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  html {
+    background: hsl(var(--background));
+  }
+
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    letter-spacing: var(--letter-spacing);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.24);
+    color: hsl(var(--foreground));
+  }
+}

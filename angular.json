@@ -94,6 +94,7 @@
             "tsConfig": "projects/material/tsconfig.spec.json",
             "include": [
               "**/*.spec.ts",
+              "../../theme/src/**/*.spec.ts",
               "../../navigation/src/**/*.spec.ts",
               "../../chart/src/**/*.spec.ts"
             ]

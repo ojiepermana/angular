@@ -16,12 +16,12 @@ describe('buildChartCss', () => {
     expect(css).toContain('--color-revenue: hsl(var(--chart-2));');
   });
 
-  it('emits a `.dark` variant when theme map is provided', () => {
+  it('emits a `[data-mode="dark"]` variant when theme map is provided', () => {
     const css = buildChartCss('c', {
       a: { theme: { light: '#fff', dark: '#000' } },
     });
     expect(css).toContain('[data-chart="c"] {\n  --color-a: #fff;\n}');
-    expect(css).toContain('.dark [data-chart="c"] {\n  --color-a: #000;\n}');
+    expect(css).toContain('[data-mode="dark"] [data-chart="c"] {\n  --color-a: #000;\n}');
   });
 
   it('escapes unsafe characters in series keys', () => {

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavigationService } from '@ojiepermana/material/navigation';
+import { ThemeService } from '@ojiepermana/material/theme';
 
 import { DemoNavigationData } from './navigation.data';
 
@@ -13,8 +14,10 @@ import { DemoNavigationData } from './navigation.data';
 })
 export class App {
   private readonly nav = inject(NavigationService);
+  private readonly theme = inject(ThemeService);
 
   constructor() {
+    void this.theme.snapshot();
     this.nav.registerItems(DemoNavigationData);
     effect(() => {
       // no-op; keeps ChangeDetection aware of nav state updates.

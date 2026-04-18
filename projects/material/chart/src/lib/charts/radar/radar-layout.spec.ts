@@ -17,11 +17,13 @@ describe('computeRadarLayout', () => {
       innerHeight: 200,
       levels: 4,
       curve: 'linear',
+      grid: 'circle',
     });
     expect(layout.axes).toHaveLength(3);
     expect(layout.series).toHaveLength(2);
     expect(layout.series[0].points).toHaveLength(3);
     expect(layout.series[0].path).toMatch(/^M/);
+    expect(layout.grid).toBe('circle');
   });
 
   it('scales points so max value lands on the outer ring', () => {
@@ -33,6 +35,7 @@ describe('computeRadarLayout', () => {
       innerHeight: 200,
       levels: 4,
       curve: 'linear',
+      grid: 'circle',
       maxValue: 100,
     });
     const { radius } = layout;

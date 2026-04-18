@@ -25,10 +25,12 @@ export interface MaterialThemeFeature {
  *     provideAnimations(),
  *     provideMaterialTheme(
  *       {
- *         defaultTheme: 'zinc',
- *         defaultScheme: 'dark',
- *         schemeStorageKey: 'theme-scheme',
- *         themeStorageKey: 'theme-palette',
+ *         defaultMode: 'system',
+ *         defaultColor: 'blue',
+ *         defaultStyle: 'soft',
+ *         modeStorageKey: 'theme-mode',
+ *         colorStorageKey: 'theme-color',
+ *         styleStorageKey: 'theme-style',
  *       },
  *       withMaterialDefaults(),
  *     ),
@@ -46,7 +48,7 @@ export function provideMaterialTheme(
 }
 
 /**
- * Opt-in Angular Material defaults tuned for shadcn-style UIs:
+ * Opt-in Angular Material defaults tuned for the shared theme layer:
  *
  * - Disables the global Material ripple.
  * - Forces `appearance: 'outline'` + `subscriptSizing: 'dynamic'` on every

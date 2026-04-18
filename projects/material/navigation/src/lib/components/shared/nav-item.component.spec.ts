@@ -33,12 +33,13 @@ describe('UiNavItemComponent', () => {
     const nav = TestBed.inject(NavigationService);
     nav.registerItems([{ id: 'root', type: 'group', title: 'Root', children: [docsItem] }]);
 
-    const router = TestBed.inject(Router);
-    await router.navigateByUrl('/docs/intro');
-
     const fixture = TestBed.createComponent(HostComponent);
     fixture.componentInstance.item = item;
     fixture.detectChanges();
+    await fixture.whenStable();
+
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/docs/intro');
     await fixture.whenStable();
     return fixture;
   }

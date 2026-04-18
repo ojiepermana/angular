@@ -1,28 +1,16 @@
-/* @ojiepermana/material theme tokens (palettes, base, material bridge). */
+/* @ojiepermana/material theme tokens (mode, color, style, material bridge). */
 @import '../../material/theme/src/lib/styles/index.css';
 
 /* Tailwind v4 runtime. */
 @import 'tailwindcss';
 
-/* Tailwind ↔ shadcn token mapping (bg-background, text-foreground, …). */
+/* Tailwind ↔ theme token mapping (bg-background, text-foreground, rounded-md, …). */
 @import '../../material/theme/tailwind/theme.css';
 
 /* Base reset. */
 html,
 body {
-  @apply h-full bg-background text-foreground antialiased;
-}
-
-body {
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+  @apply h-full antialiased;
 }
 
 .material-symbols-outlined {

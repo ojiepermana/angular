@@ -53,7 +53,8 @@ describe('SidebarComponent', () => {
     const group = host.querySelector('[role="group"]') as HTMLElement | null;
     const groupedChildren = host.querySelector('[role="group"] > div.flex.flex-col') as HTMLElement | null;
 
-    expect(group?.classList.contains('py-3')).toBe(true);
+    expect(group?.classList.contains('p-3')).toBe(true);
+    expect(group?.classList.contains('py-3')).toBe(false);
     expect(groupedChildren?.classList.contains('py-3')).toBe(false);
   });
 

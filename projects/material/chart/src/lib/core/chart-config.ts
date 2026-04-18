@@ -39,13 +39,13 @@ export const CHART_THEMES: ReadonlyArray<{
   readonly selector: string;
 }> = [
   { key: 'light', selector: '' },
-  { key: 'dark', selector: '.dark' },
+  { key: 'dark', selector: '[data-mode="dark"]' },
 ];
 
 /**
  * Generate the CSS rule-set for a chart instance: one `--color-<key>` per
  * series, scoped to the owning `[data-chart]` element, with optional dark
- * variant via `.dark [data-chart="…"]`.
+ * variant via `[data-mode="dark"] [data-chart="…"]`.
  *
  * Series without any color are skipped (consumer can fall back to a default).
  *

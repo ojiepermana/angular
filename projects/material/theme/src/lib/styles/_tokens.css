@@ -1,0 +1,54 @@
+/**
+ * Semantic and shared tokens.
+ * Feedback colors stay independent from the color layer.
+ */
+@layer tokens {
+  :root {
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 10%;
+
+    --info: 217 91% 60%;
+    --info-foreground: 0 0% 100%;
+
+    --chart-1: 217 91% 60%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 271 81% 56%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 355 78% 56%;
+
+    --sidebar-background: var(--card);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+  }
+
+  [data-mode='dark'] {
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 95%;
+
+    --success: 142 60% 40%;
+    --success-foreground: 0 0% 95%;
+
+    --warning: 38 80% 45%;
+    --warning-foreground: 0 0% 10%;
+
+    --info: 217 80% 55%;
+    --info-foreground: 0 0% 95%;
+
+    --chart-1: 217 91% 68%;
+    --chart-2: 173 62% 48%;
+    --chart-3: 271 85% 70%;
+    --chart-4: 38 96% 62%;
+    --chart-5: 355 82% 68%;
+  }
+}

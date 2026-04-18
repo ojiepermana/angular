@@ -2,12 +2,19 @@ import { DOCUMENT } from '@angular/common';
 import { DestroyRef, Injectable, computed, effect, inject, signal } from '@angular/core';
 import {
   COLOR_SCHEMES,
+  COLORS,
   DEFAULT_MATERIAL_THEME_CONFIG,
   MATERIAL_THEME_CONFIG,
-  THEME_NAMES,
+  STYLES,
   type ColorScheme,
   type ResolvedMaterialThemeConfig,
-  type ThemeName,
+  type ThemeColor,
+  type ThemeConfig,
+  type ThemeMode,
+  type ThemeStyle,
+  isColorScheme,
+  isThemeColor,
+  isThemeStyle,
 } from './theme.tokens';
 
 @Injectable({ providedIn: 'root' })
@@ -16,50 +23,126 @@ export class ThemeService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly config = this.resolveConfig();
 
-  private readonly _scheme = signal<ColorScheme>(this.readPersistedScheme() ?? this.config.defaultScheme);
-  private readonly _theme = signal<ThemeName>(this.readPersistedTheme() ?? this.config.defaultTheme);
+  private readonly _modePreference = signal<ColorScheme>(this.readPersistedMode() ?? this.config.defaultMode);
+  private readonly _color = signal<ThemeColor>(this.readPersistedColor() ?? this.config.defaultColor);
+  private readonly _style = signal<ThemeStyle>(this.readPersistedStyle() ?? this.config.defaultStyle);
   private readonly _systemPrefersDark = signal<boolean>(this.prefersDark());
 
-  readonly scheme = this._scheme.asReadonly();
-  readonly theme = this._theme.asReadonly();
+  readonly scheme = this._modePreference.asReadonly();
+  readonly color = this._color.asReadonly();
+  readonly theme = this._color.asReadonly();
+  readonly style = this._style.asReadonly();
+  readonly mode = computed<ThemeMode>(() => this.resolveMode(this._modePreference()));
+  readonly snapshot = computed<ThemeConfig>(() => ({
+    mode: this.mode(),
+    color: this._color(),
+    style: this._style(),
+  }));
 
-  readonly isDark = computed(() => {
-    const s = this._scheme();
-    return s === 'system' ? this._systemPrefersDark() : s === 'dark';
-  });
+  readonly isDark = computed(() => this.mode() === 'dark');
 
   constructor() {
     this.watchSystemScheme();
 
     effect(() => {
       const root = this.document.documentElement;
-      root.dataset['theme'] = this._theme();
-      root.classList.toggle('dark', this.isDark());
-      this.persistScheme(this._scheme());
-      this.persistTheme(this._theme());
+      const mode = this.mode();
+      const color = this._color();
+      const style = this._style();
+
+      root.dataset['mode'] = mode;
+      root.dataset['color'] = color;
+      root.dataset['style'] = style;
+      root.dataset['theme'] = color;
+      root.classList.toggle('dark', mode === 'dark');
+
+      this.persistMode(this._modePreference());
+      this.persistColor(color);
+      this.persistStyle(style);
     });
   }
 
-  setScheme(scheme: ColorScheme): void {
-    this._scheme.set(scheme);
+  setMode(mode: ThemeMode): void {
+    this._modePreference.set(mode);
   }
 
-  setTheme(theme: ThemeName): void {
-    this._theme.set(theme);
+  setScheme(scheme: ColorScheme): void {
+    this._modePreference.set(scheme);
+  }
+
+  setColor(color: ThemeColor): void {
+    this._color.set(color);
+  }
+
+  setTheme(theme: ThemeColor | string): void {
+    if (isThemeColor(theme)) {
+      this._color.set(theme);
+    }
+  }
+
+  setStyle(style: ThemeStyle): void {
+    this._style.set(style);
+  }
+
+  setAll(config: Partial<ThemeConfig> & { readonly scheme?: ColorScheme }): void {
+    if (config.scheme) {
+      this.setScheme(config.scheme);
+    }
+    if (config.mode) {
+      this.setMode(config.mode);
+    }
+    if (config.color) {
+      this.setColor(config.color);
+    }
+    if (config.style) {
+      this.setStyle(config.style);
+    }
   }
 
   toggleScheme(): void {
-    this._scheme.update((s) => (s === 'dark' ? 'light' : 'dark'));
+    this.toggleMode();
+  }
+
+  toggleMode(): void {
+    this.setMode(this.mode() === 'dark' ? 'light' : 'dark');
+  }
+
+  reset(): void {
+    this._modePreference.set(this.config.defaultMode);
+    this._color.set(this.config.defaultColor);
+    this._style.set(this.config.defaultStyle);
   }
 
   private resolveConfig(): ResolvedMaterialThemeConfig {
     const config = inject(MATERIAL_THEME_CONFIG, { optional: true }) ?? {};
+
+    const defaultMode = isColorScheme(config.defaultMode ?? config.defaultScheme)
+      ? (config.defaultMode ?? config.defaultScheme)!
+      : DEFAULT_MATERIAL_THEME_CONFIG.defaultMode;
+    const defaultColor = isThemeColor(config.defaultColor ?? config.defaultTheme)
+      ? ((config.defaultColor ?? config.defaultTheme) as ThemeColor)
+      : DEFAULT_MATERIAL_THEME_CONFIG.defaultColor;
+    const defaultStyle = isThemeStyle(config.defaultStyle)
+      ? config.defaultStyle
+      : DEFAULT_MATERIAL_THEME_CONFIG.defaultStyle;
+
     return {
-      defaultTheme: config.defaultTheme ?? DEFAULT_MATERIAL_THEME_CONFIG.defaultTheme,
-      defaultScheme: config.defaultScheme ?? DEFAULT_MATERIAL_THEME_CONFIG.defaultScheme,
-      schemeStorageKey: config.schemeStorageKey ?? config.storageKey ?? DEFAULT_MATERIAL_THEME_CONFIG.schemeStorageKey,
-      themeStorageKey: config.themeStorageKey ?? DEFAULT_MATERIAL_THEME_CONFIG.themeStorageKey,
+      defaultMode,
+      defaultColor,
+      defaultStyle,
+      modeStorageKey:
+        config.modeStorageKey ??
+        config.schemeStorageKey ??
+        config.storageKey ??
+        DEFAULT_MATERIAL_THEME_CONFIG.modeStorageKey,
+      colorStorageKey:
+        config.colorStorageKey ?? config.themeStorageKey ?? DEFAULT_MATERIAL_THEME_CONFIG.colorStorageKey,
+      styleStorageKey: config.styleStorageKey ?? DEFAULT_MATERIAL_THEME_CONFIG.styleStorageKey,
     };
+  }
+
+  private resolveMode(mode: ColorScheme): ThemeMode {
+    return mode === 'system' ? (this._systemPrefersDark() ? 'dark' : 'light') : mode;
   }
 
   private prefersDark(): boolean {
@@ -78,8 +161,8 @@ export class ThemeService {
     this.destroyRef.onDestroy(() => mql.removeEventListener('change', listener));
   }
 
-  private readPersistedScheme(): ColorScheme | null {
-    const key = this.config.schemeStorageKey;
+  private readPersistedMode(): ColorScheme | null {
+    const key = this.config.modeStorageKey;
     if (!key) return null;
     try {
       const value = this.document.defaultView?.localStorage?.getItem(key);
@@ -89,32 +172,53 @@ export class ThemeService {
     }
   }
 
-  private readPersistedTheme(): ThemeName | null {
-    const key = this.config.themeStorageKey;
+  private readPersistedColor(): ThemeColor | null {
+    const key = this.config.colorStorageKey;
     if (!key) return null;
     try {
       const value = this.document.defaultView?.localStorage?.getItem(key);
-      return THEME_NAMES.some((theme) => theme === value) ? (value as ThemeName) : null;
+      return COLORS.some((color) => color === value) ? (value as ThemeColor) : null;
     } catch {
       return null;
     }
   }
 
-  private persistScheme(scheme: ColorScheme): void {
-    const key = this.config.schemeStorageKey;
+  private readPersistedStyle(): ThemeStyle | null {
+    const key = this.config.styleStorageKey;
+    if (!key) return null;
+    try {
+      const value = this.document.defaultView?.localStorage?.getItem(key);
+      return STYLES.some((style) => style === value) ? (value as ThemeStyle) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private persistMode(mode: ColorScheme): void {
+    const key = this.config.modeStorageKey;
     if (!key) return;
     try {
-      this.document.defaultView?.localStorage?.setItem(key, scheme);
+      this.document.defaultView?.localStorage?.setItem(key, mode);
     } catch {
       /* ignore */
     }
   }
 
-  private persistTheme(theme: ThemeName): void {
-    const key = this.config.themeStorageKey;
+  private persistColor(color: ThemeColor): void {
+    const key = this.config.colorStorageKey;
     if (!key) return;
     try {
-      this.document.defaultView?.localStorage?.setItem(key, theme);
+      this.document.defaultView?.localStorage?.setItem(key, color);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  private persistStyle(style: ThemeStyle): void {
+    const key = this.config.styleStorageKey;
+    if (!key) return;
+    try {
+      this.document.defaultView?.localStorage?.setItem(key, style);
     } catch {
       /* ignore */
     }

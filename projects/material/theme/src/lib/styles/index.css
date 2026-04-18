@@ -7,24 +7,26 @@
  *   @import 'tailwindcss';
  *   @import '@ojiepermana/material/theme/tailwind/theme.css';
  *
- * Includes cascade layers, shared base tokens (radius, chart, sidebar), all
- * shadcn palettes (neutral, zinc, slate, stone, gray, etos) switchable via
- * `[data-theme="..."]`, and an Angular Material M3 bridge so `mat-*`
- * components inherit shadcn tokens by default.
+ * Includes cascade layers, independent mode/color/style tokens, shared
+ * semantic tokens, and an Angular Material bridge so `mat-*` components
+ * inherit the active theme automatically.
  */
 @import './_layers.css';
 
-/* Shared tokens (radius, chart, sidebar) — loaded before palettes so palette
-   files can still override any of them if needed. */
-@import './_base.css';
+/* Layer 1: mode. */
+@import './themes/_mode.css';
 
-/* Palettes — neutral is the default (`:root`); others activate via [data-theme]. */
-@import './_palette-neutral.css';
-@import './_palette-zinc.css';
-@import './_palette-slate.css';
-@import './_palette-stone.css';
-@import './_palette-gray.css';
-@import './_palette-etos.css';
+/* Layer 2: color. */
+@import './themes/_color.css';
+
+/* Layer 3: style. */
+@import './themes/_style.css';
+
+/* Shared semantic and library tokens. */
+@import './_tokens.css';
 
 /* Angular Material M3 bridge. */
-@import './_material-bridge.css';
+@import './_material-overrides.css';
+
+/* Global component-facing styles. */
+@import './_components.css';

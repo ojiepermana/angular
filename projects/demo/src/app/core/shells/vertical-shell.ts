@@ -3,16 +3,16 @@ import { RouterOutlet } from '@angular/router';
 import { NavigationService, SidebarComponent } from '@ojiepermana/material/navigation';
 
 import { LayoutSwitcherComponent } from '../layout-switcher/layout-switcher';
-import { ThemeSchemeToggleComponent } from '../theme-scheme-toggle/theme-scheme-toggle';
+import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher';
 
 /**
  * Demo-scoped Vertical shell — sidebar + main. Injects `[ui-sidebar-header]`
- * slot (brand + layout switcher) and `[ui-sidebar-footer]` (scheme toggle).
+ * slot (brand + layout switcher) and `[ui-sidebar-footer]` (theme switcher).
  */
 @Component({
   selector: 'demo-vertical-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, SidebarComponent, LayoutSwitcherComponent, ThemeSchemeToggleComponent],
+  imports: [RouterOutlet, SidebarComponent, LayoutSwitcherComponent, ThemeSwitcherComponent],
   host: { class: 'flex h-dvh w-full overflow-hidden bg-background text-foreground' },
   template: `
     <ui-sidebar [items]="items()" appearance="default" position="left" ariaLabel="Primary" [autoRegister]="false">
@@ -22,7 +22,7 @@ import { ThemeSchemeToggleComponent } from '../theme-scheme-toggle/theme-scheme-
       </div>
       <div ui-sidebar-footer class="flex items-center justify-between gap-2 px-2">
         <span class="text-xs text-muted-foreground">v0.0.1</span>
-        <demo-theme-scheme-toggle />
+        <demo-theme-switcher />
       </div>
     </ui-sidebar>
     <main class="flex-1 overflow-hidden">

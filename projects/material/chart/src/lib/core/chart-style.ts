@@ -5,7 +5,7 @@ import { buildChartCss } from './chart-config';
 /**
  * Emits a scoped `<style>` block mapping every series key in the current
  * `ChartConfig` to a `--color-<key>` CSS custom property, scoped to
- * `[data-chart="<id>"]`. Dark-mode values are scoped under `.dark`.
+ * `[data-chart="<id>"]`. Dark-mode values are scoped under `[data-mode="dark"]`.
  *
  * Implemented as an empty component that injects a real `<style>` element
  * into its host via `Renderer2`. We avoid rendering `<style>` directly in a

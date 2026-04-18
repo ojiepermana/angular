@@ -3,16 +3,16 @@ import { RouterOutlet } from '@angular/router';
 import { NavigationService, TopbarComponent } from '@ojiepermana/material/navigation';
 
 import { LayoutSwitcherComponent } from '../layout-switcher/layout-switcher';
-import { ThemeSchemeToggleComponent } from '../theme-scheme-toggle/theme-scheme-toggle';
+import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher';
 
 /**
  * Demo-scoped Horizontal shell — topbar + main. Renders brand in start slot
- * and layout-switcher + theme-toggle in end slot.
+ * and layout-switcher + theme-switcher in end slot.
  */
 @Component({
   selector: 'demo-horizontal-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, TopbarComponent, LayoutSwitcherComponent, ThemeSchemeToggleComponent],
+  imports: [RouterOutlet, TopbarComponent, LayoutSwitcherComponent, ThemeSwitcherComponent],
   host: { class: 'flex h-dvh w-full flex-col overflow-hidden bg-background text-foreground' },
   template: `
     <ui-topbar
@@ -24,7 +24,7 @@ import { ThemeSchemeToggleComponent } from '../theme-scheme-toggle/theme-scheme-
       <span ui-topbar-start class="mr-4 text-sm font-semibold tracking-tight">@ojiepermana/material</span>
       <div ui-topbar-end class="flex items-center gap-2">
         <demo-layout-switcher />
-        <demo-theme-scheme-toggle />
+        <demo-theme-switcher />
       </div>
     </ui-topbar>
     <main class="flex-1 overflow-hidden">

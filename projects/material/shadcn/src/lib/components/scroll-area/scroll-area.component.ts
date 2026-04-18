@@ -33,9 +33,9 @@ import { cn } from '../../core/cn/cn.util';
       }
       .ui-scroll-area-viewport::-webkit-scrollbar-thumb {
         background: hsl(var(--border));
-        border: 2px solid transparent;
+        border: var(--border-width) solid transparent;
         background-clip: padding-box;
-        border-radius: 9999px;
+        border-radius: var(--radius-lg);
       }
       .ui-scroll-area-viewport::-webkit-scrollbar-thumb:hover {
         background: hsl(var(--muted-foreground));
