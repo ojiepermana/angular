@@ -57,7 +57,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
 
     <ng-template #body>
       @if (header()) {
-        <div class="flex h-14 items-center gap-2 border-b border-border px-3">
+        <div class="flex h-12 items-center gap-2 border-b border-border px-3">
           <ng-content select="[ui-sidebar-header]" />
         </div>
       }
@@ -66,7 +66,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
           <ui-nav-item [item]="item" [compact]="isCompact()" />
         }
       </nav>
-      <div class="border-t border-border">
+      <div class="border-t border-border h-12">
         <ng-content select="[ui-sidebar-footer]" />
       </div>
     </ng-template>

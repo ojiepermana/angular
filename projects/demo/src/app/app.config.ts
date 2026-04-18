@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideMaterialLayout({ defaultMode: 'vertical', storageKey: 'layout-mode' }),
     provideMaterialTheme(
       {
-        defaultTheme: 'neutral',
+        defaultTheme: 'etos',
         defaultScheme: 'light',
         schemeStorageKey: 'theme-scheme',
         themeStorageKey: 'theme-palette',

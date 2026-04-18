@@ -20,7 +20,7 @@ import { ThemeSchemeToggleComponent } from '../theme-scheme-toggle/theme-scheme-
         <span class="text-sm font-semibold tracking-tight">@ojiepermana/material</span>
         <demo-layout-switcher />
       </div>
-      <div ui-sidebar-footer class="flex items-center justify-between gap-2 p-2">
+      <div ui-sidebar-footer class="flex items-center justify-between gap-2 px-2">
         <span class="text-xs text-muted-foreground">v0.0.1</span>
         <demo-theme-scheme-toggle />
       </div>
