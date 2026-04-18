@@ -25,8 +25,7 @@ value: string | null = null;
   [options]="frameworks"
   [(value)]="value"
   placeholder="Select framework"
-  searchPlaceholder="Search framework…"
-/>
+  searchPlaceholder="Search framework…" />
 ```
 
 ## API

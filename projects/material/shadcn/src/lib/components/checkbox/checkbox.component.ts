@@ -16,9 +16,7 @@ import { cn } from '../../core/cn/cn.util';
   selector: 'ui-checkbox',
   imports: [MatCheckbox],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CheckboxComponent), multi: true },
-  ],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CheckboxComponent), multi: true }],
   template: `
     <mat-checkbox
       #ref
@@ -30,8 +28,7 @@ import { cn } from '../../core/cn/cn.util';
       [required]="required()"
       [attr.aria-label]="ariaLabel()"
       [attr.aria-labelledby]="ariaLabelledby()"
-      (change)="handleChange($event)"
-    >
+      (change)="handleChange($event)">
       <ng-content />
     </mat-checkbox>
   `,

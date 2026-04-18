@@ -11,12 +11,7 @@ import { PaginationComponent } from '@ojiepermana/material/shadcn';
 ## Usage
 
 ```html
-<ui-pagination
-  [(page)]="currentPage"
-  [total]="totalPages"
-  [siblingCount]="1"
-  (pageChange)="load($event)"
-/>
+<ui-pagination [(page)]="currentPage" [total]="totalPages" [siblingCount]="1" (pageChange)="load($event)" />
 ```
 
 ## API

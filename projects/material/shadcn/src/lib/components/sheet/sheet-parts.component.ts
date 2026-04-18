@@ -9,9 +9,7 @@ import { cn } from '../../core/cn/cn.util';
 })
 export class SheetHeaderComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('flex flex-col gap-2 text-center sm:text-left', this.class()),
-  );
+  protected readonly classes = computed(() => cn('flex flex-col gap-2 text-center sm:text-left', this.class()));
 }
 
 @Component({
@@ -22,9 +20,7 @@ export class SheetHeaderComponent {
 })
 export class SheetTitleComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('text-lg font-semibold text-foreground', this.class()),
-  );
+  protected readonly classes = computed(() => cn('text-lg font-semibold text-foreground', this.class()));
 }
 
 @Component({

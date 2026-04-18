@@ -11,8 +11,7 @@ import { ProgressComponent } from '@ojiepermana/material/shadcn';
 ## Usage
 
 ```html
-<ui-progress [value]="60" aria-label="Uploading" />
-<ui-progress indeterminate aria-label="Loading" />
+<ui-progress [value]="60" aria-label="Uploading" /> <ui-progress indeterminate aria-label="Loading" />
 ```
 
 ## API

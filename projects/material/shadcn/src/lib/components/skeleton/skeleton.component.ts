@@ -13,7 +13,5 @@ import { cn } from '../../core/cn/cn.util';
 export class SkeletonComponent {
   readonly class = input<string>('');
 
-  protected readonly classes = computed(() =>
-    cn('animate-pulse rounded-md bg-muted', this.class()),
-  );
+  protected readonly classes = computed(() => cn('animate-pulse rounded-md bg-muted', this.class()));
 }

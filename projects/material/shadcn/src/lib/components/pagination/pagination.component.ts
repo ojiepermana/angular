@@ -22,8 +22,7 @@ import { buttonVariants } from '../button/button.variants';
           [disabled]="page() <= 1 || null"
           [attr.aria-label]="'Go to previous page'"
           [class]="navClasses()"
-          (click)="go(page() - 1)"
-        >
+          (click)="go(page() - 1)">
           <svg
             class="h-4 w-4"
             viewBox="0 0 24 24"
@@ -31,8 +30,7 @@ import { buttonVariants } from '../button/button.variants';
             stroke="currentColor"
             stroke-width="2"
             stroke-linecap="round"
-            stroke-linejoin="round"
-          >
+            stroke-linejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
           <span>Previous</span>
@@ -46,8 +44,7 @@ import { buttonVariants } from '../button/button.variants';
               type="button"
               [attr.aria-current]="p.value === page() ? 'page' : null"
               [class]="pageClasses(p.value === page())"
-              (click)="go(p.value)"
-            >
+              (click)="go(p.value)">
               {{ p.value }}
             </button>
           } @else {
@@ -62,8 +59,7 @@ import { buttonVariants } from '../button/button.variants';
           [disabled]="page() >= total() || null"
           [attr.aria-label]="'Go to next page'"
           [class]="navClasses()"
-          (click)="go(page() + 1)"
-        >
+          (click)="go(page() + 1)">
           <span>Next</span>
           <svg
             class="h-4 w-4"
@@ -72,8 +68,7 @@ import { buttonVariants } from '../button/button.variants';
             stroke="currentColor"
             stroke-width="2"
             stroke-linecap="round"
-            stroke-linejoin="round"
-          >
+            stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </button>
@@ -90,9 +85,7 @@ export class PaginationComponent {
 
   readonly pageChange = output<number>();
 
-  protected readonly classes = computed(() =>
-    cn('mx-auto flex w-full justify-center', this.class()),
-  );
+  protected readonly classes = computed(() => cn('mx-auto flex w-full justify-center', this.class()));
 
   protected readonly pages = computed(() => {
     const total = Math.max(1, this.total());

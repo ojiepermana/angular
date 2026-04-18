@@ -22,14 +22,7 @@ describe('ButtonComponent', () => {
     return fixture.nativeElement.querySelector('button') as HTMLButtonElement;
   }
 
-  for (const variant of [
-    'default',
-    'secondary',
-    'destructive',
-    'outline',
-    'ghost',
-    'link',
-  ] as const) {
+  for (const variant of ['default', 'secondary', 'destructive', 'outline', 'ghost', 'link'] as const) {
     it(`renders variant=${variant}`, () => {
       const btn = render(variant);
       expect(btn.getAttribute('data-variant')).toBe(variant);

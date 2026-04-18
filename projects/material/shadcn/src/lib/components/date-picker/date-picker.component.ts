@@ -11,19 +11,10 @@ import {
   untracked,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  MatDatepicker,
-  MatDatepickerInput,
-  MatDatepickerToggle,
-} from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALUE_ACCESSOR,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { cn } from '../../core/cn/cn.util';
 
 /**
@@ -33,18 +24,9 @@ import { cn } from '../../core/cn/cn.util';
 @Component({
   selector: 'ui-date-picker',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    ReactiveFormsModule,
-    MatFormField,
-    MatInput,
-    MatDatepicker,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-  ],
+  imports: [ReactiveFormsModule, MatFormField, MatInput, MatDatepicker, MatDatepickerInput, MatDatepickerToggle],
   host: { '[class]': 'classes()' },
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DatePickerComponent), multi: true },
-  ],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DatePickerComponent), multi: true }],
   template: `
     <mat-form-field class="ui-date-picker" appearance="outline" subscriptSizing="dynamic">
       <input
@@ -53,8 +35,7 @@ import { cn } from '../../core/cn/cn.util';
         [placeholder]="placeholder()"
         [min]="min()"
         [max]="max()"
-        [formControl]="control"
-      />
+        [formControl]="control" />
       <mat-datepicker-toggle matIconSuffix [for]="picker" />
       <mat-datepicker #picker panelClass="ui-datepicker-panel" />
     </mat-form-field>
@@ -88,13 +69,11 @@ export class DatePickerComponent implements ControlValueAccessor {
       d ? this.control.disable({ emitEvent: false }) : this.control.enable({ emitEvent: false });
     });
 
-    this.control.valueChanges
-      .pipe(takeUntilDestroyed(inject(DestroyRef)))
-      .subscribe((next) => {
-        untracked(() => this.value.set(next));
-        this.onChangeFn(next);
-        this.onTouchedFn();
-      });
+    this.control.valueChanges.pipe(takeUntilDestroyed(inject(DestroyRef))).subscribe((next) => {
+      untracked(() => this.value.set(next));
+      this.onChangeFn(next);
+      this.onTouchedFn();
+    });
   }
 
   writeValue(v: Date | null): void {

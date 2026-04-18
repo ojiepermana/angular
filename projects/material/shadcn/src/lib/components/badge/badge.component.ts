@@ -12,7 +12,5 @@ export class BadgeComponent {
   readonly variant = input<BadgeVariant>('default');
   readonly class = input<string>('');
 
-  protected readonly classes = computed(() =>
-    cn(badgeVariants({ variant: this.variant() }), this.class()),
-  );
+  protected readonly classes = computed(() => cn(badgeVariants({ variant: this.variant() }), this.class()));
 }

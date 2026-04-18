@@ -5,11 +5,7 @@ Rounded image with an automatic text fallback when the image fails to load.
 ## Import
 
 ```ts
-import {
-  AvatarComponent,
-  AvatarImageComponent,
-  AvatarFallbackComponent,
-} from '@ojiepermana/material/shadcn';
+import { AvatarComponent, AvatarImageComponent, AvatarFallbackComponent } from '@ojiepermana/material/shadcn';
 ```
 
 ## Usage

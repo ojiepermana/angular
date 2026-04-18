@@ -9,12 +9,7 @@ import {
 } from './accordion.component';
 
 @Component({
-  imports: [
-    AccordionComponent,
-    AccordionItemComponent,
-    AccordionTriggerComponent,
-    AccordionContentComponent,
-  ],
+  imports: [AccordionComponent, AccordionItemComponent, AccordionTriggerComponent, AccordionContentComponent],
   template: `
     <ui-accordion [type]="type">
       <ui-accordion-item value="one">
@@ -34,18 +29,14 @@ class Host {
 
 describe('Accordion primitives', () => {
   function triggersOf(fixture: ReturnType<typeof TestBed.createComponent<Host>>) {
-    return fixture.nativeElement.querySelectorAll(
-      'button[ui-accordion-trigger]',
-    ) as NodeListOf<HTMLButtonElement>;
+    return fixture.nativeElement.querySelectorAll('button[ui-accordion-trigger]') as NodeListOf<HTMLButtonElement>;
   }
 
   it('wires aria attributes between trigger and content', () => {
     const fixture = TestBed.createComponent(Host);
     fixture.detectChanges();
     const trigger = triggersOf(fixture)[0];
-    const content = fixture.nativeElement.querySelectorAll(
-      'ui-accordion-content',
-    )[0] as HTMLElement;
+    const content = fixture.nativeElement.querySelectorAll('ui-accordion-content')[0] as HTMLElement;
     expect(trigger.getAttribute('aria-controls')).toBe(content.getAttribute('id'));
     expect(content.getAttribute('aria-labelledby')).toBe(trigger.getAttribute('id'));
     expect(content.getAttribute('role')).toBe('region');

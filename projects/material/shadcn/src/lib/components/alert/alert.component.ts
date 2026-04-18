@@ -15,9 +15,7 @@ export class AlertComponent {
   readonly variant = input<AlertVariant>('default');
   readonly class = input<string>('');
 
-  protected readonly classes = computed(() =>
-    cn(alertVariants({ variant: this.variant() }), this.class()),
-  );
+  protected readonly classes = computed(() => cn(alertVariants({ variant: this.variant() }), this.class()));
 }
 
 @Component({
@@ -28,9 +26,7 @@ export class AlertComponent {
 })
 export class AlertTitleComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('mb-1 font-medium leading-none tracking-tight', this.class()),
-  );
+  protected readonly classes = computed(() => cn('mb-1 font-medium leading-none tracking-tight', this.class()));
 }
 
 @Component({

@@ -35,9 +35,7 @@ describe('PaginationComponent', () => {
     fixture.componentInstance.page = 1;
     fixture.detectChanges();
     const root = fixture.nativeElement as HTMLElement;
-    const prev = root.querySelector(
-      'button[aria-label="Go to previous page"]',
-    ) as HTMLButtonElement;
+    const prev = root.querySelector('button[aria-label="Go to previous page"]') as HTMLButtonElement;
     expect(prev.disabled).toBe(true);
   });
 
@@ -52,9 +50,9 @@ describe('PaginationComponent', () => {
 
   it('emits pageChange and updates two-way bound page on click', () => {
     const { fixture, root } = render();
-    const pageFiveBtn = Array.from(root.querySelectorAll('button')).find(
-      (b) => b.textContent?.trim() === '5',
-    ) as HTMLButtonElement | undefined;
+    const pageFiveBtn = Array.from(root.querySelectorAll('button')).find((b) => b.textContent?.trim() === '5') as
+      | HTMLButtonElement
+      | undefined;
     // Page 5 is not in window (siblingCount=1 default around current=3) so pick Next.
     const next = root.querySelector('button[aria-label="Go to next page"]') as HTMLButtonElement;
     next.click();

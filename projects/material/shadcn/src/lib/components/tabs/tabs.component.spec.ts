@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
-import {
-  TabsComponent,
-  TabsContentComponent,
-  TabsListComponent,
-  TabsTriggerComponent,
-} from './tabs.component';
+import { TabsComponent, TabsContentComponent, TabsListComponent, TabsTriggerComponent } from './tabs.component';
 
 @Component({
   imports: [TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComponent],
@@ -34,9 +29,7 @@ describe('Tabs primitives', () => {
 
   it('activates the first trigger based on the bound value', () => {
     const fixture = render();
-    const first = fixture.nativeElement.querySelector(
-      'button[ui-tabs-trigger]',
-    ) as HTMLButtonElement;
+    const first = fixture.nativeElement.querySelector('button[ui-tabs-trigger]') as HTMLButtonElement;
     expect(first.getAttribute('aria-selected')).toBe('true');
     expect(first.getAttribute('data-state')).toBe('active');
   });
@@ -50,9 +43,7 @@ describe('Tabs primitives', () => {
 
   it('clicking a trigger activates the matching content panel', () => {
     const fixture = render();
-    const triggers = fixture.nativeElement.querySelectorAll(
-      'button[ui-tabs-trigger]',
-    ) as NodeListOf<HTMLButtonElement>;
+    const triggers = fixture.nativeElement.querySelectorAll('button[ui-tabs-trigger]') as NodeListOf<HTMLButtonElement>;
     triggers[1].click();
     fixture.detectChanges();
     expect(triggers[1].getAttribute('aria-selected')).toBe('true');
@@ -63,9 +54,7 @@ describe('Tabs primitives', () => {
 
   it('ArrowRight moves focus/selection to the next trigger', () => {
     const fixture = render();
-    const triggers = fixture.nativeElement.querySelectorAll(
-      'button[ui-tabs-trigger]',
-    ) as NodeListOf<HTMLButtonElement>;
+    const triggers = fixture.nativeElement.querySelectorAll('button[ui-tabs-trigger]') as NodeListOf<HTMLButtonElement>;
     triggers[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
     fixture.detectChanges();
     expect(triggers[1].getAttribute('aria-selected')).toBe('true');

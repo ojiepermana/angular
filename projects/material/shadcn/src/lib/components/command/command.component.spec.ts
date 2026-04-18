@@ -42,12 +42,8 @@ describe('Command', () => {
     const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
     expect(input.getAttribute('role')).toBe('combobox');
     expect(input.getAttribute('aria-autocomplete')).toBe('list');
-    expect(fixture.nativeElement.querySelector('ui-command-list')!.getAttribute('role')).toBe(
-      'listbox',
-    );
-    expect(
-      fixture.nativeElement.querySelectorAll('[ui-command-item],[role=option]').length,
-    ).toBeGreaterThanOrEqual(3);
+    expect(fixture.nativeElement.querySelector('ui-command-list')!.getAttribute('role')).toBe('listbox');
+    expect(fixture.nativeElement.querySelectorAll('[ui-command-item],[role=option]').length).toBeGreaterThanOrEqual(3);
   });
 
   it('filters items by the input query via hidden attribute', () => {
@@ -57,9 +53,7 @@ describe('Command', () => {
     input.value = 'save';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    const items = fixture.nativeElement.querySelectorAll(
-      'button[ui-command-item]',
-    ) as NodeListOf<HTMLElement>;
+    const items = fixture.nativeElement.querySelectorAll('button[ui-command-item]') as NodeListOf<HTMLElement>;
     const visible = Array.from(items).filter((i) => !i.hasAttribute('hidden'));
     expect(visible.length).toBe(1);
     expect(visible[0].textContent).toContain('Save');

@@ -101,10 +101,7 @@ export class TabsListComponent {
   protected readonly ctx = inject(TabsComponent);
   readonly class = input<string>('');
   protected readonly classes = computed(() =>
-    cn(
-      'inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground',
-      this.class(),
-    ),
+    cn('inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground', this.class()),
   );
 }
 

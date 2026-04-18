@@ -25,8 +25,7 @@ import { TopbarComponent, type TopbarAppearance } from '@ojiepermana/material/na
     <ui-topbar
       class="h-12 w-full shrink-0 border-b border-border"
       [appearance]="topbarAppearance()"
-      [ariaLabel]="ariaLabel()"
-    />
+      [ariaLabel]="ariaLabel()" />
     <main class="flex-1 overflow-auto">
       <router-outlet />
     </main>

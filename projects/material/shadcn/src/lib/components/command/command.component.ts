@@ -45,10 +45,7 @@ export class CommandComponent extends CommandContextBase {
   private readonly activeIndex = signal(0);
 
   protected readonly classes = computed(() =>
-    cn(
-      'flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground',
-      this.class(),
-    ),
+    cn('flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground', this.class()),
   );
 
   override matches(text: string): boolean {
@@ -151,9 +148,7 @@ export class CommandInputComponent {
 })
 export class CommandListComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('max-h-[300px] overflow-y-auto overflow-x-hidden p-1', this.class()),
-  );
+  protected readonly classes = computed(() => cn('max-h-[300px] overflow-y-auto overflow-x-hidden p-1', this.class()));
 }
 
 @Component({
@@ -164,9 +159,7 @@ export class CommandListComponent {
 })
 export class CommandEmptyComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('py-6 text-center text-sm text-muted-foreground', this.class()),
-  );
+  protected readonly classes = computed(() => cn('py-6 text-center text-sm text-muted-foreground', this.class()));
 }
 
 @Component({
@@ -183,9 +176,7 @@ export class CommandEmptyComponent {
 export class CommandGroupComponent {
   readonly heading = input<string | null>(null);
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('overflow-hidden p-1 text-foreground', this.class()),
-  );
+  protected readonly classes = computed(() => cn('overflow-hidden p-1 text-foreground', this.class()));
 }
 
 @Component({
@@ -262,9 +253,7 @@ export class CommandItemComponent {
   protected onHover(): void {
     if (this.disabled()) return;
     // Mark this item active; deactivate siblings.
-    (this.ctx as unknown as { _activateOnly?: (i: CommandItemComponent) => void })._activateOnly?.(
-      this,
-    );
+    (this.ctx as unknown as { _activateOnly?: (i: CommandItemComponent) => void })._activateOnly?.(this);
     this._setActive(true);
   }
 }

@@ -5,9 +5,7 @@ import { ComboboxComponent, type ComboboxOption } from './combobox.component';
 
 @Component({
   imports: [ComboboxComponent],
-  template: `
-    <ui-combobox [options]="options" [(value)]="value" placeholder="Pick a framework" />
-  `,
+  template: ` <ui-combobox [options]="options" [(value)]="value" placeholder="Pick a framework" /> `,
 })
 class Host {
   options: ComboboxOption<string>[] = [

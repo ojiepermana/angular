@@ -48,8 +48,7 @@ const SIDE_ENTER_FROM: Record<SheetSide, string> = {
         [attr.aria-labelledby]="labelledBy()"
         [attr.aria-describedby]="describedBy()"
         [class]="surfaceClasses()"
-        [style.--ui-sheet-from]="enterFrom()"
-      >
+        [style.--ui-sheet-from]="enterFrom()">
         <ng-content />
       </div>
     </ng-template>

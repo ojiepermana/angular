@@ -14,9 +14,7 @@ import { PopoverTriggerDirective, PopoverContentDirective } from '@ojiepermana/m
 <button ui-button [uiPopoverTrigger]="content" side="bottom" align="start">Open</button>
 
 <ng-template uiPopoverContent #content="uiPopoverContent">
-  <div class="w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md">
-    Popover body
-  </div>
+  <div class="w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md">Popover body</div>
 </ng-template>
 ```
 

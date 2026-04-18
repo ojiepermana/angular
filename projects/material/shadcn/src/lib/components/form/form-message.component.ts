@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, OnDestroy, OnInit } from '@angular/core';
 import { cn } from '../../core/cn/cn.util';
 import { FormFieldContext } from './form-field.context';
 
@@ -34,9 +26,7 @@ export class FormMessageComponent implements OnInit, OnDestroy {
   readonly class = input<string>('');
 
   protected readonly show = computed(() => this.ctx.invalid());
-  protected readonly classes = computed(() =>
-    cn('text-sm font-medium text-destructive', this.class()),
-  );
+  protected readonly classes = computed(() => cn('text-sm font-medium text-destructive', this.class()));
 
   ngOnInit(): void {
     this.ctx.hasMessage.set(true);

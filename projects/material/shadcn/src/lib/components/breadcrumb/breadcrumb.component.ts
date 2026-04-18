@@ -20,10 +20,7 @@ export class BreadcrumbComponent {}
 export class BreadcrumbListComponent {
   readonly class = input<string>('');
   protected readonly classes = computed(() =>
-    cn(
-      'flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5',
-      this.class(),
-    ),
+    cn('flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5', this.class()),
   );
 }
 
@@ -46,9 +43,7 @@ export class BreadcrumbItemComponent {
 })
 export class BreadcrumbLinkComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('transition-colors hover:text-foreground', this.class()),
-  );
+  protected readonly classes = computed(() => cn('transition-colors hover:text-foreground', this.class()));
 }
 
 @Component({
@@ -84,8 +79,7 @@ export class BreadcrumbPageComponent {
         stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
-        stroke-linejoin="round"
-      >
+        stroke-linejoin="round">
         <polyline points="9 18 15 12 9 6" />
       </svg>
     </ng-content>
@@ -112,8 +106,7 @@ export class BreadcrumbSeparatorComponent {
       stroke="currentColor"
       stroke-width="2"
       stroke-linecap="round"
-      stroke-linejoin="round"
-    >
+      stroke-linejoin="round">
       <circle cx="12" cy="12" r="1" />
       <circle cx="19" cy="12" r="1" />
       <circle cx="5" cy="12" r="1" />
@@ -123,7 +116,5 @@ export class BreadcrumbSeparatorComponent {
 })
 export class BreadcrumbEllipsisComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('flex h-9 w-9 items-center justify-center', this.class()),
-  );
+  protected readonly classes = computed(() => cn('flex h-9 w-9 items-center justify-center', this.class()));
 }

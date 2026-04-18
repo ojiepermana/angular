@@ -52,9 +52,7 @@ export interface ComboboxOption<T = unknown> {
     CommandGroupComponent,
     CommandItemComponent,
   ],
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ComboboxComponent), multi: true },
-  ],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ComboboxComponent), multi: true }],
   host: { '[class]': 'classes()' },
   template: `
     <button
@@ -65,8 +63,7 @@ export interface ComboboxOption<T = unknown> {
       [attr.aria-controls]="isOpen() ? 'ui-combobox-panel' : null"
       [class]="triggerClasses()"
       [disabled]="disabled() || null"
-      (click)="toggle()"
-    >
+      (click)="toggle()">
       <span [class.text-muted-foreground]="!selectedLabel()">
         {{ selectedLabel() || placeholder() }}
       </span>
@@ -77,8 +74,7 @@ export interface ComboboxOption<T = unknown> {
         stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
-        stroke-linejoin="round"
-      >
+        stroke-linejoin="round">
         <polyline points="6 9 12 15 18 9" />
       </svg>
     </button>
@@ -86,8 +82,7 @@ export interface ComboboxOption<T = unknown> {
     <ng-template #panel>
       <div
         id="ui-combobox-panel"
-        class="w-[var(--ui-combobox-trigger-width)] rounded-md border bg-popover text-popover-foreground shadow-md"
-      >
+        class="w-[var(--ui-combobox-trigger-width)] rounded-md border bg-popover text-popover-foreground shadow-md">
         <ui-command>
           <input ui-command-input [placeholder]="searchPlaceholder()" />
           <ui-command-list>
@@ -99,8 +94,7 @@ export interface ComboboxOption<T = unknown> {
                   ui-command-item
                   [value]="opt.label"
                   [disabled]="!!opt.disabled"
-                  (selected)="pick(opt)"
-                >
+                  (selected)="pick(opt)">
                   {{ opt.label }}
                   @if (isSelected(opt)) {
                     <svg
@@ -110,8 +104,7 @@ export interface ComboboxOption<T = unknown> {
                       stroke="currentColor"
                       stroke-width="2"
                       stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
+                      stroke-linejoin="round">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   }
@@ -190,9 +183,7 @@ export class ComboboxComponent<T = unknown> implements ControlValueAccessor {
     this.overlayRef.attach(portal);
 
     merge(
-      this.overlayRef
-        .outsidePointerEvents()
-        .pipe(filter((e) => !triggerEl.contains(e.target as Node))),
+      this.overlayRef.outsidePointerEvents().pipe(filter((e) => !triggerEl.contains(e.target as Node))),
       this.overlayRef.keydownEvents().pipe(filter((e) => e.key === 'Escape')),
       this.overlayRef.detachments(),
     )
@@ -201,9 +192,7 @@ export class ComboboxComponent<T = unknown> implements ControlValueAccessor {
 
     this.isOpen.set(true);
     // Focus search input after attach tick
-    queueMicrotask(() =>
-      this.overlayRef?.overlayElement.querySelector<HTMLInputElement>('input')?.focus(),
-    );
+    queueMicrotask(() => this.overlayRef?.overlayElement.querySelector<HTMLInputElement>('input')?.focus());
   }
 
   protected close(): void {

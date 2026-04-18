@@ -5,11 +5,7 @@ Call-out box for informational or destructive messages.
 ## Import
 
 ```ts
-import {
-  AlertComponent,
-  AlertTitleComponent,
-  AlertDescriptionComponent,
-} from '@ojiepermana/material/shadcn';
+import { AlertComponent, AlertTitleComponent, AlertDescriptionComponent } from '@ojiepermana/material/shadcn';
 ```
 
 ## Usage

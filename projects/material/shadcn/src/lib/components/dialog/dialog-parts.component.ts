@@ -9,9 +9,7 @@ import { cn } from '../../core/cn/cn.util';
 })
 export class DialogHeaderComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('flex flex-col gap-1.5 text-center sm:text-left', this.class()),
-  );
+  protected readonly classes = computed(() => cn('flex flex-col gap-1.5 text-center sm:text-left', this.class()));
 }
 
 @Component({
@@ -22,9 +20,7 @@ export class DialogHeaderComponent {
 })
 export class DialogTitleComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('text-lg font-semibold leading-none tracking-tight', this.class()),
-  );
+  protected readonly classes = computed(() => cn('text-lg font-semibold leading-none tracking-tight', this.class()));
 }
 
 @Component({

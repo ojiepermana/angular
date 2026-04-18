@@ -1,15 +1,6 @@
 import { Overlay, OverlayRef, ConnectedPosition } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import {
-  DestroyRef,
-  Directive,
-  ElementRef,
-  ViewContainerRef,
-  inject,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { DestroyRef, Directive, ElementRef, ViewContainerRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { merge } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -84,10 +75,7 @@ export class MenuTriggerDirective {
     );
 
     this.overlayRef = this.overlay.create({
-      positionStrategy: this.overlay
-        .position()
-        .flexibleConnectedTo(this.el)
-        .withPositions([primary, fallback]),
+      positionStrategy: this.overlay.position().flexibleConnectedTo(this.el).withPositions([primary, fallback]),
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
       hasBackdrop: false,
       panelClass: 'ui-menu-panel',
@@ -97,9 +85,7 @@ export class MenuTriggerDirective {
     this.overlayRef.attach(portal);
 
     merge(
-      this.overlayRef
-        .outsidePointerEvents()
-        .pipe(filter((e) => !this.el.nativeElement.contains(e.target as Node))),
+      this.overlayRef.outsidePointerEvents().pipe(filter((e) => !this.el.nativeElement.contains(e.target as Node))),
       this.overlayRef.keydownEvents().pipe(filter((e) => e.key === 'Escape')),
       this.overlayRef.detachments(),
     )

@@ -49,8 +49,7 @@ import { cn } from '../../core/cn/cn.util';
         aria-modal="true"
         [attr.aria-labelledby]="labelledBy()"
         [attr.aria-describedby]="describedBy()"
-        [class]="surfaceClasses()"
-      >
+        [class]="surfaceClasses()">
         <ng-content />
       </div>
     </ng-template>
@@ -78,10 +77,7 @@ export class DialogComponent {
   private previousFocus: HTMLElement | null = null;
 
   protected readonly surfaceClasses = computed(() =>
-    cn(
-      'relative grid w-full max-w-lg gap-4 rounded-lg border bg-background p-6 shadow-lg duration-200',
-      this.class(),
-    ),
+    cn('relative grid w-full max-w-lg gap-4 rounded-lg border bg-background p-6 shadow-lg duration-200', this.class()),
   );
 
   constructor() {

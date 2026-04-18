@@ -23,9 +23,7 @@ describe('AlertComponent', () => {
     const alert = fixture.nativeElement.querySelector('ui-alert') as HTMLElement;
     expect(alert.getAttribute('role')).toBe('alert');
     expect(alert.querySelector('ui-alert-title')?.textContent).toContain('Heads up!');
-    expect(alert.querySelector('ui-alert-description')?.textContent).toContain(
-      'Something happened.',
-    );
+    expect(alert.querySelector('ui-alert-description')?.textContent).toContain('Something happened.');
   });
 
   it('applies destructive variant tokens', () => {

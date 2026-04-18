@@ -17,8 +17,7 @@ import { cn } from '../../core/cn/cn.util';
   template: `
     <div
       class="ui-progress-indicator h-full w-full flex-1 bg-primary transition-transform"
-      [style.transform]="indicatorTransform()"
-    ></div>
+      [style.transform]="indicatorTransform()"></div>
   `,
   styles: [
     `

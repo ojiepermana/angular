@@ -19,9 +19,7 @@ import { cn } from '../../core/cn/cn.util';
   selector: 'ui-switch',
   imports: [MatSlideToggle],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SwitchComponent), multi: true },
-  ],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SwitchComponent), multi: true }],
   template: `
     <mat-slide-toggle
       #ref
@@ -33,8 +31,7 @@ import { cn } from '../../core/cn/cn.util';
       [required]="required()"
       [attr.aria-label]="ariaLabel()"
       [attr.aria-labelledby]="ariaLabelledby()"
-      (change)="handleChange($event)"
-    >
+      (change)="handleChange($event)">
       <ng-content />
     </mat-slide-toggle>
   `,

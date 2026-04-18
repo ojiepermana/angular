@@ -1,15 +1,6 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import {
-  DestroyRef,
-  Directive,
-  ElementRef,
-  ViewContainerRef,
-  inject,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { DestroyRef, Directive, ElementRef, ViewContainerRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { merge } from 'rxjs';
 import { filter } from 'rxjs/operators';

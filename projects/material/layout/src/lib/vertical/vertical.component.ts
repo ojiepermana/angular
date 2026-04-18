@@ -29,11 +29,7 @@ import {
     class: 'flex h-dvh w-full overflow-hidden bg-background text-foreground',
   },
   template: `
-    <ui-sidebar
-      [appearance]="sidebarAppearance()"
-      [position]="sidebarPosition()"
-      [ariaLabel]="ariaLabel()"
-    />
+    <ui-sidebar [appearance]="sidebarAppearance()" [position]="sidebarPosition()" [ariaLabel]="ariaLabel()" />
     <main class="flex-1 overflow-auto">
       <router-outlet />
     </main>

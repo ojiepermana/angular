@@ -16,9 +16,7 @@ import { cn } from '../../core/cn/cn.util';
   selector: 'ui-radio-group',
   imports: [MatRadioGroup],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => RadioGroupComponent), multi: true },
-  ],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => RadioGroupComponent), multi: true }],
   template: `
     <mat-radio-group
       #ref
@@ -26,8 +24,7 @@ import { cn } from '../../core/cn/cn.util';
       [value]="value()"
       [disabled]="disabled()"
       [name]="name()"
-      (change)="handleChange($event)"
-    >
+      (change)="handleChange($event)">
       <ng-content />
     </mat-radio-group>
   `,

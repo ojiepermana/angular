@@ -20,10 +20,6 @@ export class SeparatorComponent {
   readonly class = input<string>('');
 
   protected readonly classes = computed(() =>
-    cn(
-      'shrink-0 bg-border',
-      this.orientation() === 'horizontal' ? 'h-px w-full' : 'h-full w-px',
-      this.class(),
-    ),
+    cn('shrink-0 bg-border', this.orientation() === 'horizontal' ? 'h-px w-full' : 'h-full w-px', this.class()),
   );
 }

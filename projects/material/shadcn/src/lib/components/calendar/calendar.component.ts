@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  forwardRef,
-  input,
-  model,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, forwardRef, input, model } from '@angular/core';
 import { MatCalendar } from '@angular/material/datepicker';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { cn } from '../../core/cn/cn.util';
@@ -19,9 +12,7 @@ import { cn } from '../../core/cn/cn.util';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatCalendar],
   host: { '[class]': 'classes()' },
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CalendarComponent), multi: true },
-  ],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CalendarComponent), multi: true }],
   template: `
     <mat-calendar
       class="ui-calendar"
@@ -29,8 +20,7 @@ import { cn } from '../../core/cn/cn.util';
       [minDate]="min()"
       [maxDate]="max()"
       [startAt]="startAt()"
-      (selectedChange)="onSelect($event)"
-    />
+      (selectedChange)="onSelect($event)" />
   `,
   styles: [
     `

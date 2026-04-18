@@ -29,9 +29,7 @@ export class AvatarImageComponent {
   readonly class = input<string>('');
 
   protected readonly failed = signal(false);
-  protected readonly classes = computed(() =>
-    cn('aspect-square h-full w-full object-cover', this.class()),
-  );
+  protected readonly classes = computed(() => cn('aspect-square h-full w-full object-cover', this.class()));
 }
 
 @Component({

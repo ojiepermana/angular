@@ -9,7 +9,5 @@ import { cn } from '../../core/cn/cn.util';
 })
 export class CardTitleComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('text-lg font-semibold leading-none tracking-tight', this.class()),
-  );
+  protected readonly classes = computed(() => cn('text-lg font-semibold leading-none tracking-tight', this.class()));
 }

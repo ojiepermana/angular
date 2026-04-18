@@ -17,9 +17,7 @@ import { cn } from '../../core/cn/cn.util';
   selector: 'ui-select',
   imports: [MatFormField, MatSelect],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SelectComponent), multi: true },
-  ],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SelectComponent), multi: true }],
   template: `
     <mat-form-field [class]="classes()" subscriptSizing="dynamic">
       <mat-select
@@ -34,8 +32,7 @@ import { cn } from '../../core/cn/cn.util';
         [attr.aria-label]="ariaLabel()"
         [attr.aria-labelledby]="ariaLabelledby()"
         (selectionChange)="handleChange($event)"
-        (openedChange)="openedChange.emit($event)"
-      >
+        (openedChange)="openedChange.emit($event)">
         <ng-content />
       </mat-select>
     </mat-form-field>

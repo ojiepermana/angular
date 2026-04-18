@@ -1,15 +1,6 @@
 import { Overlay, OverlayRef, ConnectedPosition } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import {
-  DestroyRef,
-  Directive,
-  ElementRef,
-  ViewContainerRef,
-  inject,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { DestroyRef, Directive, ElementRef, ViewContainerRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { merge } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -113,9 +104,7 @@ export class PopoverTriggerDirective {
     this.overlayRef.attach(portal);
 
     merge(
-      this.overlayRef
-        .outsidePointerEvents()
-        .pipe(filter((e) => !this.el.nativeElement.contains(e.target as Node))),
+      this.overlayRef.outsidePointerEvents().pipe(filter((e) => !this.el.nativeElement.contains(e.target as Node))),
       this.overlayRef.keydownEvents().pipe(filter((e) => e.key === 'Escape')),
       this.overlayRef.detachments(),
     )
@@ -135,12 +124,6 @@ export class PopoverTriggerDirective {
   }
 
   private oppositeSide(side: PopoverSide): PopoverSide {
-    return side === 'top'
-      ? 'bottom'
-      : side === 'bottom'
-        ? 'top'
-        : side === 'left'
-          ? 'right'
-          : 'left';
+    return side === 'top' ? 'bottom' : side === 'bottom' ? 'top' : side === 'left' ? 'right' : 'left';
   }
 }

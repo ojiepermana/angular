@@ -89,9 +89,7 @@ export class TableHeadComponent {
 })
 export class TableCellComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('p-2 align-middle [&:has([role=checkbox])]:pr-0', this.class()),
-  );
+  protected readonly classes = computed(() => cn('p-2 align-middle [&:has([role=checkbox])]:pr-0', this.class()));
 }
 
 @Component({
@@ -102,7 +100,5 @@ export class TableCellComponent {
 })
 export class TableCaptionComponent {
   readonly class = input<string>('');
-  protected readonly classes = computed(() =>
-    cn('mt-4 text-sm text-muted-foreground', this.class()),
-  );
+  protected readonly classes = computed(() => cn('mt-4 text-sm text-muted-foreground', this.class()));
 }

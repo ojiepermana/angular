@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  computed,
-  inject,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, input, output } from '@angular/core';
 import { cn } from '../../core/cn/cn.util';
 
 @Component({
@@ -82,11 +74,7 @@ export class MenuLabelComponent {
   readonly inset = input<boolean>(false);
   readonly class = input<string>('');
   protected readonly classes = computed(() =>
-    cn(
-      'px-2 py-1.5 text-sm font-semibold text-foreground',
-      this.inset() ? 'pl-8' : '',
-      this.class(),
-    ),
+    cn('px-2 py-1.5 text-sm font-semibold text-foreground', this.inset() ? 'pl-8' : '', this.class()),
   );
 }
 

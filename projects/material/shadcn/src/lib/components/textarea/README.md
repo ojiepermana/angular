@@ -12,13 +12,7 @@ import { TextareaComponent } from '@ojiepermana/material/shadcn';
 
 ```html
 <ui-label for="bio">Bio</ui-label>
-<textarea
-  id="bio"
-  ui-textarea
-  [(ngModel)]="bio"
-  rows="4"
-  placeholder="Tell us about yourself"
-></textarea>
+<textarea id="bio" ui-textarea [(ngModel)]="bio" rows="4" placeholder="Tell us about yourself"></textarea>
 ```
 
 ## API

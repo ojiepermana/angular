@@ -1,13 +1,6 @@
 import { IsActiveMatchOptions, Params, QueryParamsHandling } from '@angular/router';
 
-export type NavigationItemType =
-  | 'aside'
-  | 'basic'
-  | 'collapsable'
-  | 'divider'
-  | 'group'
-  | 'mega'
-  | 'spacer';
+export type NavigationItemType = 'aside' | 'basic' | 'collapsable' | 'divider' | 'group' | 'mega' | 'spacer';
 
 export interface NavigationItemClasses {
   title?: string;
