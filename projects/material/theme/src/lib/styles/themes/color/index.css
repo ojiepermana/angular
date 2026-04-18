@@ -1,0 +1,9 @@
+/**
+ * Layer 2: color.
+ * Imports every color variant in a stable order.
+ */
+@import './blue.css';
+@import './red.css';
+@import './green.css';
+@import './purple.css';
+@import './amber.css';

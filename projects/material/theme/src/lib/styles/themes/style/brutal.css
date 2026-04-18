@@ -1,0 +1,34 @@
+@layer tokens {
+  [data-style='brutal'] {
+    --theme-radius-base: 0;
+    --theme-radius-sm: 0;
+    --theme-radius-md: 0;
+    --theme-radius-lg: 0;
+
+    --radius: 0;
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+
+    --border-width: 2px;
+
+    --theme-shadow-sm: 2px 2px 0 0 hsl(var(--foreground));
+    --theme-shadow: 4px 4px 0 0 hsl(var(--foreground));
+    --theme-shadow-md: 6px 6px 0 0 hsl(var(--foreground));
+    --theme-shadow-lg: 8px 8px 0 0 hsl(var(--foreground));
+
+    --shadow-sm: var(--theme-shadow-sm);
+    --shadow: var(--theme-shadow);
+    --shadow-md: var(--theme-shadow-md);
+    --shadow-lg: var(--theme-shadow-lg);
+
+    --theme-font-sans: 'JetBrains Mono', 'Courier New', monospace;
+    --theme-font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+    --font-sans: var(--theme-font-sans);
+    --font-mono: var(--theme-font-mono);
+    --font-weight-bold: 700;
+    --letter-spacing: -0.01em;
+    --space-unit: 0.25rem;
+  }
+}

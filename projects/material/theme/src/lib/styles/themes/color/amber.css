@@ -1,0 +1,18 @@
+@layer tokens {
+  [data-color='amber'] {
+    --primary: 38 92% 50%;
+    --primary-foreground: 0 0% 10%;
+    --accent: 38 92% 95%;
+    --accent-foreground: 38 92% 30%;
+    --secondary: 38 30% 95%;
+    --secondary-foreground: 38 92% 30%;
+    --ring: 38 92% 50%;
+  }
+
+  [data-mode='dark'][data-color='amber'] {
+    --accent: 38 50% 18%;
+    --accent-foreground: 38 92% 75%;
+    --secondary: 38 30% 18%;
+    --secondary-foreground: 38 92% 75%;
+  }
+}

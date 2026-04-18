@@ -13,14 +13,14 @@
  */
 @import './_layers.css';
 
-/* Layer 1: mode. */
-@import './themes/_mode.css';
+/* Layer 1: mode variants. */
+@import './themes/mode/index.css';
 
-/* Layer 2: color. */
-@import './themes/_color.css';
+/* Layer 2: color variants. */
+@import './themes/color/index.css';
 
-/* Layer 3: style. */
-@import './themes/_style.css';
+/* Layer 3: style variants. */
+@import './themes/style/index.css';
 
 /* Shared semantic and library tokens. */
 @import './_tokens.css';

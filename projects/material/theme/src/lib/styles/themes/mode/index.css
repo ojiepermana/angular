@@ -1,0 +1,6 @@
+/**
+ * Layer 1: mode.
+ * Imports every mode variant in a stable order.
+ */
+@import './light.css';
+@import './dark.css';

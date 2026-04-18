@@ -1,0 +1,8 @@
+/**
+ * Layer 3: style.
+ * Imports every style variant in a stable order.
+ */
+@import './default.css';
+@import './sharp.css';
+@import './brutal.css';
+@import './soft.css';

@@ -1,0 +1,34 @@
+@layer tokens {
+  [data-style='sharp'] {
+    --theme-radius-base: 0;
+    --theme-radius-sm: 0;
+    --theme-radius-md: 0;
+    --theme-radius-lg: 0;
+
+    --radius: 0;
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+
+    --border-width: 1px;
+
+    --theme-shadow-sm: none;
+    --theme-shadow: none;
+    --theme-shadow-md: none;
+    --theme-shadow-lg: none;
+
+    --shadow-sm: none;
+    --shadow: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+
+    --theme-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --theme-font-mono: 'JetBrains Mono', monospace;
+
+    --font-sans: var(--theme-font-sans);
+    --font-mono: var(--theme-font-mono);
+    --font-weight-bold: 600;
+    --letter-spacing: 0;
+    --space-unit: 0.25rem;
+  }
+}
