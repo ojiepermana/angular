@@ -1,5 +1,5 @@
 {
-  "name": "material-ui",
+  "name": "angular",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -11,6 +11,14 @@
     "format:check": "prettier --check \"**/*.{ts,js,json,html,css,scss,md}\""
   },
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ojiepermana/angular.git"
+  },
+  "homepage": "https://github.com/ojiepermana/angular#readme",
+  "bugs": {
+    "url": "https://github.com/ojiepermana/angular/issues"
+  },
   "packageManager": "npm@10.9.4",
   "dependencies": {
     "@angular/animations": "^21.2.9",

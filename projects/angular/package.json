@@ -1,6 +1,14 @@
 {
   "name": "@ojiepermana/angular",
   "version": "21.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ojiepermana/angular.git"
+  },
+  "homepage": "https://github.com/ojiepermana/angular#readme",
+  "bugs": {
+    "url": "https://github.com/ojiepermana/angular/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^21.2.0",
     "@angular/core": "^21.2.0",
