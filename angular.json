@@ -61,23 +61,23 @@
           "type": ""
         }
       },
-      "root": "projects/demo",
-      "sourceRoot": "projects/demo/src",
+      "root": "projects/demo/library",
+      "sourceRoot": "projects/demo/library/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "browser": "projects/demo/src/main.ts",
-            "tsConfig": "projects/demo/tsconfig.app.json",
+            "browser": "projects/demo/library/src/main.ts",
+            "tsConfig": "projects/demo/library/tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "projects/demo/public"
+                "input": "projects/demo/library/public"
               }
             ],
             "styles": [
-              "projects/demo/src/styles.css"
+              "projects/demo/library/src/styles.css"
             ]
           },
           "configurations": {

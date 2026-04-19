@@ -1,12 +1,13 @@
 /* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
 /* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true,
-    "outDir": "../../out-tsc/spec",
-    "rootDir": "../..",
-    "types": ["vitest/globals"]
+    "outDir": "../../../out-tsc/app",
+    "rootDir": "../../..",
+    "types": []
   },
-  "include": ["src/**/*.d.ts", "src/**/*.spec.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts"]
 }
