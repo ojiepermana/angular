@@ -7,6 +7,7 @@
     "watch": "ng build angular --watch --configuration development",
     "test": "ng test angular",
     "test:theme": "ng run angular:test-theme --watch=false",
+    "publish": "npm run build && npm publish ./dist/angular --access public",
     "format": "prettier --write \"**/*.{ts,js,json,html,css,scss,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,json,html,css,scss,md}\""
   },
@@ -30,6 +31,7 @@
     "@angular/material": "^21.2.7",
     "@angular/platform-browser": "^21.2.9",
     "@angular/router": "^21.2.9",
+    "@ojiepermana/angular": "21.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "d3-array": "^3.2.4",

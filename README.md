@@ -34,6 +34,24 @@ bun run build
 
 This compiles the `@ojiepermana/angular` library and writes the output to `dist/angular`.
 
+## Publishing To npm
+
+The published package is the scoped public package `@ojiepermana/angular`.
+
+Log in to npm first:
+
+```bash
+npm login
+```
+
+Then publish from the workspace root with:
+
+```bash
+npm run publish
+```
+
+This command rebuilds the library and publishes `dist/angular` to the public npm registry.
+
 ## Running unit tests
 
 To execute the library unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:

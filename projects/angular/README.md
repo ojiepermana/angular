@@ -29,26 +29,28 @@ bun run ng --help
 To build the library, run:
 
 ```bash
-bun run build -- angular
+bun run build
 ```
 
 This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
 
 ### Publishing the Library
 
-Once the project is built, you can publish your library by following these steps:
+Publish the scoped package to the public npm registry from the workspace root.
 
-1. Navigate to the `dist` directory:
+First, log in to npm:
 
-   ```bash
-   cd dist/angular
-   ```
+```bash
+npm login
+```
 
-2. Run the `bun publish` command to publish your library to the npm registry:
+Then run:
 
-   ```bash
-   bun publish
-   ```
+```bash
+npm run publish
+```
+
+This command rebuilds the library and publishes the generated `dist/angular` package with public access.
 
 ## Running unit tests
 

@@ -1,11 +1,11 @@
 /* @ojiepermana/angular theme tokens with the Etos brand bundle. */
-@import '../../../angular/theme/src/lib/styles/etos.css';
+@import '@ojiepermana/angular/theme/styles/etos.css';
 
 /* Tailwind v4 runtime. */
 @import 'tailwindcss';
 
 /* Tailwind ↔ theme token mapping (bg-background, text-foreground, rounded-md, …). */
-@import '../../../angular/theme/src/lib/styles/themes/taildwind.css';
+@import '@ojiepermana/angular/theme/tailwind/theme.css';
 
 html,
 body {
