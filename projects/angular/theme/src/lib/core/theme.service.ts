@@ -2,16 +2,16 @@ import { DOCUMENT } from '@angular/common';
 import { DestroyRef, Injectable, computed, effect, inject, signal } from '@angular/core';
 import {
   COLOR_SCHEMES,
-  COLORS,
   DEFAULT_MATERIAL_THEME_CONFIG,
   MATERIAL_THEME_CONFIG,
-  STYLES,
   type ColorScheme,
   type ResolvedMaterialThemeConfig,
+  type ThemeBrand,
   type ThemeColor,
   type ThemeConfig,
   type ThemeMode,
   type ThemeStyle,
+  isThemeBrand,
   isColorScheme,
   isThemeColor,
   isThemeStyle,
@@ -22,19 +22,27 @@ export class ThemeService {
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
   private readonly config = this.resolveConfig();
+  private readonly initialBrand = this.readPersistedBrand() ?? this.config.defaultBrand;
 
   private readonly _modePreference = signal<ColorScheme>(this.readPersistedMode() ?? this.config.defaultMode);
-  private readonly _color = signal<ThemeColor>(this.readPersistedColor() ?? this.config.defaultColor);
-  private readonly _style = signal<ThemeStyle>(this.readPersistedStyle() ?? this.config.defaultStyle);
+  private readonly _brand = signal<ThemeBrand | null>(this.initialBrand);
+  private readonly _color = signal<ThemeColor>(
+    this.initialBrand ? this.config.defaultColor : (this.readPersistedColor() ?? this.config.defaultColor),
+  );
+  private readonly _style = signal<ThemeStyle>(
+    this.initialBrand ? this.config.defaultStyle : (this.readPersistedStyle() ?? this.config.defaultStyle),
+  );
   private readonly _systemPrefersDark = signal<boolean>(this.prefersDark());
 
   readonly scheme = this._modePreference.asReadonly();
+  readonly brand = this._brand.asReadonly();
   readonly color = this._color.asReadonly();
   readonly theme = this._color.asReadonly();
   readonly style = this._style.asReadonly();
   readonly mode = computed<ThemeMode>(() => this.resolveMode(this._modePreference()));
   readonly snapshot = computed<ThemeConfig>(() => ({
     mode: this.mode(),
+    brand: this._brand(),
     color: this._color(),
     style: this._style(),
   }));
@@ -47,16 +55,36 @@ export class ThemeService {
     effect(() => {
       const root = this.document.documentElement;
       const mode = this.mode();
+      const brand = this._brand();
       const color = this._color();
       const style = this._style();
 
       root.dataset['mode'] = mode;
-      root.dataset['color'] = color;
-      root.dataset['style'] = style;
-      root.dataset['theme'] = color;
+      root.dataset['theme'] = brand ?? color;
       root.classList.toggle('dark', mode === 'dark');
 
       this.persistMode(this._modePreference());
+
+      if (brand) {
+        root.setAttribute('theme-brand', brand);
+        root.removeAttribute('theme-color');
+        root.removeAttribute('theme-style');
+        delete root.dataset['color'];
+        delete root.dataset['style'];
+
+        this.persistBrand(brand);
+        this.clearPersistedColor();
+        this.clearPersistedStyle();
+        return;
+      }
+
+      root.removeAttribute('theme-brand');
+      root.setAttribute('theme-color', color);
+      root.setAttribute('theme-style', style);
+      root.dataset['color'] = color;
+      root.dataset['style'] = style;
+
+      this.clearPersistedBrand();
       this.persistColor(color);
       this.persistStyle(style);
     });
@@ -70,17 +98,29 @@ export class ThemeService {
     this._modePreference.set(scheme);
   }
 
+  setBrand(brand: ThemeBrand | null): void {
+    this._brand.set(brand);
+    this._color.set(this.config.defaultColor);
+    this._style.set(this.config.defaultStyle);
+  }
+
   setColor(color: ThemeColor): void {
+    if (this._brand()) {
+      this._brand.set(null);
+    }
     this._color.set(color);
   }
 
   setTheme(theme: ThemeColor | string): void {
     if (isThemeColor(theme)) {
-      this._color.set(theme);
+      this.setColor(theme);
     }
   }
 
   setStyle(style: ThemeStyle): void {
+    if (this._brand()) {
+      this._brand.set(null);
+    }
     this._style.set(style);
   }
 
@@ -91,11 +131,16 @@ export class ThemeService {
     if (config.mode) {
       this.setMode(config.mode);
     }
-    if (config.color) {
-      this.setColor(config.color);
+    if (config.brand !== undefined) {
+      this.setBrand(config.brand);
     }
-    if (config.style) {
-      this.setStyle(config.style);
+    if (config.brand === undefined || config.brand === null) {
+      if (config.color) {
+        this.setColor(config.color);
+      }
+      if (config.style) {
+        this.setStyle(config.style);
+      }
     }
   }
 
@@ -109,6 +154,7 @@ export class ThemeService {
 
   reset(): void {
     this._modePreference.set(this.config.defaultMode);
+    this._brand.set(this.config.defaultBrand);
     this._color.set(this.config.defaultColor);
     this._style.set(this.config.defaultStyle);
   }
@@ -116,15 +162,18 @@ export class ThemeService {
   private resolveConfig(): ResolvedMaterialThemeConfig {
     const config = inject(MATERIAL_THEME_CONFIG, { optional: true }) ?? {};
     const configuredMode = config.mode ?? config.defaultMode ?? config.defaultScheme;
+    const configuredBrand = config.brand ?? config['theme-brand'] ?? config.defaultBrand;
     const configuredColor = config.color ?? config.defaultColor ?? config.defaultTheme;
     const configuredStyle = config.style ?? config.defaultStyle;
 
     const defaultMode = isColorScheme(configuredMode) ? configuredMode : DEFAULT_MATERIAL_THEME_CONFIG.defaultMode;
+    const defaultBrand = isThemeBrand(configuredBrand) ? configuredBrand : DEFAULT_MATERIAL_THEME_CONFIG.defaultBrand;
     const defaultColor = isThemeColor(configuredColor) ? configuredColor : DEFAULT_MATERIAL_THEME_CONFIG.defaultColor;
     const defaultStyle = isThemeStyle(configuredStyle) ? configuredStyle : DEFAULT_MATERIAL_THEME_CONFIG.defaultStyle;
 
     return {
       defaultMode,
+      defaultBrand,
       defaultColor,
       defaultStyle,
       modeStorageKey:
@@ -132,6 +181,7 @@ export class ThemeService {
         config.schemeStorageKey ??
         config.storageKey ??
         DEFAULT_MATERIAL_THEME_CONFIG.modeStorageKey,
+      brandStorageKey: config.brandStorageKey ?? DEFAULT_MATERIAL_THEME_CONFIG.brandStorageKey,
       colorStorageKey:
         config.colorStorageKey ?? config.themeStorageKey ?? DEFAULT_MATERIAL_THEME_CONFIG.colorStorageKey,
       styleStorageKey: config.styleStorageKey ?? DEFAULT_MATERIAL_THEME_CONFIG.styleStorageKey,
@@ -163,7 +213,18 @@ export class ThemeService {
     if (!key) return null;
     try {
       const value = this.document.defaultView?.localStorage?.getItem(key);
-      return COLOR_SCHEMES.some((scheme) => scheme === value) ? (value as ColorScheme) : null;
+      return isColorScheme(value) ? value : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private readPersistedBrand(): ThemeBrand | null {
+    const key = this.config.brandStorageKey;
+    if (!key) return null;
+    try {
+      const value = this.document.defaultView?.localStorage?.getItem(key);
+      return isThemeBrand(value) ? value : null;
     } catch {
       return null;
     }
@@ -174,7 +235,7 @@ export class ThemeService {
     if (!key) return null;
     try {
       const value = this.document.defaultView?.localStorage?.getItem(key);
-      return COLORS.some((color) => color === value) ? (value as ThemeColor) : null;
+      return isThemeColor(value) ? value : null;
     } catch {
       return null;
     }
@@ -185,7 +246,7 @@ export class ThemeService {
     if (!key) return null;
     try {
       const value = this.document.defaultView?.localStorage?.getItem(key);
-      return STYLES.some((style) => style === value) ? (value as ThemeStyle) : null;
+      return isThemeStyle(value) ? value : null;
     } catch {
       return null;
     }
@@ -196,6 +257,16 @@ export class ThemeService {
     if (!key) return;
     try {
       this.document.defaultView?.localStorage?.setItem(key, mode);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  private persistBrand(brand: ThemeBrand): void {
+    const key = this.config.brandStorageKey;
+    if (!key) return;
+    try {
+      this.document.defaultView?.localStorage?.setItem(key, brand);
     } catch {
       /* ignore */
     }
@@ -216,6 +287,27 @@ export class ThemeService {
     if (!key) return;
     try {
       this.document.defaultView?.localStorage?.setItem(key, style);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  private clearPersistedBrand(): void {
+    this.clearPersistedItem(this.config.brandStorageKey);
+  }
+
+  private clearPersistedColor(): void {
+    this.clearPersistedItem(this.config.colorStorageKey);
+  }
+
+  private clearPersistedStyle(): void {
+    this.clearPersistedItem(this.config.styleStorageKey);
+  }
+
+  private clearPersistedItem(key: string | null): void {
+    if (!key) return;
+    try {
+      this.document.defaultView?.localStorage?.removeItem(key);
     } catch {
       /* ignore */
     }

@@ -14,8 +14,7 @@ import { routes } from './app.routes';
 
 export const themeConfig = {
   mode: 'light',
-  color: 'blue',
-  style: 'default',
+  brand: 'etos',
 } satisfies MaterialThemeConfig;
 
 export const layoutConfig = {

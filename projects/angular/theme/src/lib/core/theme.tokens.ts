@@ -16,8 +16,13 @@ export const STYLES = ['default', 'sharp', 'brutal', 'soft'] as const;
 
 export type ThemeStyle = (typeof STYLES)[number];
 
+export const BRANDS = ['etos'] as const;
+
+export type ThemeBrand = (typeof BRANDS)[number];
+
 export interface ThemeConfig {
   readonly mode: ThemeMode;
+  readonly brand: ThemeBrand | null;
   readonly color: ThemeColor;
   readonly style: ThemeStyle;
 }
@@ -25,12 +30,18 @@ export interface ThemeConfig {
 export interface MaterialThemeConfig {
   /** Initial mode preference. Supports `system` for first-visit OS detection. */
   readonly mode?: ColorScheme;
+  /** Initial brand bundle. When set, it replaces the explicit color and style layers. */
+  readonly brand?: ThemeBrand | null;
+  /** Alias for `brand` to match the persisted `theme-brand` setting. */
+  readonly 'theme-brand'?: ThemeBrand | null;
   /** Initial brand color layer. */
   readonly color?: ThemeColor;
   /** Initial style personality layer. */
   readonly style?: ThemeStyle;
   /** @deprecated Use `mode` instead. */
   readonly defaultMode?: ColorScheme;
+  /** Default brand bundle. When set, it replaces the explicit color and style layers. */
+  readonly defaultBrand?: ThemeBrand | null;
   /** @deprecated Use `color` instead. */
   readonly defaultColor?: ThemeColor;
   /** @deprecated Use `style` instead. */
@@ -47,6 +58,8 @@ export interface MaterialThemeConfig {
   readonly themeStorageKey?: string | null;
   /** localStorage key used to persist the mode preference. Set to `null` to disable persistence. */
   readonly modeStorageKey?: string | null;
+  /** localStorage key used to persist the brand bundle. Set to `null` to disable persistence. */
+  readonly brandStorageKey?: string | null;
   /** localStorage key used to persist the color layer. Set to `null` to disable persistence. */
   readonly colorStorageKey?: string | null;
   /** localStorage key used to persist the style layer. Set to `null` to disable persistence. */
@@ -55,9 +68,11 @@ export interface MaterialThemeConfig {
 
 export interface ResolvedMaterialThemeConfig {
   readonly defaultMode: ColorScheme;
+  readonly defaultBrand: ThemeBrand | null;
   readonly defaultColor: ThemeColor;
   readonly defaultStyle: ThemeStyle;
   readonly modeStorageKey: string | null;
+  readonly brandStorageKey: string | null;
   readonly colorStorageKey: string | null;
   readonly styleStorageKey: string | null;
 }
@@ -65,10 +80,12 @@ export interface ResolvedMaterialThemeConfig {
 export const MATERIAL_THEME_CONFIG = new InjectionToken<MaterialThemeConfig>('MATERIAL_THEME_CONFIG');
 
 export const DEFAULT_MATERIAL_THEME_CONFIG: ResolvedMaterialThemeConfig = {
-  defaultMode: 'system',
+  defaultMode: 'light',
+  defaultBrand: null,
   defaultColor: 'blue',
   defaultStyle: 'default',
   modeStorageKey: 'theme-mode',
+  brandStorageKey: 'theme-brand',
   colorStorageKey: 'theme-color',
   styleStorageKey: 'theme-style',
 };
@@ -83,4 +100,8 @@ export function isThemeColor(value: string | null | undefined): value is ThemeCo
 
 export function isThemeStyle(value: string | null | undefined): value is ThemeStyle {
   return STYLES.some((style) => style === value);
+}
+
+export function isThemeBrand(value: string | null | undefined): value is ThemeBrand {
+  return BRANDS.some((brand) => brand === value);
 }

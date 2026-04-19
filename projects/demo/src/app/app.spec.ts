@@ -14,6 +14,9 @@ describe('App', () => {
     delete document.documentElement.dataset['color'];
     delete document.documentElement.dataset['style'];
     delete document.documentElement.dataset['theme'];
+    document.documentElement.removeAttribute('theme-brand');
+    document.documentElement.removeAttribute('theme-color');
+    document.documentElement.removeAttribute('theme-style');
 
     await TestBed.configureTestingModule({
       imports: [App],
@@ -28,6 +31,9 @@ describe('App', () => {
     delete document.documentElement.dataset['color'];
     delete document.documentElement.dataset['style'];
     delete document.documentElement.dataset['theme'];
+    document.documentElement.removeAttribute('theme-brand');
+    document.documentElement.removeAttribute('theme-color');
+    document.documentElement.removeAttribute('theme-style');
   });
 
   it('should create the app', () => {
@@ -48,12 +54,16 @@ describe('App', () => {
     fixture.detectChanges();
 
     expect(document.documentElement.dataset['mode']).toBe(themeConfig.mode);
-    expect(document.documentElement.dataset['color']).toBe(themeConfig.color);
-    expect(document.documentElement.dataset['style']).toBe(themeConfig.style);
-    expect(document.documentElement.dataset['theme']).toBe(themeConfig.color);
+    expect(document.documentElement.getAttribute('theme-brand')).toBe(themeConfig.brand);
+    expect(document.documentElement.hasAttribute('theme-color')).toBe(false);
+    expect(document.documentElement.hasAttribute('theme-style')).toBe(false);
+    expect(document.documentElement.dataset['color']).toBeUndefined();
+    expect(document.documentElement.dataset['style']).toBeUndefined();
+    expect(document.documentElement.dataset['theme']).toBe(themeConfig.brand);
     expect(localStorage.getItem('theme-mode')).toBe(themeConfig.mode);
-    expect(localStorage.getItem('theme-color')).toBe(themeConfig.color);
-    expect(localStorage.getItem('theme-style')).toBe(themeConfig.style);
+    expect(localStorage.getItem('theme-brand')).toBe(themeConfig.brand);
+    expect(localStorage.getItem('theme-color')).toBeNull();
+    expect(localStorage.getItem('theme-style')).toBeNull();
   });
 
   it('should apply configured layout defaults on bootstrap', () => {

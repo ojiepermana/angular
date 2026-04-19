@@ -17,6 +17,7 @@ describe('VerticalLayoutComponent', () => {
     localStorage.removeItem('layout-mode');
     localStorage.removeItem('layout-width');
     localStorage.removeItem('theme-mode');
+    localStorage.removeItem('theme-brand');
     localStorage.removeItem('theme-color');
     localStorage.removeItem('theme-style');
     document.documentElement.classList.remove('dark');
@@ -24,6 +25,9 @@ describe('VerticalLayoutComponent', () => {
     delete document.documentElement.dataset['color'];
     delete document.documentElement.dataset['style'];
     delete document.documentElement.dataset['theme'];
+    document.documentElement.removeAttribute('theme-brand');
+    document.documentElement.removeAttribute('theme-color');
+    document.documentElement.removeAttribute('theme-style');
   });
 
   it('constrains the main area when layout width is fixed', () => {

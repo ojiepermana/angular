@@ -1,26 +1,32 @@
 /**
- * @ojiepermana/angular/theme — root stylesheet.
+ * @ojiepermana/angular/theme — Etos brand stylesheet.
  *
  * Usage — import once in the consumer app, **before** Tailwind:
  *
- *   @import '@ojiepermana/angular/theme/styles';
+ *   @import '@ojiepermana/angular/theme/etos.css';
  *   @import 'tailwindcss';
  *   @import '@ojiepermana/angular/theme/tailwind/theme.css';
  *
- * Includes cascade layers, independent mode/color/style tokens, shared
- * semantic tokens, and an Angular Material bridge so `mat-*` components
- * inherit the active theme automatically.
+ * Includes the shared cascade layers, mode tokens, default library color/style
+ * fallbacks, Etos brand overrides, shared semantic tokens, and Angular
+ * Material bridge styles.
  */
 @import './themes/library/_layers.css';
 
 /* Layer 1: mode variants. */
 @import './themes/mode/index.css';
 
-/* Layer 2: color variants. */
+/* Layer 2: default library color fallbacks. */
 @import './themes/library/color/index.css';
 
-/* Layer 3: style variants. */
+/* Layer 3: default library style fallbacks. */
 @import './themes/library/style/index.css';
+
+/* Brand override: Etos color variant. */
+@import './themes/brand/etos/color.css';
+
+/* Brand override: Etos style variant. */
+@import './themes/brand/etos/style.css';
 
 /* Shared semantic and library tokens. */
 @import './themes/library/_tokens.css';

@@ -1,0 +1,21 @@
+/**
+ * Etos brand color layer.
+ */
+@layer tokens {
+  [theme-brand='etos'] {
+    --primary: 211 95% 29%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 211 95% 96%;
+    --accent-foreground: 211 95% 22%;
+    --secondary: 211 24% 95%;
+    --secondary-foreground: 211 75% 24%;
+    --ring: 211 95% 29%;
+  }
+
+  [data-mode='dark'][theme-brand='etos'] {
+    --accent: 211 58% 18%;
+    --accent-foreground: 211 90% 84%;
+    --secondary: 211 24% 18%;
+    --secondary-foreground: 211 82% 84%;
+  }
+}
