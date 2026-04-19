@@ -1,5 +1,5 @@
-/* @ojiepermana/angular theme tokens with the Etos brand bundle. */
-@import '../../../angular/theme/src/lib/styles/etos.css';
+/* @ojiepermana/angular theme tokens (mode, color, style, material bridge). */
+@import '../../../angular/theme/src/lib/styles/index.css';
 
 /* Tailwind v4 runtime. */
 @import 'tailwindcss';

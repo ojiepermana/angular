@@ -54,16 +54,16 @@ describe('App', () => {
     fixture.detectChanges();
 
     expect(document.documentElement.dataset['mode']).toBe(themeConfig.mode);
-    expect(document.documentElement.getAttribute('theme-brand')).toBe(themeConfig.brand);
-    expect(document.documentElement.hasAttribute('theme-color')).toBe(false);
-    expect(document.documentElement.hasAttribute('theme-style')).toBe(false);
-    expect(document.documentElement.dataset['color']).toBeUndefined();
-    expect(document.documentElement.dataset['style']).toBeUndefined();
-    expect(document.documentElement.dataset['theme']).toBe(themeConfig.brand);
+    expect(document.documentElement.hasAttribute('theme-brand')).toBe(false);
+    expect(document.documentElement.getAttribute('theme-color')).toBe(themeConfig.color);
+    expect(document.documentElement.getAttribute('theme-style')).toBe(themeConfig.style);
+    expect(document.documentElement.dataset['color']).toBe(themeConfig.color);
+    expect(document.documentElement.dataset['style']).toBe(themeConfig.style);
+    expect(document.documentElement.dataset['theme']).toBe(themeConfig.color);
     expect(localStorage.getItem('theme-mode')).toBe(themeConfig.mode);
-    expect(localStorage.getItem('theme-brand')).toBe(themeConfig.brand);
-    expect(localStorage.getItem('theme-color')).toBeNull();
-    expect(localStorage.getItem('theme-style')).toBeNull();
+    expect(localStorage.getItem('theme-brand')).toBeNull();
+    expect(localStorage.getItem('theme-color')).toBe(themeConfig.color);
+    expect(localStorage.getItem('theme-style')).toBe(themeConfig.style);
   });
 
   it('should apply configured layout defaults on bootstrap', () => {
