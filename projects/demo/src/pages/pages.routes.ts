@@ -22,6 +22,18 @@ export const routes: Routes = [
         title: 'Dashboard',
         loadComponent: () => import('./dashboard/dashboard').then((m) => m.DashboardPage),
       },
+      {
+        path: 'ui/shadcn',
+        title: 'shadcn UI',
+        loadChildren: () => import('./ui/component/shadcn/ui-shadcn.routes').then((m) => m.shadcnRoutes),
+      },
+      {
+        path: 'ui/chart',
+        title: 'Chart demos',
+        loadChildren: () => import('./ui/component/chart/chart.routes').then((m) => m.chartRoutes),
+      },
+      pendingRoute('material', 'Angular Material'),
+      pendingRoute('cdk', 'Angular CDK'),
     ],
   },
 ];

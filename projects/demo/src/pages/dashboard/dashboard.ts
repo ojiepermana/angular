@@ -1,40 +1,40 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { LayoutService } from '@ojiepermana/angular/layout';
+import { LayoutService, ShellLayoutComponent } from '@ojiepermana/angular/layout';
 
 @Component({
-  selector: 'app-shell',
-  imports: [],
+  selector: 'app-dashboard',
+  imports: [ShellLayoutComponent],
   host: {
-    class: 'flex h-full min-h-0 flex-col bg-background text-foreground',
+    class: 'block h-full min-h-0',
   },
   template: `
-    @if (layoutMode() === 'vertical') {
-      <header class="flex h-12 shrink-0 items-center border-b border-border bg-card px-4">Header Vertical</header>
-      <main class="min-h-0 flex-1 overflow-auto">
-        <section class="flex min-h-full flex-col" data-dashboard-layout="vertical">
+    <ui-shell>
+      <div ui-shell-header class="contents">
+        @if (layoutMode() === 'vertical') {
+          Header Vertical
+        } @else {
+          <div>
+            <h1 class="text-lg font-semibold tracking-tight">Header Horizontal</h1>
+            <div class="-mt-1.5 text-sm text-muted-foreground">Subtitle Horizontal</div>
+          </div>
+          <div>Action</div>
+        }
+      </div>
+
+      <div ui-shell-main class="contents" [attr.data-dashboard-layout]="layoutMode()">
+        @if (layoutMode() === 'vertical') {
           @for (item of verticalItems; track item) {
             <div>Dashboard content vertical</div>
           }
-        </section>
-      </main>
-      <footer class="flex h-12 shrink-0 items-center border-t border-border bg-card px-4">Footer</footer>
-    } @else {
-      <header class="flex shrink-0 items-center p-6 justify-between">
-        <div>
-          <h1 class="text-lg font-semibold tracking-tight">Header Horizontal</h1>
-          <div class="text-sm text-muted-foreground -mt-1.5">Subtitle Horizontal</div>
-        </div>
-        <div>Action</div>
-      </header>
-      <main class="min-h-0 flex-1 overflow-auto">
-        <section class="flex min-h-full flex-col p-6" data-dashboard-layout="horizontal">
+        } @else {
           @for (item of verticalItems; track item) {
             <div>Dashboard content horizontal <br /></div>
           }
-        </section>
-      </main>
-      <footer class="flex h-12 shrink-0 items-center border-t border-border px-6">Footer</footer>
-    }
+        }
+      </div>
+
+      <div ui-shell-footer class="contents">Footer</div>
+    </ui-shell>
   `,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
