@@ -9,13 +9,13 @@ import {
   MenuSurfaceComponent,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-context-menu-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ShellLayoutComponent,
+    PageShellComponent,
     ContextMenuTriggerDirective,
     MenuContentDirective,
     MenuItemComponent,
@@ -25,7 +25,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
     MenuSurfaceComponent,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Context Menu"
       description="Right-click menu with keyboard, focus, and CDK overlay positioning.">
       <section class="mb-10">
@@ -46,7 +46,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </ui-menu-surface>
         </ng-template>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class ContextMenuPageComponent {}

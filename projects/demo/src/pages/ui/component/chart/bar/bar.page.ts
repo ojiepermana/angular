@@ -9,7 +9,7 @@ import {
   ChartTooltip,
 } from '@ojiepermana/angular/chart';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
 import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import {
@@ -39,13 +39,13 @@ import {
     ChartLegend,
     ChartPageBadgesComponent,
     ChartTooltip,
-    ShellLayoutComponent,
+    PageShellComponent,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Bar Charts"
       description="Bar layouts modeled after the shadcn chart gallery: grouped, stacked, horizontal, active, mixed-color, and label-heavy variants.">
-      <demo-chart-page-badges ui-shell-actions [labels]="pageBadges" />
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -229,7 +229,7 @@ import {
           </ui-chart-container>
         </demo-chart-card>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class BarChartPageComponent {

@@ -10,13 +10,13 @@ import {
   InputComponent,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-form-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ShellLayoutComponent,
+    PageShellComponent,
     ReactiveFormsModule,
     ButtonComponent,
     FormControlDirective,
@@ -27,7 +27,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
     InputComponent,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Form"
       description="Composable form-field — wires id, aria-describedby, and aria-invalid automatically.">
       <section class="mb-10 max-w-md">
@@ -51,7 +51,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </div>
         </form>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class FormPageComponent {

@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AlertComponent, AlertDescriptionComponent, AlertTitleComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-alert-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, AlertComponent, AlertTitleComponent, AlertDescriptionComponent],
+  imports: [PageShellComponent, AlertComponent, AlertTitleComponent, AlertDescriptionComponent],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Alert"
       description="Displays a callout for user attention. Default and destructive variants.">
       <section class="mb-10 grid gap-4">
@@ -22,7 +22,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           <ui-alert-description>Your session has expired. Please log in again.</ui-alert-description>
         </ui-alert>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class AlertPageComponent {}

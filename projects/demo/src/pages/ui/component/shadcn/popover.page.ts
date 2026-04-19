@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ButtonComponent, PopoverContentDirective, PopoverTriggerDirective } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-popover-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, ButtonComponent, PopoverContentDirective, PopoverTriggerDirective],
+  imports: [PageShellComponent, ButtonComponent, PopoverContentDirective, PopoverTriggerDirective],
   template: `
-    <ui-shell title="Popover" description="Floating panel anchored to a trigger with positioning and dismiss.">
+    <demo-page-shell title="Popover" description="Floating panel anchored to a trigger with positioning and dismiss.">
       <section class="mb-10">
         <button ui-button variant="outline" [uiPopoverTrigger]="pop">Open popover</button>
         <ng-template uiPopoverContent #pop="uiPopoverContent">
@@ -27,7 +27,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </div>
         </ng-template>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class PopoverPageComponent {}

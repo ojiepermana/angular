@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CheckboxComponent, LabelComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-checkbox-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, FormsModule, CheckboxComponent, LabelComponent],
+  imports: [PageShellComponent, FormsModule, CheckboxComponent, LabelComponent],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Checkbox"
       description="Shadcn-styled checkbox built on mat-checkbox. Works with ngModel / FormControl.">
       <section class="mb-10">
@@ -30,7 +30,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
         </div>
         <p class="mt-3 text-sm text-muted-foreground">Agreed: {{ agree() ? 'yes' : 'no' }}</p>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class CheckboxPageComponent {

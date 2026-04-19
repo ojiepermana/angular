@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LabelComponent, SwitchComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-switch-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, FormsModule, LabelComponent, SwitchComponent],
+  imports: [PageShellComponent, FormsModule, LabelComponent, SwitchComponent],
   template: `
-    <ui-shell title="Switch" description="Shadcn-styled slide toggle. Works with ngModel.">
+    <demo-page-shell title="Switch" description="Shadcn-styled slide toggle. Works with ngModel.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">States</h2>
         <div class="flex flex-col gap-3">
@@ -24,7 +24,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
         </div>
         <p class="mt-3 text-sm text-muted-foreground">Airplane mode: {{ enabled() ? 'on' : 'off' }}</p>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class SwitchPageComponent {

@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ButtonComponent, ToastService } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-toast-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, ButtonComponent],
+  imports: [PageShellComponent, ButtonComponent],
   template: `
-    <ui-shell title="Toast" description="Lightweight transient message built on MatSnackBar.">
+    <demo-page-shell title="Toast" description="Lightweight transient message built on MatSnackBar.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Variants</h2>
         <div class="flex flex-wrap items-center gap-2">
@@ -17,7 +17,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           <button ui-button variant="destructive" (click)="showError()">Destructive</button>
         </div>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class ToastPageComponent {

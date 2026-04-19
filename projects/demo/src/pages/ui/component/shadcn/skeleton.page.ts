@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SkeletonComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-skeleton-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, SkeletonComponent],
+  imports: [PageShellComponent, SkeletonComponent],
   template: `
-    <ui-shell title="Skeleton" description="Shimmering placeholder while content loads.">
+    <demo-page-shell title="Skeleton" description="Shimmering placeholder while content loads.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <div class="flex items-center gap-4">
@@ -19,7 +19,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </div>
         </div>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class SkeletonPageComponent {}

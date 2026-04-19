@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ButtonComponent, ProgressComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-progress-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, ButtonComponent, ProgressComponent],
+  imports: [PageShellComponent, ButtonComponent, ProgressComponent],
   template: `
-    <ui-shell title="Progress" description="Determinate and indeterminate progress indicators.">
+    <demo-page-shell title="Progress" description="Determinate and indeterminate progress indicators.">
       <section class="mb-10 grid max-w-lg gap-4">
         <h2 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Determinate</h2>
         <ui-progress class="h-2 overflow-hidden rounded-full bg-secondary" [value]="value()" />
@@ -23,7 +23,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
         <h2 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Indeterminate</h2>
         <ui-progress class="h-2 overflow-hidden rounded-full bg-secondary" [indeterminate]="true" />
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class ProgressPageComponent {

@@ -8,13 +8,13 @@ import {
   DialogTitleComponent,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-dialog-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ShellLayoutComponent,
+    PageShellComponent,
     ButtonComponent,
     DialogComponent,
     DialogDescriptionComponent,
@@ -23,7 +23,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
     DialogTitleComponent,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Dialog"
       description="Modal dialog rendered through CDK overlay, with focus trap and restore.">
       <section class="mb-10">
@@ -43,7 +43,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </ui-dialog-footer>
         </ui-dialog>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class DialogPageComponent {

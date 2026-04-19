@@ -9,13 +9,13 @@ import {
   ButtonComponent,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-card-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ShellLayoutComponent,
+    PageShellComponent,
     CardComponent,
     CardContentComponent,
     CardDescriptionComponent,
@@ -25,7 +25,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
     ButtonComponent,
   ],
   template: `
-    <ui-shell title="Card" description="Container for related content, titles, descriptions and actions.">
+    <demo-page-shell title="Card" description="Container for related content, titles, descriptions and actions.">
       <section class="mb-10 grid gap-6 md:grid-cols-2">
         <ui-card class="block rounded-xl border border-border bg-card text-card-foreground shadow">
           <ui-card-header class="flex flex-col gap-1.5 p-6">
@@ -56,7 +56,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </ui-card-footer>
         </ui-card>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class CardPageComponent {}

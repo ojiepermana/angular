@@ -9,7 +9,7 @@ import {
   RadialChart,
 } from '@ojiepermana/angular/chart';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
 import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared/chart-datasets';
@@ -23,17 +23,17 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
     ChartLegend,
     ChartPageBadgesComponent,
     ChartTooltip,
-    ShellLayoutComponent,
+    PageShellComponent,
     PieCenter,
     PieChart,
     RadialCenter,
     RadialChart,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Pie Charts"
       description="Pie and donut compositions aligned with the shadcn gallery, including active slices, center copy, legends, and stacked radial rings.">
-      <demo-chart-page-badges ui-shell-actions [labels]="pageBadges" />
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -233,7 +233,7 @@ import { BROWSER_CONFIG, BROWSER_DATA, BROWSER_TOTAL_VISITORS } from '../_shared
           </ui-chart-container>
         </demo-chart-card>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class PieChartPageComponent {

@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LabelComponent, RadioComponent, RadioGroupComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-radio-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, FormsModule, LabelComponent, RadioComponent, RadioGroupComponent],
+  imports: [PageShellComponent, FormsModule, LabelComponent, RadioComponent, RadioGroupComponent],
   template: `
-    <ui-shell title="Radio" description="Mutually exclusive selection within a group.">
+    <demo-page-shell title="Radio" description="Mutually exclusive selection within a group.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <ui-radio-group name="plan" [(ngModel)]="value">
@@ -28,7 +28,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
         </ui-radio-group>
         <p class="mt-3 text-sm text-muted-foreground">Selected: {{ value() ?? '—' }}</p>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class RadioPageComponent {

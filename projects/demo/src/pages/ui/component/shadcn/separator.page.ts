@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SeparatorComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-separator-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, SeparatorComponent],
+  imports: [PageShellComponent, SeparatorComponent],
   template: `
-    <ui-shell title="Separator" description="Thin divider with semantic role toggle.">
+    <demo-page-shell title="Separator" description="Thin divider with semantic role toggle.">
       <section class="mb-10 max-w-md">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Horizontal</h2>
         <div>
@@ -24,7 +24,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </div>
         </div>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class SeparatorPageComponent {}

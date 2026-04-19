@@ -33,9 +33,8 @@ describe('DashboardPage', () => {
     const root = fixture.nativeElement as HTMLElement;
     const main = root.querySelector('main');
     const footer = root.querySelector('footer');
-    const shell = root.querySelector('ui-shell');
 
-    expect(shell?.getAttribute('data-layout-mode')).toBe('vertical');
+    expect(root.getAttribute('data-layout-mode')).toBe('vertical');
     expect(main?.className).toContain('flex-1');
     expect(main?.className).toContain('overflow-auto');
     expect(footer?.className).toContain('shrink-0');

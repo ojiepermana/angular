@@ -11,7 +11,7 @@ import {
   ChartZoomControls,
 } from '@ojiepermana/angular/chart';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
 import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import {
@@ -42,13 +42,13 @@ import {
     ChartPageBadgesComponent,
     ChartTooltip,
     ChartZoomControls,
-    ShellLayoutComponent,
+    PageShellComponent,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Area Charts"
       description="Area charts that match the shadcn demos: curve modes, stacked totals, normalized stacks, gradient fills, and an interactive zoomable panel.">
-      <demo-chart-page-badges ui-shell-actions [labels]="pageBadges" />
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -250,7 +250,7 @@ import {
           </ui-chart-container>
         </demo-chart-card>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class AreaChartPageComponent {

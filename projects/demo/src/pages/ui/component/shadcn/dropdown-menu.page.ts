@@ -10,13 +10,13 @@ import {
   MenuTriggerDirective,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-dropdown-menu-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ShellLayoutComponent,
+    PageShellComponent,
     ButtonComponent,
     MenuContentDirective,
     MenuItemComponent,
@@ -27,7 +27,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
     MenuTriggerDirective,
   ],
   template: `
-    <ui-shell title="Dropdown Menu" description="Menu anchored to a trigger via CDK overlay with keyboard a11y.">
+    <demo-page-shell title="Dropdown Menu" description="Menu anchored to a trigger via CDK overlay with keyboard a11y.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <button ui-button variant="outline" [uiMenuTrigger]="menu">Open menu</button>
@@ -45,7 +45,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </ui-menu-surface>
         </ng-template>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class DropdownMenuPageComponent {}

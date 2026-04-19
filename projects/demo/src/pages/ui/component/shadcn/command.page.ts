@@ -10,13 +10,13 @@ import {
   CommandShortcutComponent,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-command-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ShellLayoutComponent,
+    PageShellComponent,
     CommandComponent,
     CommandEmptyComponent,
     CommandGroupComponent,
@@ -27,7 +27,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
     CommandShortcutComponent,
   ],
   template: `
-    <ui-shell title="Command" description="Fast filterable command palette primitive.">
+    <demo-page-shell title="Command" description="Fast filterable command palette primitive.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <ui-command class="w-full max-w-md rounded-lg border border-border shadow-md">
@@ -48,7 +48,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </ui-command-list>
         </ui-command>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class CommandPageComponent {}

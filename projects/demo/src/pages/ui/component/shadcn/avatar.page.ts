@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AvatarComponent, AvatarFallbackComponent, AvatarImageComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-avatar-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, AvatarComponent, AvatarFallbackComponent, AvatarImageComponent],
+  imports: [PageShellComponent, AvatarComponent, AvatarFallbackComponent, AvatarImageComponent],
   template: `
-    <ui-shell title="Avatar" description="User image with graceful fallback when the image fails to load.">
+    <demo-page-shell title="Avatar" description="User image with graceful fallback when the image fails to load.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <div class="flex items-center gap-4">
@@ -25,7 +25,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </ui-avatar>
         </div>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class AvatarPageComponent {}

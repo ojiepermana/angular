@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComboboxComponent, type ComboboxOption } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-combobox-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, FormsModule, ComboboxComponent],
+  imports: [PageShellComponent, FormsModule, ComboboxComponent],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Combobox"
       description="Searchable single-select dropdown. Combines button trigger with the Command palette.">
       <section class="mb-10">
@@ -17,7 +17,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
         <ui-combobox class="block w-72" [options]="options" [placeholder]="'Select framework…'" [(ngModel)]="value" />
         <p class="mt-3 text-sm text-muted-foreground">Selected: {{ value() ?? '—' }}</p>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class ComboboxPageComponent {

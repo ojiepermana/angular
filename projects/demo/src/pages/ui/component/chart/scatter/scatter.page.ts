@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ChartBrush, ChartContainer, ChartLegend, ChartZoomControls, ScatterChart } from '@ojiepermana/angular/chart';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
 import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import { SCATTER_BASIC_CONFIG, SCATTER_BASIC_DATA, SCATTER_CONFIG, SCATTER_DATA } from '../_shared/chart-datasets';
@@ -16,14 +16,14 @@ import { SCATTER_BASIC_CONFIG, SCATTER_BASIC_DATA, SCATTER_CONFIG, SCATTER_DATA 
     ChartLegend,
     ChartPageBadgesComponent,
     ChartZoomControls,
-    ShellLayoutComponent,
+    PageShellComponent,
     ScatterChart,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Scatter Charts"
       description="Four scatter variants chosen to fit the current primitive set: a minimal distribution plot, grouped points, bubble sizing, and a brush-and-zoom example.">
-      <demo-chart-page-badges ui-shell-actions [labels]="pageBadges" />
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -96,7 +96,7 @@ import { SCATTER_BASIC_CONFIG, SCATTER_BASIC_DATA, SCATTER_CONFIG, SCATTER_DATA 
           </ui-chart-container>
         </demo-chart-card>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class ScatterChartPageComponent {

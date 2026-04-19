@@ -6,20 +6,20 @@ import {
   AccordionTriggerComponent,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-accordion-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ShellLayoutComponent,
+    PageShellComponent,
     AccordionComponent,
     AccordionContentComponent,
     AccordionItemComponent,
     AccordionTriggerComponent,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Accordion"
       description="Stacked, collapsible sections. Supports single and multiple open modes.">
       <section class="mb-10">
@@ -53,7 +53,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </ui-accordion-item>
         </ui-accordion>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class AccordionPageComponent {}

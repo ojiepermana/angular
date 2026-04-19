@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ChartContainer, ChartTooltip, RadialCenter, RadialChart } from '@ojiepermana/angular/chart';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
 import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import {
@@ -24,15 +24,15 @@ import {
     ChartDemoCardComponent,
     ChartPageBadgesComponent,
     ChartTooltip,
-    ShellLayoutComponent,
+    PageShellComponent,
     RadialCenter,
     RadialChart,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Radial Charts"
       description="Radial compositions modeled after the shadcn gallery: per-browser concentric rings, inline labels, grid tracks, center copy, shaped partial arcs, and stacked desktop/mobile totals.">
-      <demo-chart-page-badges ui-shell-actions [labels]="pageBadges" />
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -182,7 +182,7 @@ import {
           </ui-chart-container>
         </demo-chart-card>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class RadialChartPageComponent {

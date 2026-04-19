@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LabelComponent, SliderComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-slider-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, FormsModule, LabelComponent, SliderComponent],
+  imports: [PageShellComponent, FormsModule, LabelComponent, SliderComponent],
   template: `
-    <ui-shell title="Slider" description="Styled native range input. Works with ngModel / FormControl.">
+    <demo-page-shell title="Slider" description="Styled native range input. Works with ngModel / FormControl.">
       <section class="mb-10 grid max-w-md gap-3">
         <h2 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <label ui-label>Volume: {{ value() }}</label>
@@ -20,7 +20,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Disabled</h2>
         <input ui-slider type="range" min="0" max="100" [value]="40" disabled />
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class SliderPageComponent {

@@ -9,7 +9,7 @@ import {
   TableRowComponent,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 interface Invoice {
   readonly invoice: string;
@@ -22,7 +22,7 @@ interface Invoice {
   selector: 'demo-shadcn-table-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ShellLayoutComponent,
+    PageShellComponent,
     TableBodyComponent,
     TableCaptionComponent,
     TableCellComponent,
@@ -32,7 +32,7 @@ interface Invoice {
     TableRowComponent,
   ],
   template: `
-    <ui-shell title="Table" description="Semantic table with shadcn styling — head, body, footer, caption.">
+    <demo-page-shell title="Table" description="Semantic table with shadcn styling — head, body, footer, caption.">
       <section class="mb-10">
         <ui-table>
           <caption ui-table-caption>
@@ -58,7 +58,7 @@ interface Invoice {
           </tbody>
         </ui-table>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class TablePageComponent {

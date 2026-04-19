@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ChartContainer, ChartLegend, ChartTooltip, RadarChart } from '@ojiepermana/angular/chart';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
 import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
@@ -15,14 +15,14 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
     ChartLegend,
     ChartPageBadgesComponent,
     ChartTooltip,
-    ShellLayoutComponent,
+    PageShellComponent,
     RadarChart,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Radar Charts"
       description="Radar charts covering the shadcn-style variants: dots, lines-only views, polygon and circle grids, hidden axes, and filled backdrops.">
-      <demo-chart-page-badges ui-shell-actions [labels]="pageBadges" />
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <demo-chart-card
@@ -164,7 +164,7 @@ import { RADAR_MONTH_DATA, VISITOR_CONFIG } from '../_shared/chart-datasets';
           </ui-chart-container>
         </demo-chart-card>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class RadarChartPageComponent {

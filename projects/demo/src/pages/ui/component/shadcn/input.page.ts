@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputComponent, LabelComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-input-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, FormsModule, InputComponent, LabelComponent],
+  imports: [PageShellComponent, FormsModule, InputComponent, LabelComponent],
   template: `
-    <ui-shell title="Input" description="Styled native input that works with ngModel and reactive forms.">
+    <demo-page-shell title="Input" description="Styled native input that works with ngModel and reactive forms.">
       <section class="mb-10 grid max-w-md gap-4">
         <h2 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Variants</h2>
         <div class="grid gap-2">
@@ -29,7 +29,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           <input ui-input type="file" />
         </div>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class InputPageComponent {}

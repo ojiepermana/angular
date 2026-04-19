@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BadgeComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-badge-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, BadgeComponent],
+  imports: [PageShellComponent, BadgeComponent],
   template: `
-    <ui-shell title="Badge" description="Small pill for statuses, counts, and metadata.">
+    <demo-page-shell title="Badge" description="Small pill for statuses, counts, and metadata.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Variants</h2>
         <div class="flex flex-wrap items-center gap-2">
@@ -18,7 +18,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           <ui-badge variant="outline">Outline</ui-badge>
         </div>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class BadgePageComponent {}

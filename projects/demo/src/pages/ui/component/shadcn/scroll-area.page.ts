@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ScrollAreaComponent, SeparatorComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-scroll-area-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, ScrollAreaComponent, SeparatorComponent],
+  imports: [PageShellComponent, ScrollAreaComponent, SeparatorComponent],
   template: `
-    <ui-shell title="Scroll Area" description="Styled native scrollbar for constrained lists.">
+    <demo-page-shell title="Scroll Area" description="Styled native scrollbar for constrained lists.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <ui-scroll-area class="h-72 w-64 rounded-md border border-border">
@@ -21,7 +21,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </div>
         </ui-scroll-area>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class ScrollAreaPageComponent {

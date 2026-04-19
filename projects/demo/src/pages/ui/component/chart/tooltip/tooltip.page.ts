@@ -10,7 +10,7 @@ import {
   type ChartTooltipValueFormatter,
 } from '@ojiepermana/angular/chart';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../../core/page-shell/page-shell';
 import { ChartDemoCardComponent } from '../_shared/chart-demo-card';
 import { ChartPageBadgesComponent } from '../_shared/chart-page-badges';
 import { DEFAULT_META, DEFAULT_TREND, EXERCISE_CONFIG, EXERCISE_DATA } from '../_shared/chart-datasets';
@@ -42,13 +42,13 @@ export class DemoTooltipSwimmingIconComponent {}
     ChartDemoCardComponent,
     ChartPageBadgesComponent,
     ChartTooltip,
-    ShellLayoutComponent,
+    PageShellComponent,
   ],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Tooltip Charts"
       description="Nine tooltip treatments modeled on the shadcn tooltip gallery: indicator variants, header overrides, value formatters, icon support, and a fully custom template with a summed total row.">
-      <demo-chart-page-badges ui-shell-actions [labels]="pageBadges" />
+      <demo-chart-page-badges demo-page-actions [labels]="pageBadges" />
 
       <section class="grid gap-6 xl:grid-cols-2">
         <!-- 1. Default -->
@@ -206,7 +206,7 @@ export class DemoTooltipSwimmingIconComponent {}
           </ui-chart-container>
         </demo-chart-card>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class TooltipChartPageComponent {

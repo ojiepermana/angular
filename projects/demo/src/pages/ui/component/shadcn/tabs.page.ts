@@ -6,14 +6,14 @@ import {
   TabsTriggerComponent,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-tabs-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, TabsComponent, TabsContentComponent, TabsListComponent, TabsTriggerComponent],
+  imports: [PageShellComponent, TabsComponent, TabsContentComponent, TabsListComponent, TabsTriggerComponent],
   template: `
-    <ui-shell title="Tabs" description="Horizontal tab set with keyboard-roving focus and active panel.">
+    <demo-page-shell title="Tabs" description="Horizontal tab set with keyboard-roving focus and active panel.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <ui-tabs value="account" class="w-full max-w-xl">
@@ -34,7 +34,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </ui-tabs-content>
         </ui-tabs>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class TabsPageComponent {}

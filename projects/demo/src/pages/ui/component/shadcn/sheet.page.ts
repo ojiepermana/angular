@@ -8,13 +8,13 @@ import {
   SheetTitleComponent,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-sheet-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ShellLayoutComponent,
+    PageShellComponent,
     ButtonComponent,
     SheetComponent,
     SheetDescriptionComponent,
@@ -23,7 +23,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
     SheetTitleComponent,
   ],
   template: `
-    <ui-shell title="Sheet" description="Side drawer backed by CDK overlay — supports 4 sides.">
+    <demo-page-shell title="Sheet" description="Side drawer backed by CDK overlay — supports 4 sides.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <div class="flex flex-wrap items-center gap-2">
@@ -61,7 +61,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </ui-sheet-header>
         </ui-sheet>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class SheetPageComponent {

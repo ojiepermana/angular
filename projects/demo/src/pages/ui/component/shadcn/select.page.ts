@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OptionComponent, SelectComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-select-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, FormsModule, OptionComponent, SelectComponent],
+  imports: [PageShellComponent, FormsModule, OptionComponent, SelectComponent],
   template: `
-    <ui-shell title="Select" description="Single-select wrapper on mat-select with shadcn styling.">
+    <demo-page-shell title="Select" description="Single-select wrapper on mat-select with shadcn styling.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <ui-select class="block w-72" placeholder="Select a fruit" [(ngModel)]="value">
@@ -20,7 +20,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
         </ui-select>
         <p class="mt-3 text-sm text-muted-foreground">Selected: {{ value() ?? '—' }}</p>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class SelectPageComponent {

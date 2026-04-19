@@ -10,13 +10,13 @@ import {
   BreadcrumbSeparatorComponent,
 } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-breadcrumb-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ShellLayoutComponent,
+    PageShellComponent,
     RouterLink,
     BreadcrumbComponent,
     BreadcrumbEllipsisComponent,
@@ -27,7 +27,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
     BreadcrumbSeparatorComponent,
   ],
   template: `
-    <ui-shell title="Breadcrumb" description="Hierarchical navigation trail with ellipsis and separator slots.">
+    <demo-page-shell title="Breadcrumb" description="Hierarchical navigation trail with ellipsis and separator slots.">
       <section class="mb-10">
         <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Default</h2>
         <nav ui-breadcrumb>
@@ -53,7 +53,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           </ol>
         </nav>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class BreadcrumbPageComponent {}

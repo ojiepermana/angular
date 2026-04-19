@@ -1,19 +1,19 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { PaginationComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-pagination-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, PaginationComponent],
+  imports: [PageShellComponent, PaginationComponent],
   template: `
-    <ui-shell title="Pagination" description="Compact page navigation with previous/next and ellipsis.">
+    <demo-page-shell title="Pagination" description="Compact page navigation with previous/next and ellipsis.">
       <section class="mb-10">
         <ui-pagination [(page)]="page" [total]="10" />
         <p class="mt-3 text-sm text-muted-foreground">Page: {{ page() }}</p>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class PaginationPageComponent {

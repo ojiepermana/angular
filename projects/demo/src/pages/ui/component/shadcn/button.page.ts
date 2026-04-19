@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ButtonComponent } from '@ojiepermana/angular/component';
 
-import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
+import { PageShellComponent } from '../../../core/page-shell/page-shell';
 
 @Component({
   selector: 'demo-shadcn-button-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ShellLayoutComponent, ButtonComponent],
+  imports: [PageShellComponent, ButtonComponent],
   template: `
-    <ui-shell
+    <demo-page-shell
       title="Button"
       description="Native <button> / <a> styled through cva variants. Supports default, secondary, destructive, outline, ghost, link, plus 4 sizes.">
       <section class="mb-10">
@@ -41,7 +41,7 @@ import { ShellLayoutComponent } from '@ojiepermana/angular/layout';
           <a ui-button variant="link" href="#">Link anchor</a>
         </div>
       </section>
-    </ui-shell>
+    </demo-page-shell>
   `,
 })
 export class ButtonPageComponent {}
