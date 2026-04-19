@@ -43,6 +43,12 @@
     },
     {
       "path": "./projects/demo/library/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/demo/etos/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/demo/etos/tsconfig.spec.json"
     }
   ]
 }

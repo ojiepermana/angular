@@ -1,0 +1,17 @@
+/* @ojiepermana/angular theme tokens with the Etos brand bundle. */
+@import '../../../angular/theme/src/lib/styles/etos.css';
+
+/* Tailwind v4 runtime. */
+@import 'tailwindcss';
+
+/* Tailwind ↔ theme token mapping (bg-background, text-foreground, rounded-md, …). */
+@import '../../../angular/theme/src/lib/styles/themes/taildwind.css';
+
+html,
+body {
+  @apply min-h-full bg-background text-foreground antialiased;
+}
+
+body {
+  @apply m-0;
+}
