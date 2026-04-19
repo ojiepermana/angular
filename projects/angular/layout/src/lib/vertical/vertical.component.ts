@@ -6,6 +6,7 @@ import {
   type SidebarMode,
   type SidebarPosition,
 } from '@ojiepermana/angular/navigation';
+import { ThemeService } from '@ojiepermana/angular/theme';
 import { LayoutService } from '../core/layout.service';
 
 /**
@@ -29,9 +30,16 @@ import { LayoutService } from '../core/layout.service';
   host: {
     '[class]': 'hostClasses()',
     '[attr.data-layout-width]': 'layoutWidth()',
+    '[attr.data-style]': 'themeStyle()',
+    '[style.border-width]': 'shellBorderWidth()',
   },
   template: `
-    <ui-sidebar [appearance]="sidebarAppearance()" [position]="sidebarPosition()" [ariaLabel]="ariaLabel()" />
+    <ui-sidebar
+      [appearance]="sidebarAppearance()"
+      [position]="sidebarPosition()"
+      [ariaLabel]="ariaLabel()"
+      [style.border-left-width]="dividerBorderWidth()"
+      [style.border-right-width]="dividerBorderWidth()" />
     <main [class]="mainClasses()">
       <router-outlet />
     </main>
@@ -39,6 +47,7 @@ import { LayoutService } from '../core/layout.service';
 })
 export class VerticalLayoutComponent {
   private readonly layout = inject(LayoutService);
+  private readonly theme = inject(ThemeService);
 
   readonly sidebarAppearance = input<SidebarAppearance>('default');
   readonly sidebarPosition = input<SidebarPosition>('left');
@@ -46,6 +55,9 @@ export class VerticalLayoutComponent {
   readonly ariaLabel = input<string>('Primary');
 
   protected readonly layoutWidth = this.layout.width;
+  protected readonly themeStyle = this.theme.style;
+  protected readonly shellBorderWidth = computed(() => (this.layoutWidth() === 'fixed' ? 'var(--border-width)' : null));
+  protected readonly dividerBorderWidth = computed(() => 'var(--border-width)');
 
   protected readonly hostClasses = computed(() => {
     const classes = ['flex', 'h-dvh', 'w-full', 'overflow-hidden', 'bg-background', 'text-foreground'];
@@ -57,6 +69,8 @@ export class VerticalLayoutComponent {
         'lg:w-[calc(100%-4rem)]',
         'lg:border',
         'lg:border-border',
+        'lg:rounded-lg',
+        'lg:shadow-sm',
       );
     }
     return classes.join(' ');

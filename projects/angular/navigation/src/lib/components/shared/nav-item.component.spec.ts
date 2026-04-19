@@ -62,6 +62,8 @@ describe('UiNavItemComponent', () => {
 
     expect(anchor?.getAttribute('aria-current')).toBe('page');
     expect(anchor?.className).toContain('text-primary');
+    expect(anchor?.className).not.toContain('text-sm');
+    expect(anchor?.className).toContain('ui-nav-text');
     expect(anchor?.className).not.toContain('bg-accent/50');
   });
 });

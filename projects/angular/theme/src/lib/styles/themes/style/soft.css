@@ -28,6 +28,19 @@
     --font-sans: var(--theme-font-sans);
     --font-mono: var(--theme-font-mono);
     --font-weight-bold: 600;
+    --theme-text-scale: 1.05;
+    --nav-font-family: var(--font-sans);
+    --nav-text-size: var(--text-base);
+    --nav-text-line-height: var(--text-base--line-height);
+    --nav-heading-font-family: var(--font-sans);
+    --nav-heading-size: var(--text-sm);
+    --nav-heading-line-height: var(--text-sm--line-height);
+    --nav-heading-weight: 700;
+    --nav-heading-letter-spacing: 0.08em;
+    --nav-badge-font-family: var(--font-sans);
+    --nav-badge-size: var(--text-sm);
+    --nav-badge-line-height: var(--text-sm--line-height);
+    --nav-badge-weight: 600;
     --letter-spacing: 0;
     --space-unit: 0.25rem;
   }

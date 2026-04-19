@@ -67,8 +67,10 @@ describe('TopbarComponent', () => {
     const el: HTMLElement = fixture.nativeElement;
     const menubar = el.querySelector('[role="menubar"]');
     expect(menubar).toBeTruthy();
-    const items = el.querySelectorAll('[role="menuitem"]');
+    const items = Array.from(el.querySelectorAll('[role="menuitem"]'));
     expect(items.length).toBe(4);
+    expect(items.every((item) => !item.className.includes('text-sm'))).toBe(true);
+    expect(items.every((item) => item.className.includes('ui-nav-text'))).toBe(true);
   });
 
   it('renders brand and profile in dedicated topbar slots', () => {

@@ -21,7 +21,13 @@ import { bandTicks, linearTicks, type ChartTick } from '../core/ticks';
         @if (tickLine()) {
           <svg:line class="stroke-border" y1="0" y2="6" />
         }
-        <svg:text class="fill-current" y="18" text-anchor="middle" font-size="12">{{ t.label }}</svg:text>
+        <svg:text
+          class="fill-current"
+          y="18"
+          text-anchor="middle"
+          style="font-size: var(--text-xs); font-family: var(--font-sans)">
+          {{ t.label }}
+        </svg:text>
       </svg:g>
     }
   `,

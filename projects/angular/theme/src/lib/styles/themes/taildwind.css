@@ -77,6 +77,33 @@
   --shadow-lg: var(--theme-shadow-lg);
   --shadow-xl: var(--theme-shadow-lg);
 
+  --text-xs: calc(0.75rem * var(--theme-text-scale));
+  --text-xs--line-height: calc(1 / 0.75);
+  --text-sm: calc(0.875rem * var(--theme-text-scale));
+  --text-sm--line-height: calc(1.25 / 0.875);
+  --text-base: calc(1rem * var(--theme-text-scale));
+  --text-base--line-height: calc(1.5 / 1);
+  --text-lg: calc(1.125rem * var(--theme-text-scale));
+  --text-lg--line-height: calc(1.75 / 1.125);
+  --text-xl: calc(1.25rem * var(--theme-text-scale));
+  --text-xl--line-height: calc(1.75 / 1.25);
+  --text-2xl: calc(1.5rem * var(--theme-text-scale));
+  --text-2xl--line-height: calc(2 / 1.5);
+  --text-3xl: calc(1.875rem * var(--theme-text-scale));
+  --text-3xl--line-height: calc(2.25 / 1.875);
+  --text-4xl: calc(2.25rem * var(--theme-text-scale));
+  --text-4xl--line-height: calc(2.5 / 2.25);
+  --text-5xl: calc(3rem * var(--theme-text-scale));
+  --text-5xl--line-height: 1;
+  --text-6xl: calc(3.75rem * var(--theme-text-scale));
+  --text-6xl--line-height: 1;
+  --text-7xl: calc(4.5rem * var(--theme-text-scale));
+  --text-7xl--line-height: 1;
+  --text-8xl: calc(6rem * var(--theme-text-scale));
+  --text-8xl--line-height: 1;
+  --text-9xl: calc(8rem * var(--theme-text-scale));
+  --text-9xl--line-height: 1;
+
   --font-sans: var(--theme-font-sans);
   --font-mono: var(--theme-font-mono);
 }

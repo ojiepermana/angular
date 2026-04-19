@@ -15,6 +15,8 @@
     background: hsl(var(--background));
     color: hsl(var(--foreground));
     font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
     letter-spacing: var(--letter-spacing);
     transition:
       background-color 0.2s ease,
@@ -33,5 +35,29 @@
   ::selection {
     background: hsl(var(--primary) / 0.24);
     color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+  .ui-nav-text {
+    font-family: var(--nav-font-family, var(--font-sans));
+    font-size: var(--nav-text-size, var(--text-base));
+    line-height: var(--nav-text-line-height, var(--text-base--line-height));
+  }
+
+  .ui-nav-heading {
+    font-family: var(--nav-heading-font-family, var(--nav-font-family, var(--font-sans)));
+    font-size: var(--nav-heading-size, var(--text-sm));
+    line-height: var(--nav-heading-line-height, var(--text-sm--line-height));
+    font-weight: var(--nav-heading-weight, 600);
+    letter-spacing: var(--nav-heading-letter-spacing, 0.12em);
+    text-transform: uppercase;
+  }
+
+  .ui-nav-badge {
+    font-family: var(--nav-badge-font-family, var(--nav-font-family, var(--font-sans)));
+    font-size: var(--nav-badge-size, var(--text-sm));
+    line-height: var(--nav-badge-line-height, var(--text-sm--line-height));
+    font-weight: var(--nav-badge-weight, 500);
   }
 }

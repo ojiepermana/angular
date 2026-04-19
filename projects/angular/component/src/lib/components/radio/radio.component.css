@@ -50,7 +50,9 @@
 :host ::ng-deep .mat-mdc-radio-button .mdc-form-field {
   gap: 0.5rem;
   color: hsl(var(--foreground));
-  font-size: 0.875rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
 }
 
 :host ::ng-deep .mat-mdc-radio-button .mdc-label {

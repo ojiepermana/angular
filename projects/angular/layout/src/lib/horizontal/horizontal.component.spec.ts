@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { ThemeService } from '@ojiepermana/angular/theme';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { MATERIAL_LAYOUT_CONFIG } from '../core/layout.tokens';
 import { HorizontalLayoutComponent } from './horizontal.component';
@@ -20,6 +21,14 @@ describe('HorizontalLayoutComponent', () => {
   beforeEach(() => {
     localStorage.removeItem('layout-mode');
     localStorage.removeItem('layout-width');
+    localStorage.removeItem('theme-mode');
+    localStorage.removeItem('theme-color');
+    localStorage.removeItem('theme-style');
+    document.documentElement.classList.remove('dark');
+    delete document.documentElement.dataset['mode'];
+    delete document.documentElement.dataset['color'];
+    delete document.documentElement.dataset['style'];
+    delete document.documentElement.dataset['theme'];
   });
 
   it('projects brand and profile content into the topbar', () => {
@@ -36,8 +45,12 @@ describe('HorizontalLayoutComponent', () => {
     expect(root.querySelector('[data-ui-topbar-slot="nav"] [role="menubar"]')).toBeTruthy();
     expect(root.querySelector('[data-ui-topbar-slot="end"]')?.textContent).toContain('Profile');
 
-    const host = root.querySelector('horizontal');
+    const host = root.querySelector('horizontal') as HTMLElement | null;
+    const topbar = root.querySelector('ui-topbar') as HTMLElement | null;
     expect(host?.getAttribute('data-layout-width')).toBe('fixed');
+    expect(host?.getAttribute('data-style')).toBe('default');
+    expect(host?.style.borderWidth).toBe('var(--border-width)');
+    expect(topbar?.style.borderBottomWidth).toBe('var(--border-width)');
     expect(host?.classList.contains('h-dvh')).toBe(true);
     expect(host?.classList.contains('w-full')).toBe(true);
     expect(host?.classList.contains('border')).toBe(false);
@@ -55,6 +68,8 @@ describe('HorizontalLayoutComponent', () => {
     expect(host?.classList.contains('max-w-7xl')).toBe(false);
     expect(host?.classList.contains('md:max-w-7xl')).toBe(false);
     expect(host?.classList.contains('lg:max-w-7xl')).toBe(true);
+    expect(host?.classList.contains('lg:rounded-lg')).toBe(true);
+    expect(host?.classList.contains('lg:shadow-sm')).toBe(true);
     expect(host?.classList.contains('h-[calc(100dvh-2rem)]')).toBe(false);
     expect(host?.classList.contains('md:h-[calc(100dvh-3rem)]')).toBe(false);
     expect(host?.classList.contains('lg:h-[calc(100dvh-4rem)]')).toBe(true);
@@ -72,9 +87,13 @@ describe('HorizontalLayoutComponent', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
 
-    const host = (fixture.nativeElement as HTMLElement).querySelector('horizontal');
+    const host = (fixture.nativeElement as HTMLElement).querySelector('horizontal') as HTMLElement | null;
+    const topbar = (fixture.nativeElement as HTMLElement).querySelector('ui-topbar') as HTMLElement | null;
 
     expect(host?.getAttribute('data-layout-width')).toBe('full');
+    expect(host?.getAttribute('data-style')).toBe('default');
+    expect(host?.style.borderWidth).toBe('');
+    expect(topbar?.style.borderBottomWidth).toBe('var(--border-width)');
     expect(host?.classList.contains('border')).toBe(false);
     expect(host?.classList.contains('border-border')).toBe(false);
     expect(host?.classList.contains('md:border')).toBe(false);
@@ -91,6 +110,39 @@ describe('HorizontalLayoutComponent', () => {
     expect(host?.classList.contains('max-w-7xl')).toBe(false);
     expect(host?.classList.contains('md:max-w-7xl')).toBe(false);
     expect(host?.classList.contains('lg:max-w-7xl')).toBe(false);
+    expect(host?.classList.contains('lg:rounded-lg')).toBe(false);
+    expect(host?.classList.contains('lg:shadow-sm')).toBe(false);
     expect(host?.classList.contains('px-4')).toBe(false);
+  });
+
+  it('reflects the active theme style on the host', () => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([])],
+    });
+
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    TestBed.inject(ThemeService).setStyle('soft');
+    fixture.detectChanges();
+
+    const host = (fixture.nativeElement as HTMLElement).querySelector('horizontal');
+
+    expect(host?.getAttribute('data-style')).toBe('soft');
+  });
+
+  it('uses the persisted theme-style value on init', () => {
+    localStorage.setItem('theme-style', 'sharp');
+
+    TestBed.configureTestingModule({
+      providers: [provideRouter([])],
+    });
+
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    const host = (fixture.nativeElement as HTMLElement).querySelector('horizontal');
+
+    expect(host?.getAttribute('data-style')).toBe('sharp');
   });
 });

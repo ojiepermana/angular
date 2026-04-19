@@ -34,13 +34,8 @@ import type {
       @case ('group') {
         <div class="p-3" role="group" [attr.aria-labelledby]="headingId()">
           @if (!compact()) {
-            <div
-              class="sticky top-0 z-10 bg-background py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <div
-                [id]="headingId()"
-                [class]="
-                  cn('text-xs font-semibold uppercase tracking-wider text-muted-foreground', item().classes?.title)
-                ">
+            <div class="sticky top-0 z-10 bg-background py-3 text-muted-foreground">
+              <div [id]="headingId()" [class]="cn('ui-nav-heading text-muted-foreground', item().classes?.title)">
                 {{ item().title }}
               </div>
             </div>
@@ -59,7 +54,7 @@ import type {
           type="button"
           [class]="
             cn(
-              'group/ni flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'ui-nav-text group/ni flex w-full items-center gap-3 rounded-md px-3 py-2 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
               isTrailActive() && 'text-primary',
               item().classes?.wrapper
             )
@@ -79,7 +74,7 @@ import type {
               {{ collapsableItem().title }}
             </span>
             @if (collapsableItem().badge; as badge) {
-              <span [class]="badge.classes ?? 'ml-auto text-xs'">{{ badge.title }}</span>
+              <span [class]="badge.classes ?? 'ui-nav-badge ml-auto'">{{ badge.title }}</span>
             }
             <ui-nav-icon
               [name]="'chevron_right'"
@@ -99,8 +94,7 @@ import type {
         <!-- Mega direndahkan ke group saat berada di sidebar vertical. -->
         <div class="mt-4 py-3 first:mt-0" role="group">
           @if (!compact()) {
-            <div
-              class="sticky top-0 z-10 bg-background px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <div class="ui-nav-heading sticky top-0 z-10 bg-background px-3 pb-1 text-muted-foreground">
               {{ item().title }}
             </div>
           }
@@ -115,7 +109,7 @@ import type {
         <a
           [class]="
             cn(
-              'flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary',
+              'ui-nav-text flex items-center gap-3 rounded-md px-3 py-2 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary',
               item().classes?.wrapper
             )
           "
@@ -143,7 +137,7 @@ import type {
           <a
             [class]="
               cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary aria-disabled:pointer-events-none aria-disabled:opacity-50',
+                'ui-nav-text flex items-center gap-3 rounded-md px-3 py-2 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary aria-disabled:pointer-events-none aria-disabled:opacity-50',
                 item().classes?.wrapper
               )
             "
@@ -170,7 +164,7 @@ import type {
             @if (!compact()) {
               <span [class]="cn('flex-1 truncate', item().classes?.title)">{{ basicItem().title }}</span>
               @if (basicItem().badge; as badge) {
-                <span [class]="badge.classes ?? 'ml-auto text-xs'">{{ badge.title }}</span>
+                <span [class]="badge.classes ?? 'ui-nav-badge ml-auto'">{{ badge.title }}</span>
               }
             }
           </a>
@@ -178,7 +172,7 @@ import type {
           <a
             [class]="
               cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                'ui-nav-text flex items-center gap-3 rounded-md px-3 py-2 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                 item().classes?.wrapper
               )
             "
@@ -200,7 +194,7 @@ import type {
             type="button"
             [class]="
               cn(
-                'flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+                'ui-nav-text flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
                 item().classes?.wrapper
               )
             "

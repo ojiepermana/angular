@@ -81,7 +81,7 @@ interface ActiveOverlay {
                   @let basic = asBasic(item);
                   <a
                     role="menuitem"
-                    class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary"
+                    class="ui-nav-text inline-flex items-center gap-2 rounded-md px-3 py-2 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-primary"
                     [routerLink]="basic.link"
                     routerLinkActive
                     #rla="routerLinkActive"
@@ -100,7 +100,7 @@ interface ActiveOverlay {
                     #trigger
                     type="button"
                     role="menuitem"
-                    class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    class="ui-nav-text inline-flex items-center gap-2 rounded-md px-3 py-2 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     [class.text-primary]="isItemActive(col.id)"
                     [attr.aria-expanded]="openId() === col.id"
                     [attr.aria-haspopup]="'menu'"
@@ -119,7 +119,7 @@ interface ActiveOverlay {
                     #trigger
                     type="button"
                     role="menuitem"
-                    class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    class="ui-nav-text inline-flex items-center gap-2 rounded-md px-3 py-2 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     [class.text-primary]="isItemActive(group.id)"
                     [attr.aria-expanded]="openId() === group.id"
                     [attr.aria-haspopup]="'menu'"
@@ -138,7 +138,7 @@ interface ActiveOverlay {
                     #trigger
                     type="button"
                     role="menuitem"
-                    class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    class="ui-nav-text inline-flex items-center gap-2 rounded-md px-3 py-2 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     [class.text-primary]="isItemActive(mega.id)"
                     [attr.aria-expanded]="openId() === mega.id"
                     [attr.aria-haspopup]="'menu'"
@@ -152,7 +152,7 @@ interface ActiveOverlay {
                   </button>
                 }
                 @default {
-                  <span class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <span class="ui-nav-heading px-3 py-2 text-muted-foreground">
                     {{ item.title }}
                   </span>
                 }
@@ -188,7 +188,7 @@ interface ActiveOverlay {
         <div class="grid gap-6" [ngClass]="megaColsClass(item.columns)">
           @for (col of item.children; track col.id) {
             <div>
-              <div class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <div class="ui-nav-heading mb-2 text-muted-foreground">
                 {{ col.title }}
               </div>
               <div class="flex flex-col gap-0.5">
