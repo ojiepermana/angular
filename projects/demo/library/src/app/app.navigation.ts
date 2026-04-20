@@ -1,4 +1,6 @@
-import { NavigationItem } from '@ojiepermana/angular/navigation';
+import { type NavigationItem } from '@ojiepermana/angular/navigation';
+
+import { ApiNavigation } from './api.navigation';
 
 export const AppNavigation: NavigationItem[] = [
   {
@@ -737,4 +739,5 @@ export const AppNavigation: NavigationItem[] = [
       },
     ],
   },
+  ...ApiNavigation,
 ];

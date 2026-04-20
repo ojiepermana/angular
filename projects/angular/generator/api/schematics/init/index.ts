@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import type { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
@@ -11,16 +11,15 @@ export interface InitSchematicOptions {
 }
 
 /**
- * Default config template. Inlined so the schematic works even when the
- * workspace has no example file committed. If a real `sdk.config.example.json`
- * sits next to the generator package, we prefer that so edits to the example
- * propagate automatically.
+ * Default config template. The published package also ships a concrete
+ * `sdk.config.example.json`; this fallback only exists so `init` still works if
+ * the file is missing in unusual local/dev states.
  */
 const FALLBACK_TEMPLATE = {
-  $schema: './projects/angular/generator/api/schematics/sdk/schema.json',
+  $schema: './node_modules/@ojiepermana/angular/generator/api/schematics/sdk/schema.json',
   targets: [
     {
-      input: './projects/angular/generator/api/openapi.bundle.yaml',
+      input: './openapi.yaml',
       output: './sdk',
       mode: 'standalone',
       clientName: 'Api',
@@ -58,22 +57,40 @@ export function init(options: InitSchematicOptions = {}): Rule {
       context.logger.info(`[sdk:init] created ${destRelative}`);
     }
 
-    context.logger.info(`[sdk:init] edit targets[].input and targets[].output, then run \`bun run gen:sdk\`.`);
+    context.logger.info(
+      `[sdk:init] edit targets[].input and targets[].output, then run \`${getNextCommand(workspaceRoot)}\`.`,
+    );
   };
 }
 
 function loadTemplate(workspaceRoot: string): string {
-  // Prefer the example shipped at workspace root so it stays in sync.
   const candidates = [
     resolve(workspaceRoot, 'sdk.config.example.json'),
+    resolve(__dirname, '../../../sdk.config.example.json'),
     resolve(workspaceRoot, 'projects/angular/generator/api/sdk.config.example.json'),
   ];
   for (const candidate of candidates) {
     try {
-      return readFileSync(candidate, 'utf8');
+      const parsed = JSON.parse(readFileSync(candidate, 'utf8')) as Record<string, unknown>;
+      parsed.$schema = resolveSchemaPath(workspaceRoot);
+      return `${JSON.stringify(parsed, null, 2)}\n`;
     } catch {
       // try next
     }
   }
-  return JSON.stringify(FALLBACK_TEMPLATE, null, 2) + '\n';
+  return `${JSON.stringify({ ...FALLBACK_TEMPLATE, $schema: resolveSchemaPath(workspaceRoot) }, null, 2)}\n`;
+}
+
+function resolveSchemaPath(workspaceRoot: string): string {
+  if (existsSync(resolve(workspaceRoot, 'projects/angular/generator/api/schematics/sdk/schema.json'))) {
+    return './projects/angular/generator/api/schematics/sdk/schema.json';
+  }
+  return './node_modules/@ojiepermana/angular/generator/api/schematics/sdk/schema.json';
+}
+
+function getNextCommand(workspaceRoot: string): string {
+  if (existsSync(resolve(workspaceRoot, 'projects/angular/generator/api/collection.json'))) {
+    return 'bun run gen:sdk';
+  }
+  return 'ng generate @ojiepermana/angular/generator/api:sdk';
 }

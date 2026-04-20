@@ -7,6 +7,7 @@
  *   - `@ojiepermana/angular/layout`     — layout primitives (WIP)
  *   - `@ojiepermana/angular/navigation` — navigation primitives (WIP)
  *   - `@ojiepermana/angular/chart`      — chart primitives (WIP)
+ *   - `@ojiepermana/angular/generator/api` — OpenAPI → Angular SDK generator (schematics + config types)
  *
  * Consumers should import from the subpaths directly.
  */

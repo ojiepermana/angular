@@ -49,8 +49,7 @@ export function emitPublicApi(ir: SdkIR, target: ResolvedSdkTarget): VirtualFile
   }
 
   if (target.features.navigation) {
-    lines.push(`export { apiNavigation } from './navigation';`);
-    lines.push(`export type { ApiNavigationNode } from './navigation';`);
+    lines.push(`export { ApiNavigation } from './api.navigation';`);
   }
 
   return [{ path: 'public-api.ts', content: finalize(lines.join('\n')) }];

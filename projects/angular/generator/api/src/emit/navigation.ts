@@ -1,16 +1,16 @@
 import type { ResolvedSdkTarget } from '../config/schema';
 import type { NavNode, SdkIR } from '../parser/types';
-import { finalize, type VirtualFile } from '../render/template';
+import { finalize, kebabCase, type VirtualFile } from '../render/template';
 
 /**
- * Emit a flat `navigation.ts` exporting the tag-derived tree from the spec
- * (`x-icon`, `parent` relations). Consumers use this to build side-nav menus
- * that stay in sync with the API docs.
+ * Emit `api.navigation.ts` exporting `NavigationItem[]` data that plugs
+ * directly into `NavigationService.registerItems(...)` from
+ * `@ojiepermana/angular/navigation`.
  */
 export function emitNavigation(ir: SdkIR, target: ResolvedSdkTarget): VirtualFile[] {
   return [
     {
-      path: 'navigation.ts',
+      path: 'api.navigation.ts',
       content: finalize(renderNavigation(ir.navigation, target)),
     },
   ];
@@ -19,30 +19,37 @@ export function emitNavigation(ir: SdkIR, target: ResolvedSdkTarget): VirtualFil
 function renderNavigation(nodes: readonly NavNode[], target: ResolvedSdkTarget): string {
   return `${target.banner}
 
-export interface ApiNavigationNode {
-  name: string;
-  xIcon?: string;
-  description?: string;
-  children: ApiNavigationNode[];
-}
+import type { NavigationItem } from '@ojiepermana/angular/navigation';
 
-export const apiNavigation: readonly ApiNavigationNode[] = ${stringifyNodes(nodes, 0)};
+export const ApiNavigation: NavigationItem[] = ${stringifyNodes(nodes, 0, [])};
 `;
 }
 
-function stringifyNodes(nodes: readonly NavNode[], depth: number): string {
+function stringifyNodes(nodes: readonly NavNode[], depth: number, lineage: readonly string[]): string {
   if (!nodes.length) return '[]';
   const pad = '  '.repeat(depth + 1);
   const closePad = '  '.repeat(depth);
-  return `[\n${nodes.map((n) => pad + stringifyNode(n, depth + 1)).join(',\n')},\n${closePad}]`;
+  return `[\n${nodes
+    .map((node) => pad + stringifyNode(node, depth + 1, [...lineage, node.name]))
+    .join(',\n')},\n${closePad}]`;
 }
 
-function stringifyNode(node: NavNode, depth: number): string {
+function stringifyNode(node: NavNode, depth: number, lineage: readonly string[]): string {
+  const hasChildren = node.children.length > 0;
   const pad = '  '.repeat(depth + 1);
   const closePad = '  '.repeat(depth);
-  const fields: string[] = [`${pad}name: ${JSON.stringify(node.name)}`];
-  if (node.xIcon) fields.push(`${pad}xIcon: ${JSON.stringify(node.xIcon)}`);
-  if (node.description) fields.push(`${pad}description: ${JSON.stringify(node.description)}`);
-  fields.push(`${pad}children: ${stringifyNodes(node.children, depth + 1)}`);
+  const fields: string[] = [
+    `${pad}id: ${JSON.stringify(lineage.map(kebabCase).filter(Boolean).join('-'))}`,
+    `${pad}title: ${JSON.stringify(node.name)}`,
+    `${pad}type: ${JSON.stringify(resolveItemType(lineage.length - 1, hasChildren))}`,
+  ];
+  if (node.description) fields.push(`${pad}subtitle: ${JSON.stringify(node.description)}`);
+  if (node.xIcon) fields.push(`${pad}icon: ${JSON.stringify(node.xIcon)}`);
+  if (hasChildren) fields.push(`${pad}children: ${stringifyNodes(node.children, depth + 1, lineage)}`);
   return `{\n${fields.join(',\n')},\n${closePad}}`;
+}
+
+function resolveItemType(depth: number, hasChildren: boolean): 'group' | 'collapsable' | 'basic' {
+  if (!hasChildren) return 'basic';
+  return depth === 0 ? 'group' : 'collapsable';
 }

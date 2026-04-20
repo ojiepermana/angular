@@ -13,7 +13,8 @@
       "@ojiepermana/angular/navigation": ["./projects/angular/navigation/public-api.ts"],
       "@ojiepermana/angular/component": ["./projects/angular/component/public-api.ts"],
       "@ojiepermana/angular/layout": ["./projects/angular/layout/public-api.ts"],
-      "@ojiepermana/angular/chart": ["./projects/angular/chart/public-api.ts"]
+      "@ojiepermana/angular/chart": ["./projects/angular/chart/public-api.ts"],
+      "@ojiepermana/angular/generator/api": ["./projects/angular/generator/api/public-api.ts"]
     },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

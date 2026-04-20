@@ -1,10 +1,10 @@
 {
-    "name": "@ojiepermana/sdk-generator",
+    "name": "@ojiepermana/angular/generator/api",
     "private": true,
     "version": "0.0.0",
-    "description": "OpenAPI → Angular SDK generator (schematic + engine). Local tool, not published.",
-    "main": "bin/engine.js",
+    "description": "Secondary entrypoint metadata for the OpenAPI → Angular SDK generator shipped inside @ojiepermana/angular.",
     "schematics": "./collection.json",
+    "sideEffects": false,
     "scripts": {
         "build": "tsc -p tsconfig.schematics.json"
     }

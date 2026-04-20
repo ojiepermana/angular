@@ -10,7 +10,8 @@
     "d3-array",
     "d3-scale",
     "d3-shape",
-    "tailwind-merge"
+    "tailwind-merge",
+    "yaml"
   ],
   "assets": [
     {

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "build": "ng build angular",
+    "build": "bun run gen:sdk:build && ng build angular && node projects/angular/generator/api/scripts/prepare-package.mjs",
     "watch": "ng build angular --watch --configuration development",
     "test": "ng test angular",
     "test:theme": "ng run angular:test-theme --watch=false",

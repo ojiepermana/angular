@@ -4,6 +4,7 @@ import { NavigationService } from '@ojiepermana/angular/navigation';
 
 import { appConfig, layoutConfig, themeConfig } from './app.config';
 import { App } from './app';
+import { ApiNavigation } from './api.navigation';
 import { AppNavigation } from './app.navigation';
 
 describe('App', () => {
@@ -47,6 +48,10 @@ describe('App', () => {
     fixture.detectChanges();
     const navigation = TestBed.inject(NavigationService);
     expect(navigation.items()).toEqual(AppNavigation);
+  });
+
+  it('should include the generated ApiNavigation demo section', () => {
+    expect(AppNavigation.slice(-ApiNavigation.length)).toEqual(ApiNavigation);
   });
 
   it('should apply configured theme defaults on bootstrap', () => {
