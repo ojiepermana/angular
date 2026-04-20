@@ -7,6 +7,8 @@
             "mode": "standalone",
             "clientName": "Api",
             "rootUrl": "http://127.0.0.1:8080",
+            "splitByDomain": false,
+            "splitDepth": "service",
             "features": {
                 "models": true,
                 "operations": true,

@@ -40,6 +40,20 @@ export interface SdkTargetConfig {
   rootUrl?: string;
   /** Feature toggles. Every feature defaults to `true` except `navigation` (default `true` too). */
   features?: SdkFeatureFlags;
+  /**
+   * When `true`, reorganize emitted files into one folder per domain (derived
+   * from OpenAPI tags). Models shared by multiple domains live in `shared/`,
+   * domain-owned models live inside each domain. Default `false` (flat layout).
+   */
+  splitByDomain?: boolean;
+  /**
+   * Granularity of `splitByDomain`. Only meaningful when `splitByDomain` is
+   * `true`. `'service'` (default) groups every tag under its root parent — one
+   * folder per backend service (e.g. all Role/Permission/... tags collapse into
+   * `access/`). `'tag'` emits one folder per leaf tag, nested under the parent
+   * chain (e.g. `storage/gcs/`, `storage/s3/`, `access/role/`).
+   */
+  splitDepth?: 'service' | 'tag';
   /** Custom file banner. Defaults to a short auto-generated notice. */
   banner?: string;
 }
@@ -66,6 +80,8 @@ export interface ResolvedSdkTarget {
   packageVersion: string;
   rootUrl: string | undefined;
   features: ResolvedFeatureFlags;
+  splitByDomain: boolean;
+  splitDepth: 'service' | 'tag';
   banner: string;
 }
 
@@ -101,6 +117,8 @@ export function resolveTarget(raw: SdkTargetConfig): ResolvedSdkTarget {
     packageVersion: raw.packageVersion ?? '0.0.1',
     rootUrl: raw.rootUrl,
     features: { ...DEFAULT_FEATURES, ...(raw.features ?? {}) },
+    splitByDomain: raw.splitByDomain === true,
+    splitDepth: raw.splitDepth === 'tag' ? 'tag' : 'service',
     banner: raw.banner ?? DEFAULT_BANNER,
   };
 }

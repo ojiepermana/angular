@@ -10,6 +10,7 @@
     "d3-array",
     "d3-scale",
     "d3-shape",
+    "marked",
     "tailwind-merge",
     "yaml"
   ],

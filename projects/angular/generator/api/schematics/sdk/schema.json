@@ -6,8 +6,8 @@
     "properties": {
         "config": {
             "type": "string",
-            "description": "Path to sdk.config.json (defaults to ./sdk.config.json at workspace root).",
-            "default": "sdk.config.json"
+            "description": "Path to sdk.config.json (defaults to ./config/sdk.config.json at workspace root).",
+            "default": "config/sdk.config.json"
         },
         "target": {
             "type": "string",

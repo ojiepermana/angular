@@ -4,44 +4,24 @@ import { resolve } from 'node:path';
 import type { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 
 export interface InitSchematicOptions {
-  /** Destination path for the generated config, relative to the workspace root. */
   path?: string;
-  /** Overwrite an existing file at that path. */
   force?: boolean;
 }
 
-/**
- * Default config template. The published package also ships a concrete
- * `sdk.config.example.json`; this fallback only exists so `init` still works if
- * the file is missing in unusual local/dev states.
- */
 const FALLBACK_TEMPLATE = {
-  $schema: './node_modules/@ojiepermana/angular/generator/api/schematics/sdk/schema.json',
-  targets: [
-    {
-      input: './openapi.yaml',
-      output: './sdk',
-      mode: 'standalone',
-      clientName: 'Api',
-      rootUrl: 'http://127.0.0.1:8080',
-      splitByDomain: false,
-      splitDepth: 'service',
-      features: {
-        models: true,
-        operations: true,
-        services: true,
-        client: true,
-        metadata: true,
-        navigation: true,
-      },
-    },
-  ],
+  $schema: './node_modules/@ojiepermana/angular/generator/guide/schematics/build/schema.json',
+  sourceDir: './docs',
+  outputDir: './projects/demo/library/src/app/docs',
+  routeFile: 'doc.routes.ts',
+  componentPrefix: 'Doc',
+  componentStyle: 'none',
+  routeExportName: 'DOC_ROUTES',
 };
 
 export function init(options: InitSchematicOptions = {}): Rule {
   return (tree: Tree, context: SchematicContext) => {
     const workspaceRoot = process.cwd();
-    const destRelative = options.path ?? 'config/sdk.config.json';
+    const destRelative = options.path ?? 'config/guide.config.json';
     const treePath = destRelative.startsWith('/') ? destRelative : `/${destRelative}`;
 
     if (tree.exists(treePath) && !options.force) {
@@ -53,23 +33,21 @@ export function init(options: InitSchematicOptions = {}): Rule {
 
     if (tree.exists(treePath)) {
       tree.overwrite(treePath, buffer);
-      context.logger.info(`[sdk:init] overwrote ${destRelative}`);
+      context.logger.info(`[guide:init] overwrote ${destRelative}`);
     } else {
       tree.create(treePath, buffer);
-      context.logger.info(`[sdk:init] created ${destRelative}`);
+      context.logger.info(`[guide:init] created ${destRelative}`);
     }
 
-    context.logger.info(
-      `[sdk:init] edit targets[].input and targets[].output, then run \`${getNextCommand(workspaceRoot)}\`.`,
-    );
+    context.logger.info(`[guide:init] edit sourceDir / outputDir, then run \`${getNextCommand(workspaceRoot)}\`.`);
   };
 }
 
 function loadTemplate(workspaceRoot: string, destRelative: string): string {
   const candidates = [
-    resolve(workspaceRoot, 'sdk.config.example.json'),
-    resolve(__dirname, '../../../sdk.config.example.json'),
-    resolve(workspaceRoot, 'projects/angular/generator/api/sdk.config.example.json'),
+    resolve(workspaceRoot, 'guide.config.example.json'),
+    resolve(__dirname, '../../../guide.config.example.json'),
+    resolve(workspaceRoot, 'projects/angular/generator/guide/guide.config.example.json'),
   ];
   for (const candidate of candidates) {
     try {
@@ -85,10 +63,10 @@ function loadTemplate(workspaceRoot: string, destRelative: string): string {
 
 function resolveSchemaPath(workspaceRoot: string, destRelative: string): string {
   const prefix = relativePrefix(destRelative);
-  if (existsSync(resolve(workspaceRoot, 'projects/angular/generator/api/schematics/sdk/schema.json'))) {
-    return `${prefix}projects/angular/generator/api/schematics/sdk/schema.json`;
+  if (existsSync(resolve(workspaceRoot, 'projects/angular/generator/guide/schematics/build/schema.json'))) {
+    return `${prefix}projects/angular/generator/guide/schematics/build/schema.json`;
   }
-  return `${prefix}node_modules/@ojiepermana/angular/generator/api/schematics/sdk/schema.json`;
+  return `${prefix}node_modules/@ojiepermana/angular/generator/guide/schematics/build/schema.json`;
 }
 
 function relativePrefix(destRelative: string): string {
@@ -98,7 +76,7 @@ function relativePrefix(destRelative: string): string {
 
 function getNextCommand(workspaceRoot: string): string {
   if (existsSync(resolve(workspaceRoot, 'projects/angular/collection.json'))) {
-    return 'bun run gen:sdk';
+    return 'bun run gen:guide';
   }
-  return 'ng generate @ojiepermana/angular:sdk';
+  return 'ng generate @ojiepermana/angular:guide';
 }

@@ -1,0 +1,25 @@
+{
+    "$schema": "../../node_modules/@angular-devkit/schematics/collection-schema.json",
+    "schematics": {
+        "sdk": {
+            "description": "Generate an Angular SDK from an OpenAPI spec.",
+            "factory": "./generator/api/bin/schematics/sdk/index.js#sdk",
+            "schema": "./generator/api/schematics/sdk/schema.json"
+        },
+        "sdk-init": {
+            "description": "Create sdk.config.json at the workspace root.",
+            "factory": "./generator/api/bin/schematics/init/index.js#init",
+            "schema": "./generator/api/schematics/init/schema.json"
+        },
+        "guide": {
+            "description": "Compile Markdown files into Angular standalone components and a nested route tree.",
+            "factory": "./generator/guide/bin/schematics/build/index.js#build",
+            "schema": "./generator/guide/schematics/build/schema.json"
+        },
+        "guide-init": {
+            "description": "Create guide.config.json at the workspace root.",
+            "factory": "./generator/guide/bin/schematics/init/index.js#init",
+            "schema": "./generator/guide/schematics/init/schema.json"
+        }
+    }
+}

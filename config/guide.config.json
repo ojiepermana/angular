@@ -1,0 +1,9 @@
+{
+  "$schema": "../projects/angular/generator/guide/schematics/build/schema.json",
+  "sourceDir": "./projects/demo/library/docs",
+  "outputDir": "./projects/demo/library/src/pages/docs",
+  "routeFile": "doc.routes.ts",
+  "componentPrefix": "Doc",
+  "componentStyle": "none",
+  "routeExportName": "DOC_ROUTES"
+}

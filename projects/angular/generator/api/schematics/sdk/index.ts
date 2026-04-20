@@ -25,7 +25,7 @@ export interface SdkSchematicOptions {
 export function sdk(options: SdkSchematicOptions = {}): Rule {
   return async (tree: Tree, context: SchematicContext) => {
     const workspaceRoot = process.cwd();
-    const configPath = options.config ?? 'sdk.config.json';
+    const configPath = options.config ?? 'config/sdk.config.json';
     const targets = loadConfig(configPath, workspaceRoot);
 
     const selected = selectTargets(targets, options.target);

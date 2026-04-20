@@ -8,6 +8,7 @@ import { emitNavigation } from './emit/navigation';
 import { emitOperations } from './emit/operations';
 import { emitPublicApi } from './emit/public-api';
 import { emitServices } from './emit/services';
+import { relayoutPerDomain } from './layout/per-domain';
 import { buildIR } from './parser/ir';
 import { loadSpec } from './parser/bundle';
 import type { SdkIR } from './parser/types';
@@ -50,7 +51,8 @@ export async function generate(target: ResolvedSdkTarget, workspaceRoot: string)
   // public-api barrel is emitted last so it sees the final feature set.
   files.push(...emitPublicApi(ir, target));
 
-  const wrapped = applyMode(files, ir, target);
+  const laidOut = target.splitByDomain ? relayoutPerDomain(files, ir, target) : files;
+  const wrapped = applyMode(laidOut, ir, target);
   const outputDir = isAbsolute(target.output) ? target.output : resolve(workspaceRoot, target.output);
 
   return {

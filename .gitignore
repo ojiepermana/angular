@@ -46,4 +46,9 @@ Thumbs.db
 # SDK generator artifacts
 /sdk
 /sdk.config.json
+/.tmp-sdk-out
 /projects/angular/generator/api/bin
+
+# Guide generator artifacts
+/guide.config.json
+/projects/angular/generator/guide/bin
