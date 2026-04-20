@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "SdkGeneratorSchema",
+    "title": "Generate an Angular SDK from an OpenAPI spec",
+    "type": "object",
+    "properties": {
+        "config": {
+            "type": "string",
+            "description": "Path to sdk.config.json (defaults to ./sdk.config.json at workspace root).",
+            "default": "sdk.config.json"
+        },
+        "target": {
+            "type": "string",
+            "description": "Optional name/index of a specific target in the config to generate."
+        }
+    },
+    "required": [],
+    "additionalProperties": false
+}

@@ -60,6 +60,24 @@ To execute the library unit tests with the [Vitest](https://vitest.dev/) test ru
 bun run test
 ```
 
+## Generating an SDK from OpenAPI
+
+The workspace ships with a local schematic that turns an OpenAPI 3.x spec into a lightweight
+Angular SDK (typed services + tree-shakeable fn modules). See
+[`projects/angular/generator/api/README.md`](projects/angular/generator/api/README.md) for the
+full reference.
+
+```bash
+# 1. Build the generator
+bun run gen:sdk:build
+
+# 2. Create sdk.config.json at the workspace root
+bun run gen:sdk:init
+
+# 3. Edit sdk.config.json, then generate
+bun run gen:sdk
+```
+
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

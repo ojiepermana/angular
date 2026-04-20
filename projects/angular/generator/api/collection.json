@@ -1,0 +1,15 @@
+{
+    "$schema": "../../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+    "schematics": {
+        "sdk": {
+            "description": "Generate an Angular SDK from an OpenAPI spec.",
+            "factory": "./bin/schematics/sdk/index.js#sdk",
+            "schema": "./schematics/sdk/schema.json"
+        },
+        "init": {
+            "description": "Create sdk.config.json at the workspace root from the example template.",
+            "factory": "./bin/schematics/init/index.js#init",
+            "schema": "./schematics/init/schema.json"
+        }
+    }
+}

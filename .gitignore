@@ -42,3 +42,8 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# SDK generator artifacts
+/sdk
+/sdk.config.json
+/projects/angular/generator/api/bin
