@@ -13,7 +13,7 @@
     "gen:guide:build": "tsc -p projects/angular/generator/guide/tsconfig.schematics.json",
     "gen:guide:init": "bun run gen:guide:build && ng generate ./projects/angular/collection.json:guide-init",
     "gen:guide": "bun run gen:guide:build && ng generate ./projects/angular/collection.json:guide",
-    "publish": "node projects/angular/scripts/publish.mjs",
+    "publish": "bun projects/angular/scripts/publish.mjs",
     "format": "prettier --write \"**/*.{ts,js,json,html,css,scss,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,json,html,css,scss,md}\""
   },
