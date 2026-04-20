@@ -78,6 +78,12 @@ ng generate @ojiepermana/angular/generator/api:init
 ng generate @ojiepermana/angular/generator/api:sdk
 ```
 
+Generated SDKs use same-origin requests by default when `targets[].rootUrl` is
+omitted or set to `""`. Consumer apps can override the backend base URL at
+runtime with `provideApiConfiguration(...)`. See
+[`projects/angular/generator/api/README.md`](projects/angular/generator/api/README.md)
+for the full configuration and runtime examples.
+
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

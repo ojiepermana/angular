@@ -41,7 +41,7 @@ export async function generate(target: ResolvedSdkTarget, workspaceRoot: string)
   const ir = buildIR(doc);
 
   const files: VirtualFile[] = [];
-  if (target.features.client) files.push(...emitClient(ir, target));
+  if (target.features.client) files.push(...emitClient(target));
   if (target.features.models) files.push(...emitModels(ir, target));
   if (target.features.operations) files.push(...emitOperations(ir, target));
   if (target.features.services) files.push(...emitServices(ir, target));

@@ -23,7 +23,7 @@ const FALLBACK_TEMPLATE = {
       output: './sdk',
       mode: 'standalone',
       clientName: 'Api',
-      rootUrl: 'http://127.0.0.1:8080',
+      rootUrl: '',
       splitByDomain: false,
       splitDepth: 'service',
       features: {

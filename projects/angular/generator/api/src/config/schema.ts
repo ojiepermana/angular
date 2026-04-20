@@ -36,7 +36,7 @@ export interface SdkTargetConfig {
   packageName?: string;
   /** Package version used when `mode === "library"`. Defaults to `0.0.1`. */
   packageVersion?: string;
-  /** Default rootUrl baked into ApiConfiguration. Defaults to the first server in the spec. */
+  /** Default rootUrl baked into ApiConfiguration. Defaults to an empty string for same-origin requests. */
   rootUrl?: string;
   /** Feature toggles. Every feature defaults to `true` except `navigation` (default `true` too). */
   features?: SdkFeatureFlags;

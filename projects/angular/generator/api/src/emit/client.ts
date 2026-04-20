@@ -1,5 +1,4 @@
 import type { ResolvedSdkTarget } from '../config/schema';
-import type { SdkIR } from '../parser/types';
 import { finalize, type VirtualFile } from '../render/template';
 
 /**
@@ -12,10 +11,10 @@ import { finalize, type VirtualFile } from '../render/template';
  *
  * These files are **static** — identical across specs — so we embed them as
  * template literals rather than parsing the IR. The only dynamic bits are the
- * banner comment and the default `rootUrl`.
+ * banner comment and the configured default `rootUrl`.
  */
-export function emitClient(ir: SdkIR, target: ResolvedSdkTarget): VirtualFile[] {
-  const defaultRootUrl = target.rootUrl ?? ir.servers[0]?.url ?? '';
+export function emitClient(target: ResolvedSdkTarget): VirtualFile[] {
+  const defaultRootUrl = target.rootUrl ?? '';
   return [
     { path: 'api-configuration.ts', content: finalize(apiConfigurationFile(target, defaultRootUrl)) },
     { path: 'base-service.ts', content: finalize(baseServiceFile(target)) },

@@ -76,7 +76,7 @@ ng generate @ojiepermana/angular:sdk      [--dry-run] [--config=sdk.config.json]
       "clientName": "Api",
       "packageName": "@my-scope/sdk", // only used in "library" mode
       "packageVersion": "0.0.1", // only used in "library" mode
-      "rootUrl": "http://127.0.0.1:8080",
+      "rootUrl": "", // optional; empty string means same-origin requests
       "splitByDomain": false, // optional, default false — see "Per-domain layout"
       "splitDepth": "service", // "service" (default) | "tag"
       "features": {
@@ -93,6 +93,41 @@ ng generate @ojiepermana/angular:sdk      [--dry-run] [--config=sdk.config.json]
 ```
 
 Multiple targets are supported — one config run can emit several SDKs.
+
+If `rootUrl` is omitted or left empty, the generated SDK uses same-origin
+requests by default. Consumer apps can override it at runtime with
+`provideApiConfiguration(...)`.
+
+### Runtime base URL
+
+The generated SDK does not read `sdk.config.json` at runtime. The value of
+`targets[].rootUrl` is only used during code generation to seed the default
+`ApiConfiguration.rootUrl` value.
+
+- `rootUrl: ""` or omitted: requests use the current origin, for example
+  `/api/users` on the same host as the Angular app.
+- `rootUrl: "https://api.example.com"`: the generated SDK defaults to that
+  absolute backend URL.
+- Runtime override: consumer apps can replace the default by providing a new
+  value during bootstrap.
+
+Example runtime override in a consumer app:
+
+```ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideHttpClient } from '@angular/common/http';
+
+import { AppComponent } from './app/app.component';
+import { provideApiConfiguration } from '@my-scope/sdk';
+
+bootstrapApplication(AppComponent, {
+  providers: [provideHttpClient(), provideApiConfiguration('https://api.example.com')],
+});
+```
+
+For standalone generated output inside the same workspace, import
+`provideApiConfiguration` from the generated SDK barrel instead of an npm
+package path.
 
 ## Per-domain layout
 
