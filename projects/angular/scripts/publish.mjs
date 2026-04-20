@@ -9,9 +9,9 @@ import { stdin as input, stdout as output } from 'node:process';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '../../..');
 const libraryPkgPath = resolve(__dirname, '../package.json');
-const rootPkgPath = resolve(repoRoot, 'package.json');
 
 const SEMVER_RE = /^\d+\.\d+\.\d+$/;
+const BUMP_TYPES = ['major', 'minor', 'patch'];
 
 function run(cmd, opts = {}) {
   return execSync(cmd, { stdio: 'pipe', encoding: 'utf8', cwd: repoRoot, ...opts }).trim();
@@ -32,6 +32,30 @@ function info(message) {
 
 function success(message) {
   console.log(`\u2713 ${message}`);
+}
+
+function bumpVersion(current, type) {
+  if (!SEMVER_RE.test(current)) {
+    throw new Error(`Current version "${current}" is not a valid semver X.Y.Z.`);
+  }
+  let [major, minor, patch] = current.split('.').map(Number);
+  switch (type) {
+    case 'major':
+      major += 1;
+      minor = 0;
+      patch = 0;
+      break;
+    case 'minor':
+      minor += 1;
+      patch = 0;
+      break;
+    case 'patch':
+      patch += 1;
+      break;
+    default:
+      throw new Error(`Unknown bump type: ${type}`);
+  }
+  return `${major}.${minor}.${patch}`;
 }
 
 async function checkGitClean() {
@@ -83,26 +107,23 @@ async function promptVersion(currentVersion) {
   const rl = readline.createInterface({ input, output });
   try {
     console.log(`\nCurrent version: ${currentVersion}`);
-    console.log('Enter the new version in format XX.YY.ZZ');
-    console.log('  XX = major (breaking changes)');
-    console.log('  YY = minor (new features)');
-    console.log('  ZZ = patch (bug fixes)\n');
+    console.log('Choose bump type:');
+    console.log(`  major \u2192 ${bumpVersion(currentVersion, 'major')} (breaking changes)`);
+    console.log(`  minor \u2192 ${bumpVersion(currentVersion, 'minor')} (new features)`);
+    console.log(`  patch \u2192 ${bumpVersion(currentVersion, 'patch')} (bug fixes)\n`);
 
     while (true) {
-      const answer = (await rl.question('New version: ')).trim();
-      if (!SEMVER_RE.test(answer)) {
-        console.log('  Invalid format. Please use XX.YY.ZZ (numbers only).');
+      const answer = (await rl.question('Bump type (major/minor/patch): ')).trim().toLowerCase();
+      if (!BUMP_TYPES.includes(answer)) {
+        console.log('  Invalid choice. Please enter: major, minor, or patch.');
         continue;
       }
-      if (answer === currentVersion) {
-        console.log('  New version must differ from the current version.');
-        continue;
-      }
-      const confirm = (await rl.question(`Confirm bump ${currentVersion} \u2192 ${answer}? (y/N): `))
+      const next = bumpVersion(currentVersion, answer);
+      const confirm = (await rl.question(`Confirm bump ${currentVersion} \u2192 ${next}? (y/N): `))
         .trim()
         .toLowerCase();
       if (confirm === 'y' || confirm === 'yes') {
-        return answer;
+        return next;
       }
     }
   } finally {
@@ -114,7 +135,6 @@ function updateVersion(pkgPath, newVersion) {
   const raw = readFileSync(pkgPath, 'utf8');
   const pkg = JSON.parse(raw);
   pkg.version = newVersion;
-  // Preserve trailing newline if present
   const trailing = raw.endsWith('\n') ? '\n' : '';
   writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + trailing);
 }
