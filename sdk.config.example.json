@@ -1,20 +1,20 @@
 {
-  "$schema": "./projects/angular/generator/api/schematics/sdk/schema.json",
-  "targets": [
-    {
-      "input": "./projects/angular/generator/api/openapi.bundle.yaml",
-      "output": "./sdk",
-      "mode": "standalone",
-      "clientName": "Api",
-      "rootUrl": "http://127.0.0.1:8080",
-      "features": {
-        "models": true,
-        "operations": true,
-        "services": true,
-        "client": true,
-        "metadata": true,
-        "navigation": true
-      }
-    }
-  ]
+    "$schema": "./projects/angular/generator/api/schematics/sdk/schema.json",
+    "targets": [
+        {
+            "input": "./projects/angular/generator/api/openapi.bundle.yaml",
+            "output": "./sdk",
+            "mode": "standalone",
+            "clientName": "Api",
+            "rootUrl": "http://127.0.0.1:8080",
+            "features": {
+                "models": true,
+                "operations": true,
+                "services": true,
+                "client": true,
+                "metadata": true,
+                "navigation": true
+            }
+        }
+    ]
 }
