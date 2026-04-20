@@ -1,0 +1,5611 @@
+openapi: 3.2.0
+info:
+  title: ERP Gateway API
+  version: 0.1.0
+  description: Gateway ERP BFF document. Domain route definitions stay in each downstream service spec, and this gateway spec reuses them as the public source of truth.
+  license:
+    name: Proprietary
+    url: https://github.com/edsis/go
+servers:
+  - url: '{scheme}://{host}'
+    description: Configurable gateway endpoint for local, staging, or production environments.
+    variables:
+      scheme:
+        default: http
+        enum:
+          - http
+          - https
+      host:
+        default: 127.0.0.1:8080
+tags:
+  - name: Health
+    kind: nav
+    x-icon: heart-pulse
+    description: Gateway monitoring and liveness endpoints.
+  - name: Auth
+    kind: nav
+    x-icon: shield-check
+    description: Registration, magic-link authentication, session rotation, and logout endpoints.
+  - name: User
+    kind: nav
+    x-icon: users
+    description: User directory and self-service profile endpoints.
+  - name: Employee
+    kind: nav
+    x-icon: briefcase
+    description: Gateway-published employee CRUD endpoints exposed under /v1/employee/*.
+  - name: Access
+    kind: nav
+    x-icon: key-round
+    description: Gateway-published ACL endpoints exposed under /v1/access/*.
+  - name: Approval
+    kind: nav
+    x-icon: stamp
+    description: Gateway-published approval definition and workflow endpoints exposed under /v1/approval/*.
+  - name: Role
+    parent: Access
+    kind: nav
+    x-icon: badge-check
+    description: Role master data management endpoints.
+  - name: Permission
+    parent: Access
+    kind: nav
+    x-icon: key
+    description: Permission master data and lookup endpoints.
+  - name: Role Permission
+    parent: Access
+    kind: nav
+    x-icon: shield-plus
+    description: Role-to-permission assignment endpoints.
+  - name: Role User
+    parent: Access
+    kind: nav
+    x-icon: user-cog
+    description: Role-to-user assignment endpoints.
+  - name: Permission User
+    parent: Access
+    kind: nav
+    x-icon: user-check
+    description: User-specific permission assignment endpoints.
+  - name: Approval Definition
+    parent: Approval
+    kind: nav
+    x-icon: boxes
+    description: Approval definition master data endpoints.
+  - name: Approval Transition
+    parent: Approval
+    kind: nav
+    x-icon: arrow-right-left
+    description: Approval transition master data endpoints.
+  - name: Approval Stage
+    parent: Approval
+    kind: nav
+    x-icon: list-todo
+    description: Approval stage master data endpoints.
+  - name: Approval Actor
+    parent: Approval
+    kind: nav
+    x-icon: users
+    description: Approval actor master data endpoints.
+  - name: Approval Instance
+    parent: Approval
+    kind: nav
+    x-icon: clipboard-check
+    description: Approval workflow submit, decision, detail, and pending endpoints.
+  - name: Storage
+    kind: nav
+    x-icon: hard-drive
+    description: File upload, metadata, and signed URL endpoints for GCS and S3.
+  - name: GCS
+    parent: Storage
+    kind: nav
+    x-icon: cloud
+    description: Google Cloud Storage upload and object access endpoints.
+  - name: S3
+    parent: Storage
+    kind: nav
+    x-icon: database-backup
+    description: AWS S3 (and S3-compatible) upload and object access endpoints.
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Gateway health check
+      description: Returns the gateway service status and request metadata for monitoring.
+      operationId: getGatewayHealth
+      security: []
+      responses:
+        '200':
+          description: Gateway is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: gateway is healthy
+                  data:
+                    type: object
+                    properties:
+                      service:
+                        type: string
+                        example: gateway-erp
+                      status:
+                        type: string
+                        example: ok
+                      timestamp:
+                        type: string
+                        format: date-time
+                      request_id:
+                        type: string
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1:
+    get:
+      tags:
+        - Health
+      summary: Gateway API root probe
+      description: Returns no content when the versioned gateway API group is reachable.
+      operationId: getGatewayAPIRoot
+      security: []
+      responses:
+        '204':
+          description: Gateway API root is reachable
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new principal
+      description: Creates a new principal record and returns the registered user summary.
+      operationId: registerAuthPrincipal
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRegisterRequest'
+            examples:
+              default:
+                $ref: '#/components/examples/AuthRegisterRequestExample'
+      responses:
+        '201':
+          description: Principal registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/AuthRegisterSuccessExample'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_payload:
+                  $ref: '#/components/examples/AuthInvalidPayloadExample'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Send a magic login link
+      description: Requests a single-use magic link. The backend may send either a login link or an activation link depending on the account state.
+      operationId: requestMagicLoginLink
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthLoginRequest'
+            examples:
+              default:
+                $ref: '#/components/examples/AuthLoginRequestExample'
+      responses:
+        '200':
+          description: Magic link sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MagicLinkDispatchResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/MagicLinkDispatchSuccessExample'
+        '401':
+          description: Unknown email address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                unauthorized:
+                  $ref: '#/components/examples/AuthUnauthorizedExample'
+        '422':
+          description: Account status is not eligible for login or activation email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                activation_unavailable:
+                  $ref: '#/components/examples/AuthBusinessRuleExample'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/auth/resend:
+    post:
+      tags:
+        - Auth
+      summary: Resend a magic link
+      description: Sends a replacement single-use magic link using the same decision flow as the login endpoint. Callers may override the frontend destination URL per request.
+      operationId: resendMagicLink
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthResendRequest'
+            examples:
+              default:
+                $ref: '#/components/examples/AuthResendRequestExample'
+      responses:
+        '200':
+          description: Magic link resent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MagicLinkDispatchResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/MagicLinkResendSuccessExample'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_payload:
+                  $ref: '#/components/examples/AuthInvalidPayloadExample'
+        '422':
+          description: Account status is not eligible for login or activation email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                activation_unavailable:
+                  $ref: '#/components/examples/AuthBusinessRuleExample'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/auth/verify:
+    post:
+      tags:
+        - Auth
+      summary: Verify a single-use magic link token
+      description: Consumes a magic link token, activates eligible accounts when needed, returns an access token, and sets the refresh_token cookie with HttpOnly and SameSite protection.
+      operationId: verifyMagicLink
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthVerifyRequest'
+            examples:
+              default:
+                $ref: '#/components/examples/AuthVerifyRequestExample'
+      responses:
+        '200':
+          description: Magic link consumed, access token issued, and refresh cookie set
+          headers:
+            Set-Cookie:
+              description: HttpOnly refresh_token cookie for the current session.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/AuthVerifySuccessExample'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_payload:
+                  $ref: '#/components/examples/AuthVerifyInvalidPayloadExample'
+        '401':
+          description: Invalid, expired, or already-consumed token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_token:
+                  $ref: '#/components/examples/AuthUnauthorizedExample'
+        '422':
+          description: Account not eligible for activation or login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                email_not_verified:
+                  $ref: '#/components/examples/AuthVerifyBusinessRuleExample'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/auth/refresh:
+    post:
+      tags:
+        - Auth
+      summary: Rotate the refresh cookie
+      description: Validates the current HttpOnly refresh_token cookie, rotates the token family, returns a new access token, and sets a replacement refresh_token cookie.
+      operationId: refreshAuthToken
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Session rotated and refresh cookie replaced
+          headers:
+            Set-Cookie:
+              description: Replacement HttpOnly refresh_token cookie.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/AuthRefreshSuccessExample'
+        '401':
+          description: Missing, invalid, expired, or already-reused refresh_token cookie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_refresh_token:
+                  $ref: '#/components/examples/AuthInvalidRefreshTokenExample'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Revoke the current session
+      description: Revokes the refresh-token family for the current HttpOnly refresh_token cookie when available and clears that cookie in the response.
+      operationId: logoutAuthSession
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Session revoked and refresh cookie cleared
+          headers:
+            Set-Cookie:
+              description: Expired refresh_token cookie clearing the browser session.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: logout success
+                  data:
+                    type: object
+                    properties:
+                      revoked:
+                        type: boolean
+                        example: true
+              examples:
+                default:
+                  $ref: '#/components/examples/AuthLogoutSuccessExample'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/user:
+    get:
+      tags:
+        - User
+      summary: List users
+      description: Returns a paginated user list. Access is protected by gateway ACL and may be further restricted by service-layer rules. `user:user:list:all` grants global listing, while `user:user:list:scoped` currently resolves through a dedicated scope resolver whose default behavior still limits results to the authenticated actor until richer scope relations are introduced.
+      operationId: listUsers
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - user:user:list:all
+        - user:user:list:scoped
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - name
+              - email
+              - role
+              - status
+        - $ref: '#/components/parameters/OrderQuery'
+        - $ref: '#/components/parameters/SearchQuery'
+      responses:
+        '200':
+          description: User list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/UserListSuccessExample'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing required user listing permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbidden:
+                  $ref: '#/components/examples/UserListForbiddenExample'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - User
+      summary: Create user
+      description: Creates a new user profile with an initial role assignment.
+      operationId: createUser
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - user:user:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+            examples:
+              default:
+                $ref: '#/components/examples/UserCreateRequestExample'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdateResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/UserCreateSuccessExample'
+        '400':
+          description: Invalid payload or duplicate email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_payload:
+                  $ref: '#/components/examples/UserInvalidPayloadExample'
+                duplicate_email:
+                  $ref: '#/components/examples/UserDuplicateEmailExample'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing user:user:create permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbidden:
+                  $ref: '#/components/examples/UserCreateForbiddenExample'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/user/{id}/active:
+    patch:
+      tags:
+        - User
+      summary: Activate a user
+      description: Updates the target user status to active when the business transition is allowed.
+      operationId: patchUserActive
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - user:user:active
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User status updated to active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMutationResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/UserActivateSuccessExample'
+        '400':
+          description: Invalid user identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_identifier:
+                  $ref: '#/components/examples/UserInvalidIdentifierExample'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing user:user:active permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbidden:
+                  $ref: '#/components/examples/UserActiveForbiddenExample'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/BusinessRuleViolation'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/user/{id}:
+    get:
+      tags:
+        - User
+      summary: Get user detail
+      description: Returns a single user detail record. Service-layer ownership rules may still deny access even when the gateway permission check passes.
+      operationId: getUserByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - user:user:read
+      x-authorization-notes:
+        - Requires service-layer ownership checks for non-privileged users.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdateResponse'
+        '400':
+          description: Invalid user identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing user:user:read permission or forbidden by ownership rule
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - User
+      summary: Update any user profile
+      description: Partially updates another user's profile. Intended for privileged roles with broad update access.
+      operationId: patchUserByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - user:user:update:all
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: User profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdateResponse'
+        '400':
+          description: Invalid payload or identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing user:user:update:all permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - User
+      summary: Reject physical user deletion
+      description: This route remains registered for contract completeness, but user-service intentionally does not support physical deletion and always returns method not allowed.
+      operationId: deleteUserByID
+      security:
+        - callerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '405':
+          description: User delete is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                default:
+                  $ref: '#/components/examples/UserDeleteNotAllowedExample'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/user/me:
+    get:
+      tags:
+        - User
+      summary: Get current user detail
+      description: Returns the authenticated user's own profile.
+      operationId: getCurrentUser
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - user:user:read
+      responses:
+        '200':
+          description: Current user detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdateResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing user:user:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - User
+      summary: Update authenticated user profile
+      description: Partially updates the authenticated user's own profile using the self-update permission.
+      operationId: patchCurrentUser
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - user:user:update:own
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSelfUpdateRequest'
+      responses:
+        '200':
+          description: Current user profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdateResponse'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing user:user:update:own permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/user/{id}/suspend:
+    patch:
+      tags:
+        - User
+      summary: Suspend a user
+      description: Updates the target user status to suspend when the business transition is allowed.
+      operationId: patchUserSuspend
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - user:user:suspend
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User status updated to suspend
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMutationResponse'
+        '400':
+          description: Invalid user identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing user:user:suspend permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/BusinessRuleViolation'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/user/{id}/reset:
+    patch:
+      tags:
+        - User
+      summary: Reset a user state
+      description: Updates the target user status to reset when the business transition is allowed.
+      operationId: patchUserReset
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - user:user:reset
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User status updated to reset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMutationResponse'
+        '400':
+          description: Invalid user identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing user:user:reset permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/BusinessRuleViolation'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/employee:
+    get:
+      tags:
+        - Employee
+      summary: List employees
+      description: Returns a paginated employee list filtered by search text and sorted by supported employee fields.
+      operationId: listEmployees
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - employee:employee:list
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - full_name
+              - employee_number
+              - email
+              - hire_date
+              - employment_status
+        - $ref: '#/components/parameters/OrderQuery'
+        - $ref: '#/components/parameters/SearchQuery'
+      responses:
+        '200':
+          description: Employee list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing employee:employee:list permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Employee
+      summary: Create employee
+      description: Creates one employee profile record.
+      operationId: createEmployee
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - employee:employee:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEmployeeRequest'
+      responses:
+        '201':
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+        '400':
+          description: Invalid employee payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing employee:employee:create permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Duplicate employee number or email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          $ref: '#/components/responses/BusinessRuleViolation'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/employee/{id}:
+    get:
+      tags:
+        - Employee
+      summary: Get employee detail
+      description: Returns one employee detail record by identifier.
+      operationId: getEmployeeByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - employee:employee:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Employee detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+        '400':
+          description: Invalid employee identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing employee:employee:read permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - Employee
+      summary: Update employee
+      description: Partially updates one employee profile by identifier.
+      operationId: patchEmployeeByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - employee:employee:update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmployeeRequest'
+      responses:
+        '200':
+          description: Employee updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+        '400':
+          description: Invalid employee payload or identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing employee:employee:update permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Duplicate employee number or email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          $ref: '#/components/responses/BusinessRuleViolation'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Employee
+      summary: Delete employee
+      description: Soft deletes one employee profile by identifier.
+      operationId: deleteEmployeeByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - employee:employee:delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Employee deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeMutationAckResponse'
+        '400':
+          description: Invalid employee identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing employee:employee:delete permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/access/role:
+    get:
+      tags:
+        - Role
+      summary: List roles
+      description: Returns a paginated role master list from access-service.
+      operationId: listRoles
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role:list
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - name
+              - code
+              - updated_at
+        - $ref: '#/components/parameters/OrderQuery'
+        - $ref: '#/components/parameters/SearchQuery'
+      responses:
+        '200':
+          description: Role list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role:list permission
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Role
+      summary: Create role
+      description: Creates a new role master record.
+      operationId: createRole
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoleRequest'
+      responses:
+        '201':
+          description: Role created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponse'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role:create permission
+        '409':
+          description: Duplicate role code or name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/access/role/{id}:
+    get:
+      tags:
+        - Role
+      summary: Get role detail
+      description: Returns one role master record by identifier.
+      operationId: getRoleByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Role detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponse'
+        '400':
+          description: Invalid role identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - Role
+      summary: Update role
+      description: Partially updates a role master record.
+      operationId: patchRoleByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role:update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoleRequest'
+      responses:
+        '200':
+          description: Role updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponse'
+        '400':
+          description: Invalid payload or identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role:update permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Duplicate role code or name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Role
+      summary: Delete role
+      description: Deletes a role master record when it is not a protected seeded role.
+      operationId: deleteRoleByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role:delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Role deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessMutationAckResponse'
+        '400':
+          description: Invalid role identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role:delete permission or protected system role
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/access/permission:
+    get:
+      tags:
+        - Permission
+      summary: List permissions
+      description: Returns a paginated permission master list, optionally filtered by namespace, resource, action, and scope using the `namespace:resource:action[:scope]` naming rule.
+      operationId: listPermissions
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:permission:list
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - name
+              - code
+              - resource
+              - action
+              - updated_at
+        - $ref: '#/components/parameters/OrderQuery'
+        - $ref: '#/components/parameters/SearchQuery'
+        - name: namespace
+          in: query
+          schema:
+            type: string
+        - name: resource
+          in: query
+          schema:
+            type: string
+        - name: action
+          in: query
+          schema:
+            type: string
+        - name: scope
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Permission list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:permission:list permission
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Permission
+      summary: Create permission
+      description: Creates a permission master record from `namespace`, `resource`, `action`, and optional `scope` segments.
+      operationId: createPermission
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:permission:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePermissionRequest'
+      responses:
+        '201':
+          description: Permission created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionResponse'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:permission:create permission
+        '409':
+          description: Duplicate permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/access/permission/{id}:
+    get:
+      tags:
+        - Permission
+      summary: Get permission detail
+      description: Returns one permission master record by identifier.
+      operationId: getPermissionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:permission:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Permission detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionResponse'
+        '400':
+          description: Invalid permission identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:permission:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - Permission
+      summary: Update permission
+      description: Partially updates a permission master record.
+      operationId: patchPermissionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:permission:update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePermissionRequest'
+      responses:
+        '200':
+          description: Permission updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionResponse'
+        '400':
+          description: Invalid payload or identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:permission:update permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Duplicate permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Permission
+      summary: Delete permission
+      description: Deletes a permission master record and invalidates effective permission cache.
+      operationId: deletePermissionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:permission:delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Permission deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessMutationAckResponse'
+        '400':
+          description: Invalid permission identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:permission:delete permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/access/role-permission:
+    get:
+      tags:
+        - Role Permission
+      summary: List role-permission relations
+      description: Returns a paginated role-permission relation list.
+      operationId: listRolePermissions
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role_permission:list
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - role_id
+              - permission_id
+        - $ref: '#/components/parameters/OrderQuery'
+        - name: role_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: permission_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Role-permission list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RolePermissionListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role_permission:list permission
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Role Permission
+      summary: Create role-permission relation
+      description: Assigns a permission master record to a role master record.
+      operationId: createRolePermission
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role_permission:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRolePermissionRequest'
+      responses:
+        '201':
+          description: Role-permission relation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RolePermissionResponse'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role_permission:create permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Duplicate role-permission relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/access/role-permission/{id}:
+    get:
+      tags:
+        - Role Permission
+      summary: Get role-permission detail
+      description: Returns one role-permission relation by identifier.
+      operationId: getRolePermissionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role_permission:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Role-permission detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RolePermissionResponse'
+        '400':
+          description: Invalid relation identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role_permission:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - Role Permission
+      summary: Update role-permission relation
+      description: Corrects one role-permission relation row.
+      operationId: patchRolePermissionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role_permission:update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRolePermissionRequest'
+      responses:
+        '200':
+          description: Role-permission relation updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RolePermissionResponse'
+        '400':
+          description: Invalid payload or identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role_permission:update permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Duplicate role-permission relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Role Permission
+      summary: Delete role-permission relation
+      description: Removes one role-permission relation row.
+      operationId: deleteRolePermissionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role_permission:delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Role-permission relation deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessMutationAckResponse'
+        '400':
+          description: Invalid relation identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role_permission:delete permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/access/role-user:
+    get:
+      tags:
+        - Role User
+      summary: List role-user relations
+      description: Returns a paginated role-user relation list.
+      operationId: listRoleUsers
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role_user:list
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - role_id
+              - user_id
+        - $ref: '#/components/parameters/OrderQuery'
+        - name: role_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Role-user list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleUserListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role_user:list permission
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Role User
+      summary: Create role-user relation
+      description: Assigns a role to a user through the CRUD relation table.
+      operationId: createRoleUser
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role_user:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoleUserRequest'
+      responses:
+        '201':
+          description: Role-user relation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleUserResponse'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role_user:create permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Duplicate role-user relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/access/role-user/{id}:
+    get:
+      tags:
+        - Role User
+      summary: Get role-user detail
+      description: Returns one role-user relation by identifier.
+      operationId: getRoleUserByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role_user:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Role-user detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleUserResponse'
+        '400':
+          description: Invalid relation identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role_user:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - Role User
+      summary: Update role-user relation
+      description: Corrects one role-user relation row.
+      operationId: patchRoleUserByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role_user:update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoleUserRequest'
+      responses:
+        '200':
+          description: Role-user relation updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleUserResponse'
+        '400':
+          description: Invalid payload or identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role_user:update permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Duplicate role-user relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Role User
+      summary: Delete role-user relation
+      description: Removes one role-user relation row.
+      operationId: deleteRoleUserByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:role_user:delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Role-user relation deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessMutationAckResponse'
+        '400':
+          description: Invalid relation identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:role_user:delete permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/access/permission-user:
+    get:
+      tags:
+        - Permission User
+      summary: List permission-user relations
+      description: Returns a paginated direct permission relation list for users.
+      operationId: listPermissionUsers
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:permission_user:list
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - permission_id
+              - user_id
+        - $ref: '#/components/parameters/OrderQuery'
+        - name: permission_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Permission-user list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionUserListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:permission_user:list permission
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Permission User
+      summary: Create permission-user relation
+      description: Assigns a direct permission to a user through the CRUD relation table.
+      operationId: createPermissionUser
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:permission_user:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePermissionUserRequest'
+      responses:
+        '201':
+          description: Permission-user relation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionUserResponse'
+        '400':
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:permission_user:create permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Duplicate permission-user relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/access/permission-user/{id}:
+    get:
+      tags:
+        - Permission User
+      summary: Get permission-user detail
+      description: Returns one permission-user relation by identifier.
+      operationId: getPermissionUserByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:permission_user:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Permission-user detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionUserResponse'
+        '400':
+          description: Invalid relation identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:permission_user:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - Permission User
+      summary: Update permission-user relation
+      description: Corrects one permission-user relation row.
+      operationId: patchPermissionUserByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:permission_user:update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePermissionUserRequest'
+      responses:
+        '200':
+          description: Permission-user relation updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionUserResponse'
+        '400':
+          description: Invalid payload or identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:permission_user:update permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Duplicate permission-user relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Permission User
+      summary: Delete permission-user relation
+      description: Removes one permission-user relation row.
+      operationId: deletePermissionUserByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - access:permission_user:delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Permission-user relation deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessMutationAckResponse'
+        '400':
+          description: Invalid relation identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing access:permission_user:delete permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/definition:
+    get:
+      tags:
+        - Approval Definition
+      summary: List approval definitions
+      description: Returns paginated approval definition master data.
+      operationId: listApprovalDefinitions
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:definition:list
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - code
+              - table_name
+              - updated_at
+        - $ref: '#/components/parameters/OrderQuery'
+        - $ref: '#/components/parameters/SearchQuery'
+      responses:
+        '200':
+          description: Approval definition list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinitionListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:definition:list permission
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Approval Definition
+      summary: Create approval definition
+      description: Creates an approval definition with optional nested transitions, stages, and actors.
+      operationId: createApprovalDefinition
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:definition:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDefinitionRequest'
+      responses:
+        '201':
+          description: Approval definition created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinitionResponse'
+        '400':
+          description: Invalid approval definition payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:definition:create permission
+        '409':
+          description: Duplicate approval definition
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/definition/{id}:
+    get:
+      tags:
+        - Approval Definition
+      summary: Get approval definition detail
+      operationId: getApprovalDefinitionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:definition:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval definition detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinitionResponse'
+        '400':
+          description: Invalid definition identifier
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:definition:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - Approval Definition
+      summary: Update approval definition
+      operationId: patchApprovalDefinitionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:definition:update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDefinitionRequest'
+      responses:
+        '200':
+          description: Approval definition updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefinitionResponse'
+        '400':
+          description: Invalid payload or identifier
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:definition:update permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Approval definition still referenced by pending instance or duplicate code
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Approval Definition
+      summary: Delete approval definition
+      operationId: deleteApprovalDefinitionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:definition:delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval definition deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalMutationAckResponse'
+        '400':
+          description: Invalid definition identifier
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:definition:delete permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Approval definition still referenced by pending instance
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/transition:
+    get:
+      tags:
+        - Approval Transition
+      summary: List approval transitions
+      operationId: listApprovalTransitions
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:transition:list
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - from_status
+              - to_status
+              - updated_at
+        - $ref: '#/components/parameters/OrderQuery'
+        - name: definition_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval transition list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransitionListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:transition:list permission
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Approval Transition
+      summary: Create approval transition
+      operationId: createApprovalTransition
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:transition:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransitionRequest'
+      responses:
+        '201':
+          description: Approval transition created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransitionResponse'
+        '400':
+          description: Invalid approval transition payload or duplicate transition pair
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:transition:create permission
+        '404':
+          description: Referenced approval definition not found
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/transition/{id}:
+    get:
+      tags:
+        - Approval Transition
+      summary: Get approval transition detail
+      operationId: getApprovalTransitionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:transition:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval transition detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransitionResponse'
+        '400':
+          description: Invalid transition identifier
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:transition:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - Approval Transition
+      summary: Update approval transition
+      operationId: patchApprovalTransitionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:transition:update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTransitionRequest'
+      responses:
+        '200':
+          description: Approval transition updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransitionResponse'
+        '400':
+          description: Invalid transition payload, identifier, or duplicate transition pair
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:transition:update permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Approval Transition
+      summary: Delete approval transition
+      operationId: deleteApprovalTransitionByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:transition:delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval transition deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalMutationAckResponse'
+        '400':
+          description: Invalid transition identifier
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:transition:delete permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Approval transition is still referenced by pending instances
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/stage:
+    get:
+      tags:
+        - Approval Stage
+      summary: List approval stages
+      operationId: listApprovalStages
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:stage:list
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - level
+              - name
+              - updated_at
+        - $ref: '#/components/parameters/OrderQuery'
+        - name: definition_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval stage list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StageListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:stage:list permission
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Approval Stage
+      summary: Create approval stage
+      operationId: createApprovalStage
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:stage:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStageRequest'
+      responses:
+        '201':
+          description: Approval stage created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StageResponse'
+        '400':
+          description: Invalid approval stage payload or duplicate stage level
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:stage:create permission
+        '404':
+          description: Referenced approval definition not found
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/stage/{id}:
+    get:
+      tags:
+        - Approval Stage
+      summary: Get approval stage detail
+      operationId: getApprovalStageByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:stage:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval stage detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StageDetailResponse'
+        '400':
+          description: Invalid stage identifier
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:stage:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - Approval Stage
+      summary: Update approval stage
+      operationId: patchApprovalStageByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:stage:update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStageRequest'
+      responses:
+        '200':
+          description: Approval stage updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StageResponse'
+        '400':
+          description: Invalid stage payload, identifier, or duplicate stage level
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:stage:update permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Approval Stage
+      summary: Delete approval stage
+      operationId: deleteApprovalStageByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:stage:delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval stage deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalMutationAckResponse'
+        '400':
+          description: Invalid stage identifier
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:stage:delete permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Approval stage is still referenced by pending instances
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/actor:
+    get:
+      tags:
+        - Approval Actor
+      summary: List approval actors
+      operationId: listApprovalActors
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:actor:list
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - type
+              - ref_id
+              - updated_at
+        - $ref: '#/components/parameters/OrderQuery'
+        - name: stage_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval actor list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActorListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:actor:list permission
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Approval Actor
+      summary: Create approval actor
+      operationId: createApprovalActor
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:actor:create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateActorRequest'
+      responses:
+        '201':
+          description: Approval actor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActorResponse'
+        '400':
+          description: Invalid approval actor payload or duplicate actor pair
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:actor:create permission
+        '404':
+          description: Referenced approval stage not found
+        '422':
+          $ref: '#/components/responses/BusinessRuleViolation'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/actor/{id}:
+    get:
+      tags:
+        - Approval Actor
+      summary: Get approval actor detail
+      operationId: getApprovalActorByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:actor:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval actor detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActorResponse'
+        '400':
+          description: Invalid actor identifier
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:actor:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+        - Approval Actor
+      summary: Update approval actor
+      operationId: patchApprovalActorByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:actor:update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateActorRequest'
+      responses:
+        '200':
+          description: Approval actor updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActorResponse'
+        '400':
+          description: Invalid actor payload, identifier, or duplicate actor pair
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:actor:update permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '422':
+          $ref: '#/components/responses/BusinessRuleViolation'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Approval Actor
+      summary: Delete approval actor
+      operationId: deleteApprovalActorByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:actor:delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval actor deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalMutationAckResponse'
+        '400':
+          description: Invalid actor identifier
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:actor:delete permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '409':
+          description: Approval actor is still referenced by pending instances
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/submit:
+    post:
+      tags:
+        - Approval Instance
+      summary: Submit record into approval workflow
+      description: Resolves one approval definition, chooses the valid transition from current status, and creates a pending approval instance with generated steps.
+      operationId: submitApprovalWorkflow
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:instance:submit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitRequest'
+      responses:
+        '201':
+          description: Approval workflow submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowActionResponse'
+        '400':
+          description: Invalid approval workflow payload, inactive definition, or transition mismatch
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:instance:submit permission
+        '404':
+          description: Approval definition not found
+        '409':
+          description: Record already has a pending approval instance
+        '422':
+          $ref: '#/components/responses/BusinessRuleViolation'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/approve:
+    post:
+      tags:
+        - Approval Instance
+      summary: Approve current approval step
+      operationId: approveApprovalStep
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:instance:approve
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApproveRequest'
+      responses:
+        '200':
+          description: Approval step approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowActionResponse'
+        '400':
+          description: Invalid approval action payload or approval step state
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval permission or invalid workflow actor
+        '404':
+          description: Approval instance or step not found
+        '422':
+          $ref: '#/components/responses/BusinessRuleViolation'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/reject:
+    post:
+      tags:
+        - Approval Instance
+      summary: Reject current approval step
+      operationId: rejectApprovalStep
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:instance:reject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectRequest'
+      responses:
+        '200':
+          description: Approval step rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowActionResponse'
+        '400':
+          description: Invalid approval action payload or approval step state
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval permission or invalid workflow actor
+        '404':
+          description: Approval instance or step not found
+        '422':
+          $ref: '#/components/responses/BusinessRuleViolation'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/instance/{id}:
+    get:
+      tags:
+        - Approval Instance
+      summary: Get approval instance detail
+      operationId: getApprovalInstanceByID
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:instance:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Approval instance detail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceDetailResponse'
+        '400':
+          description: Invalid approval instance identifier
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:instance:read permission
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/approval/pending:
+    get:
+      tags:
+        - Approval Instance
+      summary: List pending approvals for current actor
+      operationId: listPendingApprovalItems
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - approval:instance:pending
+      parameters:
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/LimitQuery'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - updated_at
+              - table_name
+              - record_id
+              - current_stage
+        - $ref: '#/components/parameters/OrderQuery'
+      responses:
+        '200':
+          description: Pending approval list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PendingListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '403':
+          description: Missing approval:instance:pending permission
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/storage/gcs:
+    post:
+      tags:
+        - GCS
+      summary: Upload file to GCS
+      description: |
+        Uploads a file to Google Cloud Storage. The object key is derived as:
+        `{path}/{YYYY}/{MonthName}/{DD}/{id}.{ext}`
+      operationId: uploadGCS
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - storage:gcs:upload
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - id
+                - path
+                - date
+                - object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: UUIDv7 identifier for the object.
+                  example: 01956b8e-0000-7000-8000-000000000000
+                path:
+                  type: string
+                  description: Storage path prefix. Must not contain '..'.
+                  example: docs/invoice
+                date:
+                  type: string
+                  format: date
+                  description: Date in YYYY-MM-DD format used to build the object key.
+                  example: '2022-01-02'
+                compress:
+                  type: boolean
+                  default: false
+                  description: If true, compresses the uploaded image (PNG or JPEG). Only valid for image/* content.
+                object:
+                  type: string
+                  format: binary
+                  description: File to upload. Maximum 32 MB.
+      responses:
+        '200':
+          description: Object uploaded successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageUploadResponse'
+        '400':
+          description: Validation error (missing or invalid fields).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '422':
+          description: Compress requested on non-image object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/storage/gcs/object:
+    get:
+      tags:
+        - GCS
+      summary: Get GCS object metadata and signed URL
+      description: |
+        Returns metadata for a GCS object and a 15-minute read-only signed URL.
+      operationId: getObjectGCS
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - storage:gcs:read
+      parameters:
+        - name: key
+          in: query
+          required: true
+          description: URL-encoded object key. Must not contain '..'.
+          schema:
+            type: string
+          example: docs%2Finvoice%2F2022%2FJanuary%2F02%2F01956b8e.pdf
+      responses:
+        '200':
+          description: Object metadata and signed URL.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageObjectResponse'
+        '400':
+          description: Missing or invalid key parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/storage/gcs/object/download:
+    get:
+      tags:
+        - GCS
+      summary: Download GCS object via signed URL redirect
+      description: |
+        Generates an attachment signed URL and responds with a 307 redirect.
+        The browser will download the file with Content-Disposition: attachment.
+      operationId: downloadObjectGCS
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - storage:gcs:read
+      parameters:
+        - name: key
+          in: query
+          required: true
+          description: URL-encoded object key. Must not contain '..'.
+          schema:
+            type: string
+      responses:
+        '307':
+          description: Temporary redirect to the signed download URL.
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Missing or invalid key parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/storage/sss:
+    post:
+      tags:
+        - S3
+      summary: Upload file to S3
+      description: |
+        Uploads a file to AWS S3 (or S3-compatible storage). The object key is derived as:
+        `{path}/{YYYY}/{MonthName}/{DD}/{id}.{ext}`
+      operationId: uploadS3
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - storage:sss:upload
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - id
+                - path
+                - date
+                - object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: UUIDv7 identifier for the object.
+                path:
+                  type: string
+                  description: Storage path prefix. Must not contain '..'.
+                date:
+                  type: string
+                  format: date
+                  description: Date in YYYY-MM-DD format.
+                compress:
+                  type: boolean
+                  default: false
+                  description: Compress image before upload (images only).
+                object:
+                  type: string
+                  format: binary
+                  description: File to upload. Maximum 32 MB.
+      responses:
+        '200':
+          description: Object uploaded successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageUploadResponse'
+        '400':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '422':
+          description: Compress requested on non-image object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/storage/sss/object:
+    get:
+      tags:
+        - S3
+      summary: Get S3 object metadata and signed URL
+      description: |
+        Returns metadata and a 15-minute pre-signed URL for an S3 object.
+      operationId: getObjectS3
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - storage:sss:read
+      parameters:
+        - name: key
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Object metadata and signed URL.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageObjectResponse'
+        '400':
+          description: Missing or invalid key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/storage/sss/object/download:
+    get:
+      tags:
+        - S3
+      summary: Download S3 object via signed URL redirect
+      description: |
+        Generates an attachment pre-signed URL and responds with a 307 redirect.
+      operationId: downloadObjectS3
+      security:
+        - callerAuth: []
+      x-required-permissions:
+        - storage:sss:read
+      parameters:
+        - name: key
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '307':
+          description: Temporary redirect to the signed download URL.
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Missing or invalid key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedCaller'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    callerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: refresh_token
+      description: HttpOnly refresh token cookie used for session rotation and logout.
+  responses:
+    TooManyRequests:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            rate_limited:
+              $ref: '#/components/examples/TooManyRequestsExample'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            internal_error:
+              $ref: '#/components/examples/InternalServerErrorExample'
+    UnauthorizedCaller:
+      description: Missing or invalid caller credential
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            unauthorized:
+              $ref: '#/components/examples/MissingCallerAuthExample'
+    ResourceNotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            not_found:
+              $ref: '#/components/examples/ResourceNotFoundExample'
+    BusinessRuleViolation:
+      description: Business rule violation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            business_rule:
+              $ref: '#/components/examples/BusinessRuleViolationExample'
+  schemas:
+    ValidationErrorDetail:
+      type: object
+      properties:
+        field:
+          type: string
+          example: email
+        message:
+          type: string
+          example: must be a valid email
+    ErrorResponse:
+      type: object
+      example:
+        status: error
+        message: user not found
+        error_code: EDSIS-USER-404
+      properties:
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: user not found
+        error_code:
+          type: string
+          example: EDSIS-USER-404
+        details:
+          type: array
+          description: Present for validation errors and safe for frontend field-level error mapping.
+          items:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+    AuthRegisterRequest:
+      type: object
+      description: Registration payload. Frontend can use the schema constraints below to build client-side validation.
+      example:
+        name: Jane Admin
+        email: jane.admin@edsis.local
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Full name with 2 to 100 characters.
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          description: Unique email address.
+    AuthUser:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+        status:
+          type: string
+        name:
+          type: string
+    AuthUserResponse:
+      type: object
+      example:
+        status: success
+        message: register success
+        data:
+          user_id: 11111111-1111-1111-1111-111111111111
+          email: jane.admin@edsis.local
+          role: admin
+          status: pending
+          name: Jane Admin
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: register success
+        data:
+          $ref: '#/components/schemas/AuthUser'
+    AuthLoginRequest:
+      type: object
+      example:
+        email: jane.admin@edsis.local
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          description: Registered email address.
+    MagicLinkDispatchResponse:
+      type: object
+      example:
+        status: success
+        message: magic link sent
+        data:
+          sent: true
+          purpose: login
+          expires_in_seconds: 300
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: magic link sent
+        data:
+          type: object
+          properties:
+            sent:
+              type: boolean
+              example: true
+            purpose:
+              type: string
+              enum:
+                - login
+                - activation
+              description: Public-facing purpose of the dispatched magic link.
+            expires_in_seconds:
+              type: integer
+              example: 300
+    AuthResendRequest:
+      type: object
+      example:
+        email: jane.admin@edsis.local
+        frontend_url: http://localhost:4202/verify
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          description: Registered email address.
+        frontend_url:
+          type:
+            - string
+            - 'null'
+          format: uri
+          maxLength: 2048
+          description: Optional absolute frontend URL that will receive the magic-link token fragment.
+    AuthVerifyRequest:
+      type: object
+      example:
+        token: magic-token-from-email
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          minLength: 1
+          description: Single-use magic link token.
+    AuthTokenResponse:
+      type: object
+      example:
+        status: success
+        message: verify success
+        data:
+          access_token: access-token-value
+          user_id: 11111111-1111-1111-1111-111111111111
+          role: admin
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: verify login success
+        data:
+          type: object
+          properties:
+            access_token:
+              type: string
+            user_id:
+              type: string
+              format: uuid
+            role:
+              type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        employee_id:
+          type:
+            - string
+            - 'null'
+        role:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - active
+            - suspend
+            - reset
+            - inactive
+            - blocked
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        email_verified_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    PaginationMeta:
+      type: object
+      properties:
+        current_page:
+          type: integer
+          example: 1
+        per_page:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 3
+        last_page:
+          type: integer
+          example: 1
+    UserListResponse:
+      type: object
+      example:
+        status: success
+        message: user list retrieved
+        data:
+          - id: 22222222-2222-2222-2222-222222222222
+            employee_id: EMP-001
+            role: manager
+            status: active
+            name: John Manager
+            email: john.manager@edsis.local
+            email_verified_at: '2026-03-30T10:00:00Z'
+            created_at: '2026-03-29T10:00:00Z'
+            updated_at: '2026-03-30T10:00:00Z'
+        meta:
+          current_page: 1
+          per_page: 20
+          total: 1
+          last_page: 1
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: user list retrieved
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    UserCreateRequest:
+      type: object
+      description: Payload to create a user. All constraints are safe for frontend form validation.
+      example:
+        employee_id: EMP-001
+        name: John Manager
+        email: john.manager@edsis.local
+        role: manager
+      required:
+        - name
+        - email
+        - role
+      properties:
+        employee_id:
+          type:
+            - string
+            - 'null'
+          maxLength: 100
+          description: Optional employee identifier with a maximum of 100 characters.
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Display name with 2 to 100 characters.
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          description: Unique email address.
+        role:
+          type: string
+          maxLength: 100
+          description: Initial role code assigned to the user. The role must exist in access.role.
+    UserUpdateResponse:
+      type: object
+      example:
+        status: success
+        message: user updated
+        data:
+          id: 22222222-2222-2222-2222-222222222222
+          employee_id: EMP-001
+          role: manager
+          status: active
+          name: John Updated
+          email: john.updated@edsis.local
+          email_verified_at: '2026-03-30T10:00:00Z'
+          created_at: '2026-03-29T10:00:00Z'
+          updated_at: '2026-03-30T10:30:00Z'
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: user updated
+        data:
+          $ref: '#/components/schemas/User'
+    UserMutationResponse:
+      type: object
+      example:
+        status: success
+        message: user activated
+        data:
+          id: 22222222-2222-2222-2222-222222222222
+          employee_id: EMP-001
+          role: manager
+          status: active
+          name: John Manager
+          email: john.manager@edsis.local
+          email_verified_at: '2026-03-30T10:00:00Z'
+          created_at: '2026-03-29T10:00:00Z'
+          updated_at: '2026-03-30T10:00:00Z'
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: user activated
+        data:
+          $ref: '#/components/schemas/User'
+    UserUpdateRequest:
+      type: object
+      description: Partial payload to update any user profile.
+      example:
+        name: John Updated
+        email: john.updated@edsis.local
+        role: manager
+      properties:
+        employee_id:
+          type:
+            - string
+            - 'null'
+          maxLength: 100
+          description: Optional employee identifier with a maximum of 100 characters.
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Display name with 2 to 100 characters.
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          description: Unique email address.
+        role:
+          type: string
+          maxLength: 100
+          description: Role code to assign to the user. The role must exist in access.role.
+    UserSelfUpdateRequest:
+      type: object
+      description: Partial payload to update the authenticated user's own profile.
+      example:
+        employee_id: EMP-001
+        name: John Updated
+        email: john.updated@edsis.local
+      properties:
+        employee_id:
+          type:
+            - string
+            - 'null'
+          maxLength: 100
+          description: Optional employee identifier with a maximum of 100 characters.
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Display name with 2 to 100 characters.
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          description: Unique email address.
+    Employee:
+      type: object
+      required:
+        - id
+        - employee_number
+        - full_name
+        - nationality
+        - email
+        - hire_date
+        - employment_status
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        employee_number:
+          type: string
+          maxLength: 100
+        full_name:
+          type: string
+          maxLength: 200
+        nationality:
+          type: string
+          maxLength: 50
+        phone_number:
+          type:
+            - string
+            - 'null'
+          maxLength: 50
+        marital_status:
+          type:
+            - string
+            - 'null'
+          description: One of TK, TK/1, TK/2, TK/3, K, K/1, K/2, or K/3.
+        dependents:
+          type:
+            - integer
+            - 'null'
+          minimum: 0
+        place_of_birth:
+          type:
+            - string
+            - 'null'
+          maxLength: 100
+        date_of_birth:
+          type:
+            - string
+            - 'null'
+          format: date
+        gender:
+          type:
+            - string
+            - 'null'
+          description: One of male or female.
+        religion:
+          type:
+            - string
+            - 'null'
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 200
+        hire_date:
+          type: string
+          format: date
+        termination_date:
+          type:
+            - string
+            - 'null'
+          format: date
+        payroll_date:
+          type:
+            - string
+            - 'null'
+          format: date
+        employment_status:
+          type: string
+          enum:
+            - contract
+            - permanent
+            - probation
+            - intern
+            - terminated
+        photo_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    EmployeeListResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+        - meta
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: employee list retrieved
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Employee'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CreateEmployeeRequest:
+      type: object
+      required:
+        - employee_number
+        - full_name
+        - email
+        - hire_date
+      properties:
+        employee_number:
+          type: string
+          maxLength: 100
+        full_name:
+          type: string
+          minLength: 2
+          maxLength: 200
+        nationality:
+          type: string
+          maxLength: 50
+          default: indonesian
+        phone_number:
+          type: string
+          maxLength: 50
+        marital_status:
+          type: string
+          enum:
+            - TK
+            - TK/1
+            - TK/2
+            - TK/3
+            - K
+            - K/1
+            - K/2
+            - K/3
+        dependents:
+          type: integer
+          minimum: 0
+        place_of_birth:
+          type: string
+          maxLength: 100
+        date_of_birth:
+          type: string
+          format: date
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+        religion:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 200
+        hire_date:
+          type: string
+          format: date
+        termination_date:
+          type: string
+          format: date
+        payroll_date:
+          type: string
+          format: date
+        employment_status:
+          type: string
+          enum:
+            - contract
+            - permanent
+            - probation
+            - intern
+            - terminated
+          default: contract
+        photo_id:
+          type: string
+          format: uuid
+          description: Optional file identifier reference for the employee photo.
+    EmployeeResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: employee retrieved
+        data:
+          $ref: '#/components/schemas/Employee'
+    EmployeeMutationAckResponse:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: employee deleted
+        data:
+          type: object
+          required:
+            - deleted
+          properties:
+            deleted:
+              type: boolean
+              example: true
+    UpdateEmployeeRequest:
+      type: object
+      properties:
+        employee_number:
+          type: string
+          maxLength: 100
+        full_name:
+          type: string
+          minLength: 2
+          maxLength: 200
+        nationality:
+          type: string
+          maxLength: 50
+        phone_number:
+          type: string
+          maxLength: 50
+        marital_status:
+          type: string
+          enum:
+            - TK
+            - TK/1
+            - TK/2
+            - TK/3
+            - K
+            - K/1
+            - K/2
+            - K/3
+        dependents:
+          type: integer
+          minimum: 0
+        place_of_birth:
+          type: string
+          maxLength: 100
+        date_of_birth:
+          type: string
+          format: date
+          description: Send an empty string to clear the stored value.
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+        religion:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 200
+        hire_date:
+          type: string
+          format: date
+        termination_date:
+          type: string
+          format: date
+          description: Send an empty string to clear the stored value.
+        payroll_date:
+          type: string
+          format: date
+          description: Send an empty string to clear the stored value.
+        employment_status:
+          type: string
+          enum:
+            - contract
+            - permanent
+            - probation
+            - intern
+            - terminated
+        photo_id:
+          type: string
+          format: uuid
+          description: Send an empty string to clear the stored UUID reference.
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        code:
+          type: string
+        description:
+          type:
+            - string
+            - 'null'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    RoleListResponse:
+      type: object
+      example:
+        status: success
+        message: role list retrieved
+        data:
+          - id: 10000000-0000-7000-8000-000000000001
+            name: superadmin
+            code: superadmin
+            description: System superadmin role
+            created_at: '2026-03-28T19:30:00Z'
+            updated_at: '2026-03-28T19:30:00Z'
+        meta:
+          current_page: 1
+          per_page: 20
+          total: 1
+          last_page: 1
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: role list retrieved
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CreateRoleRequest:
+      type: object
+      required:
+        - name
+        - code
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+        code:
+          type: string
+          minLength: 2
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+    RoleResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: role retrieved
+        data:
+          $ref: '#/components/schemas/Role'
+    AccessMutationAckResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: role deleted
+        data:
+          type: object
+          properties:
+            assigned:
+              type: boolean
+            revoked:
+              type: boolean
+            deleted:
+              type: boolean
+    UpdateRoleRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+        code:
+          type: string
+          minLength: 2
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+    Permission:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        code:
+          type: string
+        namespace:
+          type: string
+        resource:
+          type: string
+        action:
+          type: string
+        scope:
+          type:
+            - string
+            - 'null'
+        description:
+          type:
+            - string
+            - 'null'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    PermissionListResponse:
+      type: object
+      example:
+        status: success
+        message: permission list retrieved
+        data:
+          - id: 10000000-0000-7000-8000-000000000021
+            name: user:user:read
+            code: USER_USER_READ
+            namespace: user
+            resource: user
+            action: read
+            scope: null
+            description: Read user detail
+            created_at: '2026-03-29T15:00:00Z'
+            updated_at: '2026-03-29T15:00:00Z'
+        meta:
+          current_page: 1
+          per_page: 20
+          total: 1
+          last_page: 1
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: permission list retrieved
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Permission'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CreatePermissionRequest:
+      type: object
+      required:
+        - namespace
+        - resource
+        - action
+      properties:
+        namespace:
+          type: string
+          minLength: 2
+          maxLength: 100
+        resource:
+          type: string
+          minLength: 2
+          maxLength: 100
+        action:
+          type: string
+          minLength: 2
+          maxLength: 100
+        scope:
+          type: string
+          minLength: 2
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+    PermissionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: permission retrieved
+        data:
+          $ref: '#/components/schemas/Permission'
+    UpdatePermissionRequest:
+      type: object
+      properties:
+        namespace:
+          type: string
+          minLength: 2
+          maxLength: 100
+        resource:
+          type: string
+          minLength: 2
+          maxLength: 100
+        action:
+          type: string
+          minLength: 2
+          maxLength: 100
+        scope:
+          type: string
+          minLength: 2
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+    RolePermission:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        role_id:
+          type: string
+          format: uuid
+        permission_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+    RolePermissionListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: role permission list retrieved
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RolePermission'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CreateRolePermissionRequest:
+      type: object
+      required:
+        - role_id
+        - permission_id
+      properties:
+        role_id:
+          type: string
+          format: uuid
+        permission_id:
+          type: string
+          format: uuid
+    RolePermissionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: role permission retrieved
+        data:
+          $ref: '#/components/schemas/RolePermission'
+    UpdateRolePermissionRequest:
+      type: object
+      properties:
+        role_id:
+          type: string
+          format: uuid
+        permission_id:
+          type: string
+          format: uuid
+    RoleUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        role_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+    RoleUserListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: role user list retrieved
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleUser'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CreateRoleUserRequest:
+      type: object
+      required:
+        - role_id
+        - user_id
+      properties:
+        role_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+    RoleUserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: role user retrieved
+        data:
+          $ref: '#/components/schemas/RoleUser'
+    UpdateRoleUserRequest:
+      type: object
+      properties:
+        role_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+    PermissionUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        permission_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+    PermissionUserListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: permission user list retrieved
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionUser'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CreatePermissionUserRequest:
+      type: object
+      required:
+        - permission_id
+        - user_id
+      properties:
+        permission_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+    PermissionUserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: permission user retrieved
+        data:
+          $ref: '#/components/schemas/PermissionUser'
+    UpdatePermissionUserRequest:
+      type: object
+      properties:
+        permission_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+    Definition:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        table_name:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    DefinitionListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Definition'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CreateDefinitionTransitionRequest:
+      type: object
+      required:
+        - from_status
+        - to_status
+      properties:
+        from_status:
+          type: string
+          maxLength: 50
+        to_status:
+          type: string
+          maxLength: 50
+    CreateDefinitionActorRequest:
+      type: object
+      required:
+        - type
+        - ref_id
+      properties:
+        type:
+          type: string
+          enum:
+            - USER
+            - ROLE
+            - DEPARTMENT
+            - POSITION
+        ref_id:
+          type: string
+          maxLength: 100
+    CreateDefinitionStageRequest:
+      type: object
+      required:
+        - level
+        - name
+      properties:
+        level:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+          maxLength: 100
+        is_parallel:
+          type: boolean
+        actors:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateDefinitionActorRequest'
+    CreateDefinitionRequest:
+      type: object
+      required:
+        - code
+        - table_name
+      properties:
+        code:
+          type: string
+          maxLength: 100
+        table_name:
+          type: string
+          maxLength: 100
+        is_active:
+          type: boolean
+        transitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateDefinitionTransitionRequest'
+        stages:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateDefinitionStageRequest'
+    Transition:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        definition_id:
+          type: string
+          format: uuid
+        from_status:
+          type: string
+        to_status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Stage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        definition_id:
+          type: string
+          format: uuid
+        level:
+          type: integer
+        name:
+          type: string
+        is_parallel:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Actor:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        stage_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - USER
+            - ROLE
+            - DEPARTMENT
+            - POSITION
+        ref_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    StageDetail:
+      allOf:
+        - $ref: '#/components/schemas/Stage'
+        - type: object
+          properties:
+            actors:
+              type: array
+              items:
+                $ref: '#/components/schemas/Actor'
+    DefinitionDetail:
+      allOf:
+        - $ref: '#/components/schemas/Definition'
+        - type: object
+          properties:
+            transitions:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transition'
+            stages:
+              type: array
+              items:
+                $ref: '#/components/schemas/StageDetail'
+    DefinitionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/DefinitionDetail'
+    ApprovalMutationAckResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            deleted:
+              type: boolean
+              example: true
+    UpdateDefinitionRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 100
+        table_name:
+          type: string
+          maxLength: 100
+        is_active:
+          type: boolean
+    TransitionListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transition'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CreateTransitionRequest:
+      type: object
+      required:
+        - definition_id
+        - from_status
+        - to_status
+      properties:
+        definition_id:
+          type: string
+          format: uuid
+        from_status:
+          type: string
+          maxLength: 50
+        to_status:
+          type: string
+          maxLength: 50
+    TransitionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Transition'
+    UpdateTransitionRequest:
+      type: object
+      properties:
+        from_status:
+          type: string
+          maxLength: 50
+        to_status:
+          type: string
+          maxLength: 50
+    StageListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stage'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CreateStageRequest:
+      type: object
+      required:
+        - definition_id
+        - level
+        - name
+      properties:
+        definition_id:
+          type: string
+          format: uuid
+        level:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+          maxLength: 100
+        is_parallel:
+          type: boolean
+    StageResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Stage'
+    StageDetailResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/StageDetail'
+    UpdateStageRequest:
+      type: object
+      properties:
+        level:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+          maxLength: 100
+        is_parallel:
+          type: boolean
+    ActorListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Actor'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CreateActorRequest:
+      type: object
+      required:
+        - stage_id
+        - type
+        - ref_id
+      properties:
+        stage_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - USER
+            - ROLE
+            - DEPARTMENT
+            - POSITION
+        ref_id:
+          type: string
+          maxLength: 100
+    ActorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Actor'
+    UpdateActorRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - USER
+            - ROLE
+            - DEPARTMENT
+            - POSITION
+        ref_id:
+          type: string
+          maxLength: 100
+    SubmitRequest:
+      type: object
+      required:
+        - record_id
+        - current_status
+      properties:
+        code:
+          type: string
+          maxLength: 100
+        table_name:
+          type: string
+          maxLength: 100
+        record_id:
+          type: string
+          maxLength: 100
+        current_status:
+          type: string
+          maxLength: 50
+    WorkflowAction:
+      type: object
+      properties:
+        instance_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+        next_status:
+          type: string
+        current_stage:
+          type: integer
+        table_name:
+          type: string
+        record_id:
+          type: string
+    WorkflowActionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/WorkflowAction'
+    ApproveRequest:
+      type: object
+      required:
+        - instance_id
+        - step_id
+      properties:
+        instance_id:
+          type: string
+          format: uuid
+        step_id:
+          type: string
+          format: uuid
+        comment:
+          type: string
+          maxLength: 1000
+    RejectRequest:
+      type: object
+      required:
+        - instance_id
+        - step_id
+      properties:
+        instance_id:
+          type: string
+          format: uuid
+        step_id:
+          type: string
+          format: uuid
+        comment:
+          type: string
+          maxLength: 1000
+    InstanceStepDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        stage_id:
+          type: string
+          format: uuid
+        stage_level:
+          type: integer
+        stage_name:
+          type: string
+        is_parallel:
+          type: boolean
+        sequence:
+          type: integer
+        approver_id:
+          type: string
+        actor_type:
+          type:
+            - string
+            - 'null'
+        status:
+          type: string
+          enum:
+            - pending
+            - approved
+            - rejected
+        action_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        comment:
+          type:
+            - string
+            - 'null'
+        updated_at:
+          type: string
+          format: date-time
+    InstanceDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        definition_id:
+          type: string
+          format: uuid
+        definition_code:
+          type: string
+        table_name:
+          type: string
+        record_id:
+          type: string
+        current_stage:
+          type: integer
+        status:
+          type: string
+          enum:
+            - pending
+            - approved
+            - rejected
+        target_status:
+          type: string
+        created_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstanceStepDetail'
+    InstanceDetailResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/InstanceDetail'
+    PendingItem:
+      type: object
+      properties:
+        instance_id:
+          type: string
+          format: uuid
+        definition_id:
+          type: string
+          format: uuid
+        definition_code:
+          type: string
+        table_name:
+          type: string
+        record_id:
+          type: string
+        current_stage:
+          type: integer
+        status:
+          type: string
+        target_status:
+          type: string
+        created_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        step_id:
+          type: string
+          format: uuid
+        stage_id:
+          type: string
+          format: uuid
+        stage_level:
+          type: integer
+        stage_name:
+          type: string
+        approver_id:
+          type: string
+    PendingListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PendingItem'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    StorageUploadResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: object uploaded
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: UUIDv7 identifier provided by the caller.
+              example: 01956b8e-0000-7000-8000-000000000000
+            path:
+              type: string
+              description: Storage path prefix.
+              example: docs/invoice
+            date:
+              type: string
+              format: date
+              description: Date used to construct the object key path.
+              example: '2022-01-02'
+            object_key:
+              type: string
+              description: Full storage object key.
+              example: docs/invoice/2022/January/02/01956b8e-0000-7000-8000-000000000000.pdf
+            content_type:
+              type: string
+              example: application/pdf
+            size:
+              type: integer
+              format: int64
+              description: Object size in bytes.
+              example: 204800
+            compressed:
+              type: boolean
+              description: Whether image compression was applied.
+              example: false
+    StorageObjectResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: object retrieved
+        data:
+          type: object
+          properties:
+            key:
+              type: string
+              description: Storage object key.
+              example: docs/invoice/2022/January/02/01956b8e-0000-7000-8000-000000000000.pdf
+            content_type:
+              type: string
+              example: application/pdf
+            size:
+              type: integer
+              format: int64
+              example: 204800
+            etag:
+              type: string
+              example: '"abc123"'
+            last_modified:
+              type: string
+              format: date-time
+              example: '2022-01-02T10:00:00Z'
+            signed_url:
+              type: string
+              format: uri
+              description: Pre-signed URL valid for 15 minutes.
+              example: https://storage.googleapis.com/bucket/key?X-Goog-Signature=...
+            signed_url_expires_at:
+              type: string
+              format: date-time
+              example: '2022-01-02T10:15:00Z'
+  examples:
+    TooManyRequestsExample:
+      value:
+        status: error
+        message: rate limit exceeded
+        error_code: EDSIS-COMMON-429
+    InternalServerErrorExample:
+      value:
+        status: error
+        message: internal server error
+        error_code: EDSIS-COMMON-500
+    AuthRegisterRequestExample:
+      value:
+        name: Jane Admin
+        email: jane.admin@edsis.local
+    AuthRegisterSuccessExample:
+      value:
+        status: success
+        message: register success
+        data:
+          user_id: 11111111-1111-1111-1111-111111111111
+          email: jane.admin@edsis.local
+          role: admin
+          status: pending
+          name: Jane Admin
+    AuthInvalidPayloadExample:
+      value:
+        status: error
+        message: invalid register payload
+        error_code: EDSIS-AUTH-400
+        details:
+          - field: email
+            message: must be a valid email
+    AuthLoginRequestExample:
+      value:
+        email: jane.admin@edsis.local
+    MagicLinkDispatchSuccessExample:
+      value:
+        status: success
+        message: magic link sent
+        data:
+          sent: true
+          purpose: login
+          expires_in_seconds: 300
+    AuthUnauthorizedExample:
+      value:
+        status: error
+        message: invalid or expired login link
+        error_code: EDSIS-AUTH-401
+    AuthBusinessRuleExample:
+      value:
+        status: error
+        message: activation link unavailable until employee_id is assigned
+        error_code: EDSIS-AUTH-422
+    AuthResendRequestExample:
+      value:
+        email: jane.admin@edsis.local
+        frontend_url: http://localhost:4202/verify
+    MagicLinkResendSuccessExample:
+      value:
+        status: success
+        message: magic link resent
+        data:
+          sent: true
+          purpose: activation
+          expires_in_seconds: 300
+    AuthVerifyRequestExample:
+      value:
+        token: magic-token-from-email
+    AuthVerifySuccessExample:
+      value:
+        status: success
+        message: verify success
+        data:
+          access_token: access-token-value
+          user_id: 11111111-1111-1111-1111-111111111111
+          role: admin
+    AuthVerifyInvalidPayloadExample:
+      value:
+        status: error
+        message: invalid verify payload
+        error_code: EDSIS-AUTH-400
+        details:
+          - field: token
+            message: is required
+    AuthVerifyBusinessRuleExample:
+      value:
+        status: error
+        message: email must be verified before login
+        error_code: EDSIS-AUTH-422
+    AuthRefreshSuccessExample:
+      value:
+        status: success
+        message: refresh success
+        data:
+          access_token: new-access-token-value
+          user_id: 11111111-1111-1111-1111-111111111111
+          role: admin
+    AuthInvalidRefreshTokenExample:
+      value:
+        status: error
+        message: invalid refresh token
+        error_code: EDSIS-AUTH-402
+    AuthLogoutSuccessExample:
+      value:
+        status: success
+        message: logout success
+        data:
+          revoked: true
+    UserListSuccessExample:
+      value:
+        status: success
+        message: user list retrieved
+        data:
+          - id: 22222222-2222-2222-2222-222222222222
+            employee_id: EMP-001
+            role: manager
+            status: active
+            name: John Manager
+            email: john.manager@edsis.local
+            email_verified_at: '2026-03-30T10:00:00Z'
+            created_at: '2026-03-29T10:00:00Z'
+            updated_at: '2026-03-30T10:00:00Z'
+        meta:
+          current_page: 1
+          per_page: 20
+          total: 1
+          last_page: 1
+    MissingCallerAuthExample:
+      value:
+        status: error
+        message: missing or invalid caller credential
+        error_code: EDSIS-AUTH-401
+    UserListForbiddenExample:
+      value:
+        status: error
+        message: insufficient permissions
+        error_code: EDSIS-AUTH-003
+    UserCreateRequestExample:
+      value:
+        employee_id: EMP-001
+        name: John Manager
+        email: john.manager@edsis.local
+        role: manager
+    UserCreateSuccessExample:
+      value:
+        status: success
+        message: user created
+        data:
+          id: 22222222-2222-2222-2222-222222222222
+          employee_id: EMP-001
+          role: manager
+          status: pending
+          name: John Manager
+          email: john.manager@edsis.local
+          email_verified_at: null
+          created_at: '2026-03-30T09:00:00Z'
+          updated_at: '2026-03-30T09:00:00Z'
+    UserInvalidPayloadExample:
+      value:
+        status: error
+        message: invalid user payload
+        error_code: EDSIS-USER-400
+        details:
+          - field: role
+            message: must be one of [superadmin admin manager user guest]
+    UserDuplicateEmailExample:
+      value:
+        status: error
+        message: email already exists
+        error_code: EDSIS-USER-400
+    UserCreateForbiddenExample:
+      value:
+        status: error
+        message: missing required permission user:user:create
+        error_code: EDSIS-AUTH-403
+    UserActivateSuccessExample:
+      value:
+        status: success
+        message: user activated
+        data:
+          id: 22222222-2222-2222-2222-222222222222
+          employee_id: EMP-001
+          role: manager
+          status: active
+          name: John Manager
+          email: john.manager@edsis.local
+          email_verified_at: '2026-03-30T10:00:00Z'
+          created_at: '2026-03-29T10:00:00Z'
+          updated_at: '2026-03-30T10:00:00Z'
+    UserInvalidIdentifierExample:
+      value:
+        status: error
+        message: invalid user identifier
+        error_code: EDSIS-USER-400
+        details:
+          - field: id
+            message: must be a valid UUID
+    UserActiveForbiddenExample:
+      value:
+        status: error
+        message: missing required permission user:user:active
+        error_code: EDSIS-AUTH-403
+    ResourceNotFoundExample:
+      value:
+        status: error
+        message: resource not found
+        error_code: EDSIS-COMMON-404
+    BusinessRuleViolationExample:
+      value:
+        status: error
+        message: business rule violation
+        error_code: EDSIS-COMMON-422
+    UserDeleteNotAllowedExample:
+      value:
+        status: error
+        message: user delete is not supported
+        error_code: EDSIS-USER-405
+  parameters:
+    PageQuery:
+      name: page
+      in: query
+      description: 1-based page number.
+      schema:
+        type: integer
+        minimum: 1
+        example: 1
+    LimitQuery:
+      name: limit
+      in: query
+      description: Number of items returned per page.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        example: 20
+    OrderQuery:
+      name: order
+      in: query
+      description: Sort direction.
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        example: desc
+    SearchQuery:
+      name: search
+      in: query
+      description: Free-text search term.
+      schema:
+        type: string
+        example: admin

@@ -1,8 +1,8 @@
 {
-  "$schema": "../projects/angular/generator/api/schematics/sdk/schema.json",
+  "$schema": "../node_modules/@ojiepermana/angular/generator/api/schematics/sdk/schema.json",
   "targets": [
     {
-      "input": "./projects/angular/generator/api/openapi.bundle.yaml",
+      "input": "./projects/demo/etos/openapi.bundle.yaml",
       "output": "./.tmp-sdk-out",
       "mode": "standalone",
       "clientName": "Api",
