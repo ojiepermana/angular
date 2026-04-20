@@ -26,24 +26,25 @@ import { LayoutService } from '../core/layout.service';
     '[class]': 'hostClasses()',
     '[attr.data-layout-width]': 'layoutWidth()',
     '[attr.data-style]': 'themeStyle()',
-    '[style.border-width]': 'shellBorderWidth()',
   },
   template: `
-    <ui-topbar
-      class="h-12 w-full shrink-0 border-b border-border"
-      [style.border-bottom-width]="dividerBorderWidth()"
-      [appearance]="topbarAppearance()"
-      [ariaLabel]="ariaLabel()">
-      <div ui-topbar-start class="flex min-w-0 items-center">
-        <ng-content select="[ui-layout-brand],[ui-topbar-start]" />
-      </div>
-      <div ui-topbar-end class="flex min-w-0 items-center">
-        <ng-content select="[ui-layout-profile],[ui-topbar-end]" />
-      </div>
-    </ui-topbar>
-    <main class="flex-1 overflow-auto">
-      <router-outlet />
-    </main>
+    <div [class]="frameClasses()" [style.border-width]="shellBorderWidth()">
+      <ui-topbar
+        class="h-12 w-full shrink-0 border-b border-border"
+        [style.border-bottom-width]="dividerBorderWidth()"
+        [appearance]="topbarAppearance()"
+        [ariaLabel]="ariaLabel()">
+        <div ui-topbar-start class="flex min-w-0 items-center">
+          <ng-content select="[ui-layout-brand],[ui-topbar-start]" />
+        </div>
+        <div ui-topbar-end class="flex min-w-0 items-center">
+          <ng-content select="[ui-layout-profile],[ui-topbar-end]" />
+        </div>
+      </ui-topbar>
+      <main class="flex-1 overflow-auto">
+        <router-outlet />
+      </main>
+    </div>
   `,
 })
 export class HorizontalLayoutComponent {
@@ -59,19 +60,17 @@ export class HorizontalLayoutComponent {
   protected readonly dividerBorderWidth = computed(() => 'var(--border-width)');
 
   protected readonly hostClasses = computed(() => {
-    const classes = ['flex', 'h-dvh', 'w-full', 'flex-col', 'overflow-hidden', 'bg-background', 'text-foreground'];
+    const classes = ['block', 'h-dvh', 'w-full', 'overflow-hidden', 'bg-background', 'text-foreground'];
     if (this.layoutWidth() === 'fixed') {
-      classes.push(
-        'lg:mx-auto',
-        'lg:my-8',
-        'lg:max-w-7xl',
-        'lg:h-[calc(100dvh-4rem)]',
-        'lg:w-[calc(100%-4rem)]',
-        'lg:border',
-        'lg:border-border',
-        'lg:rounded-lg',
-        'lg:shadow-sm',
-      );
+      classes.push('box-border', 'lg:p-8');
+    }
+    return classes.join(' ');
+  });
+
+  protected readonly frameClasses = computed(() => {
+    const classes = ['flex', 'h-full', 'w-full', 'flex-col', 'overflow-hidden'];
+    if (this.layoutWidth() === 'fixed') {
+      classes.push('lg:mx-auto', 'lg:max-w-7xl', 'lg:border', 'lg:border-border', 'lg:rounded-lg', 'lg:shadow-sm');
     }
     return classes.join(' ');
   });

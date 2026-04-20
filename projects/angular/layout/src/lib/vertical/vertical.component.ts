@@ -31,18 +31,19 @@ import { LayoutService } from '../core/layout.service';
     '[class]': 'hostClasses()',
     '[attr.data-layout-width]': 'layoutWidth()',
     '[attr.data-style]': 'themeStyle()',
-    '[style.border-width]': 'shellBorderWidth()',
   },
   template: `
-    <ui-sidebar
-      [appearance]="sidebarAppearance()"
-      [position]="sidebarPosition()"
-      [ariaLabel]="ariaLabel()"
-      [style.border-left-width]="dividerBorderWidth()"
-      [style.border-right-width]="dividerBorderWidth()" />
-    <main [class]="mainClasses()">
-      <router-outlet />
-    </main>
+    <div [class]="frameClasses()" [style.border-width]="shellBorderWidth()">
+      <ui-sidebar
+        [appearance]="sidebarAppearance()"
+        [position]="sidebarPosition()"
+        [ariaLabel]="ariaLabel()"
+        [style.border-left-width]="dividerBorderWidth()"
+        [style.border-right-width]="dividerBorderWidth()" />
+      <main [class]="mainClasses()">
+        <router-outlet />
+      </main>
+    </div>
   `,
 })
 export class VerticalLayoutComponent {
@@ -60,18 +61,17 @@ export class VerticalLayoutComponent {
   protected readonly dividerBorderWidth = computed(() => 'var(--border-width)');
 
   protected readonly hostClasses = computed(() => {
-    const classes = ['flex', 'h-dvh', 'w-full', 'overflow-hidden', 'bg-background', 'text-foreground'];
+    const classes = ['block', 'h-dvh', 'w-full', 'overflow-hidden', 'bg-background', 'text-foreground'];
     if (this.layoutWidth() === 'fixed') {
-      classes.push(
-        'lg:mx-auto',
-        'lg:my-8',
-        'lg:h-[calc(100dvh-4rem)]',
-        'lg:w-[calc(100%-4rem)]',
-        'lg:border',
-        'lg:border-border',
-        'lg:rounded-lg',
-        'lg:shadow-sm',
-      );
+      classes.push('box-border', 'lg:p-8');
+    }
+    return classes.join(' ');
+  });
+
+  protected readonly frameClasses = computed(() => {
+    const classes = ['flex', 'h-full', 'w-full', 'overflow-hidden'];
+    if (this.layoutWidth() === 'fixed') {
+      classes.push('lg:border', 'lg:border-border', 'lg:rounded-lg', 'lg:shadow-sm');
     }
     return classes.join(' ');
   });
