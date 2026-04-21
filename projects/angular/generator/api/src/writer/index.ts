@@ -27,9 +27,9 @@ export function writeLibrary(files: VirtualFile[], ir: SdkIR, target: ResolvedSd
     version: target.packageVersion,
     description: `Generated SDK for ${ir.title} ${ir.version}`,
     peerDependencies: {
-      '@angular/common': '>=20.0.0',
-      '@angular/core': '>=20.0.0',
-      rxjs: '>=7.0.0',
+      '@angular/common': '>=21.2.0',
+      '@angular/core': '>=21.2.0',
+      rxjs: '>=7.8.0',
     },
     sideEffects: false,
   };
