@@ -1,6 +1,11 @@
 {
     "$schema": "../../node_modules/@angular-devkit/schematics/collection-schema.json",
     "schematics": {
+        "ng-add": {
+            "description": "Add @ojiepermana/angular and its required peer dependencies to an Angular workspace.",
+            "factory": "./generator/api/bin/schematics/ng-add/index.js#ngAdd",
+            "schema": "./generator/api/schematics/ng-add/schema.json"
+        },
         "sdk": {
             "description": "Generate an Angular SDK from an OpenAPI spec.",
             "factory": "./generator/api/bin/schematics/sdk/index.js#sdk",

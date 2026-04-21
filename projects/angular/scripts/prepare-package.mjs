@@ -29,7 +29,13 @@ copyInto(projectRoot, distPackageRoot, 'collection.json');
 const generators = [
   {
     name: 'api',
-    files: ['README.md', 'sdk.config.example.json', 'schematics/sdk/schema.json', 'schematics/init/schema.json'],
+    files: [
+      'README.md',
+      'sdk.config.example.json',
+      'schematics/sdk/schema.json',
+      'schematics/init/schema.json',
+      'schematics/ng-add/schema.json',
+    ],
     dirs: ['bin'],
     exportPath: './generator/api',
   },

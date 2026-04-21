@@ -10,26 +10,26 @@
     "url": "https://github.com/ojiepermana/angular/issues"
   },
   "peerDependencies": {
-    "@angular/common": ">=21.2.0",
-    "@angular/core": ">=21.2.0",
-    "@angular/forms": ">=21.2.0",
-    "@angular/router": ">=21.2.0",
-    "@angular/cdk": ">=21.2.7",
-    "@angular/material": ">=21.2.7",
-    "rxjs": ">=7.8.0"
+    "@angular/common": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "@angular/cdk": "^21.2.7",
+    "@angular/material": "^21.2.7",
+    "rxjs": "^7.8.0"
   },
   "peerDependenciesMeta": {
     "@angular/forms": {
-      "optional": true
+      "optional": false
     },
     "@angular/router": {
-      "optional": true
+      "optional": false
     },
     "@angular/cdk": {
-      "optional": true
+      "optional": false
     },
     "@angular/material": {
-      "optional": true
+      "optional": false
     }
   },
   "dependencies": {
@@ -43,6 +43,20 @@
     "tailwind-merge": "^3.5.0",
     "tslib": "^2.8.1",
     "yaml": "^2.8.3"
+  },
+  "ng-add": {
+    "save": "dependencies"
+  },
+  "ng-update": {
+    "packageGroup": {
+      "@angular/common": "^21.2.9",
+      "@angular/core": "^21.2.9",
+      "@angular/forms": "^21.2.9",
+      "@angular/router": "^21.2.9",
+      "@angular/cdk": "^21.2.7",
+      "@angular/material": "^21.2.7",
+      "rxjs": "~7.8.2"
+    }
   },
   "publishConfig": {
     "access": "public",

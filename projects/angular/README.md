@@ -10,6 +10,29 @@ Install dependencies from the workspace root with Bun:
 bun install
 ```
 
+## Consumer installation
+
+Install the published package into a consumer Angular workspace with Angular
+CLI so the required peer dependencies are added to the app's `package.json`
+and installed in the same flow:
+
+```bash
+ng add @ojiepermana/angular
+```
+
+When updating the library later, use Angular CLI as well:
+
+```bash
+ng update @ojiepermana/angular
+```
+
+The package ships `ng-add` and `ng-update` metadata so Angular and RxJS
+companions stay aligned with the supported versions of the library.
+
+If you install the package with `npm install`, `bun add`, `pnpm add`, or `yarn
+add` directly, peer dependency installation falls back to the package
+manager's own behavior.
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
