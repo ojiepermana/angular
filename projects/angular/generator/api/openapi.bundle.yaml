@@ -3709,13 +3709,27 @@ components:
       type: object
       example:
         token: magic-token-from-email
+        device_type: web
       required:
         - token
+        - device_type
       properties:
         token:
           type: string
           minLength: 1
           description: Single-use magic link token.
+        device_type:
+          type: string
+          enum:
+            - web
+            - mobile
+            - desktop
+            - tablet
+          description: |
+            Client device type for this session. Only ONE active refresh-token
+            family is allowed per (user, device_type); verifying a new session
+            with a device_type that already has an active session automatically
+            revokes the previous one (the old device is logged out).
     AuthTokenResponse:
       type: object
       example:
@@ -5425,6 +5439,7 @@ components:
     AuthVerifyRequestExample:
       value:
         token: magic-token-from-email
+        device_type: web
     AuthVerifySuccessExample:
       value:
         status: success
