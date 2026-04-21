@@ -33,6 +33,42 @@ If you install the package with `npm install`, `bun add`, `pnpm add`, or `yarn
 add` directly, peer dependency installation falls back to the package
 manager's own behavior.
 
+## SDK generator in a consumer workspace
+
+After `@ojiepermana/angular` is installed, a consumer workspace can scaffold an
+SDK config file under `config/sdk.config.json` and generate an Angular SDK directly from the published
+schematics:
+
+```bash
+ng generate @ojiepermana/angular:sdk-init
+# edit config/sdk.config.json
+ng generate @ojiepermana/angular:sdk
+```
+
+The main consumer flow is: create `config/sdk.config.json`, adjust the OpenAPI
+input and output target, then run the SDK generator.
+
+If you want short script aliases in the consumer app's `package.json`, add:
+
+```json
+{
+  "scripts": {
+    "gen:sdk:init": "ng generate @ojiepermana/angular:sdk-init",
+    "gen:sdk": "ng generate @ojiepermana/angular:sdk"
+  }
+}
+```
+
+Consumers do not need a `gen:sdk:build` step because the npm package already
+ships the compiled schematic runtime.
+
+Common follow-up options:
+
+```bash
+ng generate @ojiepermana/angular:sdk-init --path=config/my-sdk.config.json
+ng generate @ojiepermana/angular:sdk --config=config/my-sdk.config.json --dry-run
+```
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:

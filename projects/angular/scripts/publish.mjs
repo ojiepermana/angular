@@ -158,6 +158,9 @@ async function main() {
   info('Building library...');
   runInherit('npm run build');
 
+  info('Running tarball smoke tests...');
+  runInherit('npm run smoke:pack');
+
   info('Publishing to npm...');
   const publishResult = spawnSync('npm', ['publish', './dist/angular', '--access', 'public'], {
     stdio: 'inherit',

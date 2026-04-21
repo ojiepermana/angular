@@ -1,0 +1,48 @@
+name: Package Smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - package.json
+      - bun.lock
+      - angular.json
+      - projects/angular/**
+      - .github/workflows/package-smoke.yml
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+      - bun.lock
+      - angular.json
+      - projects/angular/**
+      - .github/workflows/package-smoke.yml
+
+jobs:
+  package-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.6
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build publishable package
+        run: bun run build
+
+      - name: Smoke test packed schematics
+        run: bun run smoke:pack

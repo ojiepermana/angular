@@ -52,6 +52,7 @@ for (const gen of generators) {
   const distDir = resolve(distPackageRoot, 'generator', gen.name);
   for (const file of gen.files) copyInto(sourceDir, distDir, file);
   for (const dir of gen.dirs) copyDirInto(sourceDir, distDir, dir);
+  writeCommonJsBoundary(distDir);
 }
 
 // 3. Patch the root package.json: add schematics + secondary-entry exports.
@@ -62,6 +63,7 @@ function patchRootPackage() {
   const rootMeta = readJson(rootPackagePath);
 
   rootMeta.schematics = './collection.json';
+  rootMeta.files = ['**/*'];
 
   const exports = { ...(rootMeta.exports ?? {}) };
   for (const gen of generators) {
@@ -93,6 +95,12 @@ function copyDirInto(fromRoot, toRoot, relativePath) {
   const to = resolve(toRoot, relativePath);
   mkdirSync(dirname(to), { recursive: true });
   cpSync(from, to, { recursive: true });
+}
+
+function writeCommonJsBoundary(distDir) {
+  const runtimeDir = resolve(distDir, 'bin');
+  if (!existsSync(runtimeDir)) return;
+  writeJson(resolve(runtimeDir, 'package.json'), { type: 'commonjs' });
 }
 
 function toExportPath(absolutePath) {

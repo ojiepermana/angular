@@ -25,17 +25,38 @@ bun run gen:sdk
 ```bash
 # inside an Angular workspace that installed @ojiepermana/angular
 ng generate @ojiepermana/angular:sdk-init
+# edit config/sdk.config.json
 ng generate @ojiepermana/angular:sdk
 ```
+
+The main consumer feature is generating an SDK from
+`config/sdk.config.json`. The consumer flow is: initialize the config once,
+edit it, then run `sdk` whenever the OpenAPI source changes.
+
+If a consumer wants short script aliases in `package.json`, they can add this
+script block to their workspace:
+
+```json
+{
+  "scripts": {
+    "gen:sdk:init": "ng generate @ojiepermana/angular:sdk-init",
+    "gen:sdk": "ng generate @ojiepermana/angular:sdk"
+  }
+}
+```
+
+Consumers do not need a `gen:sdk:build` step. That build command only exists
+for developing this repository, where the schematic source under
+`projects/angular/generator/api` must be compiled before local execution.
 
 ## Schematics
 
 The entrypoint exposes two schematics, registered in the parent collection at [`projects/angular/collection.json`](../../collection.json):
 
-| Schematic  | Script                 | Purpose                                                         |
-| ---------- | ---------------------- | --------------------------------------------------------------- |
-| `sdk-init` | `bun run gen:sdk:init` | Create `sdk.config.json` at the workspace root from the example |
-| `sdk`      | `bun run gen:sdk`      | Run the generator using `sdk.config.json`                       |
+| Schematic  | Script                 | Purpose                                          |
+| ---------- | ---------------------- | ------------------------------------------------ |
+| `sdk-init` | `bun run gen:sdk:init` | Create `config/sdk.config.json` from the example |
+| `sdk`      | `bun run gen:sdk`      | Run the generator using `config/sdk.config.json` |
 
 Both can be invoked directly with `ng generate` too:
 
@@ -50,18 +71,18 @@ ng generate @ojiepermana/angular:sdk      [--dry-run] [--config=sdk.config.json]
 
 ### `init` options
 
-| Option    | Type    | Default           | Description                                   |
-| --------- | ------- | ----------------- | --------------------------------------------- |
-| `--path`  | string  | `sdk.config.json` | Destination path, relative to workspace root. |
-| `--force` | boolean | `false`           | Overwrite the file if it already exists.      |
+| Option    | Type    | Default                  | Description                                   |
+| --------- | ------- | ------------------------ | --------------------------------------------- |
+| `--path`  | string  | `config/sdk.config.json` | Destination path, relative to workspace root. |
+| `--force` | boolean | `false`                  | Overwrite the file if it already exists.      |
 
 ### `sdk` options
 
-| Option      | Type   | Default           | Description                                                        |
-| ----------- | ------ | ----------------- | ------------------------------------------------------------------ |
-| `--config`  | string | `sdk.config.json` | Path to the config file, relative to workspace root.               |
-| `--target`  | string | _(all)_           | Only generate one target. Accepts a 1-based index or `clientName`. |
-| `--dry-run` | flag   | —                 | Preview file operations without writing anything.                  |
+| Option      | Type   | Default                  | Description                                                        |
+| ----------- | ------ | ------------------------ | ------------------------------------------------------------------ |
+| `--config`  | string | `config/sdk.config.json` | Path to the config file, relative to workspace root.               |
+| `--target`  | string | _(all)_                  | Only generate one target. Accepts a 1-based index or `clientName`. |
+| `--dry-run` | flag   | —                        | Preview file operations without writing anything.                  |
 
 ## Config shape
 
@@ -197,7 +218,7 @@ All default to `true`. Turn off anything you don't need to shrink the output.
 
 ## Pipeline
 
-```
+```text
 sdk.config.json → loader → spec (YAML/JSON) → IR → emitters → writer → Angular CLI Tree
 ```
 

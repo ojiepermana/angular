@@ -12,7 +12,7 @@
             "schema": "./generator/api/schematics/sdk/schema.json"
         },
         "sdk-init": {
-            "description": "Create sdk.config.json at the workspace root.",
+            "description": "Create config/sdk.config.json under the workspace root.",
             "factory": "./generator/api/bin/schematics/init/index.js#init",
             "schema": "./generator/api/schematics/init/schema.json"
         },
@@ -22,7 +22,7 @@
             "schema": "./generator/guide/schematics/build/schema.json"
         },
         "guide-init": {
-            "description": "Create guide.config.json at the workspace root.",
+            "description": "Create config/guide.config.json under the workspace root.",
             "factory": "./generator/guide/bin/schematics/init/index.js#init",
             "schema": "./generator/guide/schematics/init/schema.json"
         }
