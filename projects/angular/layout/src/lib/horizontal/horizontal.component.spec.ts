@@ -57,6 +57,8 @@ describe('HorizontalLayoutComponent', () => {
     expect(host?.style.borderWidth).toBe('');
     expect(frame?.style.borderWidth).toBe('var(--border-width)');
     expect(topbar?.style.borderBottomWidth).toBe('var(--border-width)');
+    expect(topbar?.style.height).toBe('var(--layout-topbar-height)');
+    expect(topbar?.classList.contains('h-12')).toBe(false);
     expect(host?.classList.contains('block')).toBe(true);
     expect(host?.classList.contains('h-dvh')).toBe(true);
     expect(host?.classList.contains('w-full')).toBe(true);

@@ -82,6 +82,16 @@ describe('TopbarComponent', () => {
     expect(el.querySelector('[data-ui-topbar-slot="end"]')?.textContent).toContain('Profile');
   });
 
+  it('uses the theme topbar height token', () => {
+    const fixture = setup();
+    const topbar = (fixture.nativeElement as HTMLElement).querySelector('ui-topbar') as HTMLElement | null;
+    const inner = topbar?.firstElementChild as HTMLElement | null;
+
+    expect(topbar?.style.height).toBe('var(--layout-topbar-height)');
+    expect(inner?.classList.contains('h-full')).toBe(true);
+    expect(inner?.classList.contains('h-14')).toBe(false);
+  });
+
   it('opens dropdown overlay on collapsable click', async () => {
     const fixture = setup();
     const el: HTMLElement = fixture.nativeElement;

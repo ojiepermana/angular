@@ -46,5 +46,6 @@
     --nav-badge-weight: 500;
     --letter-spacing: 0;
     --space-unit: 0.25rem;
+    --layout-topbar-height: 3rem;
   }
 }

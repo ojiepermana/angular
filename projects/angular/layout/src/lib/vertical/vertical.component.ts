@@ -40,7 +40,7 @@ import { LayoutService } from '../core/layout.service';
         [ariaLabel]="ariaLabel()"
         [style.border-left-width]="dividerBorderWidth()"
         [style.border-right-width]="dividerBorderWidth()" />
-      <main [class]="mainClasses">
+      <main [class]="mainClasses()">
         <router-outlet />
       </main>
     </div>
@@ -76,5 +76,11 @@ export class VerticalLayoutComponent {
     return classes.join(' ');
   });
 
-  protected readonly mainClasses = 'min-w-0 flex-1 overflow-auto';
+  protected readonly mainClasses = computed(() => {
+    const classes = ['min-w-0', 'flex-1', 'overflow-auto'];
+    if (this.layoutWidth() === 'fixed') {
+      classes.push('mx-auto', 'w-full', 'max-w-7xl');
+    }
+    return classes.join(' ');
+  });
 }

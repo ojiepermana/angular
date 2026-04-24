@@ -5,7 +5,7 @@ import { ThemeService } from '@ojiepermana/angular/theme';
 import { LayoutService } from '../core/layout.service';
 
 /**
- * Horizontal layout — topbar (h-12) + main (scrollable).
+ * Horizontal layout — themed topbar + main (scrollable).
  *
  * Data navigasi diambil dari `NavigationService`.
  * Consumer app dapat memproyeksikan brand kiri dan profile kanan.
@@ -30,7 +30,7 @@ import { LayoutService } from '../core/layout.service';
   template: `
     <div [class]="frameClasses()" [style.border-width]="shellBorderWidth()">
       <ui-topbar
-        class="h-12 w-full shrink-0 border-b border-border"
+        class="w-full shrink-0 border-b border-border"
         [style.border-bottom-width]="dividerBorderWidth()"
         [appearance]="topbarAppearance()"
         [ariaLabel]="ariaLabel()">
@@ -41,7 +41,7 @@ import { LayoutService } from '../core/layout.service';
           <ng-content select="[ui-layout-profile],[ui-topbar-end]" />
         </div>
       </ui-topbar>
-      <main class="flex-1 overflow-auto">
+      <main [class]="mainClasses()">
         <router-outlet />
       </main>
     </div>
@@ -70,7 +70,15 @@ export class HorizontalLayoutComponent {
   protected readonly frameClasses = computed(() => {
     const classes = ['flex', 'h-full', 'w-full', 'flex-col', 'overflow-hidden'];
     if (this.layoutWidth() === 'fixed') {
-      classes.push('lg:mx-auto', 'lg:max-w-7xl', 'lg:border', 'lg:border-border', 'lg:rounded-lg', 'lg:shadow-sm');
+      classes.push('lg:border', 'lg:border-border', 'lg:rounded-lg', 'lg:shadow-sm');
+    }
+    return classes.join(' ');
+  });
+
+  protected readonly mainClasses = computed(() => {
+    const classes = ['min-w-0', 'flex-1', 'overflow-auto'];
+    if (this.layoutWidth() === 'fixed') {
+      classes.push('mx-auto', 'w-full', 'max-w-7xl');
     }
     return classes.join(' ');
   });

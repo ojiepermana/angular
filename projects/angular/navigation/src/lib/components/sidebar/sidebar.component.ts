@@ -11,7 +11,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { DOCUMENT, NgClass, NgTemplateOutlet } from '@angular/common';
+import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -36,7 +36,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
 @Component({
   selector: 'ui-sidebar',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgClass, NgTemplateOutlet, UiNavItemComponent],
+  imports: [NgTemplateOutlet, UiNavItemComponent],
   host: {
     role: 'navigation',
     '[attr.aria-label]': 'ariaLabel()',
@@ -76,8 +76,9 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
         role="dialog"
         aria-modal="true"
         [attr.aria-label]="ariaLabel()"
-        class="flex h-full w-72 max-w-[85vw] flex-col bg-background text-foreground shadow-xl"
-        [ngClass]="position() === 'right' ? 'border-l border-border' : 'border-r border-border'">
+        class="flex h-full w-72 max-w-[85vw] flex-col border-border bg-background text-foreground shadow-xl"
+        [class.border-l]="position() === 'right'"
+        [class.border-r]="position() !== 'right'">
         <ng-container [ngTemplateOutlet]="body" />
       </div>
     </ng-template>

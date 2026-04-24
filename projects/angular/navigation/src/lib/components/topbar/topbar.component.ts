@@ -12,7 +12,6 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -46,15 +45,16 @@ interface ActiveOverlay {
 @Component({
   selector: 'ui-topbar',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgClass, RouterLink, RouterLinkActive, UiNavIconComponent, UiNavItemComponent],
+  imports: [RouterLink, RouterLinkActive, UiNavIconComponent, UiNavItemComponent],
   host: {
     role: 'navigation',
     '[attr.aria-label]': 'ariaLabel()',
     '[class]': 'hostClasses()',
     '[attr.data-appearance]': 'appearance()',
+    '[style.height]': 'topbarHeight',
   },
   template: `
-    <div class="flex h-14 w-full items-center gap-3 px-3">
+    <div class="flex h-full w-full items-center gap-3 px-3">
       <div data-ui-topbar-slot="start" class="flex shrink-0 items-center gap-2">
         @if (showHamburger()) {
           <button
@@ -185,7 +185,7 @@ interface ActiveOverlay {
         role="menu"
         class="w-screen max-w-[min(90vw,72rem)] rounded-md border border-border bg-popover p-6 text-popover-foreground shadow-lg"
         (keydown)="onPanelKeydown($event)">
-        <div class="grid gap-6" [ngClass]="megaColsClass(item.columns)">
+        <div [class]="megaGridClasses(item.columns)">
           @for (col of item.children; track col.id) {
             <div>
               <div class="ui-nav-heading mb-2 text-muted-foreground">
@@ -221,6 +221,7 @@ export class TopbarComponent {
   /** Tampilkan hamburger di `< md` yang men-toggle mobile drawer sidebar. */
   readonly showHamburger = input<boolean>(true);
   readonly hamburgerLabel = input<string>('Open navigation');
+  protected readonly topbarHeight = 'var(--layout-topbar-height)';
 
   /** Resolved items: input jika disediakan, fallback ke registry NavigationService. */
   protected readonly resolvedItems = computed(() => {
@@ -266,22 +267,29 @@ export class TopbarComponent {
     return this.nav.isActive(id);
   }
 
-  protected megaColsClass(columns?: number): string {
+  protected megaGridClasses(columns?: number): string {
     const c = Math.min(Math.max(columns ?? 4, 1), 6);
+    const classes = ['grid', 'gap-6'];
     switch (c) {
       case 1:
-        return 'grid-cols-1';
+        classes.push('grid-cols-1');
+        break;
       case 2:
-        return 'md:grid-cols-2';
+        classes.push('md:grid-cols-2');
+        break;
       case 3:
-        return 'md:grid-cols-3';
+        classes.push('md:grid-cols-3');
+        break;
       case 5:
-        return 'md:grid-cols-5';
+        classes.push('md:grid-cols-5');
+        break;
       case 6:
-        return 'md:grid-cols-6';
+        classes.push('md:grid-cols-6');
+        break;
       default:
-        return 'md:grid-cols-4';
+        classes.push('md:grid-cols-4');
     }
+    return classes.join(' ');
   }
 
   protected toggleDropdown(trigger: HTMLElement, item: NavigationItem): void {
