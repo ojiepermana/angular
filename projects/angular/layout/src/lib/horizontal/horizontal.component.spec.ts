@@ -52,6 +52,7 @@ describe('HorizontalLayoutComponent', () => {
     const host = root.querySelector('horizontal') as HTMLElement | null;
     const frame = host?.firstElementChild as HTMLElement | null;
     const topbar = root.querySelector('ui-topbar') as HTMLElement | null;
+    const main = root.querySelector('main');
     expect(host?.getAttribute('data-layout-width')).toBe('fixed');
     expect(host?.getAttribute('data-style')).toBe('default');
     expect(host?.style.borderWidth).toBe('');
@@ -93,13 +94,16 @@ describe('HorizontalLayoutComponent', () => {
     expect(frame?.classList.contains('h-full')).toBe(true);
     expect(frame?.classList.contains('w-full')).toBe(true);
     expect(frame?.classList.contains('overflow-hidden')).toBe(true);
-    expect(frame?.classList.contains('lg:mx-auto')).toBe(true);
-    expect(frame?.classList.contains('lg:max-w-7xl')).toBe(true);
+    expect(frame?.classList.contains('lg:mx-auto')).toBe(false);
+    expect(frame?.classList.contains('lg:max-w-7xl')).toBe(false);
     expect(frame?.classList.contains('lg:border')).toBe(true);
     expect(frame?.classList.contains('lg:border-border')).toBe(true);
     expect(frame?.classList.contains('lg:rounded-lg')).toBe(true);
     expect(frame?.classList.contains('lg:shadow-sm')).toBe(true);
     expect(frame?.classList.contains('lg:my-8')).toBe(false);
+    expect(main?.classList.contains('mx-auto')).toBe(true);
+    expect(main?.classList.contains('w-full')).toBe(true);
+    expect(main?.classList.contains('max-w-7xl')).toBe(true);
   });
 
   it('keeps fixed shell spacing on host padding instead of outer margins', () => {
@@ -131,6 +135,7 @@ describe('HorizontalLayoutComponent', () => {
     const host = (fixture.nativeElement as HTMLElement).querySelector('horizontal') as HTMLElement | null;
     const frame = host?.firstElementChild as HTMLElement | null;
     const topbar = (fixture.nativeElement as HTMLElement).querySelector('ui-topbar') as HTMLElement | null;
+    const main = (fixture.nativeElement as HTMLElement).querySelector('main');
 
     expect(host?.getAttribute('data-layout-width')).toBe('full');
     expect(host?.getAttribute('data-style')).toBe('default');
@@ -164,6 +169,9 @@ describe('HorizontalLayoutComponent', () => {
     expect(frame?.classList.contains('lg:border-border')).toBe(false);
     expect(frame?.classList.contains('lg:rounded-lg')).toBe(false);
     expect(frame?.classList.contains('lg:shadow-sm')).toBe(false);
+    expect(main?.classList.contains('mx-auto')).toBe(false);
+    expect(main?.classList.contains('w-full')).toBe(false);
+    expect(main?.classList.contains('max-w-7xl')).toBe(false);
   });
 
   it('reflects the active theme style on the host', () => {

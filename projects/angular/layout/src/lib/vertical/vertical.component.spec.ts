@@ -61,7 +61,7 @@ describe('VerticalLayoutComponent', () => {
     expect(host?.classList.contains('md:border-border')).toBe(false);
     expect(host?.classList.contains('lg:border')).toBe(false);
     expect(host?.classList.contains('lg:border-border')).toBe(false);
-    expect(host?.classList.contains('mx-auto')).toBe(true);
+    expect(host?.classList.contains('mx-auto')).toBe(false);
     expect(host?.classList.contains('md:mx-auto')).toBe(false);
     expect(host?.classList.contains('lg:mx-auto')).toBe(false);
     expect(host?.classList.contains('md:my-6')).toBe(false);
@@ -74,17 +74,18 @@ describe('VerticalLayoutComponent', () => {
     expect(frame?.classList.contains('h-full')).toBe(true);
     expect(frame?.classList.contains('w-full')).toBe(true);
     expect(frame?.classList.contains('overflow-hidden')).toBe(true);
-    expect(frame?.classList.contains('lg:mx-auto')).toBe(true);
-    expect(frame?.classList.contains('lg:max-w-[97.5rem]')).toBe(true);
+    expect(frame?.classList.contains('lg:mx-auto')).toBe(false);
+    expect(frame?.classList.contains('lg:max-w-[97.5rem]')).toBe(false);
     expect(frame?.classList.contains('lg:border')).toBe(true);
     expect(frame?.classList.contains('lg:border-border')).toBe(true);
     expect(frame?.classList.contains('lg:rounded-lg')).toBe(true);
     expect(frame?.classList.contains('lg:shadow-sm')).toBe(true);
     expect(frame?.classList.contains('lg:my-8')).toBe(false);
-    expect(main?.classList.contains('mx-auto')).toBe(false);
+    expect(main?.classList.contains('mx-auto')).toBe(true);
     expect(main?.classList.contains('md:mx-auto')).toBe(false);
     expect(main?.classList.contains('lg:mx-auto')).toBe(false);
-    expect(main?.classList.contains('max-w-7xl')).toBe(false);
+    expect(main?.classList.contains('w-full')).toBe(true);
+    expect(main?.classList.contains('max-w-7xl')).toBe(true);
     expect(main?.classList.contains('md:max-w-7xl')).toBe(false);
     expect(main?.classList.contains('lg:max-w-7xl')).toBe(false);
   });
@@ -102,10 +103,10 @@ describe('VerticalLayoutComponent', () => {
 
     expect(host?.classList.contains('lg:p-8')).toBe(true);
     expect(host?.classList.contains('lg:my-8')).toBe(false);
-    expect(host?.classList.contains('mx-auto')).toBe(true);
+    expect(host?.classList.contains('mx-auto')).toBe(false);
     expect(host?.classList.contains('lg:mx-auto')).toBe(false);
     expect(frame?.classList.contains('h-full')).toBe(true);
-    expect(frame?.classList.contains('lg:mx-auto')).toBe(true);
+    expect(frame?.classList.contains('lg:mx-auto')).toBe(false);
     expect(frame?.classList.contains('lg:my-8')).toBe(false);
   });
 
