@@ -1,19 +1,19 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "SdkInitSchema",
-    "title": "Initialize SDK generator config",
-    "type": "object",
-    "properties": {
-        "path": {
-            "type": "string",
-            "description": "Path (relative to workspace root) where the config file will be created.",
-            "default": "config/sdk.config.json"
-        },
-        "force": {
-            "type": "boolean",
-            "description": "Overwrite the file if it already exists.",
-            "default": false
-        }
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "SdkInitSchema",
+  "title": "Initialize SDK generator config",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Path (relative to workspace root) where the config file will be created.",
+      "default": "config/sdk.config.json"
     },
-    "required": []
+    "force": {
+      "type": "boolean",
+      "description": "Overwrite the file if it already exists.",
+      "default": false
+    }
+  },
+  "required": []
 }

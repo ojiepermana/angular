@@ -1,30 +1,30 @@
 {
-    "$schema": "../../node_modules/@angular-devkit/schematics/collection-schema.json",
-    "schematics": {
-        "ng-add": {
-            "description": "Add @ojiepermana/angular and its required peer dependencies to an Angular workspace.",
-            "factory": "./generator/api/bin/schematics/ng-add/index.js#ngAdd",
-            "schema": "./generator/api/schematics/ng-add/schema.json"
-        },
-        "sdk": {
-            "description": "Generate an Angular SDK from an OpenAPI spec.",
-            "factory": "./generator/api/bin/schematics/sdk/index.js#sdk",
-            "schema": "./generator/api/schematics/sdk/schema.json"
-        },
-        "sdk-init": {
-            "description": "Create config/sdk.config.json under the workspace root.",
-            "factory": "./generator/api/bin/schematics/init/index.js#init",
-            "schema": "./generator/api/schematics/init/schema.json"
-        },
-        "guide": {
-            "description": "Compile Markdown files into Angular standalone components and a nested route tree.",
-            "factory": "./generator/guide/bin/schematics/build/index.js#build",
-            "schema": "./generator/guide/schematics/build/schema.json"
-        },
-        "guide-init": {
-            "description": "Create config/guide.config.json under the workspace root.",
-            "factory": "./generator/guide/bin/schematics/init/index.js#init",
-            "schema": "./generator/guide/schematics/init/schema.json"
-        }
+  "$schema": "../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "ng-add": {
+      "description": "Add @ojiepermana/angular and its required peer dependencies to an Angular workspace.",
+      "factory": "./generator/api/bin/schematics/ng-add/index.js#ngAdd",
+      "schema": "./generator/api/schematics/ng-add/schema.json"
+    },
+    "sdk": {
+      "description": "Generate an Angular SDK from an OpenAPI spec.",
+      "factory": "./generator/api/bin/schematics/sdk/index.js#sdk",
+      "schema": "./generator/api/schematics/sdk/schema.json"
+    },
+    "sdk-init": {
+      "description": "Create config/sdk.config.json under the workspace root.",
+      "factory": "./generator/api/bin/schematics/init/index.js#init",
+      "schema": "./generator/api/schematics/init/schema.json"
+    },
+    "guide": {
+      "description": "Compile Markdown files into Angular standalone components and a nested route tree.",
+      "factory": "./generator/guide/bin/schematics/build/index.js#build",
+      "schema": "./generator/guide/schematics/build/schema.json"
+    },
+    "guide-init": {
+      "description": "Create config/guide.config.json under the workspace root.",
+      "factory": "./generator/guide/bin/schematics/init/index.js#init",
+      "schema": "./generator/guide/schematics/init/schema.json"
     }
+  }
 }

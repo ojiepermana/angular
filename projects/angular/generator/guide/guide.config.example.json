@@ -1,9 +1,9 @@
 {
-    "$schema": "./node_modules/@ojiepermana/angular/generator/guide/schematics/build/schema.json",
-    "sourceDir": "./docs",
-    "outputDir": "./projects/demo/library/src/app/docs",
-    "routeFile": "doc.routes.ts",
-    "componentPrefix": "Doc",
-    "componentStyle": "none",
-    "routeExportName": "DOC_ROUTES"
+  "$schema": "./node_modules/@ojiepermana/angular/generator/guide/schematics/build/schema.json",
+  "sourceDir": "./docs",
+  "outputDir": "./projects/demo/library/src/app/docs",
+  "routeFile": "doc.routes.ts",
+  "componentPrefix": "Doc",
+  "componentStyle": "none",
+  "routeExportName": "DOC_ROUTES"
 }

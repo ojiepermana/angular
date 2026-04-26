@@ -1,22 +1,22 @@
 {
-    "$schema": "./node_modules/@ojiepermana/angular/generator/api/schematics/sdk/schema.json",
-    "targets": [
-        {
-            "input": "./openapi.yaml",
-            "output": "./sdk",
-            "mode": "standalone",
-            "clientName": "Api",
-            "rootUrl": "",
-            "splitByDomain": false,
-            "splitDepth": "service",
-            "features": {
-                "models": true,
-                "operations": true,
-                "services": true,
-                "client": true,
-                "metadata": true,
-                "navigation": true
-            }
-        }
-    ]
+  "$schema": "./node_modules/@ojiepermana/angular/generator/api/schematics/sdk/schema.json",
+  "targets": [
+    {
+      "input": "./openapi.yaml",
+      "output": "./sdk",
+      "mode": "standalone",
+      "clientName": "Api",
+      "rootUrl": "",
+      "splitByDomain": false,
+      "splitDepth": "service",
+      "features": {
+        "models": true,
+        "operations": true,
+        "services": true,
+        "client": true,
+        "metadata": true,
+        "navigation": true
+      }
+    }
+  ]
 }
