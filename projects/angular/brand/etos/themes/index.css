@@ -1,0 +1,15 @@
+/**
+ * @ojiepermana/angular/etos — complete Etos brand stylesheet.
+ *
+ * Import before Tailwind, then import the shared Tailwind token bridge.
+ */
+@import '@ojiepermana/angular/theme/styles/themes/library/_layers.css';
+@import '@ojiepermana/angular/theme/styles/themes/mode/index.css';
+@import '@ojiepermana/angular/theme/styles/themes/library/color/index.css';
+@import '@ojiepermana/angular/theme/styles/themes/library/style/index.css';
+@import './color.css';
+@import './style.css';
+@import './layout.css';
+@import '@ojiepermana/angular/theme/styles/themes/library/_tokens.css';
+@import '@ojiepermana/angular/theme/styles/themes/library/_material-overrides.css';
+@import '@ojiepermana/angular/theme/styles/themes/library/_components.css';

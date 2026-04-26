@@ -1,49 +1,30 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HorizontalLayoutComponent, LayoutService, VerticalLayoutComponent } from '@ojiepermana/angular/layout';
+import { EtosLayoutComponent } from '@ojiepermana/angular/etos';
 
 @Component({
   selector: 'app-pages',
-  imports: [RouterLink, HorizontalLayoutComponent, VerticalLayoutComponent],
+  imports: [RouterLink, EtosLayoutComponent],
   host: {
     class: 'contents',
   },
   template: `
-    @switch (layoutMode()) {
-      @case ('horizontal') {
-        <horizontal>
-          <a ui-layout-brand routerLink="/" class="flex items-center gap-3  px-2 py-1.5 transition-colors ">
-            <span
-              class="flex h-8 w-8 items-center justify-center rounded-lg  text-[0.7rem] font-semibold tracking-[0.22em] bg-primary text-background">
-              OJ
-            </span>
-            <span class="hidden flex-col gap-0.5 sm:flex">
-              <span class="text-sm font-semibold leading-none tracking-tight">Ojiepermana UI</span>
-              <span class="text-xs leading-none text-muted-foreground">Angular component library</span>
-            </span>
-          </a>
+    <etos-layout>
+      <a ui-layout-brand routerLink="/" class="etos-brand-link">
+        <span class="etos-brand-mark">OJ</span>
+        <span class="etos-brand-copy">
+          <span class="etos-brand-name">Ojiepermana UI</span>
+          <span class="etos-brand-subtitle">Angular component library</span>
+        </span>
+      </a>
 
-          <button
-            ui-layout-profile
-            type="button"
-            aria-label="Open profile menu"
-            class="flex items-center gap-3  px-2 py-1.5 text-sm shadow-sm transition-colors ">
-            <span class="hidden text-sm font-medium text-muted-foreground sm:inline">Ojie Permana</span>
-            <span
-              class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-background text-xs font-semibold ">
-              OP
-            </span>
-          </button>
-        </horizontal>
-      }
-      @default {
-        <vertical />
-      }
-    }
+      <button ui-layout-profile type="button" aria-label="Open profile menu" class="etos-profile-trigger">
+        <span class="etos-profile-name">Ojie Permana</span>
+        <span class="etos-profile-mark">OP</span>
+      </button>
+    </etos-layout>
   `,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Pages {
-  protected readonly layoutMode = inject(LayoutService).mode;
-}
+export class Pages {}

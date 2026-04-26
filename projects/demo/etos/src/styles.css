@@ -1,5 +1,5 @@
-/* @ojiepermana/angular theme tokens with the Etos brand bundle. */
-@import '@ojiepermana/angular/theme/styles/etos.css';
+/* Workspace source equivalent of @ojiepermana/angular/etos/styles. */
+@import '../../../angular/brand/etos/themes/index.css';
 
 /* Tailwind v4 runtime. */
 @import 'tailwindcss';

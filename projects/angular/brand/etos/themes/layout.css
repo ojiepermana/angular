@@ -1,0 +1,175 @@
+/**
+ * Etos brand layout layer.
+ */
+@layer tokens {
+  [theme-brand='etos'] {
+    --etos-layout-shell-padding: clamp(1rem, 2vw, 2rem);
+    --etos-layout-frame-radius: var(--radius-lg);
+    --etos-layout-frame-shadow: var(--shadow-sm);
+    --etos-layout-main-max-width: 80rem;
+    --etos-layout-empty-max-width: 24rem;
+    --etos-layout-empty-padding: clamp(1.5rem, 4vw, 3rem);
+    --etos-layout-topbar-inline: 0.875rem;
+    --etos-layout-brand-mark-size: 2rem;
+  }
+
+  [data-mode='dark'][theme-brand='etos'] {
+    --etos-layout-frame-shadow: 0 0 0 1px hsl(var(--border));
+  }
+}
+
+@layer components {
+  .etos-layout-host {
+    display: block;
+    height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+
+  .etos-layout-host--fixed {
+    box-sizing: border-box;
+  }
+
+  .etos-layout-frame {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: hsl(var(--background));
+  }
+
+  .etos-layout-frame--horizontal {
+    flex-direction: column;
+  }
+
+  .etos-layout-main {
+    min-width: 0;
+    flex: 1 1 0%;
+    overflow: auto;
+  }
+
+  .etos-layout-main--fixed {
+    width: 100%;
+    max-width: var(--etos-layout-main-max-width);
+    margin-inline: auto;
+  }
+
+  .etos-layout-topbar {
+    width: 100%;
+    flex-shrink: 0;
+    border-bottom: var(--border-width) solid hsl(var(--border));
+  }
+
+  .etos-layout-topbar-slot {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+  }
+
+  .etos-layout-topbar-slot--end {
+    justify-content: flex-end;
+  }
+
+  .etos-layout-empty-host {
+    display: flex;
+    min-height: 100dvh;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: var(--etos-layout-empty-padding);
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+
+  .etos-layout-empty-main {
+    width: 100%;
+    max-width: var(--etos-layout-empty-max-width);
+  }
+
+  .etos-brand-link,
+  .etos-profile-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.5rem;
+    padding: 0.375rem 0.5rem;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition:
+      color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .etos-brand-link:focus-visible,
+  .etos-profile-trigger:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  .etos-brand-mark,
+  .etos-profile-mark {
+    display: inline-flex;
+    height: var(--etos-layout-brand-mark-size);
+    width: var(--etos-layout-brand-mark-size);
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    line-height: 1;
+  }
+
+  .etos-profile-mark {
+    border-radius: 999px;
+    letter-spacing: 0;
+  }
+
+  .etos-brand-copy {
+    display: none;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .etos-brand-name {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .etos-brand-subtitle,
+  .etos-profile-name {
+    font-size: var(--text-xs);
+    line-height: 1;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .etos-profile-name {
+    display: none;
+    font-weight: 600;
+  }
+
+  @media (min-width: 40rem) {
+    .etos-brand-copy,
+    .etos-profile-name {
+      display: flex;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .etos-layout-host--fixed {
+      padding: var(--etos-layout-shell-padding);
+    }
+
+    .etos-layout-frame--fixed {
+      border: var(--border-width) solid hsl(var(--border));
+      border-radius: var(--etos-layout-frame-radius);
+      box-shadow: var(--etos-layout-frame-shadow);
+    }
+  }
+}

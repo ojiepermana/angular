@@ -1,38 +1,6 @@
 /**
- * @ojiepermana/angular/theme — Etos brand stylesheet.
+ * Compatibility entry for the Etos brand stylesheet.
  *
- * Usage — import once in the consumer app, **before** Tailwind:
- *
- *   @import '@ojiepermana/angular/theme/etos.css';
- *   @import 'tailwindcss';
- *   @import '@ojiepermana/angular/theme/tailwind/theme.css';
- *
- * Includes the shared cascade layers, mode tokens, default library color/style
- * fallbacks, Etos brand overrides, shared semantic tokens, and Angular
- * Material bridge styles.
+ * The Etos implementation now lives under the brand umbrella package.
  */
-@import './themes/library/_layers.css';
-
-/* Layer 1: mode variants. */
-@import './themes/mode/index.css';
-
-/* Layer 2: default library color fallbacks. */
-@import './themes/library/color/index.css';
-
-/* Layer 3: default library style fallbacks. */
-@import './themes/library/style/index.css';
-
-/* Brand override: Etos color variant. */
-@import './themes/brand/etos/color.css';
-
-/* Brand override: Etos style variant. */
-@import './themes/brand/etos/style.css';
-
-/* Shared semantic and library tokens. */
-@import './themes/library/_tokens.css';
-
-/* Angular Material M3 bridge. */
-@import './themes/library/_material-overrides.css';
-
-/* Global component-facing styles. */
-@import './themes/library/_components.css';
+@import '@ojiepermana/angular/etos/styles';
