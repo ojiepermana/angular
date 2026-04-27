@@ -34,6 +34,23 @@ function success(message) {
   console.log(`\u2713 ${message}`);
 }
 
+function checkNpmLogin() {
+  info('Checking npm authentication...');
+
+  const result = spawnSync('npm', ['whoami', '--registry', 'https://registry.npmjs.org/'], {
+    stdio: 'pipe',
+    encoding: 'utf8',
+    cwd: repoRoot,
+  });
+
+  if (result.status !== 0) {
+    fail('Not logged in to npm. Run `npm login` before publishing.');
+  }
+
+  const username = result.stdout.trim();
+  success(`Authenticated to npm as ${username}.`);
+}
+
 function bumpVersion(current, type) {
   if (!SEMVER_RE.test(current)) {
     throw new Error(`Current version "${current}" is not a valid semver X.Y.Z.`);
@@ -141,6 +158,7 @@ function updateVersion(pkgPath, newVersion) {
 
 async function main() {
   await checkGitClean();
+  checkNpmLogin();
 
   const libraryPkg = JSON.parse(readFileSync(libraryPkgPath, 'utf8'));
   const newVersion = await promptVersion(libraryPkg.version);
