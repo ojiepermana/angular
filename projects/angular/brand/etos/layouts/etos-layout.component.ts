@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { LayoutService } from '@ojiepermana/angular/layout';
-import { EtosHorizontalLayoutComponent } from './etos-horizontal-layout.component';
-import { EtosVerticalLayoutComponent } from './etos-vertical-layout.component';
+import { EtosHorizontalLayoutComponent } from './horizontal';
+import { EtosVerticalLayoutComponent } from './vertical';
 
 @Component({
   selector: 'etos-layout',

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { provideEtosBrand } from '../core/etos-brand.provider';
+import { provideEtosBrand } from '../../core/etos-brand.provider';
 import { EtosVerticalLayoutComponent } from './etos-vertical-layout.component';
 
 @Component({

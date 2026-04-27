@@ -1,0 +1,1 @@
+export * from './etos-vertical-layout.component';
