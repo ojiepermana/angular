@@ -71,7 +71,14 @@ export class VerticalLayoutComponent {
   protected readonly frameClasses = computed(() => {
     const classes = ['flex', 'h-full', 'w-full', 'overflow-hidden'];
     if (this.layoutWidth() === 'fixed') {
-      classes.push('lg:border', 'lg:border-border', 'lg:rounded-lg', 'lg:shadow-sm');
+      classes.push(
+        'lg:mx-auto',
+        'lg:max-w-[97.5rem]',
+        'lg:border',
+        'lg:border-border',
+        'lg:rounded-lg',
+        'lg:shadow-sm',
+      );
     }
     return classes.join(' ');
   });
@@ -79,7 +86,7 @@ export class VerticalLayoutComponent {
   protected readonly mainClasses = computed(() => {
     const classes = ['min-w-0', 'flex-1', 'overflow-auto'];
     if (this.layoutWidth() === 'fixed') {
-      classes.push('mx-auto', 'w-full', 'max-w-7xl');
+      classes.push('w-full', 'max-w-7xl');
     }
     return classes.join(' ');
   });

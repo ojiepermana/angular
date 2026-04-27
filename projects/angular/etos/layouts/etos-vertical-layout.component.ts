@@ -49,7 +49,7 @@ export class EtosVerticalLayoutComponent {
   protected readonly frameClasses = computed(() => {
     const classes = ['etos-layout-frame', 'etos-layout-frame--vertical'];
     if (this.layoutWidth() === 'fixed') {
-      classes.push('etos-layout-frame--fixed');
+      classes.push('etos-layout-frame--fixed', 'etos-layout-frame--vertical-fixed');
     }
     return classes.join(' ');
   });
@@ -57,7 +57,7 @@ export class EtosVerticalLayoutComponent {
   protected readonly mainClasses = computed(() => {
     const classes = ['etos-layout-main'];
     if (this.layoutWidth() === 'fixed') {
-      classes.push('etos-layout-main--fixed');
+      classes.push('etos-layout-main--fixed', 'etos-layout-main--vertical-fixed');
     }
     return classes.join(' ');
   });

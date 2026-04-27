@@ -6,7 +6,9 @@
     --etos-layout-shell-padding: clamp(1rem, 2vw, 2rem);
     --etos-layout-frame-radius: var(--radius-lg);
     --etos-layout-frame-shadow: var(--shadow-sm);
+    --etos-layout-sidebar-width: 17.5rem;
     --etos-layout-main-max-width: 80rem;
+    --etos-layout-vertical-shell-max-width: calc(var(--etos-layout-sidebar-width) + var(--etos-layout-main-max-width));
     --etos-layout-empty-max-width: 24rem;
     --etos-layout-empty-padding: clamp(1.5rem, 4vw, 3rem);
     --etos-layout-topbar-inline: 0.875rem;
@@ -166,10 +168,19 @@
       padding: var(--etos-layout-shell-padding);
     }
 
+    .etos-layout-frame--vertical-fixed {
+      max-width: var(--etos-layout-vertical-shell-max-width);
+      margin-inline: auto;
+    }
+
     .etos-layout-frame--fixed {
       border: var(--border-width) solid hsl(var(--border));
       border-radius: var(--etos-layout-frame-radius);
       box-shadow: var(--etos-layout-frame-shadow);
+    }
+
+    .etos-layout-main--vertical-fixed {
+      margin-inline: 0;
     }
   }
 }
