@@ -88,4 +88,19 @@ describe('App', () => {
     expect(fixture.nativeElement.textContent).toContain('Operations overview');
     expect(fixture.nativeElement.textContent).toContain('Footer');
   });
+
+  it('should resolve reused library showcase routes inside the Etos shell', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const router = TestBed.inject(Router);
+    const navigated = await router.navigateByUrl('/ui/shadcn/button');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(navigated).toBe(true);
+    expect(router.url).toBe('/ui/shadcn/button');
+    expect(fixture.nativeElement.textContent).toContain('Button');
+    expect(fixture.nativeElement.textContent).toContain('Variants');
+  });
 });

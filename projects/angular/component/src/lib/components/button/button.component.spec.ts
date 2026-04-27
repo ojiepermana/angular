@@ -44,4 +44,10 @@ describe('ButtonComponent', () => {
     const btn = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
     expect(btn.className).toContain('extra-utility-class');
   });
+
+  it('applies pointer cursor to interactive buttons', () => {
+    const btn = render();
+
+    expect(btn.className).toContain('cursor-pointer');
+  });
 });

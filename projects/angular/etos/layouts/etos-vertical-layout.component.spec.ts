@@ -11,6 +11,17 @@ import { EtosVerticalLayoutComponent } from './etos-vertical-layout.component';
 })
 class HostComponent {}
 
+@Component({
+  imports: [EtosVerticalLayoutComponent],
+  template: `
+    <etos-vertical-layout>
+      <a ui-sidebar-header href="/brand" class="test-brand-link">Brand</a>
+      <button ui-sidebar-footer type="button" class="test-profile-trigger">Profile</button>
+    </etos-vertical-layout>
+  `,
+})
+class HostWithSlotsComponent {}
+
 describe('EtosVerticalLayoutComponent', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -94,5 +105,38 @@ describe('EtosVerticalLayoutComponent', () => {
     expect(frame?.classList.contains('etos-layout-frame--vertical-fixed')).toBe(false);
     expect(main?.classList.contains('etos-layout-main--fixed')).toBe(false);
     expect(main?.classList.contains('etos-layout-main--vertical-fixed')).toBe(false);
+  });
+
+  it('projects sidebar header and footer content into the vertical shell', () => {
+    TestBed.configureTestingModule({
+      imports: [HostWithSlotsComponent],
+      providers: [
+        provideRouter([]),
+        provideEtosBrand({
+          materialDefaults: false,
+          theme: {
+            modeStorageKey: null,
+            brandStorageKey: null,
+            colorStorageKey: null,
+            styleStorageKey: null,
+          },
+          layout: {
+            storageKey: null,
+            widthStorageKey: null,
+          },
+        }),
+      ],
+    });
+
+    const fixture = TestBed.createComponent(HostWithSlotsComponent);
+    fixture.detectChanges();
+
+    const root = fixture.nativeElement as HTMLElement;
+    const sidebar = root.querySelector('ui-sidebar') as HTMLElement | null;
+
+    expect(sidebar?.textContent).toContain('Brand');
+    expect(sidebar?.textContent).toContain('Profile');
+    expect(sidebar?.querySelector('.test-brand-link')).toBeTruthy();
+    expect(sidebar?.querySelector('.test-profile-trigger')).toBeTruthy();
   });
 });

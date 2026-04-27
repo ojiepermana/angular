@@ -1,0 +1,25 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="avatar-title avatar-desc">
+  <title id="avatar-title">Ojie Permana demo avatar</title>
+  <desc id="avatar-desc">Abstract portrait used by the Etos demo theme switcher.</desc>
+  <defs>
+    <linearGradient id="avatar-bg" x1="24" y1="16" x2="132" y2="148" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F766E" />
+      <stop offset="0.55" stop-color="#155E75" />
+      <stop offset="1" stop-color="#1E293B" />
+    </linearGradient>
+    <linearGradient id="avatar-accent" x1="52" y1="46" x2="108" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC" stop-opacity="0.96" />
+      <stop offset="1" stop-color="#E2E8F0" stop-opacity="0.8" />
+    </linearGradient>
+  </defs>
+
+  <rect width="160" height="160" rx="80" fill="url(#avatar-bg)" />
+  <circle cx="122" cy="38" r="18" fill="#F59E0B" fill-opacity="0.92" />
+  <circle cx="45" cy="128" r="22" fill="#22C55E" fill-opacity="0.2" />
+  <path d="M80 30C61.2223 30 46 45.2223 46 64V73.5C46 92.2777 61.2223 107.5 80 107.5C98.7777 107.5 114 92.2777 114 73.5V64C114 45.2223 98.7777 30 80 30Z" fill="url(#avatar-accent)" fill-opacity="0.92" />
+  <path d="M80 99C50.1766 99 26 123.177 26 153V160H134V153C134 123.177 109.823 99 80 99Z" fill="#F8FAFC" fill-opacity="0.92" />
+  <path d="M62 63C62 52.5066 70.5066 44 81 44H91C98.732 44 105 50.268 105 58V62.5C105 70.232 98.732 76.5 91 76.5H67C64.2386 76.5 62 74.2614 62 71.5V63Z" fill="#0F172A" fill-opacity="0.82" />
+  <circle cx="68" cy="67" r="4" fill="#0F172A" fill-opacity="0.68" />
+  <circle cx="93" cy="67" r="4" fill="#0F172A" fill-opacity="0.68" />
+  <path d="M68 84C71.3333 88 75.6667 90 81 90C86.3333 90 90.6667 88 94 84" stroke="#0F172A" stroke-opacity="0.72" stroke-width="4" stroke-linecap="round" />
+</svg>
