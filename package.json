@@ -15,6 +15,7 @@
     "gen:guide": "bun run gen:guide:build && ng generate ./projects/angular/collection.json:guide",
     "publish": "bun projects/angular/scripts/publish.mjs",
     "smoke:pack": "node projects/angular/scripts/smoke-pack-schematics.mjs",
+    "test:gen:sdk": "bunx vitest run projects/angular/generator/api/src/layout/per-domain.spec.ts projects/angular/generator/api/src/writer/index.spec.ts projects/angular/generator/api/schematics/sdk/index.spec.ts",
     "format": "prettier --write \"**/*.{ts,js,json,html,css,scss,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,json,html,css,scss,md}\""
   },

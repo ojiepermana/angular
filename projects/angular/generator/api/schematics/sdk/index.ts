@@ -55,13 +55,20 @@ function selectTargets(targets: readonly ResolvedSdkTarget[], selector: string |
   );
 }
 
-function writeResult(tree: Tree, workspaceRoot: string, result: GenerateResult, context: SchematicContext): void {
+export function writeResult(
+  tree: Tree,
+  workspaceRoot: string,
+  result: GenerateResult,
+  context: SchematicContext,
+): void {
   const relOutput = relative(workspaceRoot, result.outputDir) || '.';
   context.logger.info(
     `[sdk] ${result.target.mode} → ${relOutput} ` +
       `(schemas=${result.stats.schemas}, operations=${result.stats.operations}, ` +
       `tags=${result.stats.tags}, files=${result.stats.files})`,
   );
+
+  removeStaleFiles(tree, workspaceRoot, result);
 
   for (const file of result.files) {
     const absolute = resolve(result.outputDir, file.path);
@@ -72,6 +79,28 @@ function writeResult(tree: Tree, workspaceRoot: string, result: GenerateResult, 
     } else {
       tree.create(treePath, buffer);
     }
+  }
+}
+
+function removeStaleFiles(tree: Tree, workspaceRoot: string, result: GenerateResult): void {
+  const outputRoot = normalizeTreePath(workspaceRoot, result.outputDir);
+  if (outputRoot === '/') {
+    return;
+  }
+
+  const nextFiles = new Set(
+    result.files.map((file) => normalizeTreePath(workspaceRoot, resolve(result.outputDir, file.path))),
+  );
+  const staleFiles: string[] = [];
+
+  tree.getDir(outputRoot).visit((path) => {
+    if (!nextFiles.has(path)) {
+      staleFiles.push(path);
+    }
+  });
+
+  for (const staleFile of staleFiles) {
+    tree.delete(staleFile);
   }
 }
 

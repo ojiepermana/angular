@@ -160,6 +160,9 @@ async function main() {
   await checkGitClean();
   checkNpmLogin();
 
+  info('Running SDK generator regression tests...');
+  runInherit('npm run test:gen:sdk');
+
   const libraryPkg = JSON.parse(readFileSync(libraryPkgPath, 'utf8'));
   const newVersion = await promptVersion(libraryPkg.version);
 

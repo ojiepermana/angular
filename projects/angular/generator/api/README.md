@@ -18,6 +18,9 @@ bun run gen:sdk:init
 
 # 3. Edit sdk.config.json, then generate
 bun run gen:sdk
+
+# 4. Run the split-by-domain regression checks
+bun run test:gen:sdk
 ```
 
 ## Consumer usage after publish
@@ -174,17 +177,21 @@ client primitives land in `shared/`.
 
 Every domain folder contains `services/`, `fn/`, `models/`, `permissions/`,
 and its own `public-api.ts` (which re-exports `shared/public-api` for
-convenience). The root `public-api.ts` aggregates `shared` plus every domain,
-so consumers can still do `import { UserService } from './sdk'` regardless of
-layout.
+convenience). The root still owns the aggregate metadata barrel:
+`metadata.ts`, `openapi-helpers.ts`, and `permissions/index.ts` stay at the SDK
+root so `shared/` never depends on sibling domains. The root `public-api.ts`
+aggregates `shared`, root metadata helpers, and every domain, so consumers can
+still do `import { UserService } from './sdk'` regardless of layout.
 
 Model ownership rule (per-domain mode):
 
 - A model used by exactly one domain → emitted inside that domain's `models/`.
 - A model shared across two or more domains → emitted inside `shared/models/`.
 - Client primitives (`ApiConfiguration`, `BaseService`, `RequestBuilder`,
-  `StrictHttpResponse`, `Api`), metadata, validators, and the top-level
-  `permissions/index.ts` always live under `shared/`.
+  `StrictHttpResponse`, `Api`), shared metadata types, validators, and
+  navigation always live under `shared/`.
+- Aggregate metadata helpers (`metadata.ts`, `openapi-helpers.ts`) and the
+  top-level `permissions/index.ts` stay at the SDK root.
 
 Example consumption when using `mode: 'library'` with `splitByDomain: true`:
 
@@ -197,11 +204,11 @@ import { GCSService } from '@my-scope/sdk/storage/gcs'; // splitDepth: 'tag'
 
 ## Output modes
 
-| Mode                   | What it emits                                                                             | Use when…                                                                              |
-| ---------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `standalone`           | A plain folder (no `ng-package.json`).                                                    | You consume the SDK via path alias / `tsconfig.paths` inside the same app.             |
-| `library`              | Standalone output **plus** `ng-package.json`, `package.json` (peerDeps), and `README.md`. | You want to build it with ng-packagr and publish to npm.                               |
-| `secondary-entrypoint` | Standalone output **plus** a minimal `ng-package.json` pointing at `public-api.ts`.       | You drop the folder inside an existing library so ng-packagr picks it up as a subpath. |
+| Mode                   | What it emits                                                                                                                                                       | Use when…                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `standalone`           | A plain folder (no `ng-package.json`).                                                                                                                              | You consume the SDK via path alias / `tsconfig.paths` inside the same app.             |
+| `library`              | Standalone output **plus** `ng-package.json`, `package.json` (peerDeps), `README.md`, and nested `ng-package.json` files for split-by-domain secondary entrypoints. | You want to build it with ng-packagr and publish to npm.                               |
+| `secondary-entrypoint` | Standalone output **plus** a minimal `ng-package.json` pointing at `public-api.ts`, plus nested `ng-package.json` files for split-by-domain secondary entrypoints.  | You drop the folder inside an existing library so ng-packagr picks it up as a subpath. |
 
 ## Feature flags
 

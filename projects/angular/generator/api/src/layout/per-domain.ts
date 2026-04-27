@@ -4,7 +4,10 @@
  *
  * ```
  *   <outputDir>/
- *     shared/                 client primitives, shared models, metadata, validators
+ *     shared/                 client primitives, shared models, metadata types, validators
+ *     metadata.ts             aggregate metadata barrel (root only)
+ *     openapi-helpers.ts      metadata helpers (root only)
+ *     permissions/index.ts    aggregate operation rules (root only)
  *     <domain>/               one folder per OpenAPI tag (kebab-cased)
  *       models/               models only referenced by this domain
  *       fn/                   tree-shakeable operation functions for this domain
@@ -202,11 +205,13 @@ function computeNewPath(oldPath: string, ctx: ComputeCtx): string | undefined {
     'strict-http-response.ts',
     'api.ts',
     'api.navigation.ts',
-    'metadata.ts',
     'metadata-types.ts',
-    'openapi-helpers.ts',
   ]);
   if (rootShared.has(oldPath)) return `${SHARED}/${oldPath}`;
+
+  if (oldPath === 'metadata.ts' || oldPath === 'openapi-helpers.ts') {
+    return oldPath;
+  }
 
   if (oldPath.startsWith('models/')) {
     const kebab = oldPath.slice('models/'.length).replace(/\.ts$/, '');
@@ -232,7 +237,7 @@ function computeNewPath(oldPath: string, ctx: ComputeCtx): string | undefined {
     return `${domain}/services/${fileName}`;
   }
 
-  if (oldPath === 'permissions/index.ts') return `${SHARED}/permissions/index.ts`;
+  if (oldPath === 'permissions/index.ts') return oldPath;
   if (oldPath.startsWith('permissions/')) {
     const fileName = oldPath.slice('permissions/'.length);
     const tagKebab = fileName.replace(/\.ts$/, '');
@@ -281,7 +286,7 @@ function emitPublicApis(ir: SdkIR, target: ResolvedSdkTarget, mapping: Mapping):
   const out: VirtualFile[] = [];
   const schemaNames = ir.schemas.map((s) => s.name);
 
-  // shared/public-api.ts — client primitives + shared models + metadata.
+  // shared/public-api.ts — shared primitives + shared models only.
   const sharedLines: string[] = [target.banner, ''];
   if (target.features.client) {
     sharedLines.push(`export { ApiConfiguration, provideApiConfiguration } from './api-configuration';`);
@@ -299,8 +304,8 @@ function emitPublicApis(ir: SdkIR, target: ResolvedSdkTarget, mapping: Mapping):
     if (sharedModels.length) sharedLines.push('');
   }
   if (target.features.metadata) {
-    sharedLines.push(`export * from './metadata';`);
-    sharedLines.push(`export * from './openapi-helpers';`);
+    sharedLines.push(`export * from './metadata-types';`);
+    sharedLines.push(`export * from './validators';`);
     sharedLines.push('');
   }
   if (target.features.navigation) {
@@ -348,6 +353,10 @@ function emitPublicApis(ir: SdkIR, target: ResolvedSdkTarget, mapping: Mapping):
   // Root public-api.ts aggregates everything.
   const rootLines: string[] = [target.banner, ''];
   rootLines.push(`export * from './${SHARED}/public-api';`);
+  if (target.features.metadata) {
+    rootLines.push(`export * from './metadata';`);
+    rootLines.push(`export * from './openapi-helpers';`);
+  }
   for (const domain of mapping.domains) {
     rootLines.push(`export * from './${domain}/public-api';`);
   }

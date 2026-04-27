@@ -36,10 +36,8 @@ export function writeLibrary(files: VirtualFile[], ir: SdkIR, target: ResolvedSd
 
   return [
     ...files,
-    {
-      path: 'ng-package.json',
-      content: finalize(JSON.stringify(ngPackage, null, 2)),
-    },
+    createNgPackageFile('ng-package.json', ngPackage),
+    ...createNestedEntrypointNgPackages(files),
     {
       path: 'package.json',
       content: finalize(JSON.stringify(pkg, null, 2)),
@@ -63,11 +61,33 @@ export function writeSecondaryEntrypoint(files: VirtualFile[], _ir: SdkIR, _targ
   const ngPackage = {
     lib: { entryFile: 'public-api.ts' },
   };
-  return [
-    ...files,
-    {
-      path: 'ng-package.json',
-      content: finalize(JSON.stringify(ngPackage, null, 2)),
-    },
-  ];
+  return [...files, createNgPackageFile('ng-package.json', ngPackage), ...createNestedEntrypointNgPackages(files)];
+}
+
+function createNestedEntrypointNgPackages(files: readonly VirtualFile[]): VirtualFile[] {
+  return collectSecondaryEntrypointDirs(files).map((dir) =>
+    createNgPackageFile(`${dir}/ng-package.json`, {
+      lib: { entryFile: 'public-api.ts' },
+    }),
+  );
+}
+
+function collectSecondaryEntrypointDirs(files: readonly VirtualFile[]): string[] {
+  const dirs = new Set<string>();
+  for (const file of files) {
+    if (!file.path.endsWith('/public-api.ts')) {
+      continue;
+    }
+
+    dirs.add(file.path.slice(0, -'/public-api.ts'.length));
+  }
+
+  return [...dirs].sort();
+}
+
+function createNgPackageFile(path: string, content: object): VirtualFile {
+  return {
+    path,
+    content: finalize(JSON.stringify(content, null, 2)),
+  };
 }
