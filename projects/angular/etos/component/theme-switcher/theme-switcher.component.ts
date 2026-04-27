@@ -117,7 +117,7 @@ const LAYOUT_WIDTH_OPTIONS = [
         data-etos-theme-switcher-panel
         role="dialog"
         aria-label="User Info"
-        class="w-[min(21rem,calc(100vw-1.5rem))] overflow-hidden rounded-[var(--etos-layout-frame-radius)] border border-border/70 bg-background text-foreground shadow-[0_18px_48px_rgba(15,23,42,0.12)]">
+        class="w-[min(21rem,calc(100vw-1.5rem))] overflow-hidden rounded-(--etos-layout-frame-radius) border border-border/70 bg-background text-foreground shadow-[0_18px_48px_rgba(15,23,42,0.12)]">
         <header class="p-5 pb-4">
           <div class="flex items-center gap-4">
             <ui-avatar class="h-14 w-14 border border-border/60 shadow-sm">
@@ -146,7 +146,7 @@ const LAYOUT_WIDTH_OPTIONS = [
           <section
             data-setting="theme-scheme"
             [attr.data-current]="themeScheme()"
-            class="rounded-[var(--etos-layout-frame-radius)] bg-muted/65 p-0.5">
+            class="rounded-(--etos-layout-frame-radius) bg-muted/65 p-0.5">
             <div class="grid grid-cols-3 gap-1">
               @for (option of themeSchemeOptions; track option.value) {
                 <button
@@ -174,7 +174,7 @@ const LAYOUT_WIDTH_OPTIONS = [
             <div class="px-1">
               <p class="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Layout</p>
             </div>
-            <div class="rounded-[var(--etos-layout-frame-radius)] bg-muted/65 p-0.5">
+            <div class="rounded-(--etos-layout-frame-radius) bg-muted/65 p-0.5">
               <div class="grid grid-cols-2 gap-1">
                 @for (option of layoutModeOptions; track option.value) {
                   <button
@@ -203,7 +203,7 @@ const LAYOUT_WIDTH_OPTIONS = [
             <div class="px-1">
               <p class="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Width</p>
             </div>
-            <div class="rounded-[var(--etos-layout-frame-radius)] bg-muted/65 p-0.5">
+            <div class="rounded-(--etos-layout-frame-radius) bg-muted/65 p-0.5">
               <div class="grid grid-cols-2 gap-1">
                 @for (option of layoutWidthOptions; track option.value) {
                   <button
