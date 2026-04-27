@@ -57,7 +57,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
 
     <ng-template #body>
       @if (header()) {
-        <div class="flex h-12 items-center gap-2 border-b border-border px-3">
+        <div class="flex h-12 items-center gap-2 border-b border-border">
           <ng-content select="[ui-sidebar-header]" />
         </div>
       }

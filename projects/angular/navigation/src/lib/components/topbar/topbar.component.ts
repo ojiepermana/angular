@@ -54,7 +54,7 @@ interface ActiveOverlay {
     '[style.height]': 'topbarHeight',
   },
   template: `
-    <div class="flex h-full w-full items-center gap-3 px-3">
+    <div class="flex h-full w-full items-center gap-3 px-1">
       <div data-ui-topbar-slot="start" class="flex shrink-0 items-center gap-2">
         @if (showHamburger()) {
           <button
