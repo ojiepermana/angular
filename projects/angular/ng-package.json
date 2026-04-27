@@ -22,7 +22,7 @@
       "output": "theme/styles"
     },
     {
-      "input": "etos/themes",
+      "input": "brand/etos/themes",
       "glob": "**/*.css",
       "output": "etos/styles"
     }

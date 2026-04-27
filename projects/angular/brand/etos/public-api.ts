@@ -1,7 +1,7 @@
 /*
  * Public API Surface of @ojiepermana/angular/etos
  *
- * Etos-specific implementation lives directly under projects/angular/etos.
+ * Etos-specific implementation lives under projects/angular/brand/etos.
  */
 
 export * from './core/etos-brand.config';

@@ -1,5 +1,5 @@
 /* Workspace source equivalent of @ojiepermana/angular/etos/styles. */
-@import '../../../angular/etos/themes/index.css';
+@import '../../../angular/brand/etos/themes/index.css';
 
 /* Tailwind v4 runtime. */
 @import 'tailwindcss';

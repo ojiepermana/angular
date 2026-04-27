@@ -1,6 +1,6 @@
 # Etos Brand
 
-Etos implementation lives under `projects/angular/etos`. Published consumers should use `@ojiepermana/angular/etos`.
+Etos implementation lives under `projects/angular/brand/etos`. Published consumers should use `@ojiepermana/angular/etos`.
 
 Use this folder for Etos-specific implementation:
 

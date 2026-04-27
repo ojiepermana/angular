@@ -77,9 +77,32 @@ function patchRootPackage() {
     };
   }
 
+  aliasSecondaryEntrypoint(exports, {
+    packagePath: ['brand', 'etos'],
+    exportPath: './etos',
+    removeExports: ['./brand/etos'],
+  });
+
   rootMeta.exports = exports;
 
   writeJson(rootPackagePath, rootMeta);
+}
+
+function aliasSecondaryEntrypoint(exports, alias) {
+  const secondaryPackagePath = resolve(distPackageRoot, ...alias.packagePath, 'package.json');
+  if (!existsSync(secondaryPackagePath)) return;
+
+  const secondaryMeta = readJson(secondaryPackagePath);
+  if (!secondaryMeta.typings || !secondaryMeta.module) return;
+
+  exports[alias.exportPath] = {
+    types: toExportPath(resolve(distPackageRoot, ...alias.packagePath, secondaryMeta.typings)),
+    default: toExportPath(resolve(distPackageRoot, ...alias.packagePath, secondaryMeta.module)),
+  };
+
+  for (const exportKey of alias.removeExports) {
+    delete exports[exportKey];
+  }
 }
 
 function copyInto(fromRoot, toRoot, relativePath) {
