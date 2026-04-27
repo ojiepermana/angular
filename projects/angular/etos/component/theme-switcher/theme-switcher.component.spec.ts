@@ -4,6 +4,11 @@ import { MATERIAL_LAYOUT_CONFIG, LayoutService } from '@ojiepermana/angular/layo
 import { MATERIAL_THEME_CONFIG, ThemeService } from '@ojiepermana/angular/theme';
 import { EtosThemeSwitcherComponent } from './theme-switcher.component';
 
+const DEFAULT_QUICK_ACTIONS = [
+  { value: 'notifications', label: 'Notifications', icon: 'notifications' },
+  { value: 'sign-out', label: 'Logout', icon: 'logout', tone: 'destructive' },
+] as const;
+
 describe('EtosThemeSwitcherComponent', () => {
   beforeEach(async () => {
     localStorage.clear();
@@ -49,6 +54,7 @@ describe('EtosThemeSwitcherComponent', () => {
   it('renders initials in the trigger fallback when no avatar is provided', () => {
     const fixture = TestBed.createComponent(EtosThemeSwitcherComponent);
     fixture.componentRef.setInput('userName', 'Ojie Permana');
+    fixture.componentRef.setInput('quickActions', DEFAULT_QUICK_ACTIONS);
     fixture.detectChanges();
 
     const fallback = fixture.nativeElement.querySelector('ui-avatar-fallback') as HTMLElement | null;
@@ -60,6 +66,7 @@ describe('EtosThemeSwitcherComponent', () => {
     const fixture = TestBed.createComponent(EtosThemeSwitcherComponent);
     fixture.componentRef.setInput('userName', 'Ojie Permana');
     fixture.componentRef.setInput('avatarSrc', 'https://example.test/avatar.png');
+    fixture.componentRef.setInput('quickActions', DEFAULT_QUICK_ACTIONS);
     fixture.detectChanges();
 
     const image = fixture.nativeElement.querySelector('ui-avatar-image img') as HTMLImageElement | null;
@@ -72,6 +79,7 @@ describe('EtosThemeSwitcherComponent', () => {
     const fixture = TestBed.createComponent(EtosThemeSwitcherComponent);
     fixture.componentRef.setInput('userName', 'Ojie Permana');
     fixture.componentRef.setInput('userSubtitle', 'Platform design system');
+    fixture.componentRef.setInput('quickActions', DEFAULT_QUICK_ACTIONS);
     fixture.detectChanges();
 
     const trigger = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
@@ -139,6 +147,7 @@ describe('EtosThemeSwitcherComponent', () => {
     const fixture = TestBed.createComponent(EtosThemeSwitcherComponent);
     const selected: string[] = [];
 
+    fixture.componentRef.setInput('quickActions', DEFAULT_QUICK_ACTIONS);
     fixture.componentInstance.actionSelected.subscribe((action) => selected.push(action));
     fixture.detectChanges();
 
@@ -165,6 +174,7 @@ describe('EtosThemeSwitcherComponent', () => {
     const selected: string[] = [];
 
     fixture.componentRef.setInput('userName', 'Ojie Permana');
+    fixture.componentRef.setInput('quickActions', DEFAULT_QUICK_ACTIONS);
     fixture.componentRef.setInput('showNotificationShortcut', true);
     fixture.componentInstance.actionSelected.subscribe((action) => selected.push(action));
     fixture.detectChanges();
@@ -191,5 +201,75 @@ describe('EtosThemeSwitcherComponent', () => {
     const panel = document.body.querySelector('[data-etos-theme-switcher-panel]') as HTMLElement | null;
 
     expect(panel?.querySelector('[data-action-option][data-value="notifications"]')).toBeNull();
+  });
+
+  it('accepts user information and notification data from inputs', async () => {
+    const fixture = TestBed.createComponent(EtosThemeSwitcherComponent);
+    const selected: string[] = [];
+
+    fixture.componentRef.setInput('userInfo', {
+      name: 'Alya Putri',
+      subtitle: 'Operations lead',
+      avatarSrc: 'https://example.test/alya.png',
+      avatarAlt: 'Portrait of Alya Putri',
+    });
+    fixture.componentRef.setInput('notificationShortcut', {
+      value: 'notifications',
+      icon: 'notifications_active',
+      ariaLabel: 'Open alerts for Alya Putri',
+    });
+    fixture.componentRef.setInput('quickActions', [
+      { value: 'notifications', label: 'Alerts', icon: 'notifications_active' },
+      { value: 'sign-out', label: 'Exit session', icon: 'logout', tone: 'destructive' },
+    ]);
+    fixture.componentInstance.actionSelected.subscribe((action) => selected.push(action));
+    fixture.detectChanges();
+
+    const notificationButton = fixture.nativeElement.querySelector(
+      '[data-trigger-action="notifications"]',
+    ) as HTMLButtonElement | null;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[aria-label="Open user info for Alya Putri"]',
+    ) as HTMLButtonElement | null;
+
+    expect(notificationButton?.getAttribute('aria-label')).toBe('Open alerts for Alya Putri');
+
+    notificationButton?.click();
+    fixture.detectChanges();
+
+    expect(selected).toEqual(['notifications']);
+
+    trigger?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const panel = document.body.querySelector('[data-etos-theme-switcher-panel]') as HTMLElement | null;
+
+    expect(panel?.textContent).toContain('Alya Putri');
+    expect(panel?.textContent).toContain('Operations lead');
+    expect(panel?.textContent).toContain('Exit session');
+    expect(panel?.textContent).not.toContain('Alerts');
+  });
+
+  it('renders only the quick actions provided by the consumer', async () => {
+    const fixture = TestBed.createComponent(EtosThemeSwitcherComponent);
+
+    fixture.componentRef.setInput('userName', 'Ojie Permana');
+    fixture.componentRef.setInput('quickActions', [{ value: 'end-session', label: 'End session', icon: 'logout' }]);
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector(
+      'button[aria-label="Open user info for Ojie Permana"]',
+    ) as HTMLButtonElement | null;
+
+    trigger?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const panel = document.body.querySelector('[data-etos-theme-switcher-panel]') as HTMLElement | null;
+
+    expect(panel?.textContent).toContain('End session');
+    expect(panel?.textContent).not.toContain('Logout');
+    expect(panel?.textContent).not.toContain('Notifications');
   });
 });

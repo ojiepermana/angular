@@ -20,13 +20,28 @@ interface ToggleOption<T extends string> {
   readonly icon: string;
 }
 
-export type EtosThemeSwitcherAction = 'profile' | 'settings' | 'notifications' | 'sign-out';
+export type EtosThemeSwitcherAction = string;
 
-interface ActionOption {
+export interface EtosThemeSwitcherUserInfo {
+  readonly name: string;
+  readonly subtitle?: string;
+  readonly avatarSrc?: string | null;
+  readonly avatarAlt?: string;
+}
+
+export interface EtosThemeSwitcherNotificationShortcut {
+  readonly value?: EtosThemeSwitcherAction;
+  readonly icon?: string;
+  readonly ariaLabel?: string;
+}
+
+type EtosThemeSwitcherActionTone = 'default' | 'destructive';
+
+export interface EtosThemeSwitcherQuickAction {
   readonly value: EtosThemeSwitcherAction;
   readonly label: string;
   readonly icon: string;
-  readonly tone: 'default' | 'destructive';
+  readonly tone?: EtosThemeSwitcherActionTone;
 }
 
 const THEME_SCHEME_OPTIONS = [
@@ -45,21 +60,6 @@ const LAYOUT_WIDTH_OPTIONS = [
   { value: 'fixed', label: 'Fixed', icon: 'center_focus_strong' },
 ] as const satisfies readonly ToggleOption<LayoutWidth>[];
 
-const ACTION_OPTIONS = [
-  {
-    value: 'notifications',
-    label: 'Notifications',
-    icon: 'notifications',
-    tone: 'default',
-  },
-  {
-    value: 'sign-out',
-    label: 'Logout',
-    icon: 'logout',
-    tone: 'destructive',
-  },
-] as const satisfies readonly ActionOption[];
-
 @Component({
   selector: 'etos-theme-switcher',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,17 +76,18 @@ const ACTION_OPTIONS = [
     '[class]': 'hostClasses()',
   },
   template: `
-    @if (showNotificationShortcut()) {
+    @if (notificationShortcutConfig(); as shortcut) {
       <button
         type="button"
         ui-button
         variant="ghost"
         size="icon"
         data-trigger-action="notifications"
-        [attr.aria-label]="notificationShortcutLabel()"
+        [attr.data-value]="shortcut.value"
+        [attr.aria-label]="shortcut.ariaLabel"
         [class]="notificationButtonClasses()"
         (click)="triggerNotificationAction($event)">
-        <ui-nav-icon name="notifications" [size]="18" class="text-current" />
+        <ui-nav-icon [name]="shortcut.icon" [size]="18" class="text-current" />
       </button>
     }
 
@@ -131,10 +132,10 @@ const ACTION_OPTIONS = [
             <div class="min-w-0 flex min-h-14 flex-1 flex-col justify-center self-center">
               <div class="space-y-px">
                 <h2 class="truncate text-[1.1rem] font-semibold leading-none tracking-tight text-foreground">
-                  {{ userName() }}
+                  {{ resolvedUserName() }}
                 </h2>
                 <p class="text-sm leading-[0.95rem] text-muted-foreground">
-                  {{ userSubtitle() }}
+                  {{ resolvedUserSubtitle() }}
                 </p>
               </div>
             </div>
@@ -235,14 +236,17 @@ const ACTION_OPTIONS = [
                   type="button"
                   ui-button
                   variant="ghost"
-                  [class]="actionButtonClasses(action.tone)"
+                  [class]="actionButtonClasses(action.tone ?? 'default')"
                   data-action-option
                   [attr.data-value]="action.value"
                   (click)="triggerAction(action.value)">
                   <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted/65">
-                    <ui-nav-icon [name]="action.icon" [size]="19" [class]="actionIconClasses(action.tone)" />
+                    <ui-nav-icon
+                      [name]="action.icon"
+                      [size]="19"
+                      [class]="actionIconClasses(action.tone ?? 'default')" />
                   </span>
-                  <span [class]="actionLabelClasses(action.tone)">
+                  <span [class]="actionLabelClasses(action.tone ?? 'default')">
                     {{ action.label }}
                   </span>
                 </button>
@@ -260,10 +264,13 @@ export class EtosThemeSwitcherComponent {
   private readonly popoverTrigger = viewChild.required<PopoverTriggerDirective>('trigger');
 
   readonly class = input<string>('');
+  readonly userInfo = input<EtosThemeSwitcherUserInfo | null>(null);
   readonly userName = input<string>('User');
   readonly userSubtitle = input<string>('Theme and layout preferences');
   readonly avatarSrc = input<string | null>(null);
   readonly avatarAlt = input<string>('');
+  readonly quickActions = input.required<readonly EtosThemeSwitcherQuickAction[]>();
+  readonly notificationShortcut = input<EtosThemeSwitcherNotificationShortcut | null>(null);
   readonly showNotificationShortcut = input<boolean>(false);
   readonly popoverSide = input<PopoverSide>('bottom');
   readonly popoverAlign = input<PopoverAlign>('end');
@@ -277,17 +284,49 @@ export class EtosThemeSwitcherComponent {
   protected readonly themeSchemeOptions = THEME_SCHEME_OPTIONS;
   protected readonly layoutModeOptions = LAYOUT_MODE_OPTIONS;
   protected readonly layoutWidthOptions = LAYOUT_WIDTH_OPTIONS;
-  protected readonly actionOptions = computed(() =>
-    ACTION_OPTIONS.filter((action) => action.value !== 'notifications' || !this.showNotificationShortcut()),
+  protected readonly notificationShortcutConfig = computed<Required<EtosThemeSwitcherNotificationShortcut> | null>(
+    () => {
+      const shortcut = this.notificationShortcut();
+
+      if (shortcut) {
+        return {
+          value: shortcut.value ?? 'notifications',
+          icon: shortcut.icon ?? 'notifications',
+          ariaLabel: shortcut.ariaLabel ?? `Open notifications for ${this.resolvedUserName()}`,
+        };
+      }
+
+      if (!this.showNotificationShortcut()) {
+        return null;
+      }
+
+      return {
+        value: 'notifications',
+        icon: 'notifications',
+        ariaLabel: `Open notifications for ${this.resolvedUserName()}`,
+      };
+    },
   );
+  protected readonly actionOptions = computed(() => {
+    const shortcutValue = this.notificationShortcutConfig()?.value;
+
+    if (!shortcutValue) {
+      return this.quickActions();
+    }
+
+    return this.quickActions().filter((action) => action.value !== shortcutValue);
+  });
 
   protected readonly hostClasses = computed(() => cn('inline-flex shrink-0 items-center gap-2', this.class()));
-  protected readonly hasAvatar = computed(() => !!this.avatarSrc());
-  protected readonly avatarImageSrc = computed(() => this.avatarSrc() ?? '');
-  protected readonly avatarAltText = computed(() => this.avatarAlt() || `${this.userName()} avatar`);
-  protected readonly initials = computed(() => this.toInitials(this.userName()));
-  protected readonly triggerLabel = computed(() => `Open user info for ${this.userName()}`);
-  protected readonly notificationShortcutLabel = computed(() => `Open notifications for ${this.userName()}`);
+  protected readonly resolvedUserName = computed(() => this.userInfo()?.name?.trim() || this.userName());
+  protected readonly resolvedUserSubtitle = computed(() => this.userInfo()?.subtitle ?? this.userSubtitle());
+  protected readonly resolvedAvatarSrc = computed(() => this.userInfo()?.avatarSrc ?? this.avatarSrc());
+  protected readonly resolvedAvatarAlt = computed(() => this.userInfo()?.avatarAlt ?? this.avatarAlt());
+  protected readonly hasAvatar = computed(() => !!this.resolvedAvatarSrc());
+  protected readonly avatarImageSrc = computed(() => this.resolvedAvatarSrc() ?? '');
+  protected readonly avatarAltText = computed(() => this.resolvedAvatarAlt() || `${this.resolvedUserName()} avatar`);
+  protected readonly initials = computed(() => this.toInitials(this.resolvedUserName()));
+  protected readonly triggerLabel = computed(() => `Open user info for ${this.resolvedUserName()}`);
 
   protected triggerButtonClasses(open: boolean): string {
     return cn(
@@ -317,18 +356,18 @@ export class EtosThemeSwitcherComponent {
     return active ? 'text-foreground' : 'text-muted-foreground';
   }
 
-  protected actionButtonClasses(tone: ActionOption['tone']): string {
+  protected actionButtonClasses(tone: EtosThemeSwitcherActionTone = 'default'): string {
     return cn(
       'h-12 w-full justify-start gap-2.5 rounded-[var(--etos-layout-frame-radius)] border border-transparent px-2 py-1.5 text-left transition-colors hover:bg-muted/50',
       tone === 'destructive' && 'hover:bg-destructive/8 focus-visible:ring-destructive/30',
     );
   }
 
-  protected actionIconClasses(tone: ActionOption['tone']): string {
+  protected actionIconClasses(tone: EtosThemeSwitcherActionTone = 'default'): string {
     return tone === 'destructive' ? 'text-destructive' : 'text-foreground';
   }
 
-  protected actionLabelClasses(tone: ActionOption['tone']): string {
+  protected actionLabelClasses(tone: EtosThemeSwitcherActionTone = 'default'): string {
     return tone === 'destructive' ? 'text-sm font-medium text-destructive' : 'text-sm font-medium text-foreground';
   }
 
@@ -351,7 +390,14 @@ export class EtosThemeSwitcherComponent {
 
   protected triggerNotificationAction(event: Event): void {
     event.stopPropagation();
-    this.actionSelected.emit('notifications');
+
+    const shortcut = this.notificationShortcutConfig();
+
+    if (!shortcut) {
+      return;
+    }
+
+    this.actionSelected.emit(shortcut.value);
   }
 
   private labelForLayoutMode(mode: LayoutMode): string {

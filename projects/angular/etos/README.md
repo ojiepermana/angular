@@ -56,19 +56,16 @@ export const appConfig = {
         <etos-horizontal-layout>
           <div ui-layout-profile>
             <etos-theme-switcher
-              userName="Ojie Permana"
-              userSubtitle="Etos design system navigator"
-              [showNotificationShortcut]="true" />
+              [userInfo]="profileInfo"
+              [quickActions]="horizontalQuickActions"
+              [notificationShortcut]="horizontalNotificationShortcut" />
           </div>
         </etos-horizontal-layout>
       }
       @default {
         <etos-vertical-layout>
           <div ui-sidebar-footer class="flex items-center gap-3">
-            <etos-theme-switcher
-              userName="Ojie Permana"
-              userSubtitle="Etos design system navigator"
-              popoverAlign="start" />
+            <etos-theme-switcher [userInfo]="profileInfo" [quickActions]="verticalQuickActions" popoverAlign="start" />
 
             <div class="flex flex-col gap-px">
               <span>Ojie Permana</span>
@@ -82,6 +79,24 @@ export const appConfig = {
 })
 export class Pages {
   protected readonly layoutMode = inject(LayoutService).mode;
+  protected readonly profileInfo = {
+    name: 'Ojie Permana',
+    subtitle: 'Etos design system navigator',
+    avatarSrc: '/avatar-ojie.svg',
+    avatarAlt: 'Portrait of Ojie Permana',
+  };
+  protected readonly horizontalQuickActions = [
+    { value: 'sign-out', label: 'Logout', icon: 'logout', tone: 'destructive' },
+  ];
+  protected readonly verticalQuickActions = [
+    { value: 'notifications', label: 'Notifications', icon: 'notifications' },
+    { value: 'sign-out', label: 'Logout', icon: 'logout', tone: 'destructive' },
+  ];
+  protected readonly horizontalNotificationShortcut = {
+    value: 'notifications',
+    icon: 'notifications',
+    ariaLabel: 'Open notifications for Ojie Permana',
+  };
 }
 ```
 
@@ -129,22 +144,20 @@ From there, switch between `EtosHorizontalLayoutComponent` and `EtosVerticalLayo
 
 Common inputs:
 
-- `userName`: display name shown in the popup header and used for the trigger `aria-label`.
-- `userSubtitle`: secondary text shown under the name in the popup header.
-- `avatarSrc` and `avatarAlt`: optional avatar image source and accessible alt text.
+- `userInfo`: object input for the user display data: `name`, `subtitle`, `avatarSrc`, and `avatarAlt`.
+- `quickActions`: required array of action items rendered in the popup footer.
+- `notificationShortcut`: object input for the standalone notification trigger shown beside the avatar in horizontal mode.
 - `popoverAlign` and `popoverSide`: override the popover anchor position.
-- `showNotificationShortcut`: when `true`, renders a notification button beside the avatar trigger and removes Notifications from the popup action list.
+- `showNotificationShortcut`: legacy boolean shortcut for rendering the default notification button. Prefer `notificationShortcut` when the data should come from the parent.
 
 Horizontal usage:
 
 ```html
 <div ui-layout-profile class="etos-profile-trigger gap-2 px-0 py-0">
   <etos-theme-switcher
-    userName="Ojie Permana"
-    userSubtitle="Etos design system navigator"
-    [avatarSrc]="avatarSrc"
-    avatarAlt="Portrait of Ojie Permana"
-    [showNotificationShortcut]="true" />
+    [userInfo]="profileInfo"
+    [quickActions]="horizontalQuickActions"
+    [notificationShortcut]="horizontalNotificationShortcut" />
 </div>
 ```
 
@@ -154,12 +167,7 @@ Vertical usage:
 
 ```html
 <div ui-sidebar-footer class="flex h-full w-full min-w-0 items-center justify-start gap-3 px-0 py-0">
-  <etos-theme-switcher
-    userName="Ojie Permana"
-    userSubtitle="Etos design system navigator"
-    [avatarSrc]="avatarSrc"
-    avatarAlt="Portrait of Ojie Permana"
-    popoverAlign="start" />
+  <etos-theme-switcher [userInfo]="profileInfo" [quickActions]="verticalQuickActions" popoverAlign="start" />
 
   <div class="min-w-0 flex flex-col gap-px">
     <span class="truncate text-sm font-semibold leading-none text-foreground">Ojie Permana</span>
@@ -170,10 +178,50 @@ Vertical usage:
 
 Use `popoverAlign="start"` in the vertical sidebar so the popup opens toward the content area instead of clipping against the left viewport edge.
 
-The popup always exposes theme scheme, layout mode, and layout width controls. Quick actions currently expose:
+Input shape examples:
 
-- `Notifications` and `Logout` when `showNotificationShortcut` is `false`.
-- `Logout` only when `showNotificationShortcut` is `true`.
+```ts
+profileInfo = {
+  name: 'Ojie Permana',
+  subtitle: 'Etos design system navigator',
+  avatarSrc: '/avatar-ojie.svg',
+  avatarAlt: 'Portrait of Ojie Permana',
+};
+
+horizontalNotificationShortcut = {
+  value: 'notifications',
+  icon: 'notifications',
+  ariaLabel: 'Open notifications for Ojie Permana',
+};
+
+verticalQuickActions = [
+  { value: 'notifications', label: 'Notifications', icon: 'notifications' },
+  { value: 'sign-out', label: 'Logout', icon: 'logout', tone: 'destructive' },
+];
+```
+
+The popup always exposes theme scheme, layout mode, and layout width controls. The quick action area is fully consumer-driven:
+
+- Provide the action values and labels you need in `quickActions`.
+- Handle actions such as logout in the app consumer through `(actionSelected)`.
+- When `notificationShortcut.value` matches one of the `quickActions` values, the matching popup item is removed to avoid duplication.
+
+Example consumer-owned action handling:
+
+```html
+<etos-theme-switcher
+  [userInfo]="profileInfo"
+  [quickActions]="verticalQuickActions"
+  (actionSelected)="onThemeSwitcherAction($event)" />
+```
+
+```ts
+onThemeSwitcherAction(action: string): void {
+  if (action === 'sign-out') {
+    this.authService.logout();
+  }
+}
+```
 
 ## Workspace usage in this repository
 
