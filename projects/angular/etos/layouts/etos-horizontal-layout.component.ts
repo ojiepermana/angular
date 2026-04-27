@@ -60,9 +60,6 @@ export class EtosHorizontalLayoutComponent {
 
   protected readonly mainClasses = computed(() => {
     const classes = ['etos-layout-main'];
-    if (this.layoutWidth() === 'fixed') {
-      classes.push('etos-layout-main--fixed');
-    }
     return classes.join(' ');
   });
 }
