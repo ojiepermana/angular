@@ -11,5 +11,6 @@ export * from './layouts/etos-empty-layout.component';
 export * from './layouts/etos-horizontal-layout.component';
 export * from './layouts/etos-layout.component';
 export * from './layouts/etos-vertical-layout.component';
+export * from './shell';
 
 export const ETOS_BRAND_VERSION = '0.0.1';

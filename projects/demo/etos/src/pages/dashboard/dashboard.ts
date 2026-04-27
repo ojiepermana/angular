@@ -1,39 +1,27 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { LayoutService } from '@ojiepermana/angular/layout';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { EtosAppShellComponent } from '@ojiepermana/angular/etos';
 
 @Component({
   selector: 'app-dashboard',
+  imports: [EtosAppShellComponent],
   host: {
     class: 'flex h-full min-h-0 flex-col bg-background text-foreground',
-    '[attr.data-layout-mode]': 'layoutMode()',
   },
   template: `
-    <header [class]="headerClasses()">
-      @if (layoutMode() === 'vertical') {
+    <etos-app-shell>
+      <div etos-app-shell-header class="flex w-full items-center justify-between gap-4">
         <div>
           <h1 class="text-lg font-semibold tracking-tight">Operations overview</h1>
-          <p class="text-sm text-muted-foreground">A full-width dashboard shell for the fixed vertical layout.</p>
+          <p class="text-sm text-muted-foreground">A dashboard page composed through the ETOS app shell slots.</p>
         </div>
         <button
           type="button"
           class="rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
           Export summary
         </button>
-      } @else {
-        <div>
-          <h1 class="text-lg font-semibold tracking-tight">Header Horizontal</h1>
-          <div class="-mt-1.5 text-sm text-muted-foreground">Subtitle Horizontal</div>
-        </div>
-        <button
-          type="button"
-          class="rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
-          Action
-        </button>
-      }
-    </header>
+      </div>
 
-    <main class="min-h-0 flex-1 overflow-auto">
-      <section [class]="contentClasses()" [attr.data-dashboard-layout]="layoutMode()">
+      <section etos-app-shell-main class="grid min-h-full gap-6 p-6">
         <div class="grid gap-4 xl:grid-cols-[minmax(0,1.6fr)_minmax(18rem,24rem)]">
           <article class="grid gap-4 rounded-xl border border-border bg-card p-5 shadow-sm">
             <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -126,27 +114,16 @@ import { LayoutService } from '@ojiepermana/angular/layout';
           </article>
         </div>
       </section>
-    </main>
 
-    <footer [class]="footerClasses()">Footer</footer>
+      <div etos-app-shell-footer class="flex w-full items-center justify-between gap-3">
+        <span class="text-sm text-muted-foreground">Footer</span>
+        <span class="text-xs text-muted-foreground">Projected app shell</span>
+      </div>
+    </etos-app-shell>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardPage {
-  protected readonly layoutMode = inject(LayoutService).mode;
-  protected readonly headerClasses = computed(() =>
-    this.layoutMode() === 'vertical'
-      ? 'flex h-12 shrink-0 items-center border-b border-border bg-card px-4'
-      : 'flex shrink-0 items-center justify-between p-6',
-  );
-  protected readonly contentClasses = computed(() =>
-    this.layoutMode() === 'vertical' ? 'grid min-h-full gap-4 p-4 lg:p-6' : 'grid min-h-full gap-6 p-6',
-  );
-  protected readonly footerClasses = computed(() =>
-    this.layoutMode() === 'vertical'
-      ? 'flex h-12 shrink-0 items-center border-t border-border bg-card px-4'
-      : 'flex h-12 shrink-0 items-center border-t border-border px-6',
-  );
   protected readonly metrics = [
     { label: 'Active sessions', value: '18.2k', detail: '+12% from last hour' },
     { label: 'Automation success', value: '97.8%', detail: '41 workflows completed' },
