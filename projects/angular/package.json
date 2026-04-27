@@ -67,8 +67,6 @@
   "exports": {
     "./etos/styles": "./etos/styles/index.css",
     "./etos/styles/*": "./etos/styles/*",
-    "./brand/etos/styles": "./brand/etos/styles/index.css",
-    "./brand/etos/styles/*": "./brand/etos/styles/*",
     "./theme/styles": "./theme/styles/index.css",
     "./theme/styles/*": "./theme/styles/*",
     "./theme/tailwind/theme.css": "./theme/styles/themes/taildwind.css"

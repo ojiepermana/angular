@@ -76,6 +76,7 @@ function patchRootPackage() {
       default: toExportPath(resolve(distPackageRoot, 'generator', gen.name, secondaryMeta.module)),
     };
   }
+
   rootMeta.exports = exports;
 
   writeJson(rootPackagePath, rootMeta);

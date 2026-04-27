@@ -1,6 +1,6 @@
 # Etos Brand
 
-Etos is isolated as a brand umbrella entrypoint under `projects/angular/brand/etos`.
+Etos implementation lives under `projects/angular/etos`. Published consumers should use `@ojiepermana/angular/etos`.
 
 Use this folder for Etos-specific implementation:
 
@@ -58,7 +58,7 @@ The Etos demo under `projects/demo/etos` already uses the short TypeScript entry
 For CSS, the workspace demo currently imports the Etos source stylesheet directly:
 
 ```css
-@import '../../../angular/brand/etos/themes/index.css';
+@import '../../../angular/etos/themes/index.css';
 @import 'tailwindcss';
 @import '@ojiepermana/angular/theme/tailwind/theme.css';
 ```

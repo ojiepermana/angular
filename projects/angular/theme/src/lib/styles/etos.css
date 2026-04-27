@@ -1,6 +1,6 @@
 /**
  * Compatibility entry for the Etos brand stylesheet.
  *
- * The Etos implementation now lives under the brand umbrella package.
+ * The Etos implementation now lives under the dedicated `./etos` entrypoint.
  */
 @import '@ojiepermana/angular/etos/styles';
