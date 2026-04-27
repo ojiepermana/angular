@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { NavigationService } from '@ojiepermana/angular/navigation';
 
-import { appConfig, layoutConfig, themeConfig } from './app.config';
+import { appConfig, etosBrandConfig } from './app.config';
 import { App } from './app';
 import { AppNavigation } from './app.navigation';
 
@@ -53,15 +53,15 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
-    expect(document.documentElement.dataset['mode']).toBe(themeConfig.mode);
-    expect(document.documentElement.getAttribute('theme-brand')).toBe(themeConfig.brand);
+    expect(document.documentElement.dataset['mode']).toBe(etosBrandConfig.theme?.mode ?? 'light');
+    expect(document.documentElement.getAttribute('theme-brand')).toBe('etos');
     expect(document.documentElement.hasAttribute('theme-color')).toBe(false);
     expect(document.documentElement.hasAttribute('theme-style')).toBe(false);
     expect(document.documentElement.dataset['color']).toBeUndefined();
     expect(document.documentElement.dataset['style']).toBeUndefined();
-    expect(document.documentElement.dataset['theme']).toBe(themeConfig.brand);
-    expect(localStorage.getItem('theme-mode')).toBe(themeConfig.mode);
-    expect(localStorage.getItem('theme-brand')).toBe(themeConfig.brand);
+    expect(document.documentElement.dataset['theme']).toBe('etos');
+    expect(localStorage.getItem('theme-mode')).toBe(etosBrandConfig.theme?.mode ?? 'light');
+    expect(localStorage.getItem('theme-brand')).toBe('etos');
     expect(localStorage.getItem('theme-color')).toBeNull();
     expect(localStorage.getItem('theme-style')).toBeNull();
   });
@@ -70,7 +70,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
-    expect(localStorage.getItem('layout-mode')).toBe(layoutConfig.mode);
+    expect(localStorage.getItem('layout-mode')).toBe(etosBrandConfig.layout?.mode ?? 'vertical');
     expect(localStorage.getItem('layout-width')).toBe('fixed');
   });
 
@@ -85,7 +85,7 @@ describe('App', () => {
 
     expect(navigated).toBe(true);
     expect(router.url).toBe('/dashboard');
-    expect(fixture.nativeElement.textContent).toContain('Dashboard content');
+    expect(fixture.nativeElement.textContent).toContain('Operations overview');
     expect(fixture.nativeElement.textContent).toContain('Footer');
   });
 });

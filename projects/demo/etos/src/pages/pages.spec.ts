@@ -32,8 +32,8 @@ describe('Pages', () => {
   it('should render the vertical layout by default', () => {
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('vertical')).not.toBeNull();
-    expect(fixture.nativeElement.querySelector('horizontal')).toBeNull();
+    expect(fixture.nativeElement.querySelector('etos-vertical-layout')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('etos-horizontal-layout')).toBeNull();
   });
 
   it('should render the horizontal layout from persisted mode', async () => {
@@ -49,9 +49,7 @@ describe('Pages', () => {
     const horizontalFixture = TestBed.createComponent(Pages);
     horizontalFixture.detectChanges();
 
-    expect(horizontalFixture.nativeElement.querySelector('horizontal')).not.toBeNull();
-    expect(horizontalFixture.nativeElement.querySelector('vertical')).toBeNull();
-    expect(horizontalFixture.nativeElement.textContent).toContain('Ojiepermana UI');
-    expect(horizontalFixture.nativeElement.textContent).toContain('Ojie Permana');
+    expect(horizontalFixture.nativeElement.querySelector('etos-horizontal-layout')).not.toBeNull();
+    expect(horizontalFixture.nativeElement.querySelector('etos-vertical-layout')).toBeNull();
   });
 });

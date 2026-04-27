@@ -4,6 +4,9 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../../out-tsc/spec",
+    "rootDir": "../..",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "types": ["vitest/globals"]
   },
   "include": ["src/**/*.d.ts", "src/**/*.spec.ts"]
