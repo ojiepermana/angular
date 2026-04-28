@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'ala-root',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'block' },
+  selector: 'ala-empty',
+  imports: [],
   template: `
     <div
       class="min-h-screen bg-neutral-200 text-neutral-600 bg-[linear-gradient(rgba(212,212,212,0.45)_1px,transparent_1px),linear-gradient(to_right,rgba(212,212,212,0.45)_1px,transparent_1px)] bg-position-[center_center] bg-size-[2.775rem_2.775rem]">
@@ -22,5 +21,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     </div>
   `,
   styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App {}
+export class Empty {}
