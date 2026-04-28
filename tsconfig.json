@@ -55,6 +55,12 @@
     },
     {
       "path": "./projects/demo/etos/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/demo/ala/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/demo/ala/tsconfig.spec.json"
     }
   ]
 }

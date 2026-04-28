@@ -187,6 +187,67 @@
           "builder": "@angular/build:unit-test"
         }
       }
+    },
+    "ala": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "projects/demo/ala",
+      "sourceRoot": "projects/demo/ala/src",
+      "prefix": "ala",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "projects/demo/ala/src/main.ts",
+            "tsConfig": "projects/demo/ala/tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/demo/ala/public"
+              }
+            ],
+            "styles": ["projects/demo/ala/src/styles.css"]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "ala:build:production"
+            },
+            "development": {
+              "buildTarget": "ala:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test"
+        }
+      }
     }
   }
 }
