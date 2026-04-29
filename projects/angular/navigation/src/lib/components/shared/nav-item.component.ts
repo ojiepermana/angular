@@ -54,7 +54,7 @@ import type {
           type="button"
           [class]="
             cn(
-              'ui-nav-text group/ni flex w-full items-center gap-3 rounded-md px-3 py-2 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'ui-nav-text group/ni flex w-full items-center gap-3 rounded-full p-3 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
               isTrailActive() && 'text-primary',
               item().classes?.wrapper
             )
@@ -67,7 +67,15 @@ import type {
           [matTooltipDisabled]="!compact()"
           (click)="toggleGroup()">
           @if (collapsableItem().icon) {
-            <ui-nav-icon [name]="collapsableItem().icon!" [size]="18" [class]="item().classes?.icon ?? ''" />
+            <span
+              [class]="
+                cn(
+                  'inline-flex shrink-0 items-center justify-center',
+                  open && 'h-7 w-7 rounded-full border border-brand'
+                )
+              ">
+              <ui-nav-icon [name]="collapsableItem().icon!" [size]="18" [class]="item().classes?.icon ?? ''" />
+            </span>
           }
           @if (!compact()) {
             <span [class]="cn('flex-1 truncate text-left', item().classes?.title)">
@@ -83,7 +91,10 @@ import type {
           }
         </button>
         @if (!compact() && open) {
-          <div [id]="id + '-panel'" role="region" class="ml-3 mt-0.5 flex flex-col gap-0.5 border-l border-border pl-3">
+          <div
+            [id]="id + '-panel'"
+            role="region"
+            class="relative ml-6.5 mt-0.5 flex flex-col gap-0.5 pl-3 before:absolute before:bottom-0 before:left-0 before:-top-3.5 before:w-px before:bg-border before:content-['']">
             @for (child of collapsableItem().children; track child.id) {
               <ui-nav-item [item]="child" [level]="level() + 1" [compact]="false" />
             }
