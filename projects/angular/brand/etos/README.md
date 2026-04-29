@@ -6,7 +6,6 @@ Use this folder for Etos-specific implementation:
 
 - `core/` contains Etos provider composition and brand defaults.
 - `themes/` contains Etos color, style, layout, and component-facing CSS.
-- `layouts/` contains Etos shell components.
 - `navigation/`, `components/`, `assets/`, and `docs/` can be added when Etos needs brand-specific behavior beyond shared primitives.
 
 Shared services, types, and primitives stay in the generic libraries:
@@ -20,14 +19,7 @@ Shared services, types, and primitives stay in the generic libraries:
 Published consumers should import Etos through the short public entrypoint:
 
 ```ts
-import {
-  type EtosBrandOptions,
-  EtosHorizontalLayoutComponent,
-  EtosThemeSwitcherComponent,
-  EtosVerticalLayoutComponent,
-  provideEtosBrand,
-} from '@ojiepermana/angular/etos';
-import { LayoutService } from '@ojiepermana/angular/layout';
+import { type EtosBrandOptions, EtosThemeSwitcherComponent, provideEtosBrand } from '@ojiepermana/angular/etos';
 
 export const etosBrandConfig = {
   theme: {
@@ -45,60 +37,7 @@ export const appConfig = {
 };
 ```
 
-`provideEtosBrand()` applies the Etos brand tokens and wires the shared `ThemeService` and `LayoutService` defaults for the app.
-
-```ts
-@Component({
-  imports: [EtosHorizontalLayoutComponent, EtosThemeSwitcherComponent, EtosVerticalLayoutComponent],
-  template: `
-    @switch (layoutMode()) {
-      @case ('horizontal') {
-        <etos-horizontal-layout>
-          <div ui-layout-profile>
-            <etos-theme-switcher
-              [userInfo]="profileInfo"
-              [quickActions]="horizontalQuickActions"
-              [notificationShortcut]="horizontalNotificationShortcut" />
-          </div>
-        </etos-horizontal-layout>
-      }
-      @default {
-        <etos-vertical-layout>
-          <div ui-sidebar-footer class="flex items-center gap-3">
-            <etos-theme-switcher [userInfo]="profileInfo" [quickActions]="verticalQuickActions" popoverAlign="start" />
-
-            <div class="flex flex-col gap-px">
-              <span>Ojie Permana</span>
-              <span>Etos design system navigator</span>
-            </div>
-          </div>
-        </etos-vertical-layout>
-      }
-    }
-  `,
-})
-export class Pages {
-  protected readonly layoutMode = inject(LayoutService).mode;
-  protected readonly profileInfo = {
-    name: 'Ojie Permana',
-    subtitle: 'Etos design system navigator',
-    avatarSrc: '/avatar-ojie.svg',
-    avatarAlt: 'Portrait of Ojie Permana',
-  };
-  protected readonly horizontalQuickActions = [
-    { value: 'sign-out', label: 'Logout', icon: 'logout', tone: 'destructive' },
-  ];
-  protected readonly verticalQuickActions = [
-    { value: 'notifications', label: 'Notifications', icon: 'notifications' },
-    { value: 'sign-out', label: 'Logout', icon: 'logout', tone: 'destructive' },
-  ];
-  protected readonly horizontalNotificationShortcut = {
-    value: 'notifications',
-    icon: 'notifications',
-    ariaLabel: 'Open notifications for Ojie Permana',
-  };
-}
-```
+`provideEtosBrand()` applies the Etos brand tokens and wires the shared `ThemeService` and `LayoutService` defaults for the app. `EtosThemeSwitcherComponent` remains the Etos-owned UI component exported from this entrypoint.
 
 ## Using the brand theme
 
@@ -136,7 +75,7 @@ export const appConfig = {
 };
 ```
 
-From there, switch between `EtosHorizontalLayoutComponent` and `EtosVerticalLayoutComponent` based on the current `LayoutService.mode()` value, as shown above.
+From there, mount Etos-specific UI such as `EtosThemeSwitcherComponent` inside your existing application shell.
 
 ## Using the theme switcher
 
@@ -225,10 +164,9 @@ onThemeSwitcherAction(action: string): void {
 
 ## Workspace usage in this repository
 
-The Etos demo under `projects/demo/etos` already uses the short TypeScript entrypoint:
+The Etos demo under `projects/demo/etos` already uses the short TypeScript entrypoint for provider setup:
 
 - `src/app/app.config.ts` imports `provideEtosBrand` from `@ojiepermana/angular/etos`.
-- `src/pages/pages.ts` imports `EtosHorizontalLayoutComponent`, `EtosVerticalLayoutComponent`, and `EtosThemeSwitcherComponent` from `@ojiepermana/angular/etos`.
 
 For CSS, the workspace demo currently imports the Etos source stylesheet directly:
 

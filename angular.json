@@ -31,6 +31,7 @@
             "tsConfig": "projects/angular/tsconfig.spec.json",
             "include": [
               "**/*.spec.ts",
+              "../../brand/etos/**/*.spec.ts",
               "../../etos/**/*.spec.ts",
               "../../theme/src/**/*.spec.ts",
               "../../layout/src/**/*.spec.ts",

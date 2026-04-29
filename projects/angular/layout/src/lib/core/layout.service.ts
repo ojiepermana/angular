@@ -36,7 +36,17 @@ export class LayoutService {
   }
 
   toggleMode(): void {
-    this._mode.update((mode) => (mode === 'vertical' ? 'horizontal' : 'vertical'));
+    this._mode.update((mode) => {
+      if (mode === 'vertical') {
+        return 'horizontal';
+      }
+
+      if (mode === 'horizontal') {
+        return 'vertical';
+      }
+
+      return 'vertical';
+    });
   }
 
   setWidth(width: LayoutWidth): void {

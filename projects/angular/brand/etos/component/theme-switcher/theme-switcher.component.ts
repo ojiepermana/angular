@@ -53,6 +53,7 @@ const THEME_SCHEME_OPTIONS = [
 const LAYOUT_MODE_OPTIONS = [
   { value: 'horizontal', label: 'Horizontal', icon: 'view_column' },
   { value: 'vertical', label: 'Vertical', icon: 'view_sidebar' },
+  { value: 'empty', label: 'Empty', icon: 'crop_square' },
 ] as const satisfies readonly ToggleOption<LayoutMode>[];
 
 const LAYOUT_WIDTH_OPTIONS = [
@@ -175,7 +176,7 @@ const LAYOUT_WIDTH_OPTIONS = [
               <p class="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Layout</p>
             </div>
             <div class="rounded-(--etos-layout-frame-radius) bg-muted/65 p-0.5">
-              <div class="grid grid-cols-2 gap-1">
+              <div class="grid grid-cols-3 gap-1">
                 @for (option of layoutModeOptions; track option.value) {
                   <button
                     type="button"
@@ -401,7 +402,15 @@ export class EtosThemeSwitcherComponent {
   }
 
   private labelForLayoutMode(mode: LayoutMode): string {
-    return mode === 'horizontal' ? 'Horizontal' : 'Vertical';
+    if (mode === 'horizontal') {
+      return 'Horizontal';
+    }
+
+    if (mode === 'empty') {
+      return 'Empty';
+    }
+
+    return 'Vertical';
   }
 
   private labelForLayoutWidth(width: LayoutWidth): string {

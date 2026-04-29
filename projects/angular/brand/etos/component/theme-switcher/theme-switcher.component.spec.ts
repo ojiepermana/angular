@@ -103,6 +103,9 @@ describe('EtosThemeSwitcherComponent', () => {
     expect((panel?.querySelector('[data-setting="layout-mode"]') as HTMLElement | null)?.textContent).toContain(
       'Vertical',
     );
+    expect((panel?.querySelector('[data-setting="layout-mode"]') as HTMLElement | null)?.textContent).toContain(
+      'Empty',
+    );
     expect((panel?.querySelector('[data-setting="layout-width"]') as HTMLElement | null)?.textContent).toContain(
       'Full',
     );
@@ -118,7 +121,7 @@ describe('EtosThemeSwitcherComponent', () => {
       panel?.querySelector('[data-setting-option="theme-scheme"][data-value="dark"]') as HTMLButtonElement | null
     )?.click();
     (
-      panel?.querySelector('[data-setting-option="layout-mode"][data-value="horizontal"]') as HTMLButtonElement | null
+      panel?.querySelector('[data-setting-option="layout-mode"][data-value="empty"]') as HTMLButtonElement | null
     )?.click();
     (
       panel?.querySelector('[data-setting-option="layout-width"][data-value="full"]') as HTMLButtonElement | null
@@ -130,14 +133,14 @@ describe('EtosThemeSwitcherComponent', () => {
 
     expect(theme.scheme()).toBe('dark');
     expect(theme.mode()).toBe('dark');
-    expect(layout.mode()).toBe('horizontal');
+    expect(layout.mode()).toBe('empty');
     expect(layout.width()).toBe('full');
     expect(localStorage.getItem('theme-mode')).toBe('dark');
-    expect(localStorage.getItem('layout-mode')).toBe('horizontal');
+    expect(localStorage.getItem('layout-mode')).toBe('empty');
     expect(localStorage.getItem('layout-width')).toBe('full');
     expect(
       (panel?.querySelector('[data-setting="layout-mode"]') as HTMLElement | null)?.getAttribute('data-current'),
-    ).toBe('horizontal');
+    ).toBe('empty');
     expect(
       (panel?.querySelector('[data-setting="layout-width"]') as HTMLElement | null)?.getAttribute('data-current'),
     ).toBe('full');

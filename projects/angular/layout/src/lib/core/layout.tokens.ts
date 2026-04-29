@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-export const LAYOUT_MODES = ['vertical', 'horizontal'] as const;
+export const LAYOUT_MODES = ['vertical', 'horizontal', 'empty'] as const;
 
 export type LayoutMode = (typeof LAYOUT_MODES)[number];
 

@@ -9,6 +9,8 @@
   "include": [
     "component/src/**/*.d.ts",
     "component/src/**/*.spec.ts",
+    "brand/etos/**/*.d.ts",
+    "brand/etos/**/*.spec.ts",
     "etos/**/*.d.ts",
     "etos/**/*.spec.ts",
     "theme/src/**/*.d.ts",

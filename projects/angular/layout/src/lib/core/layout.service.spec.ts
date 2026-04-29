@@ -71,6 +71,30 @@ describe('LayoutService', () => {
     expect(service.width()).toBe('fixed');
   });
 
+  it('supports empty layout mode from persistence and explicit updates', () => {
+    localStorage.setItem(MODE_STORAGE_KEY, 'empty');
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: MATERIAL_LAYOUT_CONFIG,
+          useValue: {
+            mode: 'vertical',
+            storageKey: MODE_STORAGE_KEY,
+          },
+        },
+      ],
+    });
+
+    const service = TestBed.inject(LayoutService);
+
+    expect(service.mode()).toBe('empty');
+
+    service.setMode('empty');
+    TestBed.flushEffects();
+
+    expect(localStorage.getItem(MODE_STORAGE_KEY)).toBe('empty');
+  });
+
   it('keeps legacy defaultMode config working for compatibility', () => {
     TestBed.configureTestingModule({
       providers: [{ provide: MATERIAL_LAYOUT_CONFIG, useValue: { defaultMode: 'horizontal' } }],
