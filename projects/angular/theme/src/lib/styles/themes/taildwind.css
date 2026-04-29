@@ -15,6 +15,7 @@
 @custom-variant dark (&:where([data-mode='dark'], [data-mode='dark'] *, .dark, .dark *));
 
 @theme inline {
+  --color-brand: hsl(var(--brand) / 0.7);
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));

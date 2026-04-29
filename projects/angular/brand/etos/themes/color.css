@@ -3,6 +3,23 @@
  */
 @layer tokens {
   [theme-brand='etos'] {
+    --brand: 0 0% 64%;
+
+    --background: 210 38% 98%;
+    --foreground: 211 56% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 211 56% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 211 56% 12%;
+
+    --muted: 211 34% 94%;
+    --muted-foreground: 211 24% 38%;
+
+    --border: 211 28% 82%;
+    --input: 211 28% 82%;
+
     --primary: 211 95% 29%;
     --primary-foreground: 0 0% 100%;
     --accent: 211 95% 96%;
@@ -13,9 +30,36 @@
   }
 
   [data-mode='dark'][theme-brand='etos'] {
+    --brand: 0 0% 64%;
+
+    --background: 211 38% 9%;
+    --foreground: 210 40% 96%;
+
+    --card: 211 34% 11%;
+    --card-foreground: 210 40% 96%;
+
+    --popover: 211 34% 11%;
+    --popover-foreground: 210 40% 96%;
+
+    --muted: 211 22% 18%;
+    --muted-foreground: 211 18% 70%;
+
+    --border: 211 24% 24%;
+    --input: 211 24% 24%;
+
     --accent: 211 58% 18%;
     --accent-foreground: 211 90% 84%;
     --secondary: 211 24% 18%;
     --secondary-foreground: 211 82% 84%;
+  }
+}
+
+@layer utilities {
+  .border-brand {
+    border-color: hsl(var(--brand, var(--border)) / 0.7);
+  }
+
+  .bg-brand {
+    background-color: hsl(var(--brand, var(--border)) / 0.7);
   }
 }

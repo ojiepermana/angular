@@ -12,7 +12,7 @@ import { LayoutService } from '@ojiepermana/angular/layout';
       @if (layoutMode() === 'vertical') {
         <div>
           <h1 class="text-lg font-semibold tracking-tight">Operations overview</h1>
-          <p class="text-sm text-muted-foreground">A full-width dashboard shell for the fixed vertical layout.</p>
+          <p class="text-sm text-muted-foreground">A full-width dashboard shell for the container vertical layout.</p>
         </div>
         <button
           type="button"

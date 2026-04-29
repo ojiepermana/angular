@@ -56,12 +56,14 @@ export class HorizontalLayoutComponent {
 
   protected readonly layoutWidth = this.layout.width;
   protected readonly themeStyle = this.theme.style;
-  protected readonly shellBorderWidth = computed(() => (this.layoutWidth() === 'fixed' ? 'var(--border-width)' : null));
+  protected readonly isConstrainedWidth = computed(() => this.layoutWidth() !== 'full');
+  protected readonly isWideWidth = computed(() => this.layoutWidth() === 'wide');
+  protected readonly shellBorderWidth = computed(() => (this.isConstrainedWidth() ? 'var(--border-width)' : null));
   protected readonly dividerBorderWidth = computed(() => 'var(--border-width)');
 
   protected readonly hostClasses = computed(() => {
     const classes = ['block', 'h-dvh', 'w-full', 'overflow-hidden', 'bg-background', 'text-foreground'];
-    if (this.layoutWidth() === 'fixed') {
+    if (this.isConstrainedWidth()) {
       classes.push('box-border', 'lg:p-8');
     }
     return classes.join(' ');
@@ -69,7 +71,7 @@ export class HorizontalLayoutComponent {
 
   protected readonly frameClasses = computed(() => {
     const classes = ['flex', 'h-full', 'w-full', 'flex-col', 'overflow-hidden'];
-    if (this.layoutWidth() === 'fixed') {
+    if (this.isConstrainedWidth()) {
       classes.push('lg:border', 'lg:border-border', 'lg:rounded-lg', 'lg:shadow-sm');
     }
     return classes.join(' ');
@@ -77,8 +79,10 @@ export class HorizontalLayoutComponent {
 
   protected readonly mainClasses = computed(() => {
     const classes = ['min-w-0', 'flex-1', 'overflow-auto'];
-    if (this.layoutWidth() === 'fixed') {
+    if (this.layoutWidth() === 'container') {
       classes.push('mx-auto', 'w-full', 'max-w-7xl');
+    } else if (this.isWideWidth()) {
+      classes.push('mx-auto', 'w-full', 'max-w-screen-2xl');
     }
     return classes.join(' ');
   });

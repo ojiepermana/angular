@@ -23,7 +23,7 @@ describe('LayoutService', () => {
           provide: MATERIAL_LAYOUT_CONFIG,
           useValue: {
             mode: 'vertical',
-            width: 'fixed',
+            width: 'container',
             storageKey: MODE_STORAGE_KEY,
             widthStorageKey: WIDTH_STORAGE_KEY,
           },
@@ -44,7 +44,7 @@ describe('LayoutService', () => {
           provide: MATERIAL_LAYOUT_CONFIG,
           useValue: {
             mode: 'vertical',
-            width: 'fixed',
+            width: 'container',
             storageKey: MODE_STORAGE_KEY,
             widthStorageKey: WIDTH_STORAGE_KEY,
           },
@@ -63,12 +63,53 @@ describe('LayoutService', () => {
     expect(localStorage.getItem(WIDTH_STORAGE_KEY)).toBe('full');
   });
 
-  it('defaults layout width to fixed', () => {
+  it('defaults layout width to container', () => {
     TestBed.configureTestingModule({});
 
     const service = TestBed.inject(LayoutService);
 
-    expect(service.width()).toBe('fixed');
+    expect(service.width()).toBe('container');
+  });
+
+  it('maps persisted legacy fixed width to container and rewrites storage', () => {
+    localStorage.setItem(WIDTH_STORAGE_KEY, 'fixed');
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: MATERIAL_LAYOUT_CONFIG,
+          useValue: {
+            mode: 'vertical',
+            storageKey: MODE_STORAGE_KEY,
+            widthStorageKey: WIDTH_STORAGE_KEY,
+          },
+        },
+      ],
+    });
+
+    const service = TestBed.inject(LayoutService);
+
+    expect(service.width()).toBe('container');
+
+    TestBed.flushEffects();
+
+    expect(localStorage.getItem(WIDTH_STORAGE_KEY)).toBe('container');
+  });
+
+  it('cycles layout width through container, wide, and full', () => {
+    TestBed.configureTestingModule({});
+
+    const service = TestBed.inject(LayoutService);
+
+    expect(service.width()).toBe('container');
+
+    service.toggleWidth();
+    expect(service.width()).toBe('wide');
+
+    service.toggleWidth();
+    expect(service.width()).toBe('full');
+
+    service.toggleWidth();
+    expect(service.width()).toBe('container');
   });
 
   it('supports empty layout mode from persistence and explicit updates', () => {
@@ -107,11 +148,11 @@ describe('LayoutService', () => {
 
   it('applies configured layout width when provided', () => {
     TestBed.configureTestingModule({
-      providers: [{ provide: MATERIAL_LAYOUT_CONFIG, useValue: { width: 'full' } }],
+      providers: [{ provide: MATERIAL_LAYOUT_CONFIG, useValue: { width: 'wide' } }],
     });
 
     const service = TestBed.inject(LayoutService);
 
-    expect(service.width()).toBe('full');
+    expect(service.width()).toBe('wide');
   });
 });

@@ -4,15 +4,20 @@ export const LAYOUT_MODES = ['vertical', 'horizontal', 'empty'] as const;
 
 export type LayoutMode = (typeof LAYOUT_MODES)[number];
 
-export const LAYOUT_WIDTHS = ['full', 'fixed'] as const;
+export const LAYOUT_WIDTHS = ['full', 'container', 'wide'] as const;
 
 export type LayoutWidth = (typeof LAYOUT_WIDTHS)[number];
+
+/** @deprecated Use `container` instead. */
+export type LegacyLayoutWidth = 'fixed';
+
+export type ConfiguredLayoutWidth = LayoutWidth | LegacyLayoutWidth;
 
 export interface MaterialLayoutConfig {
   /** Initial layout mode. */
   readonly mode?: LayoutMode;
   /** Initial layout width. */
-  readonly width?: LayoutWidth;
+  readonly width?: ConfiguredLayoutWidth;
   /** @deprecated Use `mode` instead. */
   /** Initial layout mode. Defaults to `vertical`. */
   readonly defaultMode?: LayoutMode;
@@ -33,7 +38,7 @@ export const MATERIAL_LAYOUT_CONFIG = new InjectionToken<MaterialLayoutConfig>('
 
 export const DEFAULT_MATERIAL_LAYOUT_CONFIG: ResolvedMaterialLayoutConfig = {
   defaultMode: 'vertical',
-  defaultWidth: 'fixed',
+  defaultWidth: 'container',
   storageKey: 'layout-mode',
   widthStorageKey: 'layout-width',
 };
@@ -44,4 +49,16 @@ export function isLayoutMode(value: string | null | undefined): value is LayoutM
 
 export function isLayoutWidth(value: string | null | undefined): value is LayoutWidth {
   return LAYOUT_WIDTHS.some((width) => width === value);
+}
+
+export function normalizeLayoutWidth(value: string | null | undefined): LayoutWidth | null {
+  if (isLayoutWidth(value)) {
+    return value;
+  }
+
+  if (value === 'fixed') {
+    return 'container';
+  }
+
+  return null;
 }

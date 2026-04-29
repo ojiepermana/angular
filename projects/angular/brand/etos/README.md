@@ -28,7 +28,7 @@ export const etosBrandConfig = {
   },
   layout: {
     mode: 'vertical',
-    width: 'fixed',
+    width: 'container',
   },
 } satisfies EtosBrandOptions;
 
@@ -66,7 +66,7 @@ export const etosBrandConfig = {
   },
   layout: {
     mode: 'vertical',
-    width: 'fixed',
+    width: 'container',
   },
 } satisfies EtosBrandOptions;
 

@@ -57,7 +57,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
 
     <ng-template #body>
       @if (header()) {
-        <div class="flex h-12 items-center gap-2 border-b border-border">
+        <div class="flex h-12 items-center gap-2 border-b border-brand">
           <ng-content select="[ui-sidebar-header]" />
         </div>
       }
@@ -66,7 +66,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
           <ui-nav-item [item]="item" [compact]="isCompact()" />
         }
       </nav>
-      <div class="border-t border-border h-12">
+      <div class="border-t border-brand h-12">
         <ng-content select="[ui-sidebar-footer]" />
       </div>
     </ng-template>
@@ -76,9 +76,9 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
         role="dialog"
         aria-modal="true"
         [attr.aria-label]="ariaLabel()"
-        class="flex h-full w-72 max-w-[85vw] flex-col border-border bg-background text-foreground shadow-xl"
+        class="flex h-full w-72 max-w-[85vw] flex-col text-foreground shadow-xl"
         [class.border-l]="position() === 'right'"
-        [class.border-r]="position() !== 'right'">
+        [class.border-brand]="position() === 'right'">
         <ng-container [ngTemplateOutlet]="body" />
       </div>
     </ng-template>
@@ -148,13 +148,11 @@ export class SidebarComponent {
   }
 
   protected readonly hostClasses = computed(() => {
-    const base = ['relative flex shrink-0 bg-background text-foreground', 'transition-[width] duration-200 ease-out'];
+    const base = ['relative flex shrink-0 text-foreground', 'transition-[width] duration-200 ease-out'];
     const appearance = this.appearance();
     if (appearance === 'thin') base.push('w-16');
     else base.push('[width:17.5rem]');
-    if (this.position() === 'right') base.push('border-l');
-    else base.push('border-r');
-    base.push('border-border');
+    if (this.position() === 'right') base.push('border-l', 'border-brand');
     return [...base, this.class()].join(' ');
   });
 
@@ -163,8 +161,8 @@ export class SidebarComponent {
     const base = ['flex h-full flex-col transition-[width] duration-200 ease-out'];
     if (overlayActive) {
       base.push(
-        'absolute inset-y-0 z-30 bg-background shadow-xl [width:17.5rem]',
-        this.position() === 'right' ? 'right-0 border-l border-border' : 'left-0 border-r border-border',
+        'absolute inset-y-0 z-30 shadow-xl [width:17.5rem]',
+        this.position() === 'right' ? 'right-0 border-l border-brand' : 'left-0',
       );
     } else {
       base.push('w-full');

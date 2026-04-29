@@ -71,7 +71,7 @@ describe('App', () => {
     fixture.detectChanges();
 
     expect(localStorage.getItem('layout-mode')).toBe(etosBrandConfig.layout?.mode ?? 'vertical');
-    expect(localStorage.getItem('layout-width')).toBe('fixed');
+    expect(localStorage.getItem('layout-width')).toBe('container');
   });
 
   it('should resolve the dashboard route under the pages shell', async () => {

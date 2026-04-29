@@ -58,7 +58,8 @@ const LAYOUT_MODE_OPTIONS = [
 
 const LAYOUT_WIDTH_OPTIONS = [
   { value: 'full', label: 'Full', icon: 'fit_screen' },
-  { value: 'fixed', label: 'Fixed', icon: 'center_focus_strong' },
+  { value: 'container', label: 'Container', icon: 'center_focus_strong' },
+  { value: 'wide', label: 'Wide', icon: 'width_wide' },
 ] as const satisfies readonly ToggleOption<LayoutWidth>[];
 
 @Component({
@@ -205,7 +206,7 @@ const LAYOUT_WIDTH_OPTIONS = [
               <p class="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Width</p>
             </div>
             <div class="rounded-(--etos-layout-frame-radius) bg-muted/65 p-0.5">
-              <div class="grid grid-cols-2 gap-1">
+              <div class="grid grid-cols-3 gap-1">
                 @for (option of layoutWidthOptions; track option.value) {
                   <button
                     type="button"
@@ -414,7 +415,15 @@ export class EtosThemeSwitcherComponent {
   }
 
   private labelForLayoutWidth(width: LayoutWidth): string {
-    return width === 'full' ? 'Full' : 'Fixed';
+    if (width === 'container') {
+      return 'Container';
+    }
+
+    if (width === 'wide') {
+      return 'Wide';
+    }
+
+    return 'Full';
   }
 
   private toInitials(name: string): string {

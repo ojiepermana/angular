@@ -2,9 +2,10 @@ import { DOCUMENT } from '@angular/common';
 import { Injectable, effect, inject, signal } from '@angular/core';
 import {
   DEFAULT_MATERIAL_LAYOUT_CONFIG,
+  LAYOUT_WIDTHS,
   MATERIAL_LAYOUT_CONFIG,
   isLayoutMode,
-  isLayoutWidth,
+  normalizeLayoutWidth,
   type LayoutMode,
   type LayoutWidth,
   type ResolvedMaterialLayoutConfig,
@@ -54,7 +55,10 @@ export class LayoutService {
   }
 
   toggleWidth(): void {
-    this._width.update((width) => (width === 'fixed' ? 'full' : 'fixed'));
+    this._width.update((width) => {
+      const currentIndex = LAYOUT_WIDTHS.indexOf(width);
+      return LAYOUT_WIDTHS[(currentIndex + 1) % LAYOUT_WIDTHS.length] ?? LAYOUT_WIDTHS[0];
+    });
   }
 
   private resolveConfig(): ResolvedMaterialLayoutConfig {
@@ -64,7 +68,7 @@ export class LayoutService {
 
     return {
       defaultMode: isLayoutMode(configuredMode) ? configuredMode : DEFAULT_MATERIAL_LAYOUT_CONFIG.defaultMode,
-      defaultWidth: isLayoutWidth(configuredWidth) ? configuredWidth : DEFAULT_MATERIAL_LAYOUT_CONFIG.defaultWidth,
+      defaultWidth: normalizeLayoutWidth(configuredWidth) ?? DEFAULT_MATERIAL_LAYOUT_CONFIG.defaultWidth,
       storageKey: config.storageKey ?? DEFAULT_MATERIAL_LAYOUT_CONFIG.storageKey,
       widthStorageKey: config.widthStorageKey ?? DEFAULT_MATERIAL_LAYOUT_CONFIG.widthStorageKey,
     };
@@ -86,7 +90,7 @@ export class LayoutService {
     if (!key) return null;
     try {
       const value = this.document.defaultView?.localStorage?.getItem(key);
-      return isLayoutWidth(value) ? value : null;
+      return normalizeLayoutWidth(value);
     } catch {
       return null;
     }

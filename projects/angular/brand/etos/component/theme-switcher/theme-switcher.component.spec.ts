@@ -42,7 +42,7 @@ describe('EtosThemeSwitcherComponent', () => {
           provide: MATERIAL_LAYOUT_CONFIG,
           useValue: {
             mode: 'vertical',
-            width: 'fixed',
+            width: 'container',
             storageKey: 'layout-mode',
             widthStorageKey: 'layout-width',
           },
@@ -110,7 +110,10 @@ describe('EtosThemeSwitcherComponent', () => {
       'Full',
     );
     expect((panel?.querySelector('[data-setting="layout-width"]') as HTMLElement | null)?.textContent).toContain(
-      'Fixed',
+      'Container',
+    );
+    expect((panel?.querySelector('[data-setting="layout-width"]') as HTMLElement | null)?.textContent).toContain(
+      'Wide',
     );
     expect(panel?.textContent).toContain('Notifications');
     expect(panel?.textContent).toContain('Logout');
@@ -124,7 +127,7 @@ describe('EtosThemeSwitcherComponent', () => {
       panel?.querySelector('[data-setting-option="layout-mode"][data-value="empty"]') as HTMLButtonElement | null
     )?.click();
     (
-      panel?.querySelector('[data-setting-option="layout-width"][data-value="full"]') as HTMLButtonElement | null
+      panel?.querySelector('[data-setting-option="layout-width"][data-value="wide"]') as HTMLButtonElement | null
     )?.click();
 
     fixture.detectChanges();
@@ -134,16 +137,16 @@ describe('EtosThemeSwitcherComponent', () => {
     expect(theme.scheme()).toBe('dark');
     expect(theme.mode()).toBe('dark');
     expect(layout.mode()).toBe('empty');
-    expect(layout.width()).toBe('full');
+    expect(layout.width()).toBe('wide');
     expect(localStorage.getItem('theme-mode')).toBe('dark');
     expect(localStorage.getItem('layout-mode')).toBe('empty');
-    expect(localStorage.getItem('layout-width')).toBe('full');
+    expect(localStorage.getItem('layout-width')).toBe('wide');
     expect(
       (panel?.querySelector('[data-setting="layout-mode"]') as HTMLElement | null)?.getAttribute('data-current'),
     ).toBe('empty');
     expect(
       (panel?.querySelector('[data-setting="layout-width"]') as HTMLElement | null)?.getAttribute('data-current'),
-    ).toBe('full');
+    ).toBe('wide');
   });
 
   it('emits the selected quick action and closes the panel', async () => {

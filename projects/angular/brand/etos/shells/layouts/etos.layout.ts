@@ -15,21 +15,13 @@ import { VerticalLayout } from './vertical/vertical';
   template: `
     @switch (resolvedMode()) {
       @case ('empty') {
-        <empty>
-          <ng-content select="[ui-layout-empty],[ui-layout-empty-controls],[etos-layout-empty-controls]" />
-        </empty>
+        <empty />
       }
       @case ('horizontal') {
-        <horizontal>
-          <ng-content select="[ui-layout-brand],[ui-topbar-start]" />
-          <ng-content select="[ui-layout-profile],[ui-topbar-end]" />
-        </horizontal>
+        <horizontal />
       }
       @default {
-        <vertical>
-          <ng-content select="[ui-sidebar-header]" />
-          <ng-content select="[ui-sidebar-footer]" />
-        </vertical>
+        <vertical />
       }
     }
   `,

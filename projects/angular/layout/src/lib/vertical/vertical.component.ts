@@ -34,12 +34,7 @@ import { LayoutService } from '../core/layout.service';
   },
   template: `
     <div [class]="frameClasses()" [style.border-width]="shellBorderWidth()">
-      <ui-sidebar
-        [appearance]="sidebarAppearance()"
-        [position]="sidebarPosition()"
-        [ariaLabel]="ariaLabel()"
-        [style.border-left-width]="dividerBorderWidth()"
-        [style.border-right-width]="dividerBorderWidth()" />
+      <ui-sidebar [appearance]="sidebarAppearance()" [position]="sidebarPosition()" [ariaLabel]="ariaLabel()" />
       <main [class]="mainClasses()">
         <router-outlet />
       </main>
@@ -57,12 +52,13 @@ export class VerticalLayoutComponent {
 
   protected readonly layoutWidth = this.layout.width;
   protected readonly themeStyle = this.theme.style;
-  protected readonly shellBorderWidth = computed(() => (this.layoutWidth() === 'fixed' ? 'var(--border-width)' : null));
-  protected readonly dividerBorderWidth = computed(() => 'var(--border-width)');
+  protected readonly isConstrainedWidth = computed(() => this.layoutWidth() !== 'full');
+  protected readonly isWideWidth = computed(() => this.layoutWidth() === 'wide');
+  protected readonly shellBorderWidth = computed(() => (this.isConstrainedWidth() ? 'var(--border-width)' : null));
 
   protected readonly hostClasses = computed(() => {
     const classes = ['block', 'h-dvh', 'w-full', 'overflow-hidden', 'bg-background', 'text-foreground'];
-    if (this.layoutWidth() === 'fixed') {
+    if (this.isConstrainedWidth()) {
       classes.push('box-border', 'lg:p-8');
     }
     return classes.join(' ');
@@ -70,10 +66,10 @@ export class VerticalLayoutComponent {
 
   protected readonly frameClasses = computed(() => {
     const classes = ['flex', 'h-full', 'w-full', 'overflow-hidden'];
-    if (this.layoutWidth() === 'fixed') {
+    if (this.isConstrainedWidth()) {
       classes.push(
         'lg:mx-auto',
-        'lg:max-w-[97.5rem]',
+        this.isWideWidth() ? 'lg:max-w-[calc(17.5rem+96rem)]' : 'lg:max-w-[calc(17.5rem+80rem)]',
         'lg:border',
         'lg:border-border',
         'lg:rounded-lg',
@@ -85,8 +81,10 @@ export class VerticalLayoutComponent {
 
   protected readonly mainClasses = computed(() => {
     const classes = ['min-w-0', 'flex-1', 'overflow-auto'];
-    if (this.layoutWidth() === 'fixed') {
+    if (this.layoutWidth() === 'container') {
       classes.push('w-full', 'max-w-7xl');
+    } else if (this.isWideWidth()) {
+      classes.push('w-full', 'max-w-screen-2xl');
     }
     return classes.join(' ');
   });

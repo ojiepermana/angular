@@ -30,7 +30,7 @@ describe('VerticalLayoutComponent', () => {
     document.documentElement.removeAttribute('theme-style');
   });
 
-  it('constrains the main area when layout width is fixed', () => {
+  it('constrains the main area when layout width is container', () => {
     TestBed.configureTestingModule({
       providers: [provideRouter([])],
     });
@@ -44,12 +44,10 @@ describe('VerticalLayoutComponent', () => {
     const main = root.querySelector('main');
     const sidebar = root.querySelector('ui-sidebar') as HTMLElement | null;
 
-    expect(host?.getAttribute('data-layout-width')).toBe('fixed');
+    expect(host?.getAttribute('data-layout-width')).toBe('container');
     expect(host?.getAttribute('data-style')).toBe('default');
     expect(host?.style.borderWidth).toBe('');
     expect(frame?.style.borderWidth).toBe('var(--border-width)');
-    expect(sidebar?.style.borderLeftWidth).toBe('var(--border-width)');
-    expect(sidebar?.style.borderRightWidth).toBe('var(--border-width)');
     expect(host?.classList.contains('block')).toBe(true);
     expect(host?.classList.contains('h-dvh')).toBe(true);
     expect(host?.classList.contains('w-full')).toBe(true);
@@ -75,7 +73,7 @@ describe('VerticalLayoutComponent', () => {
     expect(frame?.classList.contains('w-full')).toBe(true);
     expect(frame?.classList.contains('overflow-hidden')).toBe(true);
     expect(frame?.classList.contains('lg:mx-auto')).toBe(true);
-    expect(frame?.classList.contains('lg:max-w-[97.5rem]')).toBe(true);
+    expect(frame?.classList.contains('lg:max-w-[calc(17.5rem+80rem)]')).toBe(true);
     expect(frame?.classList.contains('lg:border')).toBe(true);
     expect(frame?.classList.contains('lg:border-border')).toBe(true);
     expect(frame?.classList.contains('lg:rounded-lg')).toBe(true);
@@ -90,7 +88,7 @@ describe('VerticalLayoutComponent', () => {
     expect(main?.classList.contains('lg:max-w-7xl')).toBe(false);
   });
 
-  it('keeps fixed shell spacing on host padding instead of outer margins', () => {
+  it('keeps container shell spacing on host padding instead of outer margins', () => {
     TestBed.configureTestingModule({
       providers: [provideRouter([])],
     });
@@ -128,8 +126,6 @@ describe('VerticalLayoutComponent', () => {
     expect(host?.getAttribute('data-style')).toBe('default');
     expect(host?.style.borderWidth).toBe('');
     expect(frame?.style.borderWidth).toBe('');
-    expect(sidebar?.style.borderLeftWidth).toBe('var(--border-width)');
-    expect(sidebar?.style.borderRightWidth).toBe('var(--border-width)');
     expect(host?.classList.contains('border')).toBe(false);
     expect(host?.classList.contains('border-border')).toBe(false);
     expect(host?.classList.contains('md:border')).toBe(false);
@@ -155,6 +151,31 @@ describe('VerticalLayoutComponent', () => {
     expect(frame?.classList.contains('lg:border-border')).toBe(false);
     expect(frame?.classList.contains('lg:rounded-lg')).toBe(false);
     expect(frame?.classList.contains('lg:shadow-sm')).toBe(false);
+  });
+
+  it('uses a wider constrained main area when configured for wide width', () => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([]), { provide: MATERIAL_LAYOUT_CONFIG, useValue: { width: 'wide' } }],
+    });
+
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    const root = fixture.nativeElement as HTMLElement;
+    const host = root.querySelector('vertical') as HTMLElement | null;
+    const frame = host?.firstElementChild as HTMLElement | null;
+    const main = root.querySelector('main');
+
+    expect(host?.getAttribute('data-layout-width')).toBe('wide');
+    expect(frame?.style.borderWidth).toBe('var(--border-width)');
+    expect(host?.classList.contains('box-border')).toBe(true);
+    expect(host?.classList.contains('lg:p-8')).toBe(true);
+    expect(frame?.classList.contains('lg:mx-auto')).toBe(true);
+    expect(frame?.classList.contains('lg:max-w-[calc(17.5rem+96rem)]')).toBe(true);
+    expect(frame?.classList.contains('lg:max-w-[calc(17.5rem+80rem)]')).toBe(false);
+    expect(main?.classList.contains('w-full')).toBe(true);
+    expect(main?.classList.contains('max-w-screen-2xl')).toBe(true);
+    expect(main?.classList.contains('max-w-7xl')).toBe(false);
   });
 
   it('reflects the active theme style on the host', () => {

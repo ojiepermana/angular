@@ -32,9 +32,9 @@ import type {
         <div class="flex-1"></div>
       }
       @case ('group') {
-        <div class="p-3" role="group" [attr.aria-labelledby]="headingId()">
+        <div role="group" [attr.aria-labelledby]="headingId()">
           @if (!compact()) {
-            <div class="sticky top-0 z-10 bg-background py-3 text-muted-foreground">
+            <div class="sticky top-0 z-10  p-3 text-muted-foreground backdrop-blur-3xl bg-transparent">
               <div [id]="headingId()" [class]="cn('ui-nav-heading text-muted-foreground', item().classes?.title)">
                 {{ item().title }}
               </div>
