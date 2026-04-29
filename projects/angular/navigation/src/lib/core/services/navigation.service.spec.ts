@@ -27,16 +27,39 @@ describe('NavigationService', () => {
   let service: NavigationService;
 
   beforeEach(() => {
+    localStorage.clear();
     TestBed.configureTestingModule({ providers: [provideRouter([])] });
     service = TestBed.inject(NavigationService);
   });
 
-  it('toggles collapsed state', () => {
+  it('defaults sidebar appearance to default', () => {
+    expect(service.sidebarAppearance()).toBe('default');
     expect(service.collapsed()).toBe(false);
-    service.toggleCollapsed();
+  });
+
+  it('toggles sidebar appearance and persists it', () => {
+    service.toggleSidebarAppearance();
+
+    expect(service.sidebarAppearance()).toBe('thin');
     expect(service.collapsed()).toBe(true);
-    service.setCollapsed(false);
+    expect(localStorage.getItem('sidebar-appearance')).toBe('thin');
+
+    service.setSidebarAppearance('default');
+
+    expect(service.sidebarAppearance()).toBe('default');
     expect(service.collapsed()).toBe(false);
+    expect(localStorage.getItem('sidebar-appearance')).toBe('default');
+  });
+
+  it('reads persisted sidebar appearance from localStorage', () => {
+    localStorage.setItem('sidebar-appearance', 'thin');
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
+
+    service = TestBed.inject(NavigationService);
+
+    expect(service.sidebarAppearance()).toBe('thin');
+    expect(service.collapsed()).toBe(true);
   });
 
   it('toggles group open state', () => {

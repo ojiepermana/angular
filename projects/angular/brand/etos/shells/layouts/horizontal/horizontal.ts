@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input, type TemplateRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'horizontal',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet],
+  imports: [NgTemplateOutlet, RouterOutlet],
   host: { class: 'block' },
   template: `
     <div
@@ -21,7 +22,18 @@ import { RouterOutlet } from '@angular/router';
           <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 z-20 h-px bg-brand"></div>
           <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-px bg-brand"></div>
           <div class="relative z-10 mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-xl flex-col bg-white/56">
-            <header class="flex h-11 shrink-0 items-center">Header</header>
+            <header class="flex h-11 shrink-0 items-center justify-between gap-3 px-3">
+              <div class="min-w-0 flex items-center">
+                @if (brandTemplate(); as template) {
+                  <ng-container [ngTemplateOutlet]="template" />
+                }
+              </div>
+              <div class="min-w-0 flex items-center justify-end">
+                @if (profileTemplate(); as template) {
+                  <ng-container [ngTemplateOutlet]="template" />
+                }
+              </div>
+            </header>
             <main class="flex-1">
               <router-outlet></router-outlet>
             </main>
@@ -33,4 +45,7 @@ import { RouterOutlet } from '@angular/router';
   `,
   styles: ``,
 })
-export class HorizontalLayout {}
+export class HorizontalLayout {
+  readonly brandTemplate = input<TemplateRef<unknown> | null>(null);
+  readonly profileTemplate = input<TemplateRef<unknown> | null>(null);
+}

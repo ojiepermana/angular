@@ -18,6 +18,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { FocusTrap, FocusTrapFactory } from '@angular/cdk/a11y';
 import { filter, map } from 'rxjs/operators';
+import { UiNavIconComponent } from '../shared/nav-icon.component';
 import { UiNavItemComponent } from '../shared/nav-item.component';
 import { NavigationService, DEFAULT_NAVIGATION_ID } from '../../core/services/navigation.service';
 import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../core/types/navigation.type';
@@ -36,12 +37,12 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
 @Component({
   selector: 'ui-sidebar',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, UiNavItemComponent],
+  imports: [NgTemplateOutlet, UiNavIconComponent, UiNavItemComponent],
   host: {
     role: 'navigation',
     '[attr.aria-label]': 'ariaLabel()',
     '[class]': 'hostClasses()',
-    '[attr.data-appearance]': 'appearance()',
+    '[attr.data-appearance]': 'resolvedAppearance()',
     '[attr.data-position]': 'position()',
     '[attr.data-expanded]': 'isExpanded()',
     '[hidden]': 'isMobile()',
@@ -57,17 +58,33 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
 
     <ng-template #body>
       @if (header()) {
-        <div class="flex h-12 items-center gap-2 border-b border-brand">
-          <ng-content select="[ui-sidebar-header]" />
+        <div [class]="headerClasses()">
+          <div [class]="headerSlotClasses()">
+            <ng-content select="[ui-sidebar-header]" />
+          </div>
+          @if (!isMobile() && !isCompact()) {
+            <button
+              type="button"
+              data-sidebar-toggle
+              class="ml-auto mr-2 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              [attr.aria-label]="toggleButtonLabel()"
+              [attr.title]="toggleButtonLabel()"
+              [attr.aria-pressed]="resolvedAppearance() === 'thin'"
+              (click)="toggleAppearance($event)">
+              <ui-nav-icon name="view_sidebar" [size]="18" class="text-current" />
+            </button>
+          }
         </div>
       }
-      <nav class="flex-1 overflow-y-auto overflow-x-hidden">
+      <nav [class]="navClasses()">
         @for (item of resolvedItems(); track item.id) {
           <ui-nav-item [item]="item" [compact]="isCompact()" />
         }
       </nav>
-      <div class="border-t border-brand h-12">
-        <ng-content select="[ui-sidebar-footer]" />
+      <div [class]="footerClasses()">
+        <div [class]="footerSlotClasses()">
+          <ng-content select="[ui-sidebar-footer]" />
+        </div>
       </div>
     </ng-template>
 
@@ -113,6 +130,7 @@ export class SidebarComponent {
   });
 
   private readonly hovered = signal<boolean>(false);
+  private readonly suppressHoverUntilLeave = signal<boolean>(false);
 
   private readonly drawerTpl = viewChild.required<TemplateRef<unknown>>('drawerTpl');
   private drawerRef: OverlayRef | null = null;
@@ -125,9 +143,21 @@ export class SidebarComponent {
   });
 
   protected readonly isMobile = computed(() => this.autoMobile() && this.isMobileMedia());
+  protected readonly resolvedAppearance = computed<SidebarAppearance>(() => {
+    if (this.nav.hasStoredSidebarAppearance()) {
+      return this.nav.sidebarAppearance();
+    }
 
-  protected readonly isExpanded = computed(() => this.appearance() === 'default' || this.hovered());
-  protected readonly isCompact = computed(() => !this.isMobile() && this.appearance() === 'thin' && !this.hovered());
+    return this.appearance();
+  });
+  protected readonly hoverActive = computed(() => this.hovered() && !this.suppressHoverUntilLeave());
+  protected readonly isExpanded = computed(() => this.resolvedAppearance() === 'default' || this.hoverActive());
+  protected readonly isCompact = computed(
+    () => !this.isMobile() && this.resolvedAppearance() === 'thin' && !this.hoverActive(),
+  );
+  protected readonly toggleButtonLabel = computed(() =>
+    this.resolvedAppearance() === 'thin' ? 'Expand sidebar' : 'Collapse sidebar',
+  );
 
   constructor() {
     // Auto-register items ke service untuk active trail (hanya jika input non-kosong).
@@ -149,20 +179,88 @@ export class SidebarComponent {
 
   protected readonly hostClasses = computed(() => {
     const base = ['relative flex shrink-0 text-foreground', 'transition-[width] duration-200 ease-out'];
-    const appearance = this.appearance();
+    const appearance = this.resolvedAppearance();
     if (appearance === 'thin') base.push('w-16');
     else base.push('[width:17.5rem]');
     if (this.position() === 'right') base.push('border-l', 'border-brand');
     return [...base, this.class()].join(' ');
   });
 
+  protected readonly headerClasses = computed(() => {
+    const base = ['flex h-12 items-center gap-2 border-b border-brand'];
+    if (this.isCompact()) {
+      base.push('justify-center px-2');
+    }
+    return base.join(' ');
+  });
+
+  protected readonly headerSlotClasses = computed(() => {
+    const base = ['min-w-0'];
+    if (this.isCompact()) {
+      base.push(
+        'flex flex-1 items-center justify-center overflow-hidden',
+        '[&>[ui-sidebar-header]>*]:mx-auto',
+        '[&>[ui-sidebar-header]>*]:max-w-full',
+        '[&>[ui-sidebar-header]>*]:shrink-0',
+      );
+    } else {
+      base.push('flex min-w-0 flex-1 items-center');
+    }
+    return base.join(' ');
+  });
+
+  protected readonly navClasses = computed(() => {
+    const base = ['flex-1 overflow-y-auto overflow-x-hidden'];
+    if (this.isCompact()) {
+      base.push(
+        'px-2',
+        '[&_.ui-nav-text]:mx-auto',
+        '[&_.ui-nav-text]:w-10',
+        '[&_.ui-nav-text]:justify-center',
+        '[&_.ui-nav-text]:px-0',
+      );
+    }
+    return base.join(' ');
+  });
+
+  protected readonly footerClasses = computed(() => {
+    const base = ['h-12 border-t border-brand'];
+    if (this.isCompact()) {
+      base.push('flex items-center justify-center px-2');
+    }
+    return base.join(' ');
+  });
+
+  protected readonly footerSlotClasses = computed(() => {
+    const base = ['h-full'];
+    if (this.isCompact()) {
+      base.push(
+        'flex h-full items-center justify-center overflow-hidden',
+        '[&>[ui-sidebar-footer]>*]:mx-auto',
+        '[&>[ui-sidebar-footer]>*]:w-auto',
+        '[&>[ui-sidebar-footer]>*]:max-w-full',
+        '[&>[ui-sidebar-footer]>*]:justify-center',
+        '[&>[ui-sidebar-footer]>*]:gap-0',
+        '[&>[ui-sidebar-footer]>*]:px-0',
+        '[&>[ui-sidebar-footer]>*>*:first-child]:mx-auto',
+        '[&>[ui-sidebar-footer]>*>*:nth-child(n+2)]:hidden',
+      );
+    } else {
+      base.push('w-full');
+    }
+    return base.join(' ');
+  });
+
   protected readonly innerClasses = computed(() => {
-    const overlayActive = this.appearance() === 'thin' && this.hovered();
+    const overlayActive = this.resolvedAppearance() === 'thin' && this.hoverActive();
     const base = ['flex h-full flex-col transition-[width] duration-200 ease-out'];
+    if (this.resolvedAppearance() === 'thin') {
+      base.push('bg-background');
+    }
     if (overlayActive) {
       base.push(
         'absolute inset-y-0 z-30 shadow-xl [width:17.5rem]',
-        this.position() === 'right' ? 'right-0 border-l border-brand' : 'left-0',
+        this.position() === 'right' ? 'right-0 border-l border-brand' : 'left-0 border-r border-brand',
       );
     } else {
       base.push('w-full');
@@ -171,16 +269,26 @@ export class SidebarComponent {
   });
 
   protected onHoverEnter(): void {
-    if (this.appearance() === 'thin' && !this.isMobile()) this.hovered.set(true);
+    if (this.resolvedAppearance() !== 'thin' || this.isMobile() || this.suppressHoverUntilLeave()) return;
+    this.hovered.set(true);
   }
 
   protected onHoverLeave(): void {
-    if (this.appearance() === 'thin') this.hovered.set(false);
+    this.suppressHoverUntilLeave.set(false);
+    if (this.resolvedAppearance() === 'thin') this.hovered.set(false);
+  }
+
+  protected toggleAppearance(event: MouseEvent): void {
+    event.stopPropagation();
+    const nextAppearance = this.resolvedAppearance() === 'thin' ? 'default' : 'thin';
+    this.nav.setSidebarAppearance(nextAppearance);
+    this.hovered.set(false);
+    this.suppressHoverUntilLeave.set(nextAppearance === 'thin');
   }
 
   /** Touch fallback: tap pada strip thin (ketika belum expanded) untuk expand. */
   protected onHostClick(event: MouseEvent): void {
-    if (this.appearance() !== 'thin' || this.isMobile()) return;
+    if (this.resolvedAppearance() !== 'thin' || this.isMobile()) return;
     if (this.hovered()) return;
     const target = event.target as HTMLElement | null;
     // Biarkan klik pada control interaktif terus propagate (tidak intercept).

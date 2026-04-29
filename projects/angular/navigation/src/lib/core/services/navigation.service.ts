@@ -1,12 +1,18 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
 import { DestroyRef } from '@angular/core';
-import type { NavigationItem } from '../types/navigation.type';
+import type { NavigationItem, SidebarAppearance } from '../types/navigation.type';
 
 /** Default registry key used when no id is specified. */
 export const DEFAULT_NAVIGATION_ID = 'main';
+const SIDEBAR_APPEARANCE_STORAGE_KEY = 'sidebar-appearance';
+
+function isSidebarAppearance(value: string | null | undefined): value is SidebarAppearance {
+  return value === 'default' || value === 'thin';
+}
 
 /**
  * Signal-based global state untuk navigation (sidebar/topbar).
@@ -16,14 +22,18 @@ export const DEFAULT_NAVIGATION_ID = 'main';
  */
 @Injectable({ providedIn: 'root' })
 export class NavigationService {
+  private readonly doc = inject(DOCUMENT);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly persistedSidebarAppearance = this.readPersistedSidebarAppearance();
 
   /** Internal version counter — incremented on every registry mutation. */
   private readonly _version = signal(0);
 
   /** Internal map of registered navigation trees. */
   private readonly _registry = new Map<string, NavigationItem[]>();
+  private readonly _sidebarAppearance = signal<SidebarAppearance>(this.persistedSidebarAppearance ?? 'default');
+  private readonly _hasStoredSidebarAppearance = signal(this.persistedSidebarAppearance !== null);
 
   /**
    * Backward-compatible accessor — returns items for the default (`'main'`) key.
@@ -31,8 +41,12 @@ export class NavigationService {
    */
   readonly items = computed(() => this.getItems(DEFAULT_NAVIGATION_ID)());
 
+  /** Sidebar appearance preference (`default` or `thin`). */
+  readonly sidebarAppearance = this._sidebarAppearance.asReadonly();
+  readonly hasStoredSidebarAppearance = this._hasStoredSidebarAppearance.asReadonly();
+
   /** Sidebar collapsed (default ↔ thin) toggle untuk desktop. */
-  readonly collapsed = signal<boolean>(false);
+  readonly collapsed = computed(() => this._sidebarAppearance() === 'thin');
 
   /** Sheet drawer terbuka di mobile. */
   readonly mobileOpen = signal<boolean>(false);
@@ -75,6 +89,14 @@ export class NavigationService {
   });
 
   constructor() {
+    effect(() => {
+      if (!this._hasStoredSidebarAppearance()) {
+        return;
+      }
+
+      this.persistSidebarAppearance(this._sidebarAppearance());
+    });
+
     this.router.events
       .pipe(
         filter((e): e is NavigationEnd => e instanceof NavigationEnd),
@@ -115,13 +137,22 @@ export class NavigationService {
     });
   }
 
+  setSidebarAppearance(value: SidebarAppearance): void {
+    this._sidebarAppearance.set(value);
+    this._hasStoredSidebarAppearance.set(true);
+  }
+
+  toggleSidebarAppearance(currentAppearance: SidebarAppearance = this._sidebarAppearance()): void {
+    this.setSidebarAppearance(currentAppearance === 'thin' ? 'default' : 'thin');
+  }
+
   /** Toggle sidebar collapsed (default ↔ thin). */
   toggleCollapsed(): void {
-    this.collapsed.update((v) => !v);
+    this.toggleSidebarAppearance();
   }
 
   setCollapsed(value: boolean): void {
-    this.collapsed.set(value);
+    this.setSidebarAppearance(value ? 'thin' : 'default');
   }
 
   openMobile(): void {
@@ -157,5 +188,22 @@ export class NavigationService {
   /** Apakah id termasuk dalam active trail saat ini. */
   isActive(id: string | undefined): boolean {
     return !!id && this.activeTrail().has(id);
+  }
+
+  private readPersistedSidebarAppearance(): SidebarAppearance | null {
+    try {
+      const value = this.doc.defaultView?.localStorage?.getItem(SIDEBAR_APPEARANCE_STORAGE_KEY);
+      return isSidebarAppearance(value) ? value : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private persistSidebarAppearance(value: SidebarAppearance): void {
+    try {
+      this.doc.defaultView?.localStorage?.setItem(SIDEBAR_APPEARANCE_STORAGE_KEY, value);
+    } catch {
+      /* ignore */
+    }
   }
 }
