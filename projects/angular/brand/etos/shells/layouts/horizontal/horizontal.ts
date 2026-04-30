@@ -80,9 +80,9 @@ export class HorizontalLayout {
     if (this.layoutWidth() === 'full') {
       classes.push('px-3');
     } else if (this.layoutWidth() === 'wide') {
-      classes.push('px-3', 'lg:px-15');
+      classes.push('px-3', 'lg:px-10');
     } else {
-      classes.push('px-3', 'lg:px-15');
+      classes.push('px-3', 'lg:px-10');
     }
     return classes.join(' ');
   });
@@ -96,9 +96,9 @@ export class HorizontalLayout {
     if (this.layoutWidth() === 'full') {
       classes.push('px-3');
     } else if (this.layoutWidth() === 'wide') {
-      classes.push('px-3', 'lg:px-15');
+      classes.push('px-3', 'lg:px-10');
     } else {
-      classes.push('px-3', 'lg:px-15');
+      classes.push('px-3', 'lg:px-10');
     }
     return classes.join(' ');
   });

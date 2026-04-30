@@ -98,7 +98,7 @@ export class VerticalLayout {
       case 'full':
         return 'relative mx-auto grid h-full w-fit max-w-full grid-cols-[auto_minmax(0,100rem)] items-stretch bg-background/65';
       case 'wide':
-        return 'relative mx-auto grid h-full w-fit max-w-full grid-cols-[auto_minmax(0,100rem)] items-stretch bg-background/65  lg:grid-cols-[auto_minmax(0,95rem)]';
+        return 'relative mx-auto grid h-full w-fit max-w-full grid-cols-[auto_minmax(0,100rem)] items-stretch bg-background/65  lg:grid-cols-[auto_minmax(0,96rem)]';
       default:
         return 'relative mx-auto grid h-full w-fit max-w-full grid-cols-[auto_minmax(0,100rem)] items-stretch bg-background/65  lg:grid-cols-[auto_minmax(0,80rem)]';
     }
