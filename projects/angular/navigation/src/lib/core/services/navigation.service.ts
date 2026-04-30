@@ -21,7 +21,7 @@ function parseSidebarCollapsed(value: string | null | undefined): boolean | null
  * Signal-based global state untuk navigation (sidebar/topbar).
  *
  * Items disimpan dalam registry ber-key. Key default adalah `'main'`.
- * Komponen `sidebar` / `ui-topbar` memilih registry via input `navigationId`.
+ * Komponen `sidebar` / `topbar` memilih registry via input `navigationId`.
  */
 @Injectable({ providedIn: 'root' })
 export class NavigationService {

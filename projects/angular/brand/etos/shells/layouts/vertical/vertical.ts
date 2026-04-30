@@ -14,8 +14,8 @@ import { LayoutService } from '@ojiepermana/angular/layout';
     '[attr.data-layout-width]': 'layoutWidth()',
   },
   template: `
-    <div
-      class="h-full overflow-hidden bg-neutral-200   bg-[linear-gradient(rgba(212,212,212,0.65)_1px,transparent_1px),linear-gradient(to_right,rgba(212,212,212,0.65)_1px,transparent_1px)] bg-position-[center_center] bg-size-[2.775rem_2.775rem]">
+    <!-- prettier-ignore -->
+    <div class="h-full overflow-hidden bg-neutral-200   bg-[linear-gradient(rgba(212,212,212,0.65)_1px,transparent_1px),linear-gradient(to_right,rgba(212,212,212,0.65)_1px,transparent_1px)] bg-position-[center_center] bg-size-[2.775rem_2.775rem]">
       <div [class]="shellClasses()">
         <div class="-mx-18 relative h-full border-y border-brand">
           <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 inset-y-8">
@@ -55,7 +55,7 @@ import { LayoutService } from '@ojiepermana/angular/layout';
                 <router-outlet />
                 <div class="pointer-events-none absolute right-4 top-4 z-30">
                   <div
-                    class="inline-flex min-w-20 items-center justify-center rounded-full border border-brand bg-whhite/85 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-foreground shadow-sm backdrop-blur-sm"
+                    class="inline-flex min-w-20 items-center justify-center rounded-full border border-brand bg-white/85 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-foreground shadow-sm backdrop-blur-sm"
                     aria-label="Current breakpoint identifier">
                     <span class="sm:hidden">mobile</span>
                     <span class="hidden sm:inline md:hidden">sm</span>

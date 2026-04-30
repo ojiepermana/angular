@@ -38,7 +38,7 @@ import {
       </div>
     </ng-template>
 
-    <etos-layout [sidebarFooterTemplate]="layoutPanel" [layoutBrandTemplate]="layoutBrand" />
+    <etos-layout [layoutBrandTemplate]="layoutBrand" [layoutProfileTemplate]="layoutPanel" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

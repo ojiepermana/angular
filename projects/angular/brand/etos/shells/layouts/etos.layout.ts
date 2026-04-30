@@ -23,7 +23,7 @@ import { VerticalLayout } from './vertical/vertical';
       @default {
         <vertical
           [sidebarHeaderTemplate]="sidebarHeaderTemplate() ?? layoutBrandTemplate()"
-          [sidebarFooterTemplate]="sidebarFooterTemplate()" />
+          [sidebarFooterTemplate]="sidebarFooterTemplate() ?? layoutProfileTemplate()" />
       }
     }
   `,

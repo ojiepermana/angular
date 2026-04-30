@@ -22,34 +22,20 @@ const items: NavigationItem[] = [
     title: 'Library',
     children: [{ id: 'c', type: 'basic', title: 'C', link: '/c' }],
   },
-  {
-    id: 'solutions',
-    type: 'mega',
-    title: 'Solutions',
-    columns: 3,
-    children: [
-      {
-        id: 'col-1',
-        type: 'group',
-        title: 'Column 1',
-        children: [{ id: 's1', type: 'basic', title: 'Item 1', link: '/s1' }],
-      },
-    ],
-  },
 ];
 
 @Component({
   imports: [TopbarComponent],
   template: `
-    <ui-topbar [items]="items" [appearance]="appearance">
-      <a ui-topbar-start href="/brand">Brand</a>
-      <button ui-topbar-end type="button">Profile</button>
-    </ui-topbar>
+    <topbar [items]="items" [appearance]="appearance">
+      <a topbar-start href="/brand">Brand</a>
+      <button topbar-end type="button">Profile</button>
+    </topbar>
   `,
 })
 class Host {
   items = items;
-  appearance: 'default' | 'megamenu' = 'megamenu';
+  appearance: 'default' = 'default';
 }
 
 describe('TopbarComponent', () => {
@@ -68,7 +54,7 @@ describe('TopbarComponent', () => {
     const menubar = el.querySelector('[role="menubar"]');
     expect(menubar).toBeTruthy();
     const items = Array.from(el.querySelectorAll('[role="menuitem"]'));
-    expect(items.length).toBe(4);
+    expect(items.length).toBe(3);
     expect(items.every((item) => !item.className.includes('text-sm'))).toBe(true);
     expect(items.every((item) => item.className.includes('ui-nav-text'))).toBe(true);
   });
@@ -77,17 +63,17 @@ describe('TopbarComponent', () => {
     const fixture = setup();
     const el: HTMLElement = fixture.nativeElement;
 
-    expect(el.querySelector('[data-ui-topbar-slot="start"]')?.textContent).toContain('Brand');
-    expect(el.querySelector('[data-ui-topbar-slot="nav"] [role="menubar"]')).toBeTruthy();
-    expect(el.querySelector('[data-ui-topbar-slot="end"]')?.textContent).toContain('Profile');
+    expect(el.querySelector('[data-topbar-slot="start"]')?.textContent).toContain('Brand');
+    expect(el.querySelector('[data-topbar-slot="nav"] [role="menubar"]')).toBeTruthy();
+    expect(el.querySelector('[data-topbar-slot="end"]')?.textContent).toContain('Profile');
   });
 
-  it('uses the theme topbar height token', () => {
+  it('uses the h-11 topbar height', () => {
     const fixture = setup();
-    const topbar = (fixture.nativeElement as HTMLElement).querySelector('ui-topbar') as HTMLElement | null;
+    const topbar = (fixture.nativeElement as HTMLElement).querySelector('topbar') as HTMLElement | null;
     const inner = topbar?.firstElementChild as HTMLElement | null;
 
-    expect(topbar?.style.height).toBe('var(--layout-topbar-height)');
+    expect(topbar?.classList.contains('h-11')).toBe(true);
     expect(inner?.classList.contains('h-full')).toBe(true);
     expect(inner?.classList.contains('h-14')).toBe(false);
   });
@@ -102,19 +88,6 @@ describe('TopbarComponent', () => {
     await fixture.whenStable();
     expect(productsTrigger.getAttribute('aria-expanded')).toBe('true');
     const panel = document.querySelector('.ui-dropdown-panel');
-    expect(panel).toBeTruthy();
-  });
-
-  it('opens mega overlay with columns', async () => {
-    const fixture = setup();
-    const el: HTMLElement = fixture.nativeElement;
-    const triggers = el.querySelectorAll('button[role="menuitem"]');
-    const megaTrigger = triggers[2] as HTMLButtonElement;
-    megaTrigger.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-    expect(megaTrigger.getAttribute('aria-expanded')).toBe('true');
-    const panel = document.querySelector('.ui-mega-panel');
     expect(panel).toBeTruthy();
   });
 

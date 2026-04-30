@@ -29,18 +29,18 @@ import { LayoutService } from '../core/layout.service';
   },
   template: `
     <div [class]="frameClasses()" [style.border-width]="shellBorderWidth()">
-      <ui-topbar
+      <topbar
         class="w-full shrink-0 border-b border-border"
         [style.border-bottom-width]="dividerBorderWidth()"
         [appearance]="topbarAppearance()"
         [ariaLabel]="ariaLabel()">
-        <div ui-topbar-start class="flex min-w-0 items-center">
-          <ng-content select="[ui-layout-brand],[ui-topbar-start]" />
+        <div topbar-start class="flex min-w-0 items-center">
+          <ng-content select="[ui-layout-brand],[topbar-start]" />
         </div>
-        <div ui-topbar-end class="flex min-w-0 items-center">
-          <ng-content select="[ui-layout-profile],[ui-topbar-end]" />
+        <div topbar-end class="flex min-w-0 items-center">
+          <ng-content select="[ui-layout-profile],[topbar-end]" />
         </div>
-      </ui-topbar>
+      </topbar>
       <main [class]="mainClasses()">
         <router-outlet />
       </main>

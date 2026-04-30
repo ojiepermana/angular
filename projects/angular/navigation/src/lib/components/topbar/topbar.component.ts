@@ -26,7 +26,6 @@ import type {
   NavigationCollapsableItem,
   NavigationGroupItem,
   NavigationItem,
-  NavigationMegaItem,
   TopbarAppearance,
 } from '../../core/types/navigation.type';
 
@@ -37,13 +36,9 @@ interface ActiveOverlay {
 
 /**
  * Horizontal navigation (topbar) — shadcn-styled.
- *
- * Variants:
- * - `default`: horizontal list; item `collapsable` buka dropdown
- * - `megamenu`: item `mega` buka panel full-width multi-kolom
  */
 @Component({
-  selector: 'ui-topbar',
+  selector: 'topbar',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, RouterLinkActive, UiNavIconComponent, UiNavItemComponent],
   host: {
@@ -51,11 +46,10 @@ interface ActiveOverlay {
     '[attr.aria-label]': 'ariaLabel()',
     '[class]': 'hostClasses()',
     '[attr.data-appearance]': 'appearance()',
-    '[style.height]': 'topbarHeight',
   },
   template: `
-    <div class="flex h-full w-full items-center gap-3 px-1">
-      <div data-ui-topbar-slot="start" class="flex shrink-0 items-center gap-2">
+    <div class="flex h-full w-full items-center gap-3 px-1 ">
+      <div data-topbar-slot="start" class="flex shrink-0 items-center gap-2">
         @if (showHamburger()) {
           <button
             type="button"
@@ -66,10 +60,10 @@ interface ActiveOverlay {
             <ui-nav-icon name="menu" [size]="18" />
           </button>
         }
-        <ng-content select="[ui-topbar-start]" />
+        <ng-content select="[topbar-start]" />
       </div>
 
-      <div data-ui-topbar-slot="nav" class="flex min-w-0 flex-1 items-center justify-center">
+      <div data-topbar-slot="nav" class="flex min-w-0 flex-1 items-center justify-center">
         <ul
           class="flex min-w-0 flex-1 items-center justify-center gap-1"
           role="menubar"
@@ -132,25 +126,6 @@ interface ActiveOverlay {
                     <ui-nav-icon name="expand_more" [size]="18" />
                   </button>
                 }
-                @case ('mega') {
-                  @let mega = asMega(item);
-                  <button
-                    #trigger
-                    type="button"
-                    role="menuitem"
-                    class="ui-nav-text inline-flex items-center gap-2 rounded-md px-3 py-2 text-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    [class.text-primary]="isItemActive(mega.id)"
-                    [attr.aria-expanded]="openId() === mega.id"
-                    [attr.aria-haspopup]="'menu'"
-                    (click)="toggleMega(trigger, item)"
-                    (mouseenter)="openMega(trigger, item)">
-                    @if (mega.icon) {
-                      <ui-nav-icon [name]="mega.icon" [size]="18" />
-                    }
-                    <span>{{ mega.title }}</span>
-                    <ui-nav-icon name="expand_more" [size]="18" />
-                  </button>
-                }
                 @default {
                   <span class="ui-nav-heading px-3 py-2 text-muted-foreground">
                     {{ item.title }}
@@ -162,43 +137,17 @@ interface ActiveOverlay {
         </ul>
       </div>
 
-      <div data-ui-topbar-slot="end" class="flex shrink-0 items-center justify-end gap-2">
-        <ng-content select="[ui-topbar-end]" />
+      <div data-topbar-slot="end" [class]="endSlotClasses()">
+        <ng-content select="[topbar-end]" />
       </div>
     </div>
 
     <!-- Dropdown template -->
     <ng-template #dropdownTpl let-item>
-      <div
-        role="menu"
-        class="min-w-56 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md"
-        (keydown)="onPanelKeydown($event)">
+      <div role="menu" class="min-w-56 border border-brand bg-background/95 p-1" (keydown)="onPanelKeydown($event)">
         @for (child of item.children; track child.id) {
           <ui-nav-item [item]="child" />
         }
-      </div>
-    </ng-template>
-
-    <!-- Mega panel template -->
-    <ng-template #megaTpl let-item>
-      <div
-        role="menu"
-        class="w-screen max-w-[min(90vw,72rem)] rounded-md border border-border bg-popover p-6 text-popover-foreground shadow-lg"
-        (keydown)="onPanelKeydown($event)">
-        <div [class]="megaGridClasses(item.columns)">
-          @for (col of item.children; track col.id) {
-            <div>
-              <div class="ui-nav-heading mb-2 text-muted-foreground">
-                {{ col.title }}
-              </div>
-              <div class="flex flex-col gap-0.5">
-                @for (leaf of col.children ?? []; track leaf.id) {
-                  <ui-nav-item [item]="leaf" />
-                }
-              </div>
-            </div>
-          }
-        </div>
       </div>
     </ng-template>
   `,
@@ -221,7 +170,6 @@ export class TopbarComponent {
   /** Tampilkan hamburger di `< md` yang men-toggle mobile drawer sidebar. */
   readonly showHamburger = input<boolean>(true);
   readonly hamburgerLabel = input<string>('Open navigation');
-  protected readonly topbarHeight = 'var(--layout-topbar-height)';
 
   /** Resolved items: input jika disediakan, fallback ke registry NavigationService. */
   protected readonly resolvedItems = computed(() => {
@@ -233,7 +181,6 @@ export class TopbarComponent {
   private active: ActiveOverlay | null = null;
 
   private readonly dropdownTpl = viewChild.required<TemplateRef<unknown>>('dropdownTpl');
-  private readonly megaTpl = viewChild.required<TemplateRef<unknown>>('megaTpl');
 
   constructor() {
     effect(() => {
@@ -244,10 +191,27 @@ export class TopbarComponent {
   }
 
   protected readonly hostClasses = computed(() => {
-    return [
-      'sticky top-0 z-20 flex w-full items-center border-b border-border bg-background text-foreground',
-      this.class(),
-    ].join(' ');
+    return ['sticky top-0 z-20 flex h-11 w-full items-center', this.class()].join(' ');
+  });
+
+  protected readonly endSlotClasses = computed(() => {
+    const base = ['flex h-full shrink-0 items-center justify-end gap-2 overflow-hidden'];
+    base.push(
+      '[&>[topbar-end]]:flex',
+      '[&>[topbar-end]]:min-w-0',
+      '[&>[topbar-end]]:max-w-full',
+      '[&>[topbar-end]]:items-center',
+      '[&>[topbar-end]]:justify-end',
+      '[&>[topbar-end]]:gap-2',
+      '[&>[topbar-end]>*]:w-auto',
+      '[&>[topbar-end]>*]:max-w-full',
+      '[&>[topbar-end]>*]:justify-end',
+      '[&>[topbar-end]>*]:gap-0',
+      '[&>[topbar-end]>*]:px-2',
+      '[&>[topbar-end]>*>*:first-child]:ml-auto',
+      '[&>[topbar-end]>*>*:nth-child(n+2)]:hidden',
+    );
+    return base.join(' ');
   });
 
   protected asBasic(i: NavigationItem): NavigationBasicItem {
@@ -259,37 +223,9 @@ export class TopbarComponent {
   protected asGroup(i: NavigationItem): NavigationGroupItem {
     return i as NavigationGroupItem;
   }
-  protected asMega(i: NavigationItem): NavigationMegaItem {
-    return i as NavigationMegaItem;
-  }
 
   protected isItemActive(id: string | undefined): boolean {
     return this.nav.isActive(id);
-  }
-
-  protected megaGridClasses(columns?: number): string {
-    const c = Math.min(Math.max(columns ?? 4, 1), 6);
-    const classes = ['grid', 'gap-6'];
-    switch (c) {
-      case 1:
-        classes.push('grid-cols-1');
-        break;
-      case 2:
-        classes.push('md:grid-cols-2');
-        break;
-      case 3:
-        classes.push('md:grid-cols-3');
-        break;
-      case 5:
-        classes.push('md:grid-cols-5');
-        break;
-      case 6:
-        classes.push('md:grid-cols-6');
-        break;
-      default:
-        classes.push('md:grid-cols-4');
-    }
-    return classes.join(' ');
   }
 
   protected toggleDropdown(trigger: HTMLElement, item: NavigationItem): void {
@@ -300,70 +236,38 @@ export class TopbarComponent {
   protected openDropdown(trigger: HTMLElement, item: NavigationItem): void {
     if (this.openId() === item.id) return;
     this.closeAll();
-    this.attach(trigger, item, this.dropdownTpl(), /*fullWidth*/ false);
+    this.attach(trigger, item, this.dropdownTpl());
   }
 
-  protected toggleMega(trigger: HTMLElement, item: NavigationItem): void {
-    if (this.openId() === item.id) this.closeAll();
-    else this.openMega(trigger, item);
-  }
-
-  protected openMega(trigger: HTMLElement, item: NavigationItem): void {
-    if (this.openId() === item.id) return;
-    this.closeAll();
-    this.attach(trigger, item, this.megaTpl(), /*fullWidth*/ true);
-  }
-
-  private attach(trigger: HTMLElement, item: NavigationItem, tpl: TemplateRef<unknown>, fullWidth: boolean): void {
+  private attach(trigger: HTMLElement, item: NavigationItem, tpl: TemplateRef<unknown>): void {
     const strategy = this.overlay
       .position()
       .flexibleConnectedTo(trigger)
       .withFlexibleDimensions(false)
       .withPush(false)
-      .withPositions(
-        fullWidth
-          ? [
-              {
-                originX: 'center',
-                originY: 'bottom',
-                overlayX: 'center',
-                overlayY: 'top',
-                offsetY: 4,
-              },
-              {
-                originX: 'center',
-                originY: 'top',
-                overlayX: 'center',
-                overlayY: 'bottom',
-                offsetY: -4,
-              },
-            ]
-          : [
-              {
-                originX: 'start',
-                originY: 'bottom',
-                overlayX: 'start',
-                overlayY: 'top',
-                offsetY: 4,
-              },
-              {
-                originX: 'start',
-                originY: 'top',
-                overlayX: 'start',
-                overlayY: 'bottom',
-                offsetY: -4,
-              },
-            ],
-      );
+      .withPositions([
+        {
+          originX: 'start',
+          originY: 'bottom',
+          overlayX: 'start',
+          overlayY: 'top',
+          offsetY: 4,
+        },
+        {
+          originX: 'start',
+          originY: 'top',
+          overlayX: 'start',
+          overlayY: 'bottom',
+          offsetY: -4,
+        },
+      ]);
 
     const ref = this.overlay.create({
       positionStrategy: strategy,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
-      panelClass: fullWidth ? ['ui-mega-panel'] : ['ui-dropdown-panel'],
-      width: fullWidth ? '100vw' : undefined,
-      maxWidth: fullWidth ? '100vw' : undefined,
+      panelClass: ['ui-dropdown-panel'],
     });
 
     const portal = new TemplatePortal(tpl, this.vcr, { $implicit: item });
@@ -415,7 +319,7 @@ export class TopbarComponent {
     }
   }
 
-  /** Arrow-key navigation dalam dropdown/mega panel. */
+  /** Arrow-key navigation dalam dropdown panel. */
   protected onPanelKeydown(event: KeyboardEvent): void {
     const key = event.key;
     if (

@@ -1,6 +1,19 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMaterialLayout } from '@ojiepermana/angular/layout';
 import { EtosLayoutComponent } from './etos.layout';
+
+@Component({
+  imports: [EtosLayoutComponent],
+  template: `
+    <ng-template #profileTemplate>
+      <div>Profile Panel</div>
+    </ng-template>
+
+    <etos-layout [layoutProfileTemplate]="profileTemplate" />
+  `,
+})
+class HostComponent {}
 
 describe('EtosLayoutComponent', () => {
   async function createFixture(options?: {
@@ -64,5 +77,25 @@ describe('EtosLayoutComponent', () => {
     expect(host.querySelector('empty')).not.toBeNull();
     expect(host.querySelector('vertical')).toBeNull();
     expect(host.querySelector('horizontal')).toBeNull();
+  });
+
+  it('uses layoutProfileTemplate as the vertical footer fallback', async () => {
+    localStorage.clear();
+
+    await TestBed.resetTestingModule()
+      .configureTestingModule({
+        imports: [HostComponent],
+        providers: [provideMaterialLayout({ mode: 'vertical' })],
+      })
+      .compileComponents();
+
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const host = fixture.nativeElement as HTMLElement;
+
+    expect(host.querySelector('vertical')).not.toBeNull();
+    expect(host.textContent).toContain('Profile Panel');
   });
 });

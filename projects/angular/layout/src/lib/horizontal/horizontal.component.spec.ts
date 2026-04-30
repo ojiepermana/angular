@@ -45,20 +45,20 @@ describe('HorizontalLayoutComponent', () => {
 
     const root = fixture.nativeElement as HTMLElement;
 
-    expect(root.querySelector('[data-ui-topbar-slot="start"]')?.textContent).toContain('Brand');
-    expect(root.querySelector('[data-ui-topbar-slot="nav"] [role="menubar"]')).toBeTruthy();
-    expect(root.querySelector('[data-ui-topbar-slot="end"]')?.textContent).toContain('Profile');
+    expect(root.querySelector('[data-topbar-slot="start"]')?.textContent).toContain('Brand');
+    expect(root.querySelector('[data-topbar-slot="nav"] [role="menubar"]')).toBeTruthy();
+    expect(root.querySelector('[data-topbar-slot="end"]')?.textContent).toContain('Profile');
 
     const host = root.querySelector('horizontal') as HTMLElement | null;
     const frame = host?.firstElementChild as HTMLElement | null;
-    const topbar = root.querySelector('ui-topbar') as HTMLElement | null;
+    const topbar = root.querySelector('topbar') as HTMLElement | null;
     const main = root.querySelector('main');
     expect(host?.getAttribute('data-layout-width')).toBe('container');
     expect(host?.getAttribute('data-style')).toBe('default');
     expect(host?.style.borderWidth).toBe('');
     expect(frame?.style.borderWidth).toBe('var(--border-width)');
     expect(topbar?.style.borderBottomWidth).toBe('var(--border-width)');
-    expect(topbar?.style.height).toBe('var(--layout-topbar-height)');
+    expect(topbar?.classList.contains('h-11')).toBe(true);
     expect(topbar?.classList.contains('h-12')).toBe(false);
     expect(host?.classList.contains('block')).toBe(true);
     expect(host?.classList.contains('h-dvh')).toBe(true);
@@ -134,7 +134,7 @@ describe('HorizontalLayoutComponent', () => {
 
     const host = (fixture.nativeElement as HTMLElement).querySelector('horizontal') as HTMLElement | null;
     const frame = host?.firstElementChild as HTMLElement | null;
-    const topbar = (fixture.nativeElement as HTMLElement).querySelector('ui-topbar') as HTMLElement | null;
+    const topbar = (fixture.nativeElement as HTMLElement).querySelector('topbar') as HTMLElement | null;
     const main = (fixture.nativeElement as HTMLElement).querySelector('main');
 
     expect(host?.getAttribute('data-layout-width')).toBe('full');
