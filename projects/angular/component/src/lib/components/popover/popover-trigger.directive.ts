@@ -9,36 +9,50 @@ import type { PopoverContentDirective } from './popover-content.directive';
 export type PopoverSide = 'top' | 'right' | 'bottom' | 'left';
 export type PopoverAlign = 'start' | 'center' | 'end';
 
-const POSITIONS: Record<PopoverSide, (align: PopoverAlign) => ConnectedPosition> = {
+const POSITION_ANCHORS: Record<PopoverSide, (align: PopoverAlign) => ConnectedPosition> = {
   top: (a) => ({
     originX: a === 'start' ? 'start' : a === 'end' ? 'end' : 'center',
     originY: 'top',
     overlayX: a === 'start' ? 'start' : a === 'end' ? 'end' : 'center',
     overlayY: 'bottom',
-    offsetY: -8,
   }),
   bottom: (a) => ({
     originX: a === 'start' ? 'start' : a === 'end' ? 'end' : 'center',
     originY: 'bottom',
     overlayX: a === 'start' ? 'start' : a === 'end' ? 'end' : 'center',
     overlayY: 'top',
-    offsetY: 8,
   }),
   left: (a) => ({
     originX: 'start',
     originY: a === 'start' ? 'top' : a === 'end' ? 'bottom' : 'center',
     overlayX: 'end',
     overlayY: a === 'start' ? 'top' : a === 'end' ? 'bottom' : 'center',
-    offsetX: -8,
   }),
   right: (a) => ({
     originX: 'end',
     originY: a === 'start' ? 'top' : a === 'end' ? 'bottom' : 'center',
     overlayX: 'start',
     overlayY: a === 'start' ? 'top' : a === 'end' ? 'bottom' : 'center',
-    offsetX: 8,
   }),
 };
+
+function positionFor(side: PopoverSide, align: PopoverAlign, sideOffset: number): ConnectedPosition {
+  const anchor = POSITION_ANCHORS[side](align);
+
+  if (side === 'top') {
+    return { ...anchor, offsetY: -sideOffset };
+  }
+
+  if (side === 'bottom') {
+    return { ...anchor, offsetY: sideOffset };
+  }
+
+  if (side === 'left') {
+    return { ...anchor, offsetX: -sideOffset };
+  }
+
+  return { ...anchor, offsetX: sideOffset };
+}
 
 /**
  * Toggle a `<ng-template uiPopoverContent>` anchored to the host element.
@@ -68,6 +82,7 @@ export class PopoverTriggerDirective {
   readonly uiPopoverTrigger = input.required<PopoverContentDirective>();
   readonly side = input<PopoverSide>('bottom');
   readonly align = input<PopoverAlign>('center');
+  readonly sideOffset = input<number>(8);
   readonly disabled = input<boolean>(false);
 
   readonly openedChange = output<boolean>();
@@ -83,8 +98,8 @@ export class PopoverTriggerDirective {
   open(): void {
     if (this.isOpen() || this.disabled()) return;
 
-    const primary = POSITIONS[this.side()](this.align());
-    const fallback = POSITIONS[this.oppositeSide(this.side())](this.align());
+    const primary = positionFor(this.side(), this.align(), this.sideOffset());
+    const fallback = positionFor(this.oppositeSide(this.side()), this.align(), this.sideOffset());
 
     const positionStrategy = this.overlay
       .position()

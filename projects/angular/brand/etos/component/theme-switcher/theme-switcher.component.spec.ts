@@ -1,5 +1,7 @@
+import { By } from '@angular/platform-browser';
 import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { PopoverTriggerDirective } from '@ojiepermana/angular/component';
 import { MATERIAL_LAYOUT_CONFIG, LayoutService } from '@ojiepermana/angular/layout';
 import { MATERIAL_THEME_CONFIG, ThemeService } from '@ojiepermana/angular/theme';
 import { EtosThemeSwitcherComponent } from './theme-switcher.component';
@@ -73,6 +75,29 @@ describe('EtosThemeSwitcherComponent', () => {
 
     expect(image?.getAttribute('src')).toBe('https://example.test/avatar.png');
     expect(image?.getAttribute('alt')).toBe('Ojie Permana avatar');
+  });
+
+  it('anchors the popup over the trigger according to the active layout mode', () => {
+    const fixture = TestBed.createComponent(EtosThemeSwitcherComponent);
+    const layout = TestBed.inject(LayoutService);
+
+    fixture.componentRef.setInput('quickActions', DEFAULT_QUICK_ACTIONS);
+    fixture.detectChanges();
+
+    const getDirective = () =>
+      fixture.debugElement.query(By.directive(PopoverTriggerDirective)).injector.get(PopoverTriggerDirective);
+
+    expect(getDirective().side()).toBe('top');
+    expect(getDirective().align()).toBe('start');
+    expect(getDirective().sideOffset()).toBe(-32);
+
+    layout.setMode('horizontal');
+    TestBed.flushEffects();
+    fixture.detectChanges();
+
+    expect(getDirective().side()).toBe('bottom');
+    expect(getDirective().align()).toBe('end');
+    expect(getDirective().sideOffset()).toBe(-32);
   });
 
   it('opens the popover and updates theme and layout preferences', async () => {

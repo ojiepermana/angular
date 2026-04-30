@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
 import { PopoverContentDirective } from './popover-content.directive';
@@ -14,6 +15,17 @@ import { PopoverTriggerDirective } from './popover-trigger.directive';
   `,
 })
 class Host {}
+
+@Component({
+  imports: [PopoverTriggerDirective, PopoverContentDirective],
+  template: `
+    <button [uiPopoverTrigger]="pop" side="top" align="start" [sideOffset]="-32">Open</button>
+    <ng-template uiPopoverContent #pop="uiPopoverContent">
+      <div class="ui-test-popover-body">Hello</div>
+    </ng-template>
+  `,
+})
+class OffsetHost {}
 
 describe('PopoverTriggerDirective', () => {
   it('sets aria-haspopup/aria-expanded on the trigger', () => {
@@ -37,5 +49,26 @@ describe('PopoverTriggerDirective', () => {
     btn.click();
     fixture.detectChanges();
     expect(btn.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('applies a custom side offset to the connected overlay positions', async () => {
+    const fixture = TestBed.createComponent(OffsetHost);
+    fixture.detectChanges();
+
+    const btn = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const directive = fixture.debugElement
+      .query(By.directive(PopoverTriggerDirective))
+      .injector.get(PopoverTriggerDirective);
+
+    btn.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const strategy = (directive as any).overlayRef.getConfig().positionStrategy as {
+      _preferredPositions: Array<{ offsetX?: number; offsetY?: number }>;
+    };
+
+    expect(strategy._preferredPositions[0]?.offsetY).toBe(32);
+    expect(strategy._preferredPositions[1]?.offsetY).toBe(-32);
   });
 });

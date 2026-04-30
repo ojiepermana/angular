@@ -62,6 +62,8 @@ const LAYOUT_WIDTH_OPTIONS = [
   { value: 'wide', label: 'Wide', icon: 'width_wide' },
 ] as const satisfies readonly ToggleOption<LayoutWidth>[];
 
+const SWITCHER_PANEL_OVERLAP_OFFSET = -32;
+
 @Component({
   selector: 'etos-theme-switcher',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -100,8 +102,9 @@ const LAYOUT_WIDTH_OPTIONS = [
       variant="ghost"
       size="icon"
       [uiPopoverTrigger]="preferencesPanel"
-      [side]="popoverSide()"
-      [align]="popoverAlign()"
+      [side]="resolvedPopoverSide()"
+      [align]="resolvedPopoverAlign()"
+      [sideOffset]="resolvedPopoverSideOffset()"
       [attr.aria-label]="triggerLabel()"
       [class]="triggerButtonClasses(trigger.isOpen())">
       <ui-avatar class="h-8 w-8 border border-border/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
@@ -119,7 +122,7 @@ const LAYOUT_WIDTH_OPTIONS = [
         data-etos-theme-switcher-panel
         role="dialog"
         aria-label="User Info"
-        class="w-[min(21rem,calc(100vw-1.5rem))] overflow-hidden rounded-(--etos-layout-frame-radius) border border-border/70 bg-background text-foreground shadow-[0_18px_48px_rgba(15,23,42,0.12)]">
+        class="w-[min(21rem,calc(100vw-1.5rem))] overflow-hidden  border border-border/70 bg-background text-foreground shadow-[0_18px_48px_rgba(15,23,42,0.12)]">
         <header class="p-5 pb-4">
           <div class="flex items-center gap-4">
             <ui-avatar class="h-14 w-14 border border-border/60 shadow-sm">
@@ -274,8 +277,9 @@ export class EtosThemeSwitcherComponent {
   readonly quickActions = input.required<readonly EtosThemeSwitcherQuickAction[]>();
   readonly notificationShortcut = input<EtosThemeSwitcherNotificationShortcut | null>(null);
   readonly showNotificationShortcut = input<boolean>(false);
-  readonly popoverSide = input<PopoverSide>('bottom');
-  readonly popoverAlign = input<PopoverAlign>('end');
+  readonly popoverSide = input<PopoverSide | null>(null);
+  readonly popoverAlign = input<PopoverAlign | null>(null);
+  readonly popoverSideOffset = input<number | null>(null);
   readonly actionSelected = output<EtosThemeSwitcherAction>();
 
   protected readonly themeMode = this.theme.mode;
@@ -320,6 +324,15 @@ export class EtosThemeSwitcherComponent {
   });
 
   protected readonly hostClasses = computed(() => cn('inline-flex shrink-0 items-center gap-2', this.class()));
+  protected readonly resolvedPopoverSide = computed<PopoverSide>(
+    () => this.popoverSide() ?? (this.layoutMode() === 'vertical' ? 'top' : 'bottom'),
+  );
+  protected readonly resolvedPopoverAlign = computed<PopoverAlign>(
+    () => this.popoverAlign() ?? (this.layoutMode() === 'vertical' ? 'start' : 'end'),
+  );
+  protected readonly resolvedPopoverSideOffset = computed(
+    () => this.popoverSideOffset() ?? SWITCHER_PANEL_OVERLAP_OFFSET,
+  );
   protected readonly resolvedUserName = computed(() => this.userInfo()?.name?.trim() || this.userName());
   protected readonly resolvedUserSubtitle = computed(() => this.userInfo()?.subtitle ?? this.userSubtitle());
   protected readonly resolvedAvatarSrc = computed(() => this.userInfo()?.avatarSrc ?? this.avatarSrc());

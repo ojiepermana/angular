@@ -29,7 +29,7 @@ import {
 
     <ng-template #layoutPanel>
       <div class="flex h-full w-full min-w-0 items-center justify-start gap-3 px-2 py-0">
-        <etos-theme-switcher [userInfo]="profileInfo" [quickActions]="quickActions" popoverAlign="start" />
+        <etos-theme-switcher [userInfo]="profileInfo" [quickActions]="quickActions" />
 
         <div class="min-w-0 flex flex-col gap-px">
           <span class="truncate text-sm font-semibold leading-none text-foreground">{{ profileName }}</span>
