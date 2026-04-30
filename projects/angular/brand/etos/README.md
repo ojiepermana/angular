@@ -2,11 +2,15 @@
 
 Etos implementation lives under `projects/angular/brand/etos`. Published consumers should use `@ojiepermana/angular/etos`.
 
+This package is the Etos-specific layer on top of the shared Angular libraries. It owns the Etos brand defaults, shell composition, brand stylesheet, and Etos-only UI such as the profile/theme switcher.
+
 Use this folder for Etos-specific implementation:
 
-- `core/` contains Etos provider composition and brand defaults.
+- `core/` contains brand defaults and provider composition.
+- `component/` contains Etos-owned UI such as `EtosThemeSwitcherComponent`.
+- `shells/` contains `EtosLayoutComponent` and the Etos empty, horizontal, and vertical shells.
 - `themes/` contains Etos color, style, layout, and component-facing CSS.
-- `navigation/`, `components/`, `assets/`, and `docs/` can be added when Etos needs brand-specific behavior beyond shared primitives.
+- `navigation/`, `assets/`, and `docs/` can be added when Etos needs brand-specific behavior beyond shared primitives.
 
 Shared services, types, and primitives stay in the generic libraries:
 
@@ -14,36 +18,87 @@ Shared services, types, and primitives stay in the generic libraries:
 - `@ojiepermana/angular/layout`
 - `@ojiepermana/angular/navigation`
 
-## Package usage
+## Public entrypoint
 
 Published consumers should import Etos through the short public entrypoint:
 
 ```ts
-import { type EtosBrandOptions, EtosThemeSwitcherComponent, provideEtosBrand } from '@ojiepermana/angular/etos';
+import {
+  EtosLayoutComponent,
+  EtosThemeSwitcherComponent,
+  provideEtosBrand,
+  provideEtosLayout,
+  provideEtosTheme,
+  type EtosBrandOptions,
+  type EtosThemeSwitcherQuickAction,
+  type EtosThemeSwitcherUserInfo,
+} from '@ojiepermana/angular/etos';
+```
+
+`@ojiepermana/angular/etos` currently exports:
+
+- `provideEtosBrand()` to apply the Etos theme and layout defaults together and optionally register navigation items.
+- `provideEtosTheme()` to install only the Etos theme wrapper over the shared theme provider.
+- `provideEtosLayout()` to install only the Etos layout wrapper over the shared layout provider.
+- `EtosLayoutComponent` to render the Etos shell from the current layout mode.
+- `EtosThemeSwitcherComponent` and related types for the profile/preferences UI.
+
+## Provider setup
+
+Etos ships with these defaults:
+
+- Theme defaults to brand `etos` with light mode.
+- Layout defaults to `vertical` mode with `container` width.
+
+Recommended provider configuration:
+
+```ts
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { type EtosBrandOptions, provideEtosBrand } from '@ojiepermana/angular/etos';
+
+import { AppNavigation } from './app.navigation';
+import { routes } from './app.routes';
 
 export const etosBrandConfig = {
   theme: {
     mode: 'light',
-    style: 'default',
   },
   layout: {
     mode: 'vertical',
-    width: 'container',
   },
+  navigation: AppNavigation,
 } satisfies EtosBrandOptions;
 
-export const appConfig = {
-  providers: [provideEtosBrand(etosBrandConfig)],
+export const appConfig: ApplicationConfig = {
+  providers: [provideBrowserGlobalErrorListeners(), provideRouter(routes), provideEtosBrand(etosBrandConfig)],
 };
 ```
 
-`provideEtosBrand()` applies the Etos brand tokens and wires the shared `ThemeService` and `LayoutService` defaults for the app. `EtosThemeSwitcherComponent` remains the Etos-owned UI component exported from this entrypoint.
+`provideEtosBrand()` accepts these Etos-specific options:
+
+- `theme` merges into the shared Material theme config while keeping the Etos brand tokens.
+- `layout` merges into the shared Material layout config while keeping the Etos layout defaults.
+- `navigation` registers navigation items during application startup.
+- `navigationId` targets a non-default navigation registry id when needed.
+- `materialDefaults` defaults to `true`; set it to `false` to skip `withMaterialDefaults()`.
+
+Use the granular providers when the consumer only needs one part of the Etos stack:
+
+```ts
+import { ApplicationConfig } from '@angular/core';
+import { provideEtosLayout, provideEtosTheme } from '@ojiepermana/angular/etos';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideEtosTheme(), provideEtosLayout({ mode: 'horizontal', width: 'wide' })],
+};
+```
 
 ## Using the brand theme
 
 The Etos brand theme has two parts:
 
-- TypeScript setup through `provideEtosBrand()` for theme and layout defaults.
+- TypeScript setup through one of the Etos providers.
 - CSS setup through the Etos stylesheet so the `theme-brand="etos"` tokens are available at runtime.
 
 App CSS should import the Etos package stylesheet before Tailwind:
@@ -54,77 +109,100 @@ App CSS should import the Etos package stylesheet before Tailwind:
 @import '@ojiepermana/angular/theme/tailwind/theme.css';
 ```
 
-Recommended provider configuration:
+## Using the layout shell
+
+`EtosLayoutComponent` is the exported shell component for Etos. It resolves `empty`, `horizontal`, or `vertical` from its `mode` input or from `LayoutService` when the input is omitted.
+
+This is the same composition pattern used by the Etos demo:
 
 ```ts
-import { type EtosBrandOptions, provideEtosBrand } from '@ojiepermana/angular/etos';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import {
+  EtosLayoutComponent,
+  type EtosThemeSwitcherQuickAction,
+  EtosThemeSwitcherComponent,
+  type EtosThemeSwitcherUserInfo,
+} from '@ojiepermana/angular/etos';
 
-export const etosBrandConfig = {
-  theme: {
-    mode: 'light',
-    style: 'default',
-  },
-  layout: {
-    mode: 'vertical',
-    width: 'container',
-  },
-} satisfies EtosBrandOptions;
+@Component({
+  selector: 'app-pages',
+  imports: [RouterLink, EtosLayoutComponent, EtosThemeSwitcherComponent],
+  template: `
+    <ng-template #layoutBrand>
+      <a routerLink="/" class="flex min-w-0 items-center gap-3 px-2 py-1.5 transition-colors">
+        <span class="text-sm font-semibold leading-none tracking-tight">Ojiepermana UI</span>
+      </a>
+    </ng-template>
 
-export const appConfig = {
-  providers: [provideEtosBrand(etosBrandConfig)],
-};
+    <ng-template #layoutPanel>
+      <div class="flex h-full w-full min-w-0 items-center justify-start gap-3 px-2 py-0">
+        <etos-theme-switcher [userInfo]="profileInfo" [quickActions]="quickActions" />
+
+        <div class="min-w-0 flex flex-col gap-px">
+          <span class="truncate text-sm font-semibold leading-none text-foreground">{{ profileName }}</span>
+          <span class="truncate text-xs leading-none text-muted-foreground">{{ profileTitle }}</span>
+        </div>
+      </div>
+    </ng-template>
+
+    <etos-layout [layoutBrandTemplate]="layoutBrand" [layoutProfileTemplate]="layoutPanel" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Pages {
+  protected readonly profileName = 'Ojie Permana';
+  protected readonly profileTitle = 'Etos design system navigator';
+  protected readonly profileInfo = {
+    name: this.profileName,
+    subtitle: this.profileTitle,
+    avatarSrc: '/avatar-ojie.svg',
+    avatarAlt: 'Portrait of Ojie Permana',
+  } satisfies EtosThemeSwitcherUserInfo;
+
+  protected readonly quickActions = [
+    { value: 'notifications', label: 'Notifications', icon: 'notifications' },
+    { value: 'sign-out', label: 'Logout', icon: 'logout', tone: 'destructive' },
+  ] satisfies readonly EtosThemeSwitcherQuickAction[];
+}
 ```
 
-From there, mount Etos-specific UI such as `EtosThemeSwitcherComponent` inside your existing application shell.
+Layout inputs:
+
+- `mode`: optional explicit override for the active layout mode.
+- `layoutBrandTemplate`: used in the horizontal brand area and as the default vertical sidebar header.
+- `layoutProfileTemplate`: used in the horizontal profile area and as the default vertical sidebar footer.
+- `sidebarHeaderTemplate`: optional vertical-only override for the sidebar header.
+- `sidebarFooterTemplate`: optional vertical-only override for the sidebar footer.
+
+That fallback behavior means a single `layoutBrandTemplate` and `layoutProfileTemplate` pair is enough for most consumers, while vertical layouts can still diverge when needed.
 
 ## Using the theme switcher
 
-`EtosThemeSwitcherComponent` is exported from `@ojiepermana/angular/etos` and can be mounted in either the horizontal topbar or the vertical sidebar footer.
+`EtosThemeSwitcherComponent` is exported from `@ojiepermana/angular/etos` and is intended to live inside the Etos shell profile area or any consumer-owned profile trigger.
 
-Common inputs:
+Common inputs and output:
 
-- `userInfo`: object input for the user display data: `name`, `subtitle`, `avatarSrc`, and `avatarAlt`.
-- `quickActions`: required array of action items rendered in the popup footer.
-- `notificationShortcut`: object input for the standalone notification trigger shown beside the avatar in horizontal mode.
-- `popoverAlign` and `popoverSide`: override the popover anchor position.
-- `showNotificationShortcut`: legacy boolean shortcut for rendering the default notification button. Prefer `notificationShortcut` when the data should come from the parent.
+- `quickActions`: required array rendered in the popup footer. Pass `[]` if you only want the built-in theme and layout controls.
+- `userInfo`: object input for `name`, `subtitle`, `avatarSrc`, and `avatarAlt`.
+- `userName`, `userSubtitle`, `avatarSrc`, and `avatarAlt`: fallback inputs when `userInfo` is not supplied.
+- `notificationShortcut`: configures the standalone notification trigger shown beside the avatar.
+- `showNotificationShortcut`: legacy boolean shortcut for rendering the default notification button.
+- `popoverSide`, `popoverAlign`, and `popoverSideOffset`: explicit popover placement overrides.
+- `actionSelected`: emits the selected quick action or notification shortcut value.
 
-Horizontal usage:
+The popup always exposes theme scheme, layout mode, and layout width controls. The quick action area is fully consumer-driven:
 
-```html
-<div ui-layout-profile class="etos-profile-trigger gap-2 px-0 py-0">
-  <etos-theme-switcher
-    [userInfo]="profileInfo"
-    [quickActions]="horizontalQuickActions"
-    [notificationShortcut]="horizontalNotificationShortcut" />
-</div>
-```
+- Provide the action values and labels you need in `quickActions`.
+- Handle actions such as logout in the app consumer through `(actionSelected)`.
+- When `notificationShortcut.value` matches one of the `quickActions` values, the matching popup item is removed to avoid duplication.
 
-In this mode the trigger shows only the avatar or initials plus the standalone notification shortcut.
+Popover defaults now follow the active layout automatically:
 
-Vertical usage:
+- Vertical layout defaults to `side="top"` and `align="start"`.
+- Horizontal and empty layouts default to `side="bottom"` and `align="end"`.
 
-```html
-<div sidebar-footer class="flex h-full w-full min-w-0 items-center justify-start gap-3 px-0 py-0">
-  <etos-theme-switcher [userInfo]="profileInfo" [quickActions]="verticalQuickActions" popoverAlign="start" />
-
-  <div class="min-w-0 flex flex-col gap-px">
-    <span class="truncate text-sm font-semibold leading-none text-foreground">Ojie Permana</span>
-    <span class="truncate text-xs leading-none text-muted-foreground">Etos design system navigator</span>
-  </div>
-</div>
-```
-
-Use `popoverAlign="start"` in the vertical sidebar so the popup opens toward the content area instead of clipping against the left viewport edge.
-
-When composing the shared navigation shell directly, use the renamed sidebar API:
-
-```html
-<sidebar [ariaLabel]="'Primary'">
-  <div sidebar-header>Brand</div>
-  <div sidebar-footer>Footer actions</div>
-</sidebar>
-```
+Only pass `popoverSide`, `popoverAlign`, or `popoverSideOffset` when you need to override those defaults.
 
 Input shape examples:
 
@@ -136,30 +214,24 @@ profileInfo = {
   avatarAlt: 'Portrait of Ojie Permana',
 };
 
-horizontalNotificationShortcut = {
+notificationShortcut = {
   value: 'notifications',
   icon: 'notifications',
   ariaLabel: 'Open notifications for Ojie Permana',
 };
 
-verticalQuickActions = [
+quickActions = [
   { value: 'notifications', label: 'Notifications', icon: 'notifications' },
   { value: 'sign-out', label: 'Logout', icon: 'logout', tone: 'destructive' },
 ];
 ```
-
-The popup always exposes theme scheme, layout mode, and layout width controls. The quick action area is fully consumer-driven:
-
-- Provide the action values and labels you need in `quickActions`.
-- Handle actions such as logout in the app consumer through `(actionSelected)`.
-- When `notificationShortcut.value` matches one of the `quickActions` values, the matching popup item is removed to avoid duplication.
 
 Example consumer-owned action handling:
 
 ```html
 <etos-theme-switcher
   [userInfo]="profileInfo"
-  [quickActions]="verticalQuickActions"
+  [quickActions]="quickActions"
   (actionSelected)="onThemeSwitcherAction($event)" />
 ```
 
@@ -173,9 +245,10 @@ onThemeSwitcherAction(action: string): void {
 
 ## Workspace usage in this repository
 
-The Etos demo under `projects/demo/etos` already uses the short TypeScript entrypoint for provider setup:
+The Etos demo under `projects/demo/etos` already uses the short TypeScript entrypoint for provider setup and shell composition:
 
-- `src/app/app.config.ts` imports `provideEtosBrand` from `@ojiepermana/angular/etos`.
+- `src/app/app.config.ts` imports `provideEtosBrand` and passes `navigation: AppNavigation`.
+- `src/pages/pages.ts` imports `EtosLayoutComponent` and `EtosThemeSwitcherComponent` and wires `layoutBrandTemplate` plus `layoutProfileTemplate`.
 
 For CSS, the workspace demo currently imports the Etos source stylesheet directly:
 
