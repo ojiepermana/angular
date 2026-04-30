@@ -105,7 +105,7 @@ In this mode the trigger shows only the avatar or initials plus the standalone n
 Vertical usage:
 
 ```html
-<div ui-sidebar-footer class="flex h-full w-full min-w-0 items-center justify-start gap-3 px-0 py-0">
+<div sidebar-footer class="flex h-full w-full min-w-0 items-center justify-start gap-3 px-0 py-0">
   <etos-theme-switcher [userInfo]="profileInfo" [quickActions]="verticalQuickActions" popoverAlign="start" />
 
   <div class="min-w-0 flex flex-col gap-px">
@@ -116,6 +116,15 @@ Vertical usage:
 ```
 
 Use `popoverAlign="start"` in the vertical sidebar so the popup opens toward the content area instead of clipping against the left viewport edge.
+
+When composing the shared navigation shell directly, use the renamed sidebar API:
+
+```html
+<sidebar [ariaLabel]="'Primary'">
+  <div sidebar-header>Brand</div>
+  <div sidebar-footer>Footer actions</div>
+</sidebar>
+```
 
 Input shape examples:
 

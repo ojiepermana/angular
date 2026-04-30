@@ -37,22 +37,26 @@ describe('NavigationService', () => {
     expect(service.collapsed()).toBe(false);
   });
 
-  it('toggles sidebar appearance and persists it', () => {
-    service.toggleSidebarAppearance();
+  it('toggles sidebar collapse and persists it as a boolean', () => {
+    service.toggleCollapsed();
+    TestBed.flushEffects();
 
     expect(service.sidebarAppearance()).toBe('thin');
     expect(service.collapsed()).toBe(true);
-    expect(localStorage.getItem('sidebar-appearance')).toBe('thin');
+    expect(localStorage.getItem('sidebar-collapse')).toBe('true');
+    expect(localStorage.getItem('sidebar-appearance')).toBeNull();
 
-    service.setSidebarAppearance('default');
+    service.setCollapsed(false);
+    TestBed.flushEffects();
 
     expect(service.sidebarAppearance()).toBe('default');
     expect(service.collapsed()).toBe(false);
-    expect(localStorage.getItem('sidebar-appearance')).toBe('default');
+    expect(localStorage.getItem('sidebar-collapse')).toBe('false');
+    expect(localStorage.getItem('sidebar-appearance')).toBeNull();
   });
 
-  it('reads persisted sidebar appearance from localStorage', () => {
-    localStorage.setItem('sidebar-appearance', 'thin');
+  it('reads persisted sidebar collapse from localStorage', () => {
+    localStorage.setItem('sidebar-collapse', 'true');
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({ providers: [provideRouter([])] });
 
@@ -60,6 +64,19 @@ describe('NavigationService', () => {
 
     expect(service.sidebarAppearance()).toBe('thin');
     expect(service.collapsed()).toBe(true);
+  });
+
+  it('migrates legacy sidebar appearance storage to the collapse key', () => {
+    localStorage.setItem('sidebar-appearance', 'thin');
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
+
+    service = TestBed.inject(NavigationService);
+    TestBed.flushEffects();
+
+    expect(service.collapsed()).toBe(true);
+    expect(localStorage.getItem('sidebar-collapse')).toBe('true');
+    expect(localStorage.getItem('sidebar-appearance')).toBeNull();
   });
 
   it('toggles group open state', () => {

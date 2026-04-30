@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { describe, expect, it } from 'vitest';
 import { SidebarComponent } from './sidebar.component';
+import { NavigationService } from '../../core/services/navigation.service';
 import type { NavigationItem } from '../../core/types/navigation.type';
 
 const items: NavigationItem[] = [
@@ -20,7 +21,7 @@ const items: NavigationItem[] = [
 
 @Component({
   imports: [SidebarComponent],
-  template: `<ui-sidebar [items]="items" [appearance]="appearance" [autoMobile]="false" />`,
+  template: `<sidebar [items]="items" [appearance]="appearance" [autoMobile]="false" />`,
 })
 class Host {
   items = items;
@@ -39,7 +40,7 @@ describe('SidebarComponent', () => {
 
   it('renders items with default appearance', () => {
     const fixture = setup();
-    const host: HTMLElement = fixture.nativeElement.querySelector('ui-sidebar');
+    const host: HTMLElement = fixture.nativeElement.querySelector('sidebar');
     expect(host.getAttribute('data-appearance')).toBe('default');
     expect(host.getAttribute('role')).toBe('navigation');
     expect(host.querySelectorAll('ui-nav-item').length).toBeGreaterThan(0);
@@ -49,11 +50,13 @@ describe('SidebarComponent', () => {
 
   it('adds vertical padding to groups for clearer spacing', () => {
     const fixture = setup();
-    const host: HTMLElement = fixture.nativeElement.querySelector('ui-sidebar');
+    const host: HTMLElement = fixture.nativeElement.querySelector('sidebar');
     const group = host.querySelector('[role="group"]') as HTMLElement | null;
+    const groupHeader = host.querySelector('[role="group"] > div.sticky') as HTMLElement | null;
     const groupedChildren = host.querySelector('[role="group"] > div.flex.flex-col') as HTMLElement | null;
 
-    expect(group?.classList.contains('p-3')).toBe(true);
+    expect(groupHeader?.classList.contains('p-3')).toBe(true);
+    expect(group?.classList.contains('p-3')).toBe(false);
     expect(group?.classList.contains('py-3')).toBe(false);
     expect(groupedChildren?.classList.contains('py-3')).toBe(false);
   });
@@ -64,7 +67,18 @@ describe('SidebarComponent', () => {
     fixture.componentInstance.appearance = 'thin';
     fixture.detectChanges();
     await fixture.whenStable();
-    const host: HTMLElement = fixture.nativeElement.querySelector('ui-sidebar');
+    const host: HTMLElement = fixture.nativeElement.querySelector('sidebar');
+    expect(host.getAttribute('data-appearance')).toBe('thin');
+  });
+
+  it('prefers stored collapsed state over the appearance input', async () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
+    const fixture = TestBed.createComponent(Host);
+    TestBed.inject(NavigationService).setCollapsed(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const host: HTMLElement = fixture.nativeElement.querySelector('sidebar');
     expect(host.getAttribute('data-appearance')).toBe('thin');
   });
 });

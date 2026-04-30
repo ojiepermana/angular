@@ -33,6 +33,19 @@ If you install the package with `npm install`, `bun add`, `pnpm add`, or `yarn
 add` directly, peer dependency installation falls back to the package
 manager's own behavior.
 
+## Navigation primitives
+
+`@ojiepermana/angular/navigation` exports the shared sidebar and topbar building blocks used by the demo shells. The vertical navigation selector is now `sidebar` and the projected sidebar slots use `sidebar-header` and `sidebar-footer`.
+
+```html
+<sidebar [ariaLabel]="'Primary'" [appearance]="'default'">
+  <div sidebar-header>Brand</div>
+  <div sidebar-footer>Footer actions</div>
+</sidebar>
+```
+
+Register items through `NavigationService.registerItems(...)`, or pass them directly with the `items` input when composing a local navigation tree.
+
 ## SDK generator in a consumer workspace
 
 After `@ojiepermana/angular` is installed, a consumer workspace can scaffold an

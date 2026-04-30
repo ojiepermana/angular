@@ -8,32 +8,35 @@ import type { NavigationItem, SidebarAppearance } from '../types/navigation.type
 
 /** Default registry key used when no id is specified. */
 export const DEFAULT_NAVIGATION_ID = 'main';
-const SIDEBAR_APPEARANCE_STORAGE_KEY = 'sidebar-appearance';
+const SIDEBAR_COLLAPSE_STORAGE_KEY = 'sidebar-collapse';
+const LEGACY_SIDEBAR_APPEARANCE_STORAGE_KEY = 'sidebar-appearance';
 
-function isSidebarAppearance(value: string | null | undefined): value is SidebarAppearance {
-  return value === 'default' || value === 'thin';
+function parseSidebarCollapsed(value: string | null | undefined): boolean | null {
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  return null;
 }
 
 /**
  * Signal-based global state untuk navigation (sidebar/topbar).
  *
  * Items disimpan dalam registry ber-key. Key default adalah `'main'`.
- * Komponen `ui-sidebar` / `ui-topbar` memilih registry via input `navigationId`.
+ * Komponen `sidebar` / `ui-topbar` memilih registry via input `navigationId`.
  */
 @Injectable({ providedIn: 'root' })
 export class NavigationService {
   private readonly doc = inject(DOCUMENT);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly persistedSidebarAppearance = this.readPersistedSidebarAppearance();
+  private readonly persistedSidebarCollapsed = this.readPersistedSidebarCollapsed();
 
   /** Internal version counter — incremented on every registry mutation. */
   private readonly _version = signal(0);
 
   /** Internal map of registered navigation trees. */
   private readonly _registry = new Map<string, NavigationItem[]>();
-  private readonly _sidebarAppearance = signal<SidebarAppearance>(this.persistedSidebarAppearance ?? 'default');
-  private readonly _hasStoredSidebarAppearance = signal(this.persistedSidebarAppearance !== null);
+  private readonly _collapsed = signal(this.persistedSidebarCollapsed ?? false);
+  private readonly _hasStoredSidebarCollapse = signal(this.persistedSidebarCollapsed !== null);
 
   /**
    * Backward-compatible accessor — returns items for the default (`'main'`) key.
@@ -42,11 +45,11 @@ export class NavigationService {
   readonly items = computed(() => this.getItems(DEFAULT_NAVIGATION_ID)());
 
   /** Sidebar appearance preference (`default` or `thin`). */
-  readonly sidebarAppearance = this._sidebarAppearance.asReadonly();
-  readonly hasStoredSidebarAppearance = this._hasStoredSidebarAppearance.asReadonly();
+  readonly sidebarAppearance = computed<SidebarAppearance>(() => (this._collapsed() ? 'thin' : 'default'));
+  readonly hasStoredSidebarCollapse = this._hasStoredSidebarCollapse.asReadonly();
 
   /** Sidebar collapsed (default ↔ thin) toggle untuk desktop. */
-  readonly collapsed = computed(() => this._sidebarAppearance() === 'thin');
+  readonly collapsed = this._collapsed.asReadonly();
 
   /** Sheet drawer terbuka di mobile. */
   readonly mobileOpen = signal<boolean>(false);
@@ -90,11 +93,11 @@ export class NavigationService {
 
   constructor() {
     effect(() => {
-      if (!this._hasStoredSidebarAppearance()) {
+      if (!this._hasStoredSidebarCollapse()) {
         return;
       }
 
-      this.persistSidebarAppearance(this._sidebarAppearance());
+      this.persistSidebarCollapsed(this._collapsed());
     });
 
     this.router.events
@@ -138,21 +141,21 @@ export class NavigationService {
   }
 
   setSidebarAppearance(value: SidebarAppearance): void {
-    this._sidebarAppearance.set(value);
-    this._hasStoredSidebarAppearance.set(true);
+    this.setCollapsed(value === 'thin');
   }
 
-  toggleSidebarAppearance(currentAppearance: SidebarAppearance = this._sidebarAppearance()): void {
-    this.setSidebarAppearance(currentAppearance === 'thin' ? 'default' : 'thin');
+  toggleSidebarAppearance(currentAppearance: SidebarAppearance = this.sidebarAppearance()): void {
+    this.setCollapsed(currentAppearance !== 'thin');
   }
 
   /** Toggle sidebar collapsed (default ↔ thin). */
   toggleCollapsed(): void {
-    this.toggleSidebarAppearance();
+    this.setCollapsed(!this._collapsed());
   }
 
   setCollapsed(value: boolean): void {
-    this.setSidebarAppearance(value ? 'thin' : 'default');
+    this._collapsed.set(value);
+    this._hasStoredSidebarCollapse.set(true);
   }
 
   openMobile(): void {
@@ -190,18 +193,33 @@ export class NavigationService {
     return !!id && this.activeTrail().has(id);
   }
 
-  private readPersistedSidebarAppearance(): SidebarAppearance | null {
+  private readPersistedSidebarCollapsed(): boolean | null {
     try {
-      const value = this.doc.defaultView?.localStorage?.getItem(SIDEBAR_APPEARANCE_STORAGE_KEY);
-      return isSidebarAppearance(value) ? value : null;
+      const storage = this.doc.defaultView?.localStorage;
+      const collapsed = parseSidebarCollapsed(storage?.getItem(SIDEBAR_COLLAPSE_STORAGE_KEY));
+      if (collapsed !== null) {
+        return collapsed;
+      }
+
+      const legacyAppearance = storage?.getItem(LEGACY_SIDEBAR_APPEARANCE_STORAGE_KEY);
+      if (legacyAppearance === 'thin') {
+        return true;
+      }
+      if (legacyAppearance === 'default') {
+        return false;
+      }
+
+      return null;
     } catch {
       return null;
     }
   }
 
-  private persistSidebarAppearance(value: SidebarAppearance): void {
+  private persistSidebarCollapsed(value: boolean): void {
     try {
-      this.doc.defaultView?.localStorage?.setItem(SIDEBAR_APPEARANCE_STORAGE_KEY, value);
+      const storage = this.doc.defaultView?.localStorage;
+      storage?.setItem(SIDEBAR_COLLAPSE_STORAGE_KEY, String(value));
+      storage?.removeItem(LEGACY_SIDEBAR_APPEARANCE_STORAGE_KEY);
     } catch {
       /* ignore */
     }

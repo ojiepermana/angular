@@ -20,6 +20,8 @@
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
   --color-background: hsl(var(--background));
+  --color-surface: hsl(var(--surface, var(--muted)));
+  --color-surface-foreground: hsl(var(--surface-foreground, var(--foreground)));
   --color-foreground: hsl(var(--foreground));
 
   --color-primary: hsl(var(--primary));

@@ -15,7 +15,7 @@ import { LayoutService } from '@ojiepermana/angular/layout';
   },
   template: `
     <div
-      class="h-full overflow-hidden bg-neutral-200 text-neutral-600 bg-[linear-gradient(rgba(212,212,212,0.65)_1px,transparent_1px),linear-gradient(to_right,rgba(212,212,212,0.65)_1px,transparent_1px)] bg-position-[center_center] bg-size-[2.775rem_2.775rem]">
+      class="h-full overflow-hidden bg-neutral-200   bg-[linear-gradient(rgba(212,212,212,0.65)_1px,transparent_1px),linear-gradient(to_right,rgba(212,212,212,0.65)_1px,transparent_1px)] bg-position-[center_center] bg-size-[2.775rem_2.775rem]">
       <div [class]="shellClasses()">
         <div class="-mx-18 relative h-full border-y border-brand">
           <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 inset-y-8">
@@ -34,28 +34,28 @@ import { LayoutService } from '@ojiepermana/angular/layout';
                 <div
                   aria-hidden="true"
                   class="pointer-events-none absolute bottom-[-100vh] left-full top-[-100vh] -z-10 w-px bg-brand"></div>
-                <ui-sidebar
+                <sidebar
                   class="h-full"
                   [appearance]="sidebarAppearance()"
                   [position]="sidebarPosition()"
                   [ariaLabel]="ariaLabel()">
                   @if (sidebarHeaderTemplate(); as headerTemplate) {
-                    <div ui-sidebar-header class="contents">
+                    <div sidebar-header class="contents">
                       <ng-container [ngTemplateOutlet]="headerTemplate" />
                     </div>
                   }
                   @if (sidebarFooterTemplate(); as footerTemplate) {
-                    <div ui-sidebar-footer class="contents">
+                    <div sidebar-footer class="contents">
                       <ng-container [ngTemplateOutlet]="footerTemplate" />
                     </div>
                   }
-                </ui-sidebar>
+                </sidebar>
               </nav>
               <main class="relative min-w-0 overflow-y-auto">
                 <router-outlet />
                 <div class="pointer-events-none absolute right-4 top-4 z-30">
                   <div
-                    class="inline-flex min-w-20 items-center justify-center rounded-full border border-brand bg-background/85 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-foreground shadow-sm backdrop-blur-sm"
+                    class="inline-flex min-w-20 items-center justify-center rounded-full border border-brand bg-whhite/85 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-foreground shadow-sm backdrop-blur-sm"
                     aria-label="Current breakpoint identifier">
                     <span class="sm:hidden">mobile</span>
                     <span class="hidden sm:inline md:hidden">sm</span>

@@ -34,7 +34,7 @@ import { LayoutService } from '../core/layout.service';
   },
   template: `
     <div [class]="frameClasses()" [style.border-width]="shellBorderWidth()">
-      <ui-sidebar [appearance]="sidebarAppearance()" [position]="sidebarPosition()" [ariaLabel]="ariaLabel()" />
+      <sidebar [appearance]="sidebarAppearance()" [position]="sidebarPosition()" [ariaLabel]="ariaLabel()" />
       <main [class]="mainClasses()">
         <router-outlet />
       </main>

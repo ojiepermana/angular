@@ -4,8 +4,12 @@
 @layer tokens {
   [theme-brand='etos'] {
     --brand: 0 0% 64%;
+    --brand-border-alpha: 0.7;
+    --brand-background-alpha: 0.7;
 
     --background: 210 38% 98%;
+    --surface: 0 0% 89.8%;
+    --surface-foreground: 211 56% 12%;
     --foreground: 211 56% 12%;
 
     --card: 0 0% 100%;
@@ -31,8 +35,12 @@
 
   [data-mode='dark'][theme-brand='etos'] {
     --brand: 0 0% 64%;
+    --brand-border-alpha: 0.45;
+    --brand-background-alpha: 0.55;
 
     --background: 211 38% 9%;
+    --surface: 211 22% 18%;
+    --surface-foreground: 210 40% 96%;
     --foreground: 210 40% 96%;
 
     --card: 211 34% 11%;
@@ -56,10 +64,10 @@
 
 @layer utilities {
   .border-brand {
-    border-color: hsl(var(--brand, var(--border)) / 0.7);
+    border-color: hsl(var(--brand, var(--border)) / var(--brand-border-alpha, 0.7));
   }
 
   .bg-brand {
-    background-color: hsl(var(--brand, var(--border)) / 0.7);
+    background-color: hsl(var(--brand, var(--border)) / var(--brand-background-alpha, 0.7));
   }
 }

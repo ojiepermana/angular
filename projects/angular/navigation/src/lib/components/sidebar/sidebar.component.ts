@@ -35,7 +35,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
  * dikontrol lewat `NavigationService.mobileOpen`.
  */
 @Component({
-  selector: 'ui-sidebar',
+  selector: 'sidebar',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgTemplateOutlet, UiNavIconComponent, UiNavItemComponent],
   host: {
@@ -60,7 +60,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
       @if (header()) {
         <div [class]="headerClasses()">
           <div [class]="headerSlotClasses()">
-            <ng-content select="[ui-sidebar-header]" />
+            <ng-content select="[sidebar-header]" />
           </div>
           @if (!isMobile() && !isCompact()) {
             <button
@@ -83,7 +83,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
       </nav>
       <div [class]="footerClasses()">
         <div [class]="footerSlotClasses()">
-          <ng-content select="[ui-sidebar-footer]" />
+          <ng-content select="[sidebar-footer]" />
         </div>
       </div>
     </ng-template>
@@ -143,20 +143,21 @@ export class SidebarComponent {
   });
 
   protected readonly isMobile = computed(() => this.autoMobile() && this.isMobileMedia());
-  protected readonly resolvedAppearance = computed<SidebarAppearance>(() => {
-    if (this.nav.hasStoredSidebarAppearance()) {
-      return this.nav.sidebarAppearance();
+  protected readonly resolvedCollapsed = computed(() => {
+    if (this.nav.hasStoredSidebarCollapse()) {
+      return this.nav.collapsed();
     }
 
-    return this.appearance();
+    return this.appearance() === 'thin';
+  });
+  protected readonly resolvedAppearance = computed<SidebarAppearance>(() => {
+    return this.resolvedCollapsed() ? 'thin' : 'default';
   });
   protected readonly hoverActive = computed(() => this.hovered() && !this.suppressHoverUntilLeave());
-  protected readonly isExpanded = computed(() => this.resolvedAppearance() === 'default' || this.hoverActive());
-  protected readonly isCompact = computed(
-    () => !this.isMobile() && this.resolvedAppearance() === 'thin' && !this.hoverActive(),
-  );
+  protected readonly isExpanded = computed(() => !this.resolvedCollapsed() || this.hoverActive());
+  protected readonly isCompact = computed(() => !this.isMobile() && this.resolvedCollapsed() && !this.hoverActive());
   protected readonly toggleButtonLabel = computed(() =>
-    this.resolvedAppearance() === 'thin' ? 'Expand sidebar' : 'Collapse sidebar',
+    this.resolvedCollapsed() ? 'Expand sidebar' : 'Collapse sidebar',
   );
 
   constructor() {
@@ -179,8 +180,7 @@ export class SidebarComponent {
 
   protected readonly hostClasses = computed(() => {
     const base = ['relative flex shrink-0 text-foreground', 'transition-[width] duration-200 ease-out'];
-    const appearance = this.resolvedAppearance();
-    if (appearance === 'thin') base.push('w-16');
+    if (this.resolvedCollapsed()) base.push('w-16');
     else base.push('[width:17.5rem]');
     if (this.position() === 'right') base.push('border-l', 'border-brand');
     return [...base, this.class()].join(' ');
@@ -199,9 +199,9 @@ export class SidebarComponent {
     if (this.isCompact()) {
       base.push(
         'flex flex-1 items-center justify-center overflow-hidden',
-        '[&>[ui-sidebar-header]>*]:mx-auto',
-        '[&>[ui-sidebar-header]>*]:max-w-full',
-        '[&>[ui-sidebar-header]>*]:shrink-0',
+        '[&>[sidebar-header]>*]:mx-auto',
+        '[&>[sidebar-header]>*]:max-w-full',
+        '[&>[sidebar-header]>*]:shrink-0',
       );
     } else {
       base.push('flex min-w-0 flex-1 items-center');
@@ -236,14 +236,14 @@ export class SidebarComponent {
     if (this.isCompact()) {
       base.push(
         'flex h-full items-center justify-center overflow-hidden',
-        '[&>[ui-sidebar-footer]>*]:mx-auto',
-        '[&>[ui-sidebar-footer]>*]:w-auto',
-        '[&>[ui-sidebar-footer]>*]:max-w-full',
-        '[&>[ui-sidebar-footer]>*]:justify-center',
-        '[&>[ui-sidebar-footer]>*]:gap-0',
-        '[&>[ui-sidebar-footer]>*]:px-0',
-        '[&>[ui-sidebar-footer]>*>*:first-child]:mx-auto',
-        '[&>[ui-sidebar-footer]>*>*:nth-child(n+2)]:hidden',
+        '[&>[sidebar-footer]>*]:mx-auto',
+        '[&>[sidebar-footer]>*]:w-auto',
+        '[&>[sidebar-footer]>*]:max-w-full',
+        '[&>[sidebar-footer]>*]:justify-center',
+        '[&>[sidebar-footer]>*]:gap-0',
+        '[&>[sidebar-footer]>*]:px-0',
+        '[&>[sidebar-footer]>*>*:first-child]:mx-auto',
+        '[&>[sidebar-footer]>*>*:nth-child(n+2)]:hidden',
       );
     } else {
       base.push('w-full');
@@ -252,9 +252,9 @@ export class SidebarComponent {
   });
 
   protected readonly innerClasses = computed(() => {
-    const overlayActive = this.resolvedAppearance() === 'thin' && this.hoverActive();
+    const overlayActive = this.resolvedCollapsed() && this.hoverActive();
     const base = ['flex h-full flex-col transition-[width] duration-200 ease-out'];
-    if (this.resolvedAppearance() === 'thin') {
+    if (this.resolvedCollapsed()) {
       base.push('bg-background');
     }
     if (overlayActive) {
@@ -269,26 +269,26 @@ export class SidebarComponent {
   });
 
   protected onHoverEnter(): void {
-    if (this.resolvedAppearance() !== 'thin' || this.isMobile() || this.suppressHoverUntilLeave()) return;
+    if (!this.resolvedCollapsed() || this.isMobile() || this.suppressHoverUntilLeave()) return;
     this.hovered.set(true);
   }
 
   protected onHoverLeave(): void {
     this.suppressHoverUntilLeave.set(false);
-    if (this.resolvedAppearance() === 'thin') this.hovered.set(false);
+    if (this.resolvedCollapsed()) this.hovered.set(false);
   }
 
   protected toggleAppearance(event: MouseEvent): void {
     event.stopPropagation();
-    const nextAppearance = this.resolvedAppearance() === 'thin' ? 'default' : 'thin';
-    this.nav.setSidebarAppearance(nextAppearance);
+    const nextCollapsed = !this.resolvedCollapsed();
+    this.nav.setCollapsed(nextCollapsed);
     this.hovered.set(false);
-    this.suppressHoverUntilLeave.set(nextAppearance === 'thin');
+    this.suppressHoverUntilLeave.set(nextCollapsed);
   }
 
   /** Touch fallback: tap pada strip thin (ketika belum expanded) untuk expand. */
   protected onHostClick(event: MouseEvent): void {
-    if (this.resolvedAppearance() !== 'thin' || this.isMobile()) return;
+    if (!this.resolvedCollapsed() || this.isMobile()) return;
     if (this.hovered()) return;
     const target = event.target as HTMLElement | null;
     // Biarkan klik pada control interaktif terus propagate (tidak intercept).
@@ -309,7 +309,7 @@ export class SidebarComponent {
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-dark-backdrop',
       scrollStrategy: this.overlay.scrollStrategies.block(),
-      panelClass: ['ui-sidebar-drawer'],
+      panelClass: ['sidebar-drawer'],
     });
 
     const portal = new TemplatePortal(this.drawerTpl(), this.vcr);

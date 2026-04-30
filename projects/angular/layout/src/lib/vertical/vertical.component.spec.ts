@@ -42,7 +42,7 @@ describe('VerticalLayoutComponent', () => {
     const host = root.querySelector('vertical') as HTMLElement | null;
     const frame = host?.firstElementChild as HTMLElement | null;
     const main = root.querySelector('main');
-    const sidebar = root.querySelector('ui-sidebar') as HTMLElement | null;
+    const sidebar = root.querySelector('sidebar') as HTMLElement | null;
 
     expect(host?.getAttribute('data-layout-width')).toBe('container');
     expect(host?.getAttribute('data-style')).toBe('default');
@@ -120,7 +120,7 @@ describe('VerticalLayoutComponent', () => {
     const host = root.querySelector('vertical') as HTMLElement | null;
     const frame = host?.firstElementChild as HTMLElement | null;
     const main = root.querySelector('main');
-    const sidebar = root.querySelector('ui-sidebar') as HTMLElement | null;
+    const sidebar = root.querySelector('sidebar') as HTMLElement | null;
 
     expect(host?.getAttribute('data-layout-width')).toBe('full');
     expect(host?.getAttribute('data-style')).toBe('default');
