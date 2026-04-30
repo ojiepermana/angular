@@ -44,9 +44,7 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/angular/tsconfig.theme.spec.json",
-            "include": [
-              "../../theme/src/**/*.spec.ts"
-            ]
+            "include": ["../../theme/src/**/*.spec.ts"]
           }
         }
       }
@@ -78,9 +76,7 @@
                 "input": "projects/demo/library/public"
               }
             ],
-            "styles": [
-              "projects/demo/library/src/styles.css"
-            ]
+            "styles": ["projects/demo/library/src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -150,9 +146,7 @@
                 "input": "projects/demo/etos/public"
               }
             ],
-            "styles": [
-              "projects/demo/etos/src/styles.css"
-            ]
+            "styles": ["projects/demo/etos/src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -222,9 +216,7 @@
                 "input": "projects/demo/ala/public"
               }
             ],
-            "styles": [
-              "projects/demo/ala/src/styles.css"
-            ]
+            "styles": ["projects/demo/ala/src/styles.css"]
           },
           "configurations": {
             "production": {
