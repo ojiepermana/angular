@@ -316,15 +316,9 @@ function emitPublicApis(ir: SdkIR, target: ResolvedSdkTarget, mapping: Mapping):
   // Per-domain public-api.ts.
   for (const domain of mapping.domains) {
     const lines: string[] = [target.banner, ''];
-    // Re-export shared namespace for convenience. `domain` may be nested
-    // (e.g. `storage/gcs`), so compute the relative path instead of
-    // hard-coding `../shared/public-api`.
-    const domainDir = posix.join(VIRTUAL_ROOT, domain);
-    const sharedTarget = posix.join(VIRTUAL_ROOT, SHARED, 'public-api');
-    let sharedSpec = posix.relative(domainDir, sharedTarget);
-    if (!sharedSpec.startsWith('.')) sharedSpec = `./${sharedSpec}`;
-    lines.push(`export * from '${sharedSpec}';`);
-    lines.push('');
+    // Keep each domain entrypoint scoped to its own surface. Re-exporting the
+    // shared barrel here makes the root barrel publish the same names twice
+    // once it also exports `./shared/public-api`.
     if (target.features.models) {
       const ownedModels = schemaNames.filter((n) => mapping.modelOwner.get(n) === domain);
       for (const name of ownedModels) {

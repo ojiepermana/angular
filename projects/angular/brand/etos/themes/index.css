@@ -1,15 +1,7 @@
 /**
- * @ojiepermana/angular/etos — complete Etos brand stylesheet.
+ * Compatibility entry for consumers that resolve the explicit index file.
  *
- * Import before Tailwind, then import the shared Tailwind token bridge.
+ * Keep this publish-safe because ng-packagr copies it verbatim to
+ * `@ojiepermana/angular/etos/styles/index.css`.
  */
-@import '../../../theme/src/lib/styles/themes/library/_layers.css';
-@import '../../../theme/src/lib/styles/themes/mode/index.css';
-@import '../../../theme/src/lib/styles/themes/library/color/index.css';
-@import '../../../theme/src/lib/styles/themes/library/style/index.css';
-@import './color.css';
-@import './style.css';
-@import './layout.css';
-@import '../../../theme/src/lib/styles/themes/library/_tokens.css';
-@import '../../../theme/src/lib/styles/themes/library/_material-overrides.css';
-@import '../../../theme/src/lib/styles/themes/library/_components.css';
+@import './package.css';

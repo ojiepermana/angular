@@ -93,6 +93,8 @@ describe('relayoutPerDomain', () => {
       "export { approvalOperationRules } from './permissions/approval';",
     );
     expect(files.get('access/public-api.ts')).toContain("export { accessOperationRules } from './permissions/access';");
+    expect(files.get('approval/public-api.ts')).not.toContain('shared/public-api');
+    expect(files.get('access/public-api.ts')).not.toContain('shared/public-api');
 
     expect(files.get('public-api.ts')).toContain("export * from './metadata';");
     expect(files.get('public-api.ts')).toContain("export * from './openapi-helpers';");

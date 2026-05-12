@@ -46,8 +46,7 @@ const splitFiles: VirtualFile[] = [
   },
   {
     path: 'approval/public-api.ts',
-    content:
-      "export * from '../shared/public-api';\nexport { approvalOperationRules } from './permissions/approval';\n",
+    content: "export { approvalOperationRules } from './permissions/approval';\n",
   },
   {
     path: 'approval/services/approval.service.ts',
@@ -108,7 +107,7 @@ describe('writer', () => {
     const approvalService = result.find((file) => file.path === 'approval/services/approval.service.ts');
     const rootPublicApi = result.find((file) => file.path === 'public-api.ts');
 
-    expect(approvalPublicApi?.content).toContain("from '@scope/sdk/shared';");
+    expect(approvalPublicApi?.content).not.toContain("from '@scope/sdk/shared';");
     expect(approvalService?.content).toContain("from '@scope/sdk/shared';");
     expect(rootPublicApi?.content).toContain("export * from './shared/public-api';");
   });
@@ -151,7 +150,7 @@ describe('writer', () => {
     const approvalPublicApi = result.find((file) => file.path === 'approval/public-api.ts');
     const approvalService = result.find((file) => file.path === 'approval/services/approval.service.ts');
 
-    expect(approvalPublicApi?.content).toContain("from '@scope/angular/sdk/shared';");
+    expect(approvalPublicApi?.content).not.toContain("from '@scope/angular/sdk/shared';");
     expect(approvalService?.content).toContain("from '@scope/angular/sdk/shared';");
   });
 });
