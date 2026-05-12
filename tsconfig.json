@@ -11,6 +11,9 @@
       "angular": ["./dist/angular"],
       "@ojiepermana/angular": ["./projects/angular/public-api.ts"],
       "@ojiepermana/angular/theme": ["./projects/angular/theme/public-api.ts"],
+      "@ojiepermana/angular/theme/styles": ["./projects/angular/theme/src/lib/styles/index.css"],
+      "@ojiepermana/angular/theme/styles/*": ["./projects/angular/theme/src/lib/styles/*"],
+      "@ojiepermana/angular/theme/tailwind/theme.css": ["./projects/angular/theme/src/lib/styles/themes/tailwind.css"],
       "@ojiepermana/angular/navigation": ["./projects/angular/navigation/public-api.ts"],
       "@ojiepermana/angular/component": ["./projects/angular/component/public-api.ts"],
       "@ojiepermana/angular/layout": ["./projects/angular/layout/public-api.ts"],
@@ -20,7 +23,7 @@
       "@ojiepermana/angular/etos/shell/pages": [
         "./projects/angular/brand/etos/shells/pages/shell-pages/shell-pages.ts"
       ],
-      "@ojiepermana/angular/etos/styles": ["./projects/angular/brand/etos/themes/index.css"],
+      "@ojiepermana/angular/etos/styles": ["./projects/angular/brand/etos/themes/package.css"],
       "@ojiepermana/angular/etos/styles/*": ["./projects/angular/brand/etos/themes/*"],
       "@ojiepermana/angular/generator/api": ["./projects/angular/generator/api/public-api.ts"]
     },

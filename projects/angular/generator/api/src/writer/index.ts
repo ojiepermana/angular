@@ -1,6 +1,12 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, isAbsolute, posix, relative, resolve } from 'node:path';
+
 import type { ResolvedSdkTarget } from '../config/schema';
 import type { SdkIR } from '../parser/types';
 import { finalize, type VirtualFile } from '../render/template';
+
+const ROOT_ENTRYPOINT = '';
+const VIRTUAL_ROOT = '/__sdk__';
 
 /**
  * No-op writer for the standalone mode — returns emitted files unchanged. Kept
@@ -15,10 +21,17 @@ export function writeStandalone(files: VirtualFile[]): VirtualFile[] {
  * Library mode: add `ng-package.json`, `package.json`, and a top-level README
  * so the `output` folder can be built with ng-packagr directly.
  */
-export function writeLibrary(files: VirtualFile[], ir: SdkIR, target: ResolvedSdkTarget): VirtualFile[] {
+export function writeLibrary(
+  files: VirtualFile[],
+  ir: SdkIR,
+  target: ResolvedSdkTarget,
+  workspaceRoot: string,
+  outputDir: string,
+): VirtualFile[] {
+  const normalizedFiles = rewriteCrossEntrypointImports(files, target, workspaceRoot, outputDir);
   const ngPackage = {
-    $schema: '../../node_modules/ng-packagr/ng-package.schema.json',
-    dest: `../dist/${target.packageName.replace(/^@/, '').replace(/\//g, '-')}`,
+    $schema: toPosixPath(relative(outputDir, resolve(workspaceRoot, 'node_modules/ng-packagr/ng-package.schema.json'))),
+    dest: toPosixPath(relative(outputDir, resolve(workspaceRoot, 'dist', packageSlug(target.packageName)))),
     lib: { entryFile: 'public-api.ts' },
   };
 
@@ -35,9 +48,9 @@ export function writeLibrary(files: VirtualFile[], ir: SdkIR, target: ResolvedSd
   };
 
   return [
-    ...files,
+    ...normalizedFiles,
     createNgPackageFile('ng-package.json', ngPackage),
-    ...createNestedEntrypointNgPackages(files),
+    ...createNestedEntrypointNgPackages(normalizedFiles),
     {
       path: 'package.json',
       content: finalize(JSON.stringify(pkg, null, 2)),
@@ -57,11 +70,212 @@ export function writeLibrary(files: VirtualFile[], ir: SdkIR, target: ResolvedSd
  * existing library (e.g. `projects/angular/sdk-api/`) so ng-packagr picks it
  * up automatically as a secondary entrypoint of the parent library.
  */
-export function writeSecondaryEntrypoint(files: VirtualFile[], _ir: SdkIR, _target: ResolvedSdkTarget): VirtualFile[] {
+export function writeSecondaryEntrypoint(
+  files: VirtualFile[],
+  _ir: SdkIR,
+  target: ResolvedSdkTarget,
+  workspaceRoot: string,
+  outputDir: string,
+): VirtualFile[] {
+  const normalizedFiles = rewriteCrossEntrypointImports(files, target, workspaceRoot, outputDir);
   const ngPackage = {
     lib: { entryFile: 'public-api.ts' },
   };
-  return [...files, createNgPackageFile('ng-package.json', ngPackage), ...createNestedEntrypointNgPackages(files)];
+  return [
+    ...normalizedFiles,
+    createNgPackageFile('ng-package.json', ngPackage),
+    ...createNestedEntrypointNgPackages(normalizedFiles),
+  ];
+}
+
+function rewriteCrossEntrypointImports(
+  files: readonly VirtualFile[],
+  target: ResolvedSdkTarget,
+  workspaceRoot: string,
+  outputDir: string,
+): VirtualFile[] {
+  const entrypointDirs = collectEntrypointDirs(files);
+  if (entrypointDirs.length <= 1) {
+    return [...files];
+  }
+
+  const packageImportBase = resolvePackageImportBase(target, workspaceRoot, outputDir);
+  if (!packageImportBase) {
+    return [...files];
+  }
+
+  const knownFiles = new Set(files.map((file) => file.path));
+
+  return files.map((file) => {
+    const owner = findEntrypointOwner(file.path, entrypointDirs);
+    if (owner === ROOT_ENTRYPOINT) {
+      return file;
+    }
+
+    return {
+      ...file,
+      content: file.content.replace(/(from\s+['"])([^'"]+)(['"])/g, (_match, prefix, spec, suffix) => {
+        const nextSpec = rewriteModuleSpecifier(spec, file.path, owner, entrypointDirs, knownFiles, packageImportBase);
+        return `${prefix}${nextSpec}${suffix}`;
+      }),
+    };
+  });
+}
+
+function rewriteModuleSpecifier(
+  specifier: string,
+  currentPath: string,
+  currentOwner: string,
+  entrypointDirs: readonly string[],
+  knownFiles: ReadonlySet<string>,
+  packageImportBase: string,
+): string {
+  if (!specifier.startsWith('./') && !specifier.startsWith('../')) {
+    return specifier;
+  }
+
+  const targetPath = resolveVirtualFilePath(currentPath, specifier, knownFiles);
+  if (!targetPath) {
+    return specifier;
+  }
+
+  const targetOwner = findEntrypointOwner(targetPath, entrypointDirs);
+  if (targetOwner === currentOwner) {
+    return specifier;
+  }
+
+  return buildEntrypointImport(packageImportBase, targetOwner);
+}
+
+function resolveVirtualFilePath(
+  currentPath: string,
+  specifier: string,
+  knownFiles: ReadonlySet<string>,
+): string | undefined {
+  const currentAbs = posix.join(VIRTUAL_ROOT, currentPath);
+  const resolved = posix.normalize(posix.join(dirname(currentAbs), specifier));
+  const candidates = [`${resolved}.ts`, `${resolved}/index.ts`, `${resolved}/public-api.ts`, resolved];
+
+  for (const candidate of candidates) {
+    if (!candidate.startsWith(`${VIRTUAL_ROOT}/`)) {
+      continue;
+    }
+
+    const relativePath = candidate.slice(VIRTUAL_ROOT.length + 1);
+    if (knownFiles.has(relativePath)) {
+      return relativePath;
+    }
+  }
+
+  return undefined;
+}
+
+function resolvePackageImportBase(target: ResolvedSdkTarget, workspaceRoot: string, outputDir: string): string {
+  if (target.mode === 'library') {
+    return target.packageName;
+  }
+
+  if (target.mode !== 'secondary-entrypoint') {
+    return '';
+  }
+
+  return inferSecondaryEntrypointPackageName(workspaceRoot, outputDir, target.packageName);
+}
+
+function inferSecondaryEntrypointPackageName(workspaceRoot: string, outputDir: string, fallback: string): string {
+  let currentDir = outputDir;
+  let nearestPackageDir: string | undefined;
+  let nearestPackagrDir: string | undefined;
+
+  while (isWithinWorkspace(currentDir, workspaceRoot)) {
+    const packageJsonPath = resolve(currentDir, 'package.json');
+    if (existsSync(packageJsonPath)) {
+      nearestPackageDir ??= currentDir;
+      if (existsSync(resolve(currentDir, 'ng-package.json'))) {
+        nearestPackagrDir = currentDir;
+        break;
+      }
+    }
+
+    if (currentDir === workspaceRoot) {
+      break;
+    }
+
+    const parentDir = dirname(currentDir);
+    if (parentDir === currentDir) {
+      break;
+    }
+
+    currentDir = parentDir;
+  }
+
+  const packageDir = nearestPackagrDir ?? nearestPackageDir;
+  if (!packageDir) {
+    return fallback;
+  }
+
+  const packageName = readPackageName(packageDir);
+  if (!packageName) {
+    return fallback;
+  }
+
+  const relativeOutput = toPosixPath(relative(packageDir, outputDir)).replace(/^\.\//, '');
+  if (!relativeOutput || relativeOutput === '.') {
+    return packageName;
+  }
+
+  return `${packageName}/${relativeOutput}`;
+}
+
+function readPackageName(packageDir: string): string | undefined {
+  const packageJsonPath = resolve(packageDir, 'package.json');
+  if (!existsSync(packageJsonPath)) {
+    return undefined;
+  }
+
+  const raw = JSON.parse(readFileSync(packageJsonPath, 'utf8')) as { name?: unknown };
+  return typeof raw.name === 'string' && raw.name.length > 0 ? raw.name : undefined;
+}
+
+function isWithinWorkspace(candidate: string, workspaceRoot: string): boolean {
+  const rel = relative(workspaceRoot, candidate);
+  return rel === '' || (!rel.startsWith('..') && !isAbsolute(rel));
+}
+
+function collectEntrypointDirs(files: readonly VirtualFile[]): string[] {
+  const dirs = new Set<string>();
+  for (const file of files) {
+    if (file.path === 'public-api.ts') {
+      dirs.add(ROOT_ENTRYPOINT);
+      continue;
+    }
+
+    if (!file.path.endsWith('/public-api.ts')) {
+      continue;
+    }
+
+    dirs.add(file.path.slice(0, -'/public-api.ts'.length));
+  }
+
+  return [...dirs].sort((left, right) => right.length - left.length || left.localeCompare(right));
+}
+
+function findEntrypointOwner(filePath: string, entrypointDirs: readonly string[]): string {
+  for (const entrypointDir of entrypointDirs) {
+    if (entrypointDir === ROOT_ENTRYPOINT) {
+      continue;
+    }
+
+    if (filePath === `${entrypointDir}/public-api.ts` || filePath.startsWith(`${entrypointDir}/`)) {
+      return entrypointDir;
+    }
+  }
+
+  return ROOT_ENTRYPOINT;
+}
+
+function buildEntrypointImport(packageImportBase: string, entrypointDir: string): string {
+  return entrypointDir ? `${packageImportBase}/${entrypointDir}` : packageImportBase;
 }
 
 function createNestedEntrypointNgPackages(files: readonly VirtualFile[]): VirtualFile[] {
@@ -83,6 +297,14 @@ function collectSecondaryEntrypointDirs(files: readonly VirtualFile[]): string[]
   }
 
   return [...dirs].sort();
+}
+
+function packageSlug(packageName: string): string {
+  return packageName.replace(/^@/, '').replace(/\//g, '-');
+}
+
+function toPosixPath(value: string): string {
+  return value.split('\\').join('/');
 }
 
 function createNgPackageFile(path: string, content: object): VirtualFile {

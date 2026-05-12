@@ -305,7 +305,7 @@ function emitPublicApis(ir: SdkIR, target: ResolvedSdkTarget, mapping: Mapping):
   }
   if (target.features.metadata) {
     sharedLines.push(`export * from './metadata-types';`);
-    sharedLines.push(`export * from './validators';`);
+    sharedLines.push(`export * from './validators/index';`);
     sharedLines.push('');
   }
   if (target.features.navigation) {
@@ -331,6 +331,13 @@ function emitPublicApis(ir: SdkIR, target: ResolvedSdkTarget, mapping: Mapping):
         lines.push(`export type { ${pascalCase(name)} } from './models/${kebabCase(name)}';`);
       }
       if (ownedModels.length) lines.push('');
+    }
+    if (target.features.metadata) {
+      const tags = (mapping.domainServices.get(domain) ?? []).slice().sort();
+      for (const tag of tags) {
+        lines.push(`export { ${camelCase(tag)}OperationRules } from './permissions/${kebabCase(tag)}';`);
+      }
+      if (tags.length) lines.push('');
     }
     if (target.features.services) {
       const tags = mapping.domainServices.get(domain) ?? [];

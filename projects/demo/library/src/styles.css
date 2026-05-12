@@ -5,7 +5,7 @@
 @import 'tailwindcss';
 
 /* Tailwind ↔ theme token mapping (bg-background, text-foreground, rounded-md, …). */
-@import '../../../angular/theme/src/lib/styles/themes/taildwind.css';
+@import '../../../angular/theme/src/lib/styles/themes/tailwind.css';
 
 /* Base reset. */
 html,

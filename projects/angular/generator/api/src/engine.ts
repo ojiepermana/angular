@@ -52,8 +52,8 @@ export async function generate(target: ResolvedSdkTarget, workspaceRoot: string)
   files.push(...emitPublicApi(ir, target));
 
   const laidOut = target.splitByDomain ? relayoutPerDomain(files, ir, target) : files;
-  const wrapped = applyMode(laidOut, ir, target);
   const outputDir = isAbsolute(target.output) ? target.output : resolve(workspaceRoot, target.output);
+  const wrapped = applyMode(laidOut, ir, target, workspaceRoot, outputDir);
 
   return {
     target,
@@ -68,12 +68,18 @@ export async function generate(target: ResolvedSdkTarget, workspaceRoot: string)
   };
 }
 
-function applyMode(files: VirtualFile[], ir: SdkIR, target: ResolvedSdkTarget): VirtualFile[] {
+function applyMode(
+  files: VirtualFile[],
+  ir: SdkIR,
+  target: ResolvedSdkTarget,
+  workspaceRoot: string,
+  outputDir: string,
+): VirtualFile[] {
   switch (target.mode) {
     case 'library':
-      return writeLibrary(files, ir, target);
+      return writeLibrary(files, ir, target, workspaceRoot, outputDir);
     case 'secondary-entrypoint':
-      return writeSecondaryEntrypoint(files, ir, target);
+      return writeSecondaryEntrypoint(files, ir, target, workspaceRoot, outputDir);
     case 'standalone':
     default:
       return writeStandalone(files);

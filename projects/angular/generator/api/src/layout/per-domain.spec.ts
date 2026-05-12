@@ -85,9 +85,14 @@ describe('relayoutPerDomain', () => {
     expect(files.get('metadata.ts')).toContain("export * from './shared/validators/index';");
 
     expect(files.get('shared/public-api.ts')).toContain("export * from './metadata-types';");
-    expect(files.get('shared/public-api.ts')).toContain("export * from './validators';");
+    expect(files.get('shared/public-api.ts')).toContain("export * from './validators/index';");
     expect(files.get('shared/public-api.ts')).not.toContain("export * from './metadata';");
     expect(files.get('shared/public-api.ts')).not.toContain("export * from './openapi-helpers';");
+
+    expect(files.get('approval/public-api.ts')).toContain(
+      "export { approvalOperationRules } from './permissions/approval';",
+    );
+    expect(files.get('access/public-api.ts')).toContain("export { accessOperationRules } from './permissions/access';");
 
     expect(files.get('public-api.ts')).toContain("export * from './metadata';");
     expect(files.get('public-api.ts')).toContain("export * from './openapi-helpers';");

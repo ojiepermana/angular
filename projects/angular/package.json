@@ -65,10 +65,10 @@
   "sideEffects": false,
   "schematics": "./collection.json",
   "exports": {
-    "./etos/styles": "./etos/styles/index.css",
+    "./etos/styles": "./etos/styles/package.css",
     "./etos/styles/*": "./etos/styles/*",
     "./theme/styles": "./theme/styles/index.css",
     "./theme/styles/*": "./theme/styles/*",
-    "./theme/tailwind/theme.css": "./theme/styles/themes/taildwind.css"
+    "./theme/tailwind/theme.css": "./theme/styles/themes/tailwind.css"
   }
 }
