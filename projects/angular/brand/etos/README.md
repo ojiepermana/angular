@@ -48,7 +48,7 @@ import {
 Etos ships with these defaults:
 
 - Theme defaults to brand `etos` with light mode.
-- Layout defaults to `vertical` mode with `container` width.
+- Layout defaults to `vertical` mode with `wide` width.
 
 Recommended provider configuration:
 

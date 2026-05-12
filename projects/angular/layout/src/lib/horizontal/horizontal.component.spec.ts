@@ -37,7 +37,7 @@ describe('HorizontalLayoutComponent', () => {
 
   it('projects brand and profile content into the topbar', () => {
     TestBed.configureTestingModule({
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), { provide: MATERIAL_LAYOUT_CONFIG, useValue: { width: 'container' } }],
     });
 
     const fixture = TestBed.createComponent(HostComponent);
@@ -108,7 +108,7 @@ describe('HorizontalLayoutComponent', () => {
 
   it('keeps container shell spacing on host padding instead of outer margins', () => {
     TestBed.configureTestingModule({
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), { provide: MATERIAL_LAYOUT_CONFIG, useValue: { width: 'container' } }],
     });
 
     const fixture = TestBed.createComponent(HostComponent);

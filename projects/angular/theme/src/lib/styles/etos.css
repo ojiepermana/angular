@@ -3,4 +3,4 @@
  *
  * The Etos implementation now lives under the dedicated `./etos` entrypoint.
  */
-@import '@ojiepermana/angular/etos/styles';
+@import '../../../../brand/etos/themes/index.css';

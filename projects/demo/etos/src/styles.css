@@ -1,5 +1,5 @@
-/* Workspace source equivalent of @ojiepermana/angular/etos/styles. */
-@import '../../../angular/brand/etos/themes/index.css';
+/* Demo styles resolve through the workspace alias in tsconfig. */
+@import '@ojiepermana/angular/etos/styles';
 
 /* Tailwind v4 runtime. */
 @import 'tailwindcss';

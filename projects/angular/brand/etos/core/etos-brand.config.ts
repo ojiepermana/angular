@@ -10,5 +10,4 @@ export const ETOS_THEME_CONFIG = {
 
 export const ETOS_LAYOUT_CONFIG = {
   mode: 'vertical',
-  width: 'container',
 } satisfies MaterialLayoutConfig;

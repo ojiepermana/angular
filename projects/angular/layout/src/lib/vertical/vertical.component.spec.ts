@@ -32,7 +32,7 @@ describe('VerticalLayoutComponent', () => {
 
   it('constrains the main area when layout width is container', () => {
     TestBed.configureTestingModule({
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), { provide: MATERIAL_LAYOUT_CONFIG, useValue: { width: 'container' } }],
     });
 
     const fixture = TestBed.createComponent(HostComponent);
@@ -90,7 +90,7 @@ describe('VerticalLayoutComponent', () => {
 
   it('keeps container shell spacing on host padding instead of outer margins', () => {
     TestBed.configureTestingModule({
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), { provide: MATERIAL_LAYOUT_CONFIG, useValue: { width: 'container' } }],
     });
 
     const fixture = TestBed.createComponent(HostComponent);

@@ -38,7 +38,7 @@ export const MATERIAL_LAYOUT_CONFIG = new InjectionToken<MaterialLayoutConfig>('
 
 export const DEFAULT_MATERIAL_LAYOUT_CONFIG: ResolvedMaterialLayoutConfig = {
   defaultMode: 'vertical',
-  defaultWidth: 'container',
+  defaultWidth: 'wide',
   storageKey: 'layout-mode',
   widthStorageKey: 'layout-width',
 };

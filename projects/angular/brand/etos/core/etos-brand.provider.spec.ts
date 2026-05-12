@@ -82,4 +82,30 @@ describe('provideEtosBrand', () => {
 
     expect(service.getItems(DEFAULT_NAVIGATION_ID)()).toEqual(navigation);
   });
+
+  it('inherits the shared wide layout width when no consumer width is provided', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideEtosBrand({
+          materialDefaults: false,
+          theme: {
+            modeStorageKey: null,
+            brandStorageKey: null,
+            colorStorageKey: null,
+            styleStorageKey: null,
+          },
+          layout: {
+            storageKey: null,
+            widthStorageKey: 'layout-width',
+          },
+        }),
+      ],
+    });
+
+    const layout = TestBed.inject(LayoutService);
+    TestBed.flushEffects();
+
+    expect(layout.width()).toBe('wide');
+    expect(localStorage.getItem('layout-width')).toBe('wide');
+  });
 });
