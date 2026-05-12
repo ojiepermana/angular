@@ -3,19 +3,19 @@
  */
 @layer tokens {
   [theme-brand='etos'] {
-    --etos-layout-shell-padding: clamp(1rem, 2vw, 2rem);
-    --etos-layout-frame-radius: var(--radius-lg);
-    --etos-layout-frame-shadow: var(--shadow-sm);
-    --etos-layout-sidebar-width: 17.5rem;
-    --etos-layout-main-max-width: 80rem;
-    --etos-layout-vertical-shell-max-width: calc(var(--etos-layout-sidebar-width) + var(--etos-layout-main-max-width));
-    --etos-layout-empty-max-width: 24rem;
-    --etos-layout-empty-padding: clamp(1.5rem, 4vw, 3rem);
-    --etos-layout-topbar-inline: 0.875rem;
-    --etos-layout-brand-mark-size: 2rem;
+    --layout-shell-padding: clamp(1rem, 2vw, 2rem);
+    --layout-frame-radius: var(--radius-lg);
+    --layout-frame-shadow: var(--shadow-sm);
+    --layout-sidebar-width: 17.5rem;
+    --layout-main-max-width: 80rem;
+    --layout-vertical-shell-max-width: calc(var(--layout-sidebar-width) + var(--layout-main-max-width));
+    --layout-empty-max-width: 24rem;
+    --layout-empty-padding: clamp(1.5rem, 4vw, 3rem);
+    --layout-topbar-inline: 0.875rem;
+    --layout-brand-mark-size: 2rem;
   }
 
   [data-mode='dark'][theme-brand='etos'] {
-    --etos-layout-frame-shadow: 0 0 0 1px hsl(var(--border));
+    --layout-frame-shadow: 0 0 0 1px hsl(var(--border));
   }
 }

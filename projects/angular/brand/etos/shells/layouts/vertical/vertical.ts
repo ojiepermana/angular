@@ -124,7 +124,7 @@ export class VerticalLayout {
 
     switch (this.layoutWidth()) {
       case 'container':
-        classes.push('lg:max-w-[var(--etos-layout-vertical-shell-max-width)]');
+        classes.push('lg:max-w-[var(--layout-vertical-shell-max-width)]');
         break;
       default:
         break;

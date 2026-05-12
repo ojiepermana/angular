@@ -151,7 +151,7 @@ const SWITCHER_PANEL_OVERLAP_OFFSET = -32;
           <section
             data-setting="theme-scheme"
             [attr.data-current]="themeScheme()"
-            class="rounded-(--etos-layout-frame-radius) bg-muted/65 p-0.5">
+            class="rounded-(--layout-frame-radius) bg-muted/65 p-0.5">
             <div class="grid grid-cols-3 gap-1">
               @for (option of themeSchemeOptions; track option.value) {
                 <button
@@ -179,7 +179,7 @@ const SWITCHER_PANEL_OVERLAP_OFFSET = -32;
             <div class="px-1">
               <p class="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Layout</p>
             </div>
-            <div class="rounded-(--etos-layout-frame-radius) bg-muted/65 p-0.5">
+            <div class="rounded-(--layout-frame-radius) bg-muted/65 p-0.5">
               <div class="grid grid-cols-3 gap-1">
                 @for (option of layoutModeOptions; track option.value) {
                   <button
@@ -208,7 +208,7 @@ const SWITCHER_PANEL_OVERLAP_OFFSET = -32;
             <div class="px-1">
               <p class="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Width</p>
             </div>
-            <div class="rounded-(--etos-layout-frame-radius) bg-muted/65 p-0.5">
+            <div class="rounded-(--layout-frame-radius) bg-muted/65 p-0.5">
               <div class="grid grid-cols-3 gap-1">
                 @for (option of layoutWidthOptions; track option.value) {
                   <button
@@ -352,13 +352,13 @@ export class EtosThemeSwitcherComponent {
 
   protected notificationButtonClasses(): string {
     return cn(
-      'h-8 w-8 rounded-[var(--etos-layout-frame-radius)] p-0 text-muted-foreground transition-colors duration-150 hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+      'h-8 w-8 rounded-[var(--layout-frame-radius)] p-0 text-muted-foreground transition-colors duration-150 hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
     );
   }
 
   protected segmentedOptionClasses(active: boolean): string {
     return cn(
-      'h-10 rounded-[var(--etos-layout-frame-radius)] border border-transparent px-[0.3125rem] py-[0.1875rem] text-foreground transition-colors',
+      'h-10 rounded-[var(--layout-frame-radius)] border border-transparent px-[0.3125rem] py-[0.1875rem] text-foreground transition-colors',
       active ? 'bg-background shadow-sm' : 'text-muted-foreground hover:bg-background/70',
     );
   }
@@ -373,7 +373,7 @@ export class EtosThemeSwitcherComponent {
 
   protected actionButtonClasses(tone: EtosThemeSwitcherActionTone = 'default'): string {
     return cn(
-      'h-12 w-full justify-start gap-2.5 rounded-[var(--etos-layout-frame-radius)] border border-transparent px-2 py-1.5 text-left transition-colors hover:bg-muted/50',
+      'h-12 w-full justify-start gap-2.5 rounded-[var(--layout-frame-radius)] border border-transparent px-2 py-1.5 text-left transition-colors hover:bg-muted/50',
       tone === 'destructive' && 'hover:bg-destructive/8 focus-visible:ring-destructive/30',
     );
   }

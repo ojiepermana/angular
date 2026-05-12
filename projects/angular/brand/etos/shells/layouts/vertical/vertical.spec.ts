@@ -67,7 +67,7 @@ describe('VerticalLayout', () => {
     expect(wideComponent.gridClasses()).toContain('w-full');
     expect(wideComponent.gridClasses()).not.toContain('w-fit');
     expect(wideComponent.gridClasses()).toContain('grid-cols-[auto_minmax(0,1fr)]');
-    expect(wideComponent.gridClasses()).not.toContain('lg:max-w-[var(--etos-layout-vertical-shell-max-width-wide)]');
+    expect(wideComponent.gridClasses()).not.toContain('lg:max-w-[var(--layout-vertical-shell-max-width-wide)]');
     expect(sidebar?.classList.contains('w-16')).toBe(true);
   });
 });
