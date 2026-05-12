@@ -16,6 +16,10 @@
       "@ojiepermana/angular/layout": ["./projects/angular/layout/public-api.ts"],
       "@ojiepermana/angular/chart": ["./projects/angular/chart/public-api.ts"],
       "@ojiepermana/angular/etos": ["./projects/angular/brand/etos/public-api.ts"],
+      "@ojiepermana/angular/etos/shell/layout": ["./projects/angular/brand/etos/shells/layouts/etos.layout.ts"],
+      "@ojiepermana/angular/etos/shell/pages": [
+        "./projects/angular/brand/etos/shells/pages/shell-pages/shell-pages.ts"
+      ],
       "@ojiepermana/angular/etos/styles": ["./projects/angular/brand/etos/themes/index.css"],
       "@ojiepermana/angular/etos/styles/*": ["./projects/angular/brand/etos/themes/*"],
       "@ojiepermana/angular/generator/api": ["./projects/angular/generator/api/public-api.ts"]

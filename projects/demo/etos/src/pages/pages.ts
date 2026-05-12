@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { EtosLayoutComponent } from '@ojiepermana/angular/etos/shell/layout';
 import {
-  EtosLayoutComponent,
   type EtosThemeSwitcherQuickAction,
   EtosThemeSwitcherComponent,
   type EtosThemeSwitcherUserInfo,

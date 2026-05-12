@@ -23,6 +23,11 @@ export const routes: Routes = [
         loadComponent: () => import('./dashboard/dashboard').then((m) => m.DashboardPage),
       },
       {
+        path: 'shell',
+        title: 'Shell ',
+        loadComponent: () => import('./shell/shell').then((m) => m.ShellPage),
+      },
+      {
         path: 'ui/shadcn',
         title: 'shadcn UI',
         loadChildren: () =>

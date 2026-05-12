@@ -83,6 +83,16 @@ function patchRootPackage() {
     removeExports: ['./brand/etos'],
   });
 
+  aliasExport(exports, {
+    fromExport: './etos',
+    toExport: './etos/shell/layout',
+  });
+
+  aliasExport(exports, {
+    fromExport: './etos',
+    toExport: './etos/shell/pages',
+  });
+
   rootMeta.exports = exports;
 
   writeJson(rootPackagePath, rootMeta);
@@ -103,6 +113,12 @@ function aliasSecondaryEntrypoint(exports, alias) {
   for (const exportKey of alias.removeExports) {
     delete exports[exportKey];
   }
+}
+
+function aliasExport(exports, alias) {
+  const resolved = exports[alias.fromExport];
+  if (!resolved) return;
+  exports[alias.toExport] = resolved;
 }
 
 function copyInto(fromRoot, toRoot, relativePath) {

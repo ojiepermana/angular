@@ -8,5 +8,6 @@ export * from './core/etos-brand.config';
 export * from './core/etos-brand.provider';
 export * from './component/theme-switcher';
 export * from './shells/layouts/etos.layout';
+export * from './shells/pages/shell-pages';
 
 export const ETOS_BRAND_VERSION = '0.0.1';

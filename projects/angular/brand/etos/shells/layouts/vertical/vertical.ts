@@ -51,18 +51,8 @@ import { LayoutService } from '@ojiepermana/angular/layout';
                   }
                 </sidebar>
               </nav>
-              <main class="relative min-w-0 overflow-y-auto">
+              <main class="relative min-h-0 min-w-0 overflow-y-auto">
                 <router-outlet />
-                <div class="pointer-events-none absolute right-4 top-4 z-30">
-                  <div
-                    class="inline-flex min-w-20 items-center justify-center rounded-full border border-brand bg-white/85 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-foreground shadow-sm backdrop-blur-sm"
-                    aria-label="Current breakpoint identifier">
-                    <span class="sm:hidden">mobile</span>
-                    <span class="hidden sm:inline md:hidden">sm</span>
-                    <span class="hidden md:inline lg:hidden">md</span>
-                    <span class="hidden lg:inline">lg</span>
-                  </div>
-                </div>
               </main>
             </div>
           </div>

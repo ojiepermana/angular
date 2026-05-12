@@ -20,12 +20,13 @@ Shared services, types, and primitives stay in the generic libraries:
 
 ## Public entrypoint
 
-Published consumers should import Etos through the short public entrypoint:
+Published consumers should import Etos providers and Etos-owned UI through the short public entrypoint. Shell UI can also be imported through deeper shell aliases:
 
 ```ts
 import {
   EtosLayoutComponent,
   EtosThemeSwitcherComponent,
+  ShellPagesComponent,
   provideEtosBrand,
   provideEtosLayout,
   provideEtosTheme,
@@ -33,6 +34,9 @@ import {
   type EtosThemeSwitcherQuickAction,
   type EtosThemeSwitcherUserInfo,
 } from '@ojiepermana/angular/etos';
+
+import { EtosLayoutComponent } from '@ojiepermana/angular/etos/shell/layout';
+import { ShellPagesComponent } from '@ojiepermana/angular/etos/shell/pages';
 ```
 
 `@ojiepermana/angular/etos` currently exports:
@@ -42,6 +46,12 @@ import {
 - `provideEtosLayout()` to install only the Etos layout wrapper over the shared layout provider.
 - `EtosLayoutComponent` to render the Etos shell from the current layout mode.
 - `EtosThemeSwitcherComponent` and related types for the profile/preferences UI.
+- `ShellPagesComponent` for the fixed-header, scroll-main, optional-footer page shell.
+
+Shell-specific UI is exported through deeper entrypoints:
+
+- `@ojiepermana/angular/etos/shell/layout` aliases `EtosLayoutComponent`.
+- `@ojiepermana/angular/etos/shell/pages` aliases `ShellPagesComponent`.
 
 ## Provider setup
 
@@ -118,8 +128,8 @@ This is the same composition pattern used by the Etos demo:
 ```ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { EtosLayoutComponent } from '@ojiepermana/angular/etos/shell/layout';
 import {
-  EtosLayoutComponent,
   type EtosThemeSwitcherQuickAction,
   EtosThemeSwitcherComponent,
   type EtosThemeSwitcherUserInfo,
