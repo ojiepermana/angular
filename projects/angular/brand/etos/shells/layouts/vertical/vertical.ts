@@ -17,12 +17,12 @@ import { LayoutService } from '@ojiepermana/angular/layout';
     <!-- prettier-ignore -->
     <div class="h-full overflow-hidden bg-neutral-200   bg-[linear-gradient(rgba(212,212,212,0.65)_1px,transparent_1px),linear-gradient(to_right,rgba(212,212,212,0.65)_1px,transparent_1px)] bg-position-[center_center] bg-size-[2.775rem_2.775rem]">
       <div [class]="shellClasses()">
-        <div class="-mx-18 relative h-full border-y border-brand">
+        <div [class]="frameClasses()">
           <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 inset-y-8">
             <div class="absolute inset-x-0 top-3.75 h-px bg-brand"></div>
             <div class="absolute inset-x-0 bottom-3.75 h-px bg-brand"></div>
           </div>
-          <div class="h-full px-20">
+          <div [class]="frameBodyClasses()">
             <div [class]="gridClasses()">
               <div
                 aria-hidden="true"
@@ -93,14 +93,43 @@ export class VerticalLayout {
     }
   });
 
-  protected readonly gridClasses = computed(() => {
-    switch (this.layoutWidth()) {
-      case 'full':
-        return 'relative mx-auto grid h-full w-fit max-w-full grid-cols-[auto_minmax(0,100rem)] items-stretch bg-background/65';
-      case 'wide':
-        return 'relative mx-auto grid h-full w-fit max-w-full grid-cols-[auto_minmax(0,100rem)] items-stretch bg-background/65  lg:grid-cols-[auto_minmax(0,96rem)]';
-      default:
-        return 'relative mx-auto grid h-full w-fit max-w-full grid-cols-[auto_minmax(0,100rem)] items-stretch bg-background/65  lg:grid-cols-[auto_minmax(0,80rem)]';
+  protected readonly frameClasses = computed(() => {
+    if (this.layoutWidth() === 'wide') {
+      return 'relative h-full border-y border-brand';
     }
+
+    return '-mx-18 relative h-full border-y border-brand';
+  });
+
+  protected readonly frameBodyClasses = computed(() => {
+    if (this.layoutWidth() === 'wide') {
+      return 'h-full lg:px-10';
+    }
+
+    return 'h-full px-20';
+  });
+
+  protected readonly gridClasses = computed(() => {
+    const classes = [
+      'relative',
+      'mx-auto',
+      'grid',
+      'h-full',
+      'w-full',
+      'max-w-full',
+      'grid-cols-[auto_minmax(0,1fr)]',
+      'items-stretch',
+      'bg-background/65',
+    ];
+
+    switch (this.layoutWidth()) {
+      case 'container':
+        classes.push('lg:max-w-[var(--etos-layout-vertical-shell-max-width)]');
+        break;
+      default:
+        break;
+    }
+
+    return classes.join(' ');
   });
 }
