@@ -18,6 +18,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { FocusTrap, FocusTrapFactory } from '@angular/cdk/a11y';
 import { filter, map } from 'rxjs/operators';
+import { ScrollAreaComponent } from '@ojiepermana/angular/component';
 import { UiNavIconComponent } from '../shared/nav-icon.component';
 import { UiNavItemComponent } from '../shared/nav-item.component';
 import { NavigationService, DEFAULT_NAVIGATION_ID } from '../../core/services/navigation.service';
@@ -37,7 +38,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
 @Component({
   selector: 'sidebar',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, UiNavIconComponent, UiNavItemComponent],
+  imports: [NgTemplateOutlet, ScrollAreaComponent, UiNavIconComponent, UiNavItemComponent],
   host: {
     role: 'navigation',
     '[attr.aria-label]': 'ariaLabel()',
@@ -76,11 +77,13 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
           }
         </div>
       }
-      <nav [class]="navClasses()">
-        @for (item of resolvedItems(); track item.id) {
-          <ui-nav-item [item]="item" [compact]="isCompact()" />
-        }
-      </nav>
+      <ui-scroll-area class="min-h-0 flex-1">
+        <nav [class]="navClasses()">
+          @for (item of resolvedItems(); track item.id) {
+            <ui-nav-item [item]="item" [compact]="isCompact()" />
+          }
+        </nav>
+      </ui-scroll-area>
       <div [class]="footerClasses()">
         <div [class]="footerSlotClasses()">
           <ng-content select="[sidebar-footer]" />
@@ -210,9 +213,7 @@ export class SidebarComponent {
   });
 
   protected readonly navClasses = computed(() => {
-    const base = [
-      'flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary/10',
-    ];
+    const base = ['min-h-full overflow-x-hidden'];
     if (this.isCompact()) {
       base.push(
         'px-2',
