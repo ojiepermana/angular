@@ -12,7 +12,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         <ng-content select="[shell-pages-header]" />
       </header>
 
-      <main class="min-h-0 flex-1 overflow-y-auto"><ng-content select="[shell-pages-main]" /></main>
+      <main class="min-h-0 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary/10">
+        <ng-content select="[shell-pages-main]" />
+      </main>
 
       <footer class="flex h-12 min-w-0 shrink-0 items-center gap-2 border-t border-border px-2">
         <ng-content select="[shell-pages-footer]" />

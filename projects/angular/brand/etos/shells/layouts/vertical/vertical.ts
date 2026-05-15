@@ -51,7 +51,7 @@ import { LayoutService } from '@ojiepermana/angular/layout';
                   }
                 </sidebar>
               </nav>
-              <main class="relative min-h-0 min-w-0 overflow-y-auto">
+              <main class="relative min-h-0 min-w-0 overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary/10">
                 <router-outlet />
               </main>
             </div>

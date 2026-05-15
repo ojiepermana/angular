@@ -210,7 +210,9 @@ export class SidebarComponent {
   });
 
   protected readonly navClasses = computed(() => {
-    const base = ['flex-1 overflow-y-auto overflow-x-hidden'];
+    const base = [
+      'flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary/10',
+    ];
     if (this.isCompact()) {
       base.push(
         'px-2',
