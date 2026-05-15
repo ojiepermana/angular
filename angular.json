@@ -44,7 +44,9 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/angular/tsconfig.theme.spec.json",
-            "include": ["../../theme/src/**/*.spec.ts"]
+            "include": [
+              "../../theme/src/**/*.spec.ts"
+            ]
           }
         }
       }
@@ -66,9 +68,14 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "browser": "projects/demo/library/src/main.ts",
+            "customWebpackConfig": {
+              "path": "config/tailwind-webpack.config.cjs"
+            },
+            "outputPath": "dist/demo",
+            "index": "projects/demo/library/src/index.html",
+            "main": "projects/demo/library/src/main.ts",
             "tsConfig": "projects/demo/library/tsconfig.app.json",
             "assets": [
               {
@@ -76,7 +83,9 @@
                 "input": "projects/demo/library/public"
               }
             ],
-            "styles": ["projects/demo/library/src/styles.css"]
+            "styles": [
+              "projects/demo/library/src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -103,7 +112,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "demo:build:production"
@@ -114,8 +123,37 @@
           },
           "defaultConfiguration": "development"
         },
+        "test-build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/demo-test",
+            "index": "projects/demo/library/src/index.html",
+            "browser": "projects/demo/library/src/main.ts",
+            "tsConfig": "projects/demo/library/tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/demo/library/public"
+              }
+            ],
+            "styles": [
+              "projects/demo/library/src/styles.css"
+            ]
+          },
+          "configurations": {
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "development"
+        },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "buildTarget": "demo:test-build:development"
+          }
         }
       }
     },
@@ -136,9 +174,14 @@
       "prefix": "etos",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "browser": "projects/demo/etos/src/main.ts",
+            "customWebpackConfig": {
+              "path": "config/tailwind-webpack.config.cjs"
+            },
+            "outputPath": "dist/etos",
+            "index": "projects/demo/etos/src/index.html",
+            "main": "projects/demo/etos/src/main.ts",
             "tsConfig": "projects/demo/etos/tsconfig.app.json",
             "assets": [
               {
@@ -146,7 +189,9 @@
                 "input": "projects/demo/etos/public"
               }
             ],
-            "styles": ["projects/demo/etos/src/styles.css"]
+            "styles": [
+              "projects/demo/etos/src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -173,7 +218,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "etos:build:production"
@@ -184,8 +229,37 @@
           },
           "defaultConfiguration": "development"
         },
+        "test-build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/etos-test",
+            "index": "projects/demo/etos/src/index.html",
+            "browser": "projects/demo/etos/src/main.ts",
+            "tsConfig": "projects/demo/etos/tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/demo/etos/public"
+              }
+            ],
+            "styles": [
+              "projects/demo/etos/src/styles.css"
+            ]
+          },
+          "configurations": {
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "development"
+        },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "buildTarget": "etos:test-build:development"
+          }
         }
       }
     },
@@ -206,9 +280,14 @@
       "prefix": "ala",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "browser": "projects/demo/ala/src/main.ts",
+            "customWebpackConfig": {
+              "path": "config/tailwind-webpack.config.cjs"
+            },
+            "outputPath": "dist/ala",
+            "index": "projects/demo/ala/src/index.html",
+            "main": "projects/demo/ala/src/main.ts",
             "tsConfig": "projects/demo/ala/tsconfig.app.json",
             "assets": [
               {
@@ -216,7 +295,9 @@
                 "input": "projects/demo/ala/public"
               }
             ],
-            "styles": ["projects/demo/ala/src/styles.css"]
+            "styles": [
+              "projects/demo/ala/src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -243,7 +324,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "ala:build:production"
@@ -254,8 +335,37 @@
           },
           "defaultConfiguration": "development"
         },
+        "test-build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/ala-test",
+            "index": "projects/demo/ala/src/index.html",
+            "browser": "projects/demo/ala/src/main.ts",
+            "tsConfig": "projects/demo/ala/tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/demo/ala/public"
+              }
+            ],
+            "styles": [
+              "projects/demo/ala/src/styles.css"
+            ]
+          },
+          "configurations": {
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "development"
+        },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "buildTarget": "ala:test-build:development"
+          }
         }
       }
     }

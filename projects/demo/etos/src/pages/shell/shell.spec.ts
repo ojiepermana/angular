@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Shell } from './shell';
+import { ShellPage } from './shell';
 
 describe('Shell', () => {
-  let component: Shell;
-  let fixture: ComponentFixture<Shell>;
+  let component: ShellPage;
+  let fixture: ComponentFixture<ShellPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Shell],
+      imports: [ShellPage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Shell);
+    fixture = TestBed.createComponent(ShellPage);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

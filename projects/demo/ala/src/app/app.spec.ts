@@ -16,8 +16,11 @@ describe('App', () => {
 
   it('should render the app shell', async () => {
     const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('router-outlet')).not.toBeNull();
+    expect(compiled.textContent).toContain('Header');
+    expect(compiled.textContent).toContain('Content');
+    expect(compiled.textContent).toContain('Footer');
   });
 });

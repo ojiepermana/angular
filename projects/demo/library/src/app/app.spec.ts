@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { DEFAULT_MATERIAL_LAYOUT_CONFIG } from '@ojiepermana/angular/layout';
 import { NavigationService } from '@ojiepermana/angular/navigation';
 
 import { appConfig, layoutConfig, themeConfig } from './app.config';
@@ -76,7 +77,7 @@ describe('App', () => {
     fixture.detectChanges();
 
     expect(localStorage.getItem('layout-mode')).toBe(layoutConfig.mode);
-    expect(localStorage.getItem('layout-width')).toBe('container');
+    expect(localStorage.getItem('layout-width')).toBe(DEFAULT_MATERIAL_LAYOUT_CONFIG.defaultWidth);
   });
 
   it('should resolve the dashboard route under the pages shell', async () => {
@@ -90,7 +91,7 @@ describe('App', () => {
 
     expect(navigated).toBe(true);
     expect(router.url).toBe('/dashboard');
-    expect(fixture.nativeElement.textContent).toContain('Dashboard content');
+    expect(fixture.nativeElement.textContent).toContain('Operations overview');
     expect(fixture.nativeElement.textContent).toContain('Footer');
   });
 });
