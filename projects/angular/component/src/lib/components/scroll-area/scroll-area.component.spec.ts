@@ -5,12 +5,14 @@ import { ScrollAreaComponent } from './scroll-area.component';
 
 @Component({
   imports: [ScrollAreaComponent],
-  template: `<ui-scroll-area class="h-40 w-32">Body</ui-scroll-area>`,
+  template: `<ui-scroll-area class="h-40 w-32" viewportClass="overflow-y-auto scrollbar-thin scrollbar-thumb-primary"
+    >Body</ui-scroll-area
+  >`,
 })
 class Host {}
 
 describe('ScrollAreaComponent', () => {
-  it('renders a scrollable viewport with base styling', () => {
+  it('renders a scrollable viewport with base styling and viewport classes', () => {
     const fixture = TestBed.createComponent(Host);
     fixture.detectChanges();
     const host = fixture.nativeElement.querySelector('ui-scroll-area') as HTMLElement;
@@ -18,6 +20,9 @@ describe('ScrollAreaComponent', () => {
     expect(host.className).toContain('h-40');
     const viewport = host.querySelector('.ui-scroll-area-viewport') as HTMLElement;
     expect(viewport).toBeTruthy();
+    expect(viewport.className).toContain('overflow-y-auto');
+    expect(viewport.className).toContain('scrollbar-thin');
+    expect(viewport.className).toContain('scrollbar-thumb-primary');
     expect(viewport.textContent).toContain('Body');
   });
 });

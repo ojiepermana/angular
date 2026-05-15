@@ -77,7 +77,7 @@ import type { NavigationItem, SidebarAppearance, SidebarPosition } from '../../c
           }
         </div>
       }
-      <ui-scroll-area class="min-h-0 flex-1">
+      <ui-scroll-area class="min-h-0 flex-1" [viewportClass]="scrollViewportClasses()">
         <nav [class]="navClasses()">
           @for (item of resolvedItems(); track item.id) {
             <ui-nav-item [item]="item" [compact]="isCompact()" />
@@ -213,7 +213,7 @@ export class SidebarComponent {
   });
 
   protected readonly navClasses = computed(() => {
-    const base = ['min-h-full overflow-x-hidden'];
+    const base = ['min-h-full'];
     if (this.isCompact()) {
       base.push(
         'px-2',
@@ -225,6 +225,10 @@ export class SidebarComponent {
     }
     return base.join(' ');
   });
+
+  protected readonly scrollViewportClasses = computed(
+    () => 'overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary/10',
+  );
 
   protected readonly footerClasses = computed(() => {
     const base = ['h-12 border-t border-brand'];

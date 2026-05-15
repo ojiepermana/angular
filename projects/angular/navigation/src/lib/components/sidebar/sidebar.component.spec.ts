@@ -68,10 +68,14 @@ describe('SidebarComponent', () => {
     const fixture = setup();
     const host: HTMLElement = fixture.nativeElement.querySelector('sidebar');
     const scrollArea = host.querySelector('ui-scroll-area') as HTMLElement | null;
+    const viewport = scrollArea?.querySelector('.ui-scroll-area-viewport') as HTMLElement | null;
     expect(host.getAttribute('data-appearance')).toBe('default');
     expect(host.getAttribute('role')).toBe('navigation');
     expect(scrollArea).not.toBeNull();
     expect(scrollArea?.classList.contains('flex-1')).toBe(true);
+    expect(viewport?.classList.contains('scrollbar-thin')).toBe(true);
+    expect(viewport?.classList.contains('scrollbar-thumb-primary')).toBe(true);
+    expect(viewport?.classList.contains('scrollbar-track-primary/10')).toBe(true);
     expect(scrollArea?.querySelector('nav')).not.toBeNull();
     expect(host.querySelectorAll('ui-nav-item').length).toBeGreaterThan(0);
     expect(host.textContent).toContain('Home');
@@ -151,11 +155,15 @@ describe('SidebarComponent', () => {
 
     const drawer = document.body.querySelector('.sidebar-drawer [role="dialog"]') as HTMLElement | null;
     const drawerScrollArea = drawer?.querySelector('ui-scroll-area') as HTMLElement | null;
+    const drawerViewport = drawerScrollArea?.querySelector('.ui-scroll-area-viewport') as HTMLElement | null;
 
     expect(drawer).not.toBeNull();
     expect(drawer?.getAttribute('aria-label')).toBe('Primary');
     expect(drawerScrollArea).not.toBeNull();
     expect(drawerScrollArea?.classList.contains('flex-1')).toBe(true);
+    expect(drawerViewport?.classList.contains('scrollbar-thin')).toBe(true);
+    expect(drawerViewport?.classList.contains('scrollbar-thumb-primary')).toBe(true);
+    expect(drawerViewport?.classList.contains('scrollbar-track-primary/10')).toBe(true);
     expect(drawerScrollArea?.querySelector('nav')).not.toBeNull();
 
     nav.closeMobile();

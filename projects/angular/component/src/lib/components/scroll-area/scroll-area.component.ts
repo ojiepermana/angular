@@ -11,7 +11,7 @@ import { cn } from '../../core/cn/cn.util';
   host: {
     '[class]': 'classes()',
   },
-  template: `<div class="ui-scroll-area-viewport h-full w-full"><ng-content /></div>`,
+  template: `<div [class]="viewportClasses()"><ng-content /></div>`,
   styles: [
     `
       :host {
@@ -22,23 +22,23 @@ import { cn } from '../../core/cn/cn.util';
       .ui-scroll-area-viewport {
         overflow: auto;
         scrollbar-width: thin;
-        scrollbar-color: hsl(var(--border)) transparent;
+        scrollbar-color: var(--tw-scrollbar-thumb, hsl(var(--border))) var(--tw-scrollbar-track, transparent);
       }
       .ui-scroll-area-viewport::-webkit-scrollbar {
         width: 10px;
         height: 10px;
       }
       .ui-scroll-area-viewport::-webkit-scrollbar-track {
-        background: transparent;
+        background: var(--tw-scrollbar-track, transparent);
       }
       .ui-scroll-area-viewport::-webkit-scrollbar-thumb {
-        background: hsl(var(--border));
+        background: var(--tw-scrollbar-thumb, hsl(var(--border)));
         border: var(--border-width) solid transparent;
         background-clip: padding-box;
         border-radius: var(--radius-lg);
       }
       .ui-scroll-area-viewport::-webkit-scrollbar-thumb:hover {
-        background: hsl(var(--muted-foreground));
+        background: var(--ui-scrollbar-thumb-hover, var(--tw-scrollbar-thumb, hsl(var(--muted-foreground))));
         background-clip: padding-box;
       }
       @media (forced-colors: active) {
@@ -56,5 +56,9 @@ import { cn } from '../../core/cn/cn.util';
 })
 export class ScrollAreaComponent {
   readonly class = input<string>('');
+  readonly viewportClass = input<string>('');
   protected readonly classes = computed(() => cn('relative overflow-hidden', this.class()));
+  protected readonly viewportClasses = computed(() =>
+    cn('ui-scroll-area-viewport h-full w-full', this.viewportClass()),
+  );
 }
